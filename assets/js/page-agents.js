@@ -16,7 +16,7 @@
     instructions: 'You are Adriene, a professional BPO voice assistant. Be concise, empathetic, and follow deterministic rules before LLM generation. Never override transfer or eligibility policies. Ask required questions in order.',
     rules: 'Ask account-holder check, then ZIP, then prior coverage. Validate consent before transfer. Retry once on unclear input. Terminate gracefully.',
     language: 'en-US',
-    voice: 'aura-asteria-en',
+    voice: 'flux-brittany-en',
     tone: 'professional',
     rate: 100,
     stt: 'deepgram',
@@ -54,6 +54,29 @@
   });
   $('refresh-agents').innerHTML = Shell.icon('refresh', 'w-3.5 h-3.5');
 
+  function populateVoiceOptions() {
+    const select = $('f-voice');
+    if (!window.VOICE_CATALOG) return;
+    const current = select.value || DEFAULTS.voice;
+    const aliases = ['alloy', 'nova', 'onyx', 'rachel', 'adam'].map((id) => ({
+      id,
+      name: id.charAt(0).toUpperCase() + id.slice(1),
+    }));
+    const groups = [
+      ['Deepgram Flux', window.VOICE_CATALOG.flux],
+      ['Deepgram Aura', window.VOICE_CATALOG.aura],
+      ['OpenAI / ElevenLabs aliases', aliases],
+    ];
+    select.innerHTML = groups.map(([label, voices]) => `
+      <optgroup label="${label}">
+        ${voices.map((voice) => `<option value="${voice.id}">${UI.esc(voice.name)}${voice.accent ? ` (${UI.esc(voice.accent)}, ${UI.esc(voice.gender)})` : ''}</option>`).join('')}
+      </optgroup>`).join('');
+    select.value = current;
+    if (!select.value) select.value = 'flux-brittany-en';
+  }
+
+  populateVoiceOptions();
+
   // ---- form helpers ------------------------------------------------------
 
   function setRateLabel() {
@@ -81,7 +104,7 @@
     $('f-instructions').value = a.instructions || a.systemInstructions || '';
     $('f-rules').value = a.rules || a.conversationRules || '';
     $('f-language').value = a.language || 'en-US';
-    $('f-voice').value = a.voice || 'aura-asteria-en';
+    $('f-voice').value = a.voice || 'flux-brittany-en';
     $('f-tone').value = a.tone || 'professional';
     $('f-rate').value = a.rate ?? a.speakingRate ?? 100;
     $('f-stt').value = a.stt || a.sttProvider || 'browser';

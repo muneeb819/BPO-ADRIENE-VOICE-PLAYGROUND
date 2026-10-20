@@ -97,11 +97,23 @@ RATE_LIMIT = 240  # requests / minute / client
 RATE_WINDOW = 60.0
 
 ALLOWED_LANGUAGES = {"en-US", "es-ES", "fr-FR", "en-GB"}
-ALLOWED_VOICES = {
-    "alloy", "nova", "onyx", "rachel", "adam",
+FLUX_VOICES = [
+    "flux-hannah-en", "flux-kit-en", "flux-alexis-en", "flux-cliff-en",
+    "flux-sienna-en", "flux-cole-en", "flux-brooke-en", "flux-colin-en",
+    "flux-gemma-en", "flux-haley-en", "flux-heather-en", "flux-miles-en",
+    "flux-sean-en", "flux-bree-en", "flux-brittany-en", "flux-bruce-en",
+    "flux-conor-en", "flux-donovan-en", "flux-drew-en", "flux-elise-en",
+    "flux-jack-en", "flux-kai-en", "flux-kelsey-en", "flux-maeve-en",
+    "flux-marcelo-en", "flux-marcus-en", "flux-meena-en", "flux-meghan-en",
+    "flux-naveen-en", "flux-paige-en", "flux-priya-en", "flux-rufus-en",
+    "flux-sharon-en", "flux-tanner-en", "flux-wade-en", "flux-wes-en",
+]
+AURA_VOICES = [
     "aura-asteria-en", "aura-luna-en", "aura-stella-en",
     "aura-orion-en", "aura-arcas-en",
-}
+]
+VOICE_ALIASES = ["alloy", "nova", "onyx", "rachel", "adam"]
+ALLOWED_VOICES = set(FLUX_VOICES + AURA_VOICES + VOICE_ALIASES)
 ALLOWED_TONES = {"professional", "friendly", "empathetic", "authoritative", "cheerful"}
 ALLOWED_STATUSES = {"draft", "testing", "approved", "archived"}
 ALLOWED_STT = {"browser", "whisper", "deepgram"}
@@ -400,10 +412,9 @@ def seed_db() -> None:
                  "connected" if OPENAI_API_KEY else "disconnected"),
                 ("tts", "browser-tts", "Browser Speech Synthesis", 1, 1 if tts_default == "browser-tts" else 0,
                  {"local": True}, ["local", "no-key"], ["Browser Default"], "connected"),
-                ("tts", "deepgram-tts", "Deepgram Aura TTS", 1, 1 if tts_default == "deepgram-tts" else 0,
-                 {"model": "aura-asteria-en"}, ["streaming", "low-latency"],
-                 ["aura-asteria-en", "aura-luna-en", "aura-stella-en",
-                  "aura-orion-en", "aura-arcas-en"], deepgram_status),
+                ("tts", "deepgram-tts", "Deepgram Flux / Aura TTS", 1, 1 if tts_default == "deepgram-tts" else 0,
+                 {"model": "flux-brittany-en"}, ["streaming", "conversation-aware", "low-latency"],
+                 FLUX_VOICES + AURA_VOICES, deepgram_status),
             ]
             for p in providers:
                 conn.execute(
@@ -413,6 +424,20 @@ def seed_db() -> None:
                     (new_id(), p[0], p[1], p[2], p[3], p[4], json.dumps(p[5]),
                      json.dumps(p[6]), json.dumps(p[7]), p[8], ts),
                 )
+
+        # Keep the seeded Deepgram TTS metadata in sync with the current catalog.
+        conn.execute(
+            "UPDATE providers SET display_name = ?, config = ?, capabilities = ?, "
+            "voice_catalog = ?, status = ? WHERE name = ?",
+            (
+                "Deepgram Flux / Aura TTS",
+                json.dumps({"model": "flux-brittany-en"}),
+                json.dumps(["streaming", "conversation-aware", "low-latency"]),
+                json.dumps(FLUX_VOICES + AURA_VOICES),
+                "connected" if DEEPGRAM_API_KEY else "disconnected",
+                "deepgram-tts",
+            ),
+        )
 
         # Retention policy
         if conn.execute("SELECT COUNT(*) FROM retention").fetchone()[0] == 0:
@@ -1183,7 +1208,7 @@ def test_provider(provider: dict) -> dict:
             {"Authorization": f"Token {DEEPGRAM_API_KEY}"},
         )
         return {"ok": ok, "status": "connected" if ok else "error", "latencyMs": latency,
-                "message": "Deepgram Aura reachable." if ok else f"Deepgram test failed: {err}"}
+                "message": "Deepgram Flux / Aura reachable." if ok else f"Deepgram test failed: {err}"}
     return {"ok": True, "status": "connected",
             "latencyMs": int((time.perf_counter() - started) * 1000),
             "message": "Adapter registered."}
@@ -1192,12 +1217,15 @@ def test_provider(provider: dict) -> dict:
 def deepgram_tts(text: str, voice: str) -> tuple[bytes | None, str]:
     if not DEEPGRAM_API_KEY:
         return None, "DEEPGRAM_API_KEY is not configured on the server."
-    model = voice if voice.startswith("aura-") else {
+    model = voice if voice.startswith(("aura-", "flux-")) else {
         "alloy": "aura-asteria-en", "nova": "aura-luna-en", "onyx": "aura-orion-en",
         "rachel": "aura-stella-en", "adam": "aura-arcas-en",
     }.get(voice, "aura-asteria-en")
+    if model not in ALLOWED_VOICES:
+        return None, "Unsupported Deepgram voice model."
+    speak_path = "/v2/speak" if model.startswith("flux-") else "/v1/speak"
     req = urllib.request.Request(
-        f"https://api.deepgram.com/v1/speak?model={urllib.parse.quote(model)}",
+        f"https://api.deepgram.com{speak_path}?model={urllib.parse.quote(model)}",
         data=json.dumps({"text": text[:1200]}).encode("utf-8"),
         headers={"Authorization": f"Token {DEEPGRAM_API_KEY}",
                  "Content-Type": "application/json"},

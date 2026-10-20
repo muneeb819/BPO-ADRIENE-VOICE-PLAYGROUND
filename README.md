@@ -54,12 +54,14 @@ This enables:
 
 | Capability | Configuration |
 |---|---|
-| TTS | Deepgram Aura, voice model `aura-asteria-en` (startup default) |
+| TTS | Deepgram Flux (`/v2/speak`) with Aura fallback; Voice Lab default `flux-brittany-en` |
 | STT | Deepgram Nova-2, `en-US`, smart formatting |
-| Voice models | `aura-asteria-en`, `aura-luna-en`, `aura-stella-en`, `aura-orion-en`, `aura-arcas-en` |
-| Demo persona | Adriene — warm, concise inbound intake specialist, deterministic rules first |
+| Voice models | 36 Flux voices plus 5 Aura voices, selectable in Voice Lab and Agent Studio |
+| Demo persona | Adriene — warm, concise inbound intake specialist; existing demo uses Aura `aura-asteria-en`, new agents default to Flux Brittany |
 
 The API and frontend only expose boolean capability flags such as `deepgramTts` and `deepgramStt`. The key is never returned by `/api/*`, written into HTML/JS, stored in `localStorage`, or included in logs. `.env` is also blocked by the static server and ignored by Git.
+
+**Voice picker:** `Voice Lab → Live adapter smoke test — TTS` renders a grouped picker (Provider → Voice, `Flux` and `Aura` groups) in the same dark control-panel theme as *Voice Preview & Controls*. Flux voices are served from Deepgram `/v2/speak`, Aura voices from `/v1/speak`; the same catalogue is available in `Agent Studio → Voice`.
 
 Restart the server after changing `.env`. Test the connection from **Voice Lab → Deepgram** or:
 
@@ -98,7 +100,7 @@ Browser (static HTML/CSS/JS, local Tailwind Play build)
 server.py (ThreadingHTTPServer, API, validation, rate limiting, redaction)
         │
         ├── SQLite  data/adriene.db
-        ├── Deepgram Aura TTS / Nova-2 STT (only when key present)
+        ├── Deepgram Flux / Aura TTS + Nova-2 STT (only when key present)
         └── deterministic rule engine (offline, no provider required)
 ```
 
@@ -157,7 +159,7 @@ Public, localhost-only by default:
 | POST | `/api/sessions/{id}/end` | End session |
 | GET | `/api/providers` | Provider catalogue (no secrets) |
 | POST | `/api/providers/{id}/test` | Connection test |
-| POST | `/api/tts` | Aura TTS proxy (max 1200 chars) |
+| POST | `/api/tts` | Flux / Aura TTS proxy (max 1200 chars) |
 | POST | `/api/stt` | Nova-2 STT proxy (audio ≤ 8 MB) |
 | GET/POST | `/api/test-cases` | List/create cases |
 | POST | `/api/test-cases/seed` | Seed nine fixtures |

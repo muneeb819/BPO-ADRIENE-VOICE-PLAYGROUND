@@ -246,6 +246,108 @@
   });
   $('preview-stop').disabled = true;
 
+  // ---- Deepgram voice picker ---------------------------------------------
+
+  const voicePicker = $('cloud-tts-voice-picker');
+  const voiceTrigger = $('cloud-tts-voice-trigger');
+  const voiceMenu = $('cloud-tts-voice-menu');
+  const voiceInput = $('cloud-tts-voice');
+  let selectedVoiceId = voiceInput.value;
+
+  function renderVoiceMenu() {
+    const catalog = window.VOICE_CATALOG;
+    if (!catalog) return;
+    const groups = [
+      { label: 'Flux', voices: catalog.flux },
+      { label: 'Aura', voices: catalog.aura },
+    ];
+    voiceMenu.innerHTML = groups.map((group) => `
+      <div class="voice-menu-group">${group.label}</div>
+      ${group.voices.map((voice) => `
+        <button class="voice-option${voice.id === selectedVoiceId ? ' selected' : ''}" type="button"
+          data-voice-id="${voice.id}" role="option" aria-selected="${voice.id === selectedVoiceId}">
+          <span class="voice-option-name">${UI.esc(voice.name)}</span>
+          <span class="voice-option-meta">(${UI.esc(voice.accent)}, ${UI.esc(voice.gender)})</span>
+          <span class="voice-check" aria-hidden="true">${Shell.icon('check')}</span>
+        </button>`).join('')}
+    `).join('');
+  }
+
+  function setSelectedVoice(id, focusTrigger = false) {
+    const catalog = window.VOICE_CATALOG;
+    if (!catalog) return;
+    const voice = catalog.byId(id) || catalog.byId('flux-brittany-en');
+    if (!voice) return;
+    selectedVoiceId = voice.id;
+    voiceInput.value = voice.id;
+    $('cloud-tts-voice-name').textContent = `${voice.family} — ${voice.name}`;
+    $('cloud-tts-voice-meta').textContent = `(${voice.accent}, ${voice.gender})`;
+    voiceMenu.querySelectorAll('.voice-option').forEach((option) => {
+      const selected = option.dataset.voiceId === voice.id;
+      option.classList.toggle('selected', selected);
+      option.setAttribute('aria-selected', String(selected));
+    });
+    if (focusTrigger) voiceTrigger.focus();
+  }
+
+  function openVoiceMenu() {
+    voiceMenu.classList.remove('hidden');
+    voiceTrigger.setAttribute('aria-expanded', 'true');
+    const selected = voiceMenu.querySelector('.voice-option.selected');
+    if (selected) selected.scrollIntoView({ block: 'nearest' });
+  }
+
+  function closeVoiceMenu() {
+    voiceMenu.classList.add('hidden');
+    voiceTrigger.setAttribute('aria-expanded', 'false');
+  }
+
+  voiceTrigger.addEventListener('click', () => {
+    if (voiceMenu.classList.contains('hidden')) openVoiceMenu();
+    else closeVoiceMenu();
+  });
+
+  voiceMenu.addEventListener('click', (event) => {
+    const option = event.target.closest('[data-voice-id]');
+    if (!option) return;
+    setSelectedVoice(option.dataset.voiceId, true);
+    closeVoiceMenu();
+  });
+
+  document.addEventListener('click', (event) => {
+    if (!voicePicker.contains(event.target)) closeVoiceMenu();
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && !voiceMenu.classList.contains('hidden')) {
+      closeVoiceMenu();
+      voiceTrigger.focus();
+    }
+  });
+
+  voiceTrigger.addEventListener('keydown', (event) => {
+    if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      openVoiceMenu();
+      (voiceMenu.querySelector('.voice-option.selected') || voiceMenu.querySelector('.voice-option'))?.focus();
+    }
+  });
+
+  voiceMenu.addEventListener('keydown', (event) => {
+    if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return;
+    const options = [...voiceMenu.querySelectorAll('.voice-option')];
+    const current = options.indexOf(document.activeElement);
+    if (current < 0) return;
+    event.preventDefault();
+    const next = event.key === 'ArrowDown'
+      ? options[Math.min(options.length - 1, current + 1)]
+      : options[Math.max(0, current - 1)];
+    next.focus();
+  });
+
+  renderVoiceMenu();
+  setSelectedVoice(selectedVoiceId);
+
   // ---- cloud TTS smoke ---------------------------------------------------
 
   $('cloud-tts-btn').addEventListener('click', async (event) => {
@@ -257,7 +359,8 @@
     }
     UI.setBusy(btn, true, 'Synthesizing');
     $('cloud-tts-error').classList.add('hidden');
-    $('cloud-tts-status').textContent = 'Calling Deepgram Aura…';
+    const selectedVoice = window.VOICE_CATALOG?.byId($('cloud-tts-voice').value);
+    $('cloud-tts-status').textContent = `Calling Deepgram ${selectedVoice?.family || 'TTS'}…`;
     const started = performance.now();
     try {
       const blob = await API.tts(text, $('cloud-tts-voice').value);
@@ -366,14 +469,14 @@
     const ttsReady = !!health.capabilities?.deepgramTts;
     const sttReady = !!health.capabilities?.deepgramStt;
     $('cloud-tts-pill').textContent = ttsReady ? 'configured' : 'missing key';
-    $('cloud-tts-pill').className = `pill ${ttsReady ? 'pill-green' : 'pill-red'}`;
+    $('cloud-tts-pill').className = `pill ${ttsReady ? 'pill-green-dark' : 'pill-red-dark'}`;
     $('cloud-stt-pill').textContent = sttReady ? 'configured' : 'missing key';
     $('cloud-stt-pill').className = `pill ${sttReady ? 'pill-green' : 'pill-red'}`;
     $('cloud-tts-btn').disabled = !ttsReady;
     if (!ttsReady) {
       $('cloud-tts-status').textContent = 'DEEPGRAM_API_KEY not configured';
       const box = $('cloud-tts-error');
-      box.textContent = 'Add DEEPGRAM_API_KEY to .env and restart server.py to synthesize with Deepgram Aura. The preview above uses your browser voice and works offline.';
+      box.textContent = 'Add DEEPGRAM_API_KEY to .env and restart server.py to synthesize with Deepgram Flux or Aura. The preview above uses your browser voice and works offline.';
       box.classList.remove('hidden');
     }
     if (!sttReady) {
