@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Telephony (Mock SIP / VICIdial) — BPO Adriene Playground</title>
+  <meta name="description" content="Mock-only telephony adapter with session-scoped calls, transfers, consent checks, correlation IDs and auditable events. Live dialing is disabled." />
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/assets/css/fonts.css" />
+  <link rel="stylesheet" href="/assets/css/app.css" />
+  <script src="/assets/vendor/tailwind.js"></script>
+</head>
+<body>
+  <div id="mobile-shell"></div>
+  <aside id="sidebar"></aside>
+
+  <div class="flex min-h-screen flex-col lg:pl-[268px]">
+    <main class="mx-auto w-full max-w-[1400px] flex-1 px-5 py-7 sm:px-8 lg:px-10 lg:py-9">
+      <section class="rounded-2xl border border-red-200 bg-gradient-to-br from-red-50 via-rose-50 to-red-50/40 px-5 py-4">
+        <div class="eyebrow !text-red-500">09 — Telephony Integration — Disabled by Default</div>
+        <h1 class="page-title">Telephony (Mock SIP / VICIdial)</h1>
+        <p class="page-sub">No live calls or telephony connections are enabled during the initial build. This adapter is mock-only until Tasks 1–8 pass and an operator authorizes it.</p>
+        <div class="mt-2.5 flex flex-wrap items-center gap-2">
+          <span class="pill pill-gray no-dot">Status: MOCK ONLY • Sandbox</span>
+          <span class="pill pill-red no-dot" id="telephony-live-pill">Live dialing: disabled</span>
+        </div>
+      </section>
+
+      <div class="mt-4 grid items-start gap-4 lg:grid-cols-3">
+        <div class="space-y-4 lg:col-span-2">
+          <section class="card">
+            <h2 class="section-title">Mock Telephony Adapter — Test First</h2>
+            <p class="section-sub">Define call lifecycle events, transfer requests and status callbacks. Duplicate events, timeouts and unavailable agents are handled.</p>
+            <div class="mt-3 grid gap-2 sm:grid-cols-[1fr_auto_auto]">
+              <select class="select" id="telephony-session" aria-label="Attach mock call to a session">
+                <option value="">No session (standalone mock)</option>
+              </select>
+              <button class="btn btn-dark" id="mock-call-btn" type="button"><span data-icon="phone"></span> Mock Call (Sandbox)</button>
+              <button class="btn btn-primary" id="mock-transfer-btn" type="button"><span data-icon="phoneOut"></span> Mock Transfer</button>
+            </div>
+            <div class="mt-2 hidden rounded-lg border px-2.5 py-2 text-[9.5px] leading-relaxed" id="mock-notice"></div>
+
+            <div class="mt-4 flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <h3 class="text-[11px] font-extrabold tracking-tight text-slate-800">Auditable Events & Correlation IDs</h3>
+                <p class="text-[8.5px] text-slate-400">Every event persists with a UTC timestamp, provider, direction and session reference.</p>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <span class="pill pill-ghost no-dot" id="log-count">0 events</span>
+                <button class="btn btn-xs btn-outline" id="refresh-logs" type="button"><span data-icon="refresh"></span> Refresh</button>
+              </div>
+            </div>
+            <div class="mt-2 max-h-[430px] space-y-2 overflow-y-auto pr-1" id="telephony-logs">
+              <div class="empty-state">
+                <div class="empty-title">No telephony logs</div>
+                <div class="empty-sub">Run a mock call to verify the adapter and see correlation IDs.</div>
+              </div>
+            </div>
+          </section>
+
+          <section class="card">
+            <h2 class="section-title">Transfer Authorization Flow</h2>
+            <div class="mt-3 grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
+              <div class="rounded-xl border border-slate-300 bg-slate-50/40 px-3 py-3">
+                <div class="font-mono text-[8.5px] font-bold text-slate-400">01</div>
+                <div class="mt-1 text-[9.5px] font-bold leading-snug text-slate-700">User requests transfer</div>
+              </div>
+              <div class="rounded-xl border border-slate-300 bg-slate-50/40 px-3 py-3">
+                <div class="font-mono text-[8.5px] font-bold text-slate-400">02</div>
+                <div class="mt-1 text-[9.5px] font-bold leading-snug text-slate-700">Check consent (deterministic)</div>
+              </div>
+              <div class="rounded-xl border border-slate-300 bg-slate-50/40 px-3 py-3">
+                <div class="font-mono text-[8.5px] font-bold text-slate-400">03</div>
+                <div class="mt-1 text-[9.5px] font-bold leading-snug text-slate-700">Verify live-agent via dialer</div>
+              </div>
+              <div class="rounded-xl border border-slate-300 bg-slate-50/40 px-3 py-3">
+                <div class="font-mono text-[8.5px] font-bold text-slate-400">04</div>
+                <div class="mt-1 text-[9.5px] font-bold leading-snug text-slate-700">If unavailable → fail gracefully, never infer success</div>
+              </div>
+            </div>
+            <div class="mt-3 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-[9px] leading-relaxed text-amber-800">
+              <b>Never infer that a transfer succeeded from a request alone.</b> The backend must confirm via dialer callback with <span class="mono">correlationId</span>.
+            </div>
+            <ul class="mt-2 space-y-1 text-[9.5px] leading-relaxed text-slate-500">
+              <li class="flex gap-1.5"><span class="text-emerald-500">✓</span> Handles unavailable agents, timeouts, duplicate events and call termination.</li>
+              <li class="flex gap-1.5"><span class="text-emerald-500">✓</span> Duplicate call events are deduplicated by <span class="mono">correlationId + eventType</span>.</li>
+              <li class="flex gap-1.5"><span class="text-emerald-500">✓</span> All events are auditable with UTC timestamps.</li>
+            </ul>
+          </section>
+        </div>
+
+        <div class="space-y-4">
+          <section class="card-dark p-4">
+            <h2 class="text-[12px] font-extrabold tracking-tight text-white">Gate: Tasks 1–8 Must Pass First</h2>
+            <div class="mt-3 space-y-1.5">
+              <div class="gate-row"><span>Foundation</span><span class="gate-pass">✓ Pass</span></div>
+              <div class="gate-row"><span>Agent Studio</span><span class="gate-pass">✓ Pass</span></div>
+              <div class="gate-row"><span>Conversation Engine</span><span class="gate-pass">✓ Pass</span></div>
+              <div class="gate-row"><span>Voice Playground</span><span class="gate-pass">✓ Pass</span></div>
+              <div class="gate-row"><span>Voice Lab</span><span class="gate-pass">✓ Pass</span></div>
+              <div class="gate-row"><span>Evaluation</span><span class="gate-pass">✓ Pass</span></div>
+              <div class="gate-row"><span>Analytics</span><span class="gate-pass">✓ Pass</span></div>
+              <div class="gate-row"><span>Security</span><span class="gate-pass">✓ Pass</span></div>
+              <div class="gate-row pending"><span>Telephony (Real)</span><span class="gate-pending">Pending</span></div>
+            </div>
+            <p class="mt-3 text-[8.5px] leading-relaxed text-slate-400">Real VICIdial integration remains pending until tested against an authorized test environment.</p>
+          </section>
+
+          <section class="card">
+            <h2 class="section-title">Enable Real Telephony (Requires Authorization)</h2>
+            <form id="enable-form" class="mt-3">
+              <div>
+                <label class="label" for="sip-realm">SIP Realm</label>
+                <input class="input" id="sip-realm" placeholder="sip.provider.com" autocomplete="off" />
+              </div>
+              <div class="mt-2">
+                <label class="label" for="vicidial-url">VICIdial URL</label>
+                <input class="input" id="vicidial-url" placeholder="https://vicidial.example.com" autocomplete="off" />
+              </div>
+              <label class="mt-2 flex items-start gap-2 text-[9.5px] leading-relaxed text-slate-600">
+                <input class="checkbox mt-0.5" id="operator-auth" type="checkbox" /> Operator authorization confirmed
+              </label>
+              <button class="btn btn-danger btn-wide mt-2.5 justify-center" id="enable-btn" type="submit">Enable Live Dialing (Blocked in Playground)</button>
+              <div class="mt-2 hidden rounded-lg border px-2.5 py-2 text-[9px] leading-relaxed" id="enable-result"></div>
+            </form>
+            <div class="mt-3 rounded-xl border border-red-200 bg-red-50 p-3">
+              <div class="text-[9px] font-extrabold uppercase tracking-[0.1em] text-red-700">Safeguards</div>
+              <ul class="mt-1.5 space-y-1 text-[8.5px] leading-relaxed text-red-800">
+                <li>• Disabled by default — <span class="mono">TELEPHONY_ENABLED</span> must be true.</li>
+                <li>• Sandbox mode cannot dial real numbers (prefix +1-555-MOCK).</li>
+                <li>• No unsolicited calls, no auto-campaigns; consent required.</li>
+                <li>• Real adapters must confirm every transfer with a dialer callback.</li>
+              </ul>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <section class="card mt-4">
+        <div class="flex flex-wrap items-start justify-between gap-2">
+          <div>
+            <h2 class="section-title">Integration Tests — Mock Transfer</h2>
+            <p class="section-sub">These invariants are enforced by the mock adapter and visible in the event log.</p>
+          </div>
+          <span class="pill pill-green no-dot">mock adapter healthy</span>
+        </div>
+        <div class="mt-3 grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
+          <div class="flex items-start gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-2.5 py-2 text-[9px] leading-relaxed text-emerald-800"><span>✓</span><span>Mock calls pass without SIP/PSTN config.</span></div>
+          <div class="flex items-start gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-2.5 py-2 text-[9px] leading-relaxed text-emerald-800"><span>✓</span><span>Mock transfers verify the live-agent check.</span></div>
+          <div class="flex items-start gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-2.5 py-2 text-[9px] leading-relaxed text-emerald-800"><span>✓</span><span>Correlation IDs are auditable end-to-end.</span></div>
+          <div class="flex items-start gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-2.5 py-2 text-[9px] leading-relaxed text-emerald-800"><span>✓</span><span>No real dialing without explicit config + authorization.</span></div>
+        </div>
+      </section>
+    </main>
+    <footer id="footer"></footer>
+  </div>
+
+  <script src="/assets/js/api.js"></script>
+  <script src="/assets/js/shell.js"></script>
+  <script src="/assets/js/page-telephony.js"></script>
+</body>
+</html>

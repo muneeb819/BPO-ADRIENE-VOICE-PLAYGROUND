@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Security & Reliability — BPO Adriene Playground</title>
+  <meta name="description" content="Backend-only secrets, redaction, frontend secret scan, input validation, rate limits, retention controls and SQLite operations." />
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/assets/css/fonts.css" />
+  <link rel="stylesheet" href="/assets/css/app.css" />
+  <script src="/assets/vendor/tailwind.js"></script>
+</head>
+<body>
+  <div id="mobile-shell"></div>
+  <aside id="sidebar"></aside>
+
+  <div class="flex min-h-screen flex-col lg:pl-[268px]">
+    <main class="mx-auto w-full max-w-[1400px] flex-1 px-5 py-7 sm:px-8 lg:px-10 lg:py-9">
+      <div id="page-header"></div>
+
+      <div class="mt-6 grid items-start gap-4 lg:grid-cols-3">
+        <div class="space-y-4 lg:col-span-2">
+          <!-- Secrets -->
+          <section class="card">
+            <h2 class="section-title">Secret Management — Backend-only</h2>
+            <div class="mt-3 rounded-xl bg-[#0a0e1a] p-3.5 font-mono text-[9.5px] leading-[1.85] text-slate-300">
+              <div class="text-slate-400"># .env — read by server.py, never sent to the browser</div>
+              <div><span class="text-violet-300">DATABASE_URL</span>=sqlite:///data/adriene.db <span class="text-slate-500">(server-only file)</span></div>
+              <div id="secret-key-lines"></div>
+              <div class="mt-1 text-red-400">✗ Never: public frontend env, localStorage, bundled JavaScript</div>
+              <div class="text-emerald-400">✓ Provider adapters read keys server-side</div>
+            </div>
+            <div class="mt-3 grid gap-3 sm:grid-cols-2">
+              <div class="rounded-xl border border-slate-300 p-3">
+                <h3 class="text-[11px] font-extrabold tracking-tight text-slate-800">Redaction in logs</h3>
+                <p class="mt-1 text-[9.5px] leading-relaxed text-slate-500">All log serializers replace key / secret / token / password with <span class="mono">••••••••</span>.</p>
+                <pre id="redaction-sample" class="mt-2 overflow-x-auto rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-2 font-mono text-[9px] leading-relaxed text-slate-600">{ apiKey: '••••••••', safe: 'hello' }</pre>
+              </div>
+              <div class="rounded-xl border border-slate-300 p-3">
+                <h3 class="text-[11px] font-extrabold tracking-tight text-slate-800">Frontend scan</h3>
+                <p class="mt-1 text-[9.5px] leading-relaxed text-slate-500">Server scans frontend JS/HTML for credential-shaped strings on every status check.</p>
+                <div class="mt-2" id="scan-result"><span class="pill pill-green">✓ No credentials in bundle</span></div>
+                <div class="mt-1 text-[8.5px] text-slate-400" id="scan-meta">— files scanned</div>
+              </div>
+            </div>
+            <div class="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2.5 text-[9.5px] leading-relaxed text-amber-800">
+              <b>Do not put API keys into browser environment variables</b> or committed frontend files — those values are downloadable by anyone. Keep secrets in backend process environment only.
+            </div>
+          </section>
+
+          <!-- Validation -->
+          <section class="card">
+            <h2 class="section-title">Request Validation, Input Limits & Rate Limiting</h2>
+            <ul class="mt-2 space-y-1.5 text-[10px] leading-relaxed text-slate-500">
+              <li class="flex gap-1.5"><span class="text-violet-500">•</span> Agent name ≥ 2 chars, instructions ≥ 10 chars, speaking rate 50–200 — enforced server-side.</li>
+              <li class="flex gap-1.5"><span class="text-violet-500">•</span> Turn content capped at 2,000 chars; test scripts require 1–50 valid user steps.</li>
+              <li class="flex gap-1.5"><span class="text-violet-500">•</span> Safe error envelope <span class="mono">{ error: string }</span> with 4xx/5xx — no stack traces leaked.</li>
+              <li class="flex gap-1.5"><span class="text-violet-500">•</span> Per-client local rate limit: <span class="mono" id="rate-limit-text">—</span>.</li>
+              <li class="flex gap-1.5"><span class="text-violet-500">•</span> Session writes are scoped by opaque session ID; invalid IDs return 404, never cross-session data.</li>
+              <li class="flex gap-1.5"><span class="text-violet-500">•</span> Request bodies are size-capped; uploads are limited to 8 MB.</li>
+            </ul>
+            <button class="btn btn-primary btn-wide mt-3" id="selftest-btn" type="button"><span data-icon="shield"></span> Run Authorization & Validation Tests</button>
+            <div class="mt-3 hidden" id="selftest-panel">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="pill pill-gray" id="selftest-summary">—</span>
+                <span class="text-[8.5px] text-slate-400" id="selftest-time">—</span>
+              </div>
+              <div class="mt-2 max-h-[310px] space-y-1.5 overflow-y-auto pr-0.5" id="selftest-results"></div>
+            </div>
+          </section>
+        </div>
+
+        <div class="space-y-4">
+          <!-- Auth -->
+          <section class="card">
+            <h2 class="section-title">Authentication & Access Control</h2>
+            <p class="mt-1 text-[9.5px] leading-relaxed text-slate-500">Local-only by default. Before exposing beyond localhost, authentication is required.</p>
+            <div class="mt-3 rounded-xl border border-slate-300 p-3">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="text-[10px] font-bold text-slate-700">Current mode:</span>
+                <span class="pill pill-gray" id="auth-mode">—</span>
+              </div>
+              <p class="mt-2 text-[9px] leading-relaxed text-slate-500">To require a bearer token for <span class="mono">/api/*</span>:</p>
+              <pre class="mt-1.5 overflow-x-auto rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-2 font-mono text-[8.5px] leading-relaxed text-slate-600"># .env (server process only)
+AUTH_ENABLED=true
+AUTH_SECRET=&lt;32+ random characters&gt;
+
+# Then every /api/* request must carry:
+Authorization: Bearer &lt;AUTH_SECRET&gt;
+
+# Do not ship the secret to the browser. For remote access,
+# terminate auth at a local reverse proxy.</pre>
+              <div class="mt-2 rounded-lg border border-amber-200 bg-amber-50 px-2 py-1.5 text-[8.5px] leading-relaxed text-amber-800" id="auth-warning">
+                ⚠ Dashboard must not be exposed beyond localhost without auth.
+              </div>
+            </div>
+            <div class="mt-3 rounded-xl bg-[#0a0e1a] p-3">
+              <h3 class="text-[10.5px] font-extrabold text-white">Session-scoped authorization</h3>
+              <p class="mt-1 text-[9px] leading-relaxed text-slate-400">Sessions are addressed by opaque IDs; all writes are server-validated. Invalid session IDs return 404. This build uses HTTP polling, not WebSocket, so there is no socket handshake to authorize — the session ID is the boundary.</p>
+            </div>
+          </section>
+
+          <!-- Retention -->
+          <section class="card">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <h2 class="section-title">Retention Controls & Deletion</h2>
+                <p class="section-sub">Sensitive data is not retained indefinitely by default.</p>
+              </div>
+              <span class="pill pill-gray no-dot" id="retention-updated">—</span>
+            </div>
+            <form id="retention-form" class="mt-3">
+              <div>
+                <label class="label" for="audio-days">Audio retention (days)</label>
+                <input class="input" id="audio-days" type="number" min="1" max="365" value="7" />
+              </div>
+              <div class="mt-2.5">
+                <label class="label" for="transcript-days">Transcript retention (days)</label>
+                <input class="input" id="transcript-days" type="number" min="1" max="365" value="30" />
+              </div>
+              <label class="mt-2.5 flex items-center gap-2 text-[10px] font-medium text-slate-600">
+                <input class="checkbox" id="auto-delete" type="checkbox" /> Auto-delete after retention period
+              </label>
+              <div class="mt-2.5">
+                <label class="label" for="consent-disclosure">Consent & disclosure (for future real calling)</label>
+                <textarea class="textarea" id="consent-disclosure" rows="2" maxlength="500"></textarea>
+              </div>
+              <div class="mt-3 flex gap-2">
+                <button class="btn btn-primary flex-1" id="save-retention" type="submit">Save Policy</button>
+                <button class="btn btn-danger flex-1 justify-center" id="delete-artifacts" type="button"><span data-icon="trash"></span> Delete Artifacts (sim)</button>
+              </div>
+              <p class="mt-2 text-[8.5px] leading-relaxed text-slate-400">Auto-delete is disabled unless explicitly enabled. “Delete Artifacts” removes sessions, mock telephony logs and test runs from SQLite.</p>
+            </form>
+          </section>
+        </div>
+      </div>
+
+      <!-- Operations -->
+      <section class="card mt-4">
+        <div class="flex flex-wrap items-start justify-between gap-2">
+          <div>
+            <h2 class="section-title">Migrations, Backups, Health & Shutdown</h2>
+            <p class="section-sub">SQLite is embedded — no Docker, Postgres or external migration toolchain.</p>
+          </div>
+          <button class="btn btn-dark btn-xs" id="health-btn" type="button"><span data-icon="activity"></span> Run Health Check</button>
+        </div>
+        <div class="mt-3 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+          <div class="rounded-xl border border-slate-200 p-3">
+            <div class="label">Schema migrations</div>
+            <p class="mt-1 text-[9px] leading-relaxed text-slate-500">The schema is created and extended idempotently at startup. There is no ORM migration step.</p>
+            <pre class="code-snippet mt-2">python server.py</pre>
+          </div>
+          <div class="rounded-xl border border-slate-200 p-3">
+            <div class="label">Backup & restore</div>
+            <p class="mt-1 text-[9px] leading-relaxed text-slate-500">Stop the server first, then copy the SQLite file.</p>
+            <pre class="code-snippet mt-2">Copy-Item data\adriene.db data\adriene-backup.db
+Copy-Item data\adriene-backup.db data\adriene.db</pre>
+          </div>
+          <div class="rounded-xl border border-slate-200 p-3">
+            <div class="label">Health</div>
+            <p class="mt-1 text-[9px] leading-relaxed text-slate-500"><span class="mono">GET /api/health</span> returns ok + database + capability flags.</p>
+            <div class="mt-2 flex flex-wrap gap-1">
+              <span class="pill pill-gray" id="ops-health">checking</span>
+              <span class="pill pill-gray" id="ops-db">SQLite</span>
+            </div>
+          </div>
+          <div class="rounded-xl border border-slate-200 p-3">
+            <div class="label">Graceful shutdown</div>
+            <p class="mt-1 text-[9px] leading-relaxed text-slate-500">Press <span class="mono">Ctrl+C</span> in the server console. In-flight responses drain; SQLite commits are immediate and the DB closes cleanly.</p>
+            <div class="mt-2 flex flex-wrap gap-1">
+              <span class="pill pill-green no-dot">No Docker</span>
+              <span class="pill pill-green no-dot">No Postgres</span>
+            </div>
+          </div>
+          <div class="rounded-xl border border-slate-200 p-3">
+            <div class="label">Dependency pinning</div>
+            <p class="mt-1 text-[9px] leading-relaxed text-slate-500">Python 3.12 standard library only. No npm or pip runtime dependencies to drift or audit.</p>
+            <div class="mt-2 flex flex-wrap gap-1">
+              <span class="pill pill-violet no-dot">stdlib</span>
+              <span class="pill pill-violet no-dot">SQLite</span>
+            </div>
+          </div>
+          <div class="rounded-xl border border-slate-200 p-3">
+            <div class="label">Telephony posture</div>
+            <p class="mt-1 text-[9px] leading-relaxed text-slate-500">SIP / VICIdial is disabled by default. Mock calls only unless a real adapter is installed with operator authorization.</p>
+            <div class="mt-2"><span class="pill pill-red no-dot" id="telephony-posture">disabled</span></div>
+          </div>
+        </div>
+        <p class="mt-3 border-t border-slate-100 pt-2.5 text-[9px] leading-relaxed text-slate-400">Consent & disclosure are already configurable above for any future real-world calling workflow. Provider keys remain backend-only and are never returned by the API — only presence booleans.</p>
+      </section>
+    </main>
+    <footer id="footer"></footer>
+  </div>
+
+  <script src="/assets/js/api.js"></script>
+  <script src="/assets/js/shell.js"></script>
+  <script src="/assets/js/page-security.js"></script>
+</body>
+</html>

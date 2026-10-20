@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Voice Playground — BPO Adriene Playground</title>
+  <meta name="description" content="Run a live mic → STT → deterministic policy → TTS voice loop with barge-in and latency telemetry." />
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/assets/css/fonts.css" />
+  <link rel="stylesheet" href="/assets/css/app.css" />
+  <script src="/assets/vendor/tailwind.js"></script>
+</head>
+<body>
+  <div id="mobile-shell"></div>
+  <aside id="sidebar"></aside>
+
+  <div class="flex min-h-screen flex-col lg:pl-[268px]">
+    <main class="mx-auto w-full max-w-[1400px] flex-1 px-5 py-7 sm:px-8 lg:px-10 lg:py-9">
+      <div id="page-header"></div>
+
+      <!-- Agent / session control -->
+      <section class="card mt-5">
+        <div class="grid items-end gap-3 lg:grid-cols-[1fr_auto]">
+          <div>
+            <label class="label" for="agent-select">Agent profile</label>
+            <select class="select" id="agent-select" aria-label="Agent profile"></select>
+            <div class="mt-2 flex flex-wrap items-center gap-1.5" id="agent-summary"></div>
+          </div>
+          <div class="flex items-center gap-2">
+            <button class="btn btn-primary btn-wide px-5" id="start-btn" type="button">
+              <span data-icon="play"></span> Start Session
+            </button>
+            <button class="btn btn-outline hidden" id="end-btn" type="button">End Session</button>
+          </div>
+        </div>
+      </section>
+
+      <div class="mt-4 grid items-start gap-4 lg:grid-cols-3">
+        <!-- Left -->
+        <div class="space-y-4 lg:col-span-2">
+          <section class="card">
+            <div class="flex flex-wrap items-start justify-between gap-2">
+              <div>
+                <h2 class="section-title">Microphone & session</h2>
+                <p class="section-sub">Real browser mic • audio never leaves this machine unless a backend STT key is configured.</p>
+              </div>
+              <div class="flex flex-wrap items-center gap-1.5">
+                <button class="btn btn-xs btn-outline" id="mic-toggle" type="button"><span data-icon="mic"></span> Enable mic</button>
+                <button class="btn btn-xs btn-outline" id="stt-toggle" type="button" title="Toggle browser speech recognition">STT: Auto</button>
+                <button class="btn btn-xs btn-outline" id="sound-toggle" type="button"><span data-icon="volume"></span> Sound on</button>
+              </div>
+            </div>
+
+            <div class="mt-3 flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50/60 px-3 py-2">
+              <span class="status-dot" id="mic-dot" style="background:#94a3b8;box-shadow:0 0 0 3px rgba(148,163,184,.14)"></span>
+              <span class="text-[10.5px] font-semibold text-slate-600" id="mic-status">Mic off — text mode is ready</span>
+              <div class="ml-auto flex items-center gap-2">
+                <div class="level-bar w-20 sm:w-28"><div class="level-fill" id="level-fill"></div></div>
+                <span class="text-[8px] font-bold uppercase tracking-wider text-slate-400">Input</span>
+              </div>
+            </div>
+
+            <div class="mt-3 grid grid-cols-2 gap-2 lg:grid-cols-4">
+              <div class="rounded-xl border border-slate-200 p-2.5">
+                <div class="label mb-1">Connection</div>
+                <div class="text-[11px] font-extrabold text-slate-800" id="connection-value">Local API</div>
+                <div class="mt-0.5 text-[8.5px] text-slate-400" id="connection-sub">checking health…</div>
+              </div>
+              <div class="rounded-xl border border-slate-200 p-2.5">
+                <div class="label mb-1">Audio device</div>
+                <div class="text-[11px] font-extrabold text-slate-800" id="audio-value">Not enabled</div>
+                <div class="mt-0.5 truncate text-[8.5px] text-slate-400" id="audio-sub">Click Enable mic</div>
+              </div>
+              <div class="rounded-xl border border-slate-200 p-2.5">
+                <div class="label mb-1">Barge-in</div>
+                <div class="flex items-baseline gap-1"><span class="text-[11px] font-extrabold text-slate-800" id="bargein-value">0</span><span class="text-[8px] text-slate-400">events</span></div>
+                <div class="mt-0.5 text-[8.5px] text-slate-400">Interrupt while speaking</div>
+              </div>
+              <div class="rounded-xl border border-slate-200 p-2.5">
+                <div class="label mb-1">Session</div>
+                <div class="text-[11px] font-extrabold text-slate-800" id="session-value">Idle</div>
+                <div class="mt-0.5 text-[8.5px] text-slate-400" id="session-sub">No session started</div>
+              </div>
+            </div>
+
+            <div class="mt-3 flex flex-wrap items-center gap-1.5">
+              <button class="btn btn-xs btn-outline" id="interrupt-btn" type="button" disabled><span data-icon="mic-off"></span> Test interrupt</button>
+              <button class="btn btn-xs btn-soft" id="replay-btn" type="button" disabled><span data-icon="play"></span> Replay</button>
+              <button class="btn btn-xs btn-soft" id="stop-btn" type="button" disabled><span data-icon="stop"></span> Stop playback</button>
+              <button class="btn btn-xs btn-outline hidden" id="record-btn" type="button">Record voice note</button>
+              <span class="ml-auto inline-flex items-center gap-1.5 text-[9px] font-semibold text-slate-400">
+                <span class="status-dot" id="speaking-dot" style="background:#cbd5e1;box-shadow:none"></span>
+                <span id="speaking-status">Idle</span>
+              </span>
+            </div>
+          </section>
+
+          <section class="card">
+            <div class="flex items-center justify-between gap-2">
+              <div>
+                <h2 class="section-title">Live transcript & events</h2>
+                <p class="section-sub">Server-persisted turns. Session state and events refresh after every turn.</p>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <span class="pill pill-gray" id="turn-count-pill">0 turns</span>
+                <button class="icon-btn" id="refresh-session" type="button" title="Refresh session"></button>
+              </div>
+            </div>
+
+            <div class="mt-3 max-h-[360px] min-h-[160px] overflow-y-auto rounded-xl border border-slate-200 bg-slate-50/40 p-3" id="transcript">
+              <div class="py-8 text-center">
+                <div class="text-[11px] font-bold text-slate-500">No turns yet</div>
+                <div class="mt-1 text-[10px] text-slate-400">Start a session to hear the greeting, then type or speak.</div>
+              </div>
+            </div>
+
+            <div class="mt-3 flex flex-wrap gap-1.5" id="quick-pills">
+              <button class="chip hover:border-violet-300" data-quick="what is price?">pricing</button>
+              <button class="chip hover:border-violet-300" data-quick="am I eligible?">eligibility</button>
+              <button class="chip hover:border-violet-300" data-quick="transfer me to a human">transfer to human</button>
+              <button class="chip hover:border-violet-300" data-quick="bye">bye</button>
+            </div>
+
+            <form class="mt-2 flex items-center gap-2" id="send-form">
+              <input class="input flex-1" id="user-input" placeholder="Start a session to enable text input…" disabled autocomplete="off" maxlength="2000" />
+              <button class="btn btn-primary" id="send-btn" type="submit" disabled><span data-icon="send"></span> Send</button>
+            </form>
+            <p class="hint">Enter sends. Voice finals auto-send when STT is live. Barge-in stops playback before recording your turn.</p>
+          </section>
+
+          <section class="card">
+            <div class="flex items-center justify-between gap-2">
+              <div>
+                <h2 class="section-title">Deterministic state machine</h2>
+                <p class="section-sub">Policy runs before generation: consent, eligibility, timeout and termination are explicit.</p>
+              </div>
+              <span class="pill pill-violet no-dot" id="stage-current">Not started</span>
+            </div>
+            <div class="mt-3 flex flex-wrap items-center gap-1.5 text-[9.5px]">
+              <span class="chip" id="stage-greeting">Greeting</span>
+              <span class="text-slate-300">→</span>
+              <span class="chip" id="stage-pricing">Pricing</span>
+              <span class="text-slate-300">/</span>
+              <span class="chip" id="stage-zip">Eligibility · ZIP</span>
+              <span class="text-slate-300">→</span>
+              <span class="chip" id="stage-coverage">Coverage</span>
+              <span class="text-slate-300">→</span>
+              <span class="chip" id="stage-consent">Transfer consent</span>
+              <span class="text-slate-300">→</span>
+              <span class="chip" id="stage-termination">Termination</span>
+            </div>
+            <div class="mt-3 grid gap-2 text-[9.5px] text-slate-500 sm:grid-cols-3">
+              <div class="rounded-lg border border-slate-200 bg-slate-50/60 px-2.5 py-2"><b class="text-slate-700">Guardrail</b> · max turns enforced</div>
+              <div class="rounded-lg border border-slate-200 bg-slate-50/60 px-2.5 py-2"><b class="text-slate-700">Guardrail</b> · silence clarification</div>
+              <div class="rounded-lg border border-slate-200 bg-slate-50/60 px-2.5 py-2"><b class="text-slate-700">Guardrail</b> · no inferred success</div>
+            </div>
+          </section>
+        </div>
+
+        <!-- Right -->
+        <div class="space-y-4">
+          <section class="card-dark p-4">
+            <div class="flex items-center justify-between gap-2">
+              <h2 class="text-[12px] font-extrabold tracking-tight text-white">Turn latency</h2>
+              <span class="pill pill-dark no-dot">measured in browser</span>
+            </div>
+            <div class="mt-3 grid grid-cols-2 gap-2">
+              <div class="metric-tile"><div class="metric-label">STT</div><div class="metric-value" id="m-stt">—</div></div>
+              <div class="metric-tile"><div class="metric-label">LLM first token</div><div class="metric-value" id="m-llm-first">—</div></div>
+              <div class="metric-tile"><div class="metric-label">LLM complete</div><div class="metric-value" id="m-llm">—</div></div>
+              <div class="metric-tile"><div class="metric-label">TTS first audio</div><div class="metric-value" id="m-tts">—</div></div>
+              <div class="metric-tile"><div class="metric-label">Turns</div><div class="metric-value" id="m-turns">0</div></div>
+              <div class="metric-tile"><div class="metric-label">Session</div><div class="metric-value text-[11px]" id="m-session">idle</div></div>
+              <div class="metric-tile primary col-span-2">
+                <div class="metric-label">End-to-end</div>
+                <div class="metric-value text-[20px]" id="m-e2e">—</div>
+              </div>
+            </div>
+            <p class="mt-3 text-[8.5px] leading-relaxed text-slate-400">No synthetic numbers. Values come from your browser clock plus the server's turn response. Local rules are near-zero; TTS dominates real-world latency.</p>
+          </section>
+
+          <section class="card">
+            <div class="flex items-center justify-between gap-2">
+              <div>
+                <h2 class="section-title">Event timeline</h2>
+                <p class="section-sub">session_started → llm_complete → errors</p>
+              </div>
+              <span class="pill pill-gray no-dot" id="event-count">0</span>
+            </div>
+            <div class="mt-2 max-h-[280px] min-h-[100px] overflow-y-auto" id="event-list">
+              <div class="py-6 text-center text-[10px] text-slate-400">Events appear after the session starts.</div>
+            </div>
+          </section>
+
+          <section class="card">
+            <h2 class="section-title">Error handling</h2>
+            <p class="section-sub">Fallbacks are explicit, never silent.</p>
+            <div class="mt-2.5 space-y-2">
+              <div class="flex items-start gap-2">
+                <span class="mt-0.5 text-slate-400" data-icon="mic"></span>
+                <div class="min-w-0 flex-1">
+                  <div class="text-[10.5px] font-bold text-slate-700">Mic permission denied</div>
+                  <div class="text-[9px] text-slate-400">Text-only fallback stays available</div>
+                </div>
+                <span class="pill pill-gray" id="err-mic">text</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="mt-0.5 text-slate-400" data-icon="clock"></span>
+                <div class="min-w-0 flex-1">
+                  <div class="text-[10.5px] font-bold text-slate-700">Silence timeout</div>
+                  <div class="text-[9px] text-slate-400">Clarifying prompt, once per idle stretch</div>
+                </div>
+                <span class="pill pill-blue" id="err-silence">8s</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="mt-0.5 text-slate-400" data-icon="wave"></span>
+                <div class="min-w-0 flex-1">
+                  <div class="text-[10.5px] font-bold text-slate-700">Unsupported audio</div>
+                  <div class="text-[9px] text-slate-400">Server returns 400/503 → type instead</div>
+                </div>
+                <span class="pill pill-gray" id="err-audio">fallback</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="mt-0.5 text-slate-400" data-icon="alert"></span>
+                <div class="min-w-0 flex-1">
+                  <div class="text-[10.5px] font-bold text-slate-700">Provider failure</div>
+                  <div class="text-[9px] text-slate-400">Apology + session marked error</div>
+                </div>
+                <span class="pill pill-amber" id="err-provider">safe</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="mt-0.5 text-slate-400" data-icon="stop"></span>
+                <div class="min-w-0 flex-1">
+                  <div class="text-[10.5px] font-bold text-slate-700">Barge-in</div>
+                  <div class="text-[9px] text-slate-400">Playback stops, event recorded</div>
+                </div>
+                <span class="pill pill-green" id="err-barge">ready</span>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+    <footer id="footer"></footer>
+  </div>
+
+  <script src="/assets/js/api.js"></script>
+  <script src="/assets/js/shell.js"></script>
+  <script src="/assets/js/page-playground.js"></script>
+</body>
+</html>

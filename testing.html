@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Scenario Testing — BPO Adriene Playground</title>
+  <meta name="description" content="Reusable test cases, deterministic regression suites, pass/fail with transcripts, rule violations and JSON/CSV export." />
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/assets/css/fonts.css" />
+  <link rel="stylesheet" href="/assets/css/app.css" />
+  <script src="/assets/vendor/tailwind.js"></script>
+</head>
+<body>
+  <div id="mobile-shell"></div>
+  <aside id="sidebar"></aside>
+
+  <div class="flex min-h-screen flex-col lg:pl-[268px]">
+    <main class="mx-auto w-full max-w-[1400px] flex-1 px-5 py-7 sm:px-8 lg:px-10 lg:py-9">
+      <div id="page-header"></div>
+
+      <section class="card mt-5">
+        <div class="grid items-end gap-3 lg:grid-cols-[1fr_auto_auto]">
+          <div>
+            <label class="label" for="test-agent">Agent profile</label>
+            <select class="select" id="test-agent"></select>
+          </div>
+          <button class="btn btn-amber btn-wide px-4" id="seed-btn" type="button"><span data-icon="plus"></span> Seed Fixtures</button>
+          <div class="flex gap-2">
+            <div class="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2">
+              <div class="text-[8px] font-extrabold uppercase tracking-[0.1em] text-slate-400">Cases</div>
+              <div class="mono mt-0.5 text-[14px] font-bold text-slate-800" id="case-count">—</div>
+            </div>
+            <div class="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2">
+              <div class="text-[8px] font-extrabold uppercase tracking-[0.1em] text-slate-400">Runs</div>
+              <div class="mono mt-0.5 text-[14px] font-bold text-slate-800" id="run-count">—</div>
+            </div>
+          </div>
+        </div>
+        <p class="mt-2 text-[9.5px] leading-relaxed text-slate-400">Fixtures are deterministic and safe to re-run. Seeding is idempotent — existing names are skipped.</p>
+      </section>
+
+      <div class="mt-4 grid items-start gap-4 lg:grid-cols-[minmax(300px,0.9fr)_minmax(0,1.45fr)]">
+        <!-- Create case -->
+        <section class="card">
+          <div>
+            <h2 class="section-title">Create Test Case</h2>
+            <p class="section-sub">Scripted user steps run through the same engine as live sessions.</p>
+          </div>
+          <div id="case-form-message" class="mt-3 hidden rounded-lg border px-3 py-2 text-[10.5px]"></div>
+          <form id="case-form" class="mt-3">
+            <div class="grid gap-3">
+              <div>
+                <label class="label" for="case-name">Case name *</label>
+                <input class="input" id="case-name" maxlength="120" placeholder="Positive — Pricing Inquiry" required />
+              </div>
+              <div>
+                <label class="label" for="case-description">Description</label>
+                <input class="input" id="case-description" maxlength="500" placeholder="What this scenario protects against" />
+              </div>
+              <div class="grid grid-cols-2 gap-2">
+                <div>
+                  <label class="label" for="case-category">Category</label>
+                  <select class="select" id="case-category">
+                    <option value="positive">positive</option>
+                    <option value="negative">negative</option>
+                    <option value="ambiguous">ambiguous</option>
+                    <option value="silence">silence</option>
+                    <option value="interruption">interruption</option>
+                    <option value="timeout">timeout</option>
+                    <option value="provider_failure">provider_failure</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="label" for="case-intent">Expected intent</label>
+                  <select class="select" id="case-intent">
+                    <option value="">Any</option>
+                    <option value="greeting">greeting</option>
+                    <option value="pricing">pricing</option>
+                    <option value="eligibility_check">eligibility_check</option>
+                    <option value="transfer_request">transfer_request</option>
+                    <option value="consent">consent</option>
+                    <option value="zip">zip</option>
+                    <option value="coverage">coverage</option>
+                    <option value="termination">termination</option>
+                    <option value="general">general</option>
+                    <option value="silence">silence</option>
+                    <option value="barge_in">barge_in</option>
+                    <option value="provider_error">provider_error</option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label class="label" for="case-required">Required questions (comma separated)</label>
+                <input class="input" id="case-required" placeholder="ZIP code, prior coverage" />
+              </div>
+              <div>
+                <div class="flex items-center justify-between">
+                  <label class="label mb-1.5" for="case-script">Script JSON (user steps) *</label>
+                  <span class="text-[8.5px] text-slate-400">role: user</span>
+                </div>
+                <textarea class="textarea mono" id="case-script" rows="7" spellcheck="false"></textarea>
+                <p class="hint">1–50 steps. Each step must be <span class="mono">{"role":"user","content":"..."}</span>.</p>
+              </div>
+              <button class="btn btn-primary btn-wide" id="create-case-btn" type="submit">Create Case</button>
+            </div>
+          </form>
+          <p class="mt-3 border-t border-slate-100 pt-2.5 text-[9px] leading-relaxed text-slate-400">Supports deterministic scripted tests. Optional audio fixtures require permissions — synthetic fixtures are included.</p>
+        </section>
+
+        <!-- Case library -->
+        <section class="card">
+          <div class="flex flex-wrap items-start justify-between gap-2">
+            <div>
+              <h2 class="section-title">Test Cases — reusable</h2>
+              <p class="section-sub">Select cases for a targeted run, or leave all unchecked to run the full suite.</p>
+            </div>
+            <button class="btn btn-primary btn-xs" id="run-btn" type="button"><span data-icon="play"></span> Run Regression Suite</button>
+          </div>
+          <div class="mt-3 flex flex-wrap items-center gap-2">
+            <button class="btn btn-xs btn-soft" id="select-all" type="button">Select all</button>
+            <button class="btn btn-xs btn-soft" id="clear-all" type="button">Clear</button>
+            <span class="pill pill-violet no-dot" id="selection-pill">All cases</span>
+            <span class="ml-auto text-[9px] text-slate-400" id="case-updated">—</span>
+          </div>
+          <div class="mt-2 max-h-[560px] space-y-2 overflow-y-auto pr-1" id="case-list">
+            <div class="empty-state">
+              <div class="empty-title">Loading test cases…</div>
+              <div class="empty-sub">Reading from local SQLite.</div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Runs -->
+      <section class="card mt-4">
+        <div class="flex flex-wrap items-start justify-between gap-2">
+          <div>
+            <h2 class="section-title">Regression Runs • Results: pass/fail, transcripts, timings, errors, rule violations</h2>
+            <p class="section-sub">Every run snapshots the agent configuration and the full transcript for audit.</p>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <select class="select input-sm w-auto" id="run-history" aria-label="Select a regression run"></select>
+            <button class="btn btn-xs btn-outline hidden" id="export-json" type="button"><span data-icon="download"></span> Export JSON</button>
+            <button class="btn btn-xs btn-dark hidden" id="export-csv" type="button"><span data-icon="download"></span> Export CSV</button>
+          </div>
+        </div>
+        <div class="mt-3" id="run-summary">
+          <div class="empty-state">
+            <div class="empty-title">No regression runs yet</div>
+            <div class="empty-sub">Seed fixtures and run the suite to see pass/fail evidence.</div>
+          </div>
+        </div>
+        <div class="mt-3 space-y-2" id="run-results"></div>
+      </section>
+    </main>
+    <footer id="footer"></footer>
+  </div>
+
+  <script src="/assets/js/api.js"></script>
+  <script src="/assets/js/shell.js"></script>
+  <script src="/assets/js/page-testing.js"></script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+# local noise
+error.log
+server.log
+server.err
+__pycache__/
+*.pyc
+
+# OS noise
+Thumbs.db
+.DS_Store
+
+# keep the client key out of version control once you move to a proxy
+assets/js/config.local.js

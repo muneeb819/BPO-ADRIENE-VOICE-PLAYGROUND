@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-[#070b14] text-slate-100">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="BPO Adriene - enterprise voice agent studio for Deepgram-powered AI telephony.">
+    <meta name="theme-color" content="#070b14">
+    <title>BPO ADRIENE - Enterprise Voice Agent Studio</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col overflow-x-hidden selection:bg-blue-600 selection:text-white">
+
+    <!-- Top Navigation Header -->
+    <header class="border-b border-slate-800/80 bg-slate-900/90 backdrop-blur-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3 min-w-0">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-500 flex items-center justify-center text-white shadow-lg shadow-blue-500/25">
+                    <i class="fa-solid fa-headset text-xl"></i>
+                </div>
+                <div>
+                    <div class="flex items-center space-x-2">
+                        <span class="font-bold text-base sm:text-lg tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-indigo-200 to-teal-300">Adriene Voice Studio</span>
+                        <span class="hidden sm:inline text-[10px] uppercase tracking-widest px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 font-semibold">v2.4 Enterprise</span>
+                    </div>
+                    <p class="text-[11px] text-slate-400 hidden sm:block">BPO Autonomous Voice &amp; Telephony Engine</p>
+                </div>
+            </div>
+
+            <!-- Deepgram API Status Indicator -->
+            <div class="hidden lg:flex items-center space-x-3 bg-slate-800/80 px-3.5 py-1.5 rounded-xl border border-slate-700/80 text-xs">
+                <span class="relative flex h-2.5 w-2.5">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                </span>
+                <span class="text-slate-300 font-medium">Engine: <strong class="text-emerald-400 font-mono" id="speech-status">Deepgram Active</strong></span>
+                <span class="text-slate-600">|</span>
+                <span class="text-slate-400 text-[11px]">Key: <span class="font-mono text-slate-300" id="key-hint">...99421</span></span>
+            </div>
+
+            <!-- Quick Action Toolbar -->
+            <div class="flex items-center space-x-2 sm:space-x-3 shrink-0">
+                <button onclick="toggleGlobalMute()" id="btn-global-mute" class="p-2.5 rounded-xl bg-slate-800/80 border border-slate-700 hover:bg-slate-700 text-slate-300 transition-all hover:scale-105" title="Toggle Audio Feedback" aria-label="Toggle audio feedback">
+                    <i class="fa-solid fa-volume-high text-sm"></i>
+                </button>
+
+                <button onclick="exportStudioData()" class="px-3 py-2 rounded-xl bg-slate-800/80 border border-slate-700 hover:bg-slate-700 text-slate-200 text-xs font-semibold flex items-center space-x-2 transition-all hover:scale-105">
+                    <i class="fa-solid fa-download text-blue-400"></i>
+                    <span class="hidden sm:inline">Export Setup</span>
+                </button>
+
+                <button onclick="triggerQuickDeployment()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white text-xs font-bold shadow-lg shadow-blue-600/25 flex items-center space-x-2 transition-all transform hover:-translate-y-0.5 active:translate-y-0">
+                    <i class="fa-solid fa-rocket"></i>
+                    <span class="hidden sm:inline">Deploy Agent</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs Bar -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex space-x-1 overflow-x-auto custom-scrollbar border-t border-slate-800/60 text-xs font-medium">
+            <button onclick="switchTab('sandbox')" id="tab-sandbox" class="tab-btn px-4 py-3 flex items-center space-x-2 border-b-2 border-transparent hover:text-slate-200 text-slate-400 transition-colors whitespace-nowrap active-tab">
+                <i class="fa-solid fa-microphone-lines"></i>
+                <span>Live Voice Sandbox</span>
+            </button>
+            <button onclick="switchTab('persona')" id="tab-persona" class="tab-btn px-4 py-3 flex items-center space-x-2 border-b-2 border-transparent hover:text-slate-200 text-slate-400 transition-colors whitespace-nowrap">
+                <i class="fa-solid fa-sliders"></i>
+                <span>Persona &amp; Speech Lab</span>
+            </button>
+            <button onclick="switchTab('scenarios')" id="tab-scenarios" class="tab-btn px-4 py-3 flex items-center space-x-2 border-b-2 border-transparent hover:text-slate-200 text-slate-400 transition-colors whitespace-nowrap">
+                <i class="fa-solid fa-folder-tree"></i>
+                <span>BPO Industry Workflows</span>
+            </button>
+            <button onclick="switchTab('telephony')" id="tab-telephony" class="tab-btn px-4 py-3 flex items-center space-x-2 border-b-2 border-transparent hover:text-slate-200 text-slate-400 transition-colors whitespace-nowrap">
+                <i class="fa-solid fa-phone-volume"></i>
+                <span>SIP &amp; Telephony Config</span>
+            </button>
+            <button onclick="switchTab('analytics')" id="tab-analytics" class="tab-btn px-4 py-3 flex items-center space-x-2 border-b-2 border-transparent hover:text-slate-200 text-slate-400 transition-colors whitespace-nowrap">
+                <i class="fa-solid fa-chart-line"></i>
+                <span>Analytics &amp; Quality Control</span>
+            </button>
+            <button onclick="switchTab('security')" id="tab-security" class="tab-btn px-4 py-3 flex items-center space-x-2 border-b-2 border-transparent hover:text-slate-200 text-slate-400 transition-colors whitespace-nowrap">
+                <i class="fa-solid fa-shield-halved"></i>
+                <span>Guardrails &amp; Compliance</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Studio Dashboard Content -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+
+        <!-- TAB 1: LIVE VOICE SANDBOX (DEFAULT ACTIVE) -->
+        <div id="view-sandbox" class="tab-content grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+            <!-- Left Panel: Live Agent Control & Configuration -->
+            <section class="lg:col-span-4 space-y-6">
+                <div class="glass-panel rounded-2xl p-5 border border-slate-800 shadow-xl space-y-4">
+                    <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+                        <h2 class="font-semibold text-slate-100 flex items-center text-sm">
+                            <i class="fa-solid fa-robot text-blue-400 mr-2"></i> Voice Engine Preset
+                        </h2>
+                        <span class="text-xs text-blue-400 font-mono bg-blue-500/10 px-2 py-0.5 rounded-full border border-blue-500/20" id="selected-voice-gender">Aura Asteria</span>
+                    </div>
+
+                    <div class="space-y-4 text-xs">
+                        <div>
+                            <label class="block text-slate-400 mb-1 font-medium" for="voice-select">Deepgram Voice Model (TTS)</label>
+                            <select id="voice-select" onchange="updateVoiceSelection()" class="w-full bg-slate-900/90 border border-slate-700 rounded-xl p-2.5 text-slate-200 focus:outline-none focus:border-blue-500 transition-colors font-sans">
+                                <option value="aura-asteria-en">Aura Asteria (English Female - Natural Support)</option>
+                                <option value="aura-luna-en">Aura Luna (English Female - Calm Executive)</option>
+                                <option value="aura-stella-en">Aura Stella (English Female - High Energy Sales)</option>
+                                <option value="aura-orion-en">Aura Orion (English Male - Technical Expert)</option>
+                                <option value="aura-arcas-en">Aura Arcas (English Male - Financial Advisor)</option>
+                            </select>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <label class="text-slate-400" for="input-pitch">Pitch Scale</label>
+                                    <span class="text-blue-400 font-mono" id="val-pitch">1.0</span>
+                                </div>
+                                <input type="range" id="input-pitch" min="0.5" max="1.5" step="0.1" value="1.0" oninput="updateAudioParams()" class="w-full accent-blue-500 bg-slate-800 rounded-lg h-1.5 cursor-pointer">
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <label class="text-slate-400" for="input-rate">Speech Speed</label>
+                                    <span class="text-blue-400 font-mono" id="val-rate">1.0</span>
+                                </div>
+                                <input type="range" id="input-rate" min="0.5" max="1.8" step="0.1" value="1.0" oninput="updateAudioParams()" class="w-full accent-blue-500 bg-slate-800 rounded-lg h-1.5 cursor-pointer">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-slate-400 mb-1 font-medium" for="scenario-preset">Select Active Workflow Preset</label>
+                            <select id="scenario-preset" onchange="loadScenarioPreset()" class="w-full bg-slate-900/90 border border-slate-700 rounded-xl p-2.5 text-slate-200 focus:outline-none focus:border-blue-500 transition-colors">
+                                <option value="customer-support">Tier-1 Technical Customer Support</option>
+                                <option value="collections">Outbound Payment &amp; Collections</option>
+                                <option value="lead-qual">B2B Enterprise Lead Qualification</option>
+                                <option value="custom">Custom Agent Script</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-slate-400 mb-1 font-medium" for="system-prompt">System Instructions / Prompt Persona</label>
+                            <textarea id="system-prompt" rows="5" class="w-full bg-slate-900/90 border border-slate-700 rounded-xl p-3 text-slate-300 focus:outline-none focus:border-blue-500 transition-colors custom-scrollbar font-mono text-[11px] leading-relaxed" placeholder="Define agent behavior..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Guardrails Quick Toggles -->
+                <div class="glass-panel rounded-2xl p-5 border border-slate-800 shadow-xl space-y-3">
+                    <h3 class="text-xs font-semibold text-slate-200 tracking-wider uppercase flex items-center justify-between pb-2 border-b border-slate-800">
+                        <span>Active Guardrails</span>
+                        <i class="fa-solid fa-shield-halved text-blue-400"></i>
+                    </h3>
+
+                    <div class="space-y-2 text-xs">
+                        <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-900/60 border border-slate-800">
+                            <span class="text-slate-300">Supervisor Auto-Escalation</span>
+                            <input type="checkbox" id="toggle-escalation" checked class="w-4 h-4 accent-blue-600 rounded cursor-pointer">
+                        </div>
+                        <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-900/60 border border-slate-800">
+                            <span class="text-slate-300">Sentiment &amp; Emotion Analysis</span>
+                            <input type="checkbox" id="toggle-sentiment" checked class="w-4 h-4 accent-blue-600 rounded cursor-pointer">
+                        </div>
+                        <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-900/60 border border-slate-800">
+                            <span class="text-slate-300">PCI-DSS Audio Redaction</span>
+                            <input type="checkbox" id="toggle-redaction" checked class="w-4 h-4 accent-blue-600 rounded cursor-pointer">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Center Panel: Live Visualizer & Interactive Transcript Console -->
+            <section class="lg:col-span-8 flex flex-col gap-6">
+
+                <div class="glass-panel rounded-2xl p-6 border border-slate-800 shadow-xl flex-1 flex flex-col justify-between relative overflow-hidden">
+                    <div class="absolute -top-28 -right-28 w-72 h-72 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+                    <!-- Console Header & Call Controls -->
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800 gap-4">
+                        <div class="flex items-center space-x-3">
+                            <div id="status-indicator-ring" class="w-3.5 h-3.5 rounded-full bg-slate-500"></div>
+                            <div>
+                                <h3 class="font-semibold text-sm text-slate-100" id="agent-status-title">Agent Idle</h3>
+                                <p class="text-xs text-slate-400" id="agent-status-sub">Ready for real-time speech test session</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center space-x-2">
+                            <button onclick="startVoiceTest()" id="btn-start-call" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-lg shadow-emerald-600/25 flex items-center space-x-2 transition-all hover:scale-105 active:scale-100">
+                                <i class="fa-solid fa-phone"></i>
+                                <span>Start Call Test</span>
+                            </button>
+                            <button onclick="stopVoiceTest()" id="btn-stop-call" class="px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold shadow-lg shadow-rose-600/25 flex items-center space-x-2 transition-all disabled:opacity-40 disabled:hover:bg-rose-600 hover:scale-105 active:scale-100" disabled>
+                                <i class="fa-solid fa-phone-slash"></i>
+                                <span>End Call</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Audio Waveform Visualizer Canvas -->
+                    <div class="my-5 py-5 bg-slate-900/90 rounded-2xl border border-slate-800/80 flex flex-col items-center justify-center relative shadow-inner">
+                        <canvas id="waveform-canvas" class="w-full h-24 px-4"></canvas>
+                        <div class="mt-2 text-[11px] text-slate-400 flex items-center space-x-4 font-mono">
+                            <span>Duration: <strong id="call-duration" class="text-blue-400">00:00</strong></span>
+                            <span>•</span>
+                            <span id="sentiment-badge" class="px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">Sentiment: Neutral</span>
+                        </div>
+                    </div>
+
+                    <!-- Live Conversation Transcript Output -->
+                    <div class="flex-1 flex flex-col min-h-[220px]">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center">
+                                <i class="fa-solid fa-list-check mr-2 text-blue-400"></i> Real-time Transcript
+                            </span>
+                            <button onclick="clearTranscript()" class="text-xs text-slate-500 hover:text-slate-300 transition-colors">Clear</button>
+                        </div>
+
+                        <div id="transcript-box" aria-live="polite" class="flex-1 bg-slate-900/70 border border-slate-800/80 rounded-2xl p-4 overflow-y-auto max-h-[260px] space-y-3 custom-scrollbar text-xs">
+                            <div class="text-center text-slate-500 py-10 italic">
+                                Press "Start Call Test" or type a message below to test Deepgram TTS &amp; Speech Recognition.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Live Input Console -->
+                    <div class="mt-4 pt-4 border-t border-slate-800 flex items-center gap-2">
+                        <button onclick="toggleMic()" id="btn-mic" class="p-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors flex-shrink-0" title="Toggle Live Speech-to-Text Microphone" aria-label="Toggle microphone">
+                            <i class="fa-solid fa-microphone text-base" id="mic-icon"></i>
+                        </button>
+                        <input type="text" id="user-input-field" onkeydown="handleKeyPress(event)" class="flex-1 bg-slate-900/90 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-blue-500 transition-colors placeholder:text-slate-500" placeholder="Type customer response or use Deepgram live mic...">
+                        <button onclick="sendUserMessage()" class="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-all shadow-lg shadow-blue-600/20 flex items-center space-x-1.5">
+                            <span>Send</span>
+                            <i class="fa-solid fa-paper-plane text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Call Performance Telemetry -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="glass-panel rounded-xl p-4 border border-slate-800">
+                        <div class="text-xs text-slate-400 mb-1">STT / TTS Roundtrip Latency</div>
+                        <div class="text-xl font-bold text-slate-100 font-mono" id="metric-latency">180ms</div>
+                        <div class="text-[10px] text-emerald-400 mt-1 flex items-center">
+                            <i class="fa-solid fa-bolt mr-1"></i> Deepgram Ultra-low Latency
+                        </div>
+                    </div>
+
+                    <div class="glass-panel rounded-xl p-4 border border-slate-800">
+                        <div class="text-xs text-slate-400 mb-1">Speech Recognition Accuracy</div>
+                        <div class="text-xl font-bold text-slate-100 font-mono" id="metric-confidence">99.1%</div>
+                        <div class="text-[10px] text-blue-400 mt-1 flex items-center">
+                            <i class="fa-solid fa-check-circle mr-1"></i> High Fidelity Audio Stream
+                        </div>
+                    </div>
+
+                    <div class="glass-panel rounded-xl p-4 border border-slate-800">
+                        <div class="text-xs text-slate-400 mb-1">Escalation Flag Risk</div>
+                        <div class="text-xl font-bold text-slate-100 font-mono" id="metric-risk">Low</div>
+                        <div class="text-[10px] text-emerald-400 mt-1 flex items-center" id="risk-status">
+                            <i class="fa-solid fa-shield mr-1"></i> Compliant Dialogue
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- TAB 2: PERSONA & SPEECH LAB -->
+        <div id="view-persona" class="tab-content hidden space-y-6">
+            <div class="glass-panel rounded-2xl p-6 border border-slate-800">
+                <h2 class="text-base font-bold text-slate-100 mb-2 flex items-center">
+                    <i class="fa-solid fa-sliders text-blue-400 mr-2"></i> Advanced Voice Studio &amp; Model Fine-Tuning
+                </h2>
+                <p class="text-xs text-slate-400 mb-6">Configure synthesis parameters, pronunciation lexicons, and speech cadence for Deepgram voice models.</p>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 text-xs">
+                    <div class="glass-card p-5 rounded-xl border border-slate-800 space-y-4">
+                        <h3 class="font-semibold text-slate-200 uppercase tracking-wider text-[11px]">Acoustic Tuning</h3>
+                        <div>
+                            <label class="block text-slate-400 mb-1">Punctuation Pause Duration</label>
+                            <input type="range" min="100" max="800" value="300" class="w-full accent-blue-500 bg-slate-800 rounded-lg h-1.5">
+                        </div>
+                        <div>
+                            <label class="block text-slate-400 mb-1">Emotion / Warmth Factor</label>
+                            <input type="range" min="1" max="10" value="8" class="w-full accent-blue-500 bg-slate-800 rounded-lg h-1.5">
+                        </div>
+                        <div>
+                            <label class="block text-slate-400 mb-1">Filler Word Frequency (e.g., 'um', 'let me check')</label>
+                            <select class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-slate-300">
+                                <option>Low (Human-like natural)</option>
+                                <option>Zero (Strict corporate)</option>
+                                <option>Moderate (Conversational)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="glass-card p-5 rounded-xl border border-slate-800 space-y-4">
+                        <h3 class="font-semibold text-slate-200 uppercase tracking-wider text-[11px]">Custom Lexicon &amp; Acronyms</h3>
+                        <p class="text-[11px] text-slate-400">Map custom industry jargon to phonetic pronunciations.</p>
+                        <div class="space-y-2">
+                            <div class="flex gap-2">
+                                <input type="text" value="BPO" readonly class="w-1/3 bg-slate-900 border border-slate-700 rounded p-1.5 font-mono text-slate-300">
+                                <input type="text" value="Bee-Pee-Oh" readonly class="w-2/3 bg-slate-900 border border-slate-700 rounded p-1.5 font-mono text-blue-400">
+                            </div>
+                            <div class="flex gap-2">
+                                <input type="text" value="SLA" readonly class="w-1/3 bg-slate-900 border border-slate-700 rounded p-1.5 font-mono text-slate-300">
+                                <input type="text" value="Ess-El-Ay" readonly class="w-2/3 bg-slate-900 border border-slate-700 rounded p-1.5 font-mono text-blue-400">
+                            </div>
+                        </div>
+                        <button onclick="showToast('Lexicon entry saved!')" class="w-full py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold border border-slate-700">+ Add Phonetic Rule</button>
+                    </div>
+
+                    <div class="glass-card p-5 rounded-xl border border-slate-800 space-y-4">
+                        <h3 class="font-semibold text-slate-200 uppercase tracking-wider text-[11px]">Speech Engine Selection</h3>
+                        <div class="p-3 rounded-lg bg-blue-500/10 border border-blue-500/30">
+                            <div class="font-semibold text-blue-400 mb-1">Deepgram Aura TTS</div>
+                            <p class="text-[11px] text-slate-300">Active engine delivering human-like conversational responsiveness with sub-200ms latency.</p>
+                        </div>
+                        <div class="p-3 rounded-lg bg-slate-900/50 border border-slate-800 opacity-60">
+                            <div class="font-semibold text-slate-400 mb-1">WebSpeech Browser Fallback</div>
+                            <p class="text-[11px] text-slate-500">Standby fallback for offline capability.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: BPO INDUSTRY WORKFLOWS -->
+        <div id="view-scenarios" class="tab-content hidden space-y-6">
+            <div class="glass-panel rounded-2xl p-6 border border-slate-800">
+                <h2 class="text-base font-bold text-slate-100 mb-2 flex items-center">
+                    <i class="fa-solid fa-folder-tree text-blue-400 mr-2"></i> Pre-Configured BPO Scenarios &amp; Call Flows
+                </h2>
+                <p class="text-xs text-slate-400 mb-6">Select or customize domain-specific operational workflows for instant deployment.</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs">
+                    <div onclick="selectScenarioCard('customer-support')" class="glass-card p-5 rounded-2xl border border-slate-800 hover:border-blue-500 cursor-pointer transition-all hover:-translate-y-1">
+                        <div class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center text-lg mb-3">
+                            <i class="fa-solid fa-headset"></i>
+                        </div>
+                        <h3 class="font-bold text-sm text-slate-200 mb-1">Technical Customer Support</h3>
+                        <p class="text-slate-400 mb-4 text-[11px]">Inbound tier-1 connectivity, credentials reset, ticket routing, and diagnostic flow.</p>
+                        <span class="text-[10px] text-blue-400 bg-blue-500/10 px-2.5 py-1 rounded-full font-mono border border-blue-500/20">Preset Active</span>
+                    </div>
+
+                    <div onclick="selectScenarioCard('collections')" class="glass-card p-5 rounded-2xl border border-slate-800 hover:border-blue-500 cursor-pointer transition-all hover:-translate-y-1">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-lg mb-3">
+                            <i class="fa-solid fa-credit-card"></i>
+                        </div>
+                        <h3 class="font-bold text-sm text-slate-200 mb-1">Payment &amp; Collections</h3>
+                        <p class="text-slate-400 mb-4 text-[11px]">Outbound account balance verification, payment setup, and compliant disclosure prompts.</p>
+                        <span class="text-[10px] text-slate-400 bg-slate-800 px-2.5 py-1 rounded-full font-mono border border-slate-700">Click to Load</span>
+                    </div>
+
+                    <div onclick="selectScenarioCard('lead-qual')" class="glass-card p-5 rounded-2xl border border-slate-800 hover:border-blue-500 cursor-pointer transition-all hover:-translate-y-1">
+                        <div class="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center text-lg mb-3">
+                            <i class="fa-solid fa-chart-pie"></i>
+                        </div>
+                        <h3 class="font-bold text-sm text-slate-200 mb-1">Enterprise SDR Lead Qualification</h3>
+                        <p class="text-slate-400 mb-4 text-[11px]">B2B discovery, seat count qualification, budget verification, and calendar booking.</p>
+                        <span class="text-[10px] text-slate-400 bg-slate-800 px-2.5 py-1 rounded-full font-mono border border-slate-700">Click to Load</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: SIP & TELEPHONY CONFIG -->
+        <div id="view-telephony" class="tab-content hidden space-y-6">
+            <div class="glass-panel rounded-2xl p-6 border border-slate-800">
+                <h2 class="text-base font-bold text-slate-100 mb-2 flex items-center">
+                    <i class="fa-solid fa-phone-volume text-blue-400 mr-2"></i> Telephony &amp; SIP Trunking Integration
+                </h2>
+                <p class="text-xs text-slate-400 mb-6">Connect Adriene AI directly into enterprise telecom providers (Twilio, Genesys, Avaya, Cisco).</p>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 text-xs">
+                    <div class="glass-card p-5 rounded-xl border border-slate-800 space-y-4">
+                        <h3 class="font-semibold text-slate-200 uppercase tracking-wider text-[11px]">SIP Trunk Credentials</h3>
+                        <div>
+                            <label class="block text-slate-400 mb-1">SIP Server Hostname</label>
+                            <input type="text" value="sip.telecom-bpo-gateway.com:5060" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 font-mono text-slate-200">
+                        </div>
+                        <div>
+                            <label class="block text-slate-400 mb-1">Outbound Auth User</label>
+                            <input type="text" value="adriene_agent_prod_01" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 font-mono text-slate-200">
+                        </div>
+                        <div>
+                            <label class="block text-slate-400 mb-1">Audio Codec Priority</label>
+                            <select class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-200 font-mono">
+                                <option>G.711 u-law (PCMU) - Standard BPO</option>
+                                <option>G.722 HD Audio</option>
+                                <option>Opus WebRTC High Fidelity</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="glass-card p-5 rounded-xl border border-slate-800 space-y-4">
+                        <h3 class="font-semibold text-slate-200 uppercase tracking-wider text-[11px]">Twilio / Plivo Webhook Bridge</h3>
+                        <div>
+                            <label class="block text-slate-400 mb-1">Inbound Voice Call Webhook</label>
+                            <input type="text" readonly value="https://api.adriene-bpo.ai/v1/telephony/inbound-stream" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 font-mono text-blue-400">
+                        </div>
+                        <div>
+                            <label class="block text-slate-400 mb-1">Status Callback URL</label>
+                            <input type="text" readonly value="https://api.adriene-bpo.ai/v1/telephony/events" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 font-mono text-slate-300">
+                        </div>
+                        <button onclick="showToast('SIP Connection Verified!');" class="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold transition-colors">Test SIP Trunk Ping</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 5: ANALYTICS & QUALITY CONTROL -->
+        <div id="view-analytics" class="tab-content hidden space-y-6">
+            <div class="glass-panel rounded-2xl p-6 border border-slate-800">
+                <h2 class="text-base font-bold text-slate-100 mb-2 flex items-center">
+                    <i class="fa-solid fa-chart-line text-blue-400 mr-2"></i> Quality Assurance &amp; Call Metrics
+                </h2>
+                <p class="text-xs text-slate-400 mb-6">Real-time telemetric logs and sentiment performance reports.</p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs mb-6">
+                    <div class="glass-card p-4 rounded-xl border border-slate-800">
+                        <div class="text-slate-400 mb-1">Average Handle Time (AHT)</div>
+                        <div class="text-2xl font-bold font-mono text-slate-100">1m 42s</div>
+                        <div class="text-[10px] text-emerald-400 mt-1">↓ 34% vs Human Agent</div>
+                    </div>
+
+                    <div class="glass-card p-4 rounded-xl border border-slate-800">
+                        <div class="text-slate-400 mb-1">First Call Resolution (FCR)</div>
+                        <div class="text-2xl font-bold font-mono text-slate-100">92.8%</div>
+                        <div class="text-[10px] text-blue-400 mt-1">↑ 8% Quality Target</div>
+                    </div>
+
+                    <div class="glass-card p-4 rounded-xl border border-slate-800">
+                        <div class="text-slate-400 mb-1">CSAT AI Score</div>
+                        <div class="text-2xl font-bold font-mono text-slate-100">4.8 / 5.0</div>
+                        <div class="text-[10px] text-emerald-400 mt-1">Based on 1,240 calls</div>
+                    </div>
+
+                    <div class="glass-card p-4 rounded-xl border border-slate-800">
+                        <div class="text-slate-400 mb-1">Deepgram STT Accuracy</div>
+                        <div class="text-2xl font-bold font-mono text-slate-100">99.4%</div>
+                        <div class="text-[10px] text-blue-400 mt-1">Zero dropped frames</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 6: GUARDRAILS & COMPLIANCE -->
+        <div id="view-security" class="tab-content hidden space-y-6">
+            <div class="glass-panel rounded-2xl p-6 border border-slate-800">
+                <h2 class="text-base font-bold text-slate-100 mb-2 flex items-center">
+                    <i class="fa-solid fa-shield-halved text-blue-400 mr-2"></i> Security, PCI-DSS &amp; HIPAA Compliance
+                </h2>
+                <p class="text-xs text-slate-400 mb-6">Enterprise voice security settings, real-time credit card redaction, and access controls.</p>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 text-xs">
+                    <div class="glass-card p-5 rounded-xl border border-slate-800 space-y-3">
+                        <div class="flex items-center space-x-2 text-emerald-400 font-semibold mb-2">
+                            <i class="fa-solid fa-lock"></i>
+                            <span>PCI-DSS Audio Muting</span>
+                        </div>
+                        <p class="text-slate-400">Automatically suppresses audio recording whenever sensitive card numbers or CVVs are spoken.</p>
+                        <span class="inline-block px-2.5 py-1 rounded bg-emerald-500/10 text-emerald-400 text-[10px] font-mono border border-emerald-500/20">Enforced Active</span>
+                    </div>
+
+                    <div class="glass-card p-5 rounded-xl border border-slate-800 space-y-3">
+                        <div class="flex items-center space-x-2 text-blue-400 font-semibold mb-2">
+                            <i class="fa-solid fa-user-shield"></i>
+                            <span>HIPAA Compliant PII Masking</span>
+                        </div>
+                        <p class="text-slate-400">Redacts social security numbers, medical record identifiers, and birth dates from transcript logs.</p>
+                        <span class="inline-block px-2.5 py-1 rounded bg-blue-500/10 text-blue-400 text-[10px] font-mono border border-blue-500/20">Enforced Active</span>
+                    </div>
+
+                    <div class="glass-card p-5 rounded-xl border border-slate-800 space-y-3">
+                        <div class="flex items-center space-x-2 text-purple-400 font-semibold mb-2">
+                            <i class="fa-solid fa-key"></i>
+                            <span>TLS 1.3 Media Encryption</span>
+                        </div>
+                        <p class="text-slate-400">End-to-end encrypted SRTP audio stream between BPO SIP trunks and Deepgram speech engines.</p>
+                        <span class="inline-block px-2.5 py-1 rounded bg-purple-500/10 text-purple-400 text-[10px] font-mono border border-purple-500/20">SRTP Enabled</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Deployment Modal -->
+    <div id="deploy-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-panel rounded-2xl max-w-md w-full p-6 border border-slate-700 shadow-2xl relative">
+            <h3 class="text-lg font-bold text-slate-100 mb-2 flex items-center">
+                <i class="fa-solid fa-rocket text-blue-400 mr-2"></i> Production Agent Deployment
+            </h3>
+            <p class="text-xs text-slate-400 mb-4">
+                Your AI agent configuration is validated and ready for production deployment across your enterprise SIP trunking nodes.
+            </p>
+
+            <div class="space-y-3 text-xs mb-6">
+                <div>
+                    <label class="block text-slate-400 mb-1">Production Webhook Endpoint</label>
+                    <div class="flex gap-2">
+                        <input type="text" readonly value="https://api.adriene-bpo.ai/v1/voice/agent_88294x" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 font-mono text-slate-300">
+                        <button onclick="copyWebhook()" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 rounded-xl text-slate-200 border border-slate-700 font-semibold">Copy</button>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-slate-400 mb-1">SIP Routing Trunk</label>
+                    <input type="text" readonly value="sip:adriene-agent-live@sip.telecom-bpo.com" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 font-mono text-slate-300">
+                </div>
+            </div>
+
+            <div class="flex justify-end space-x-2">
+                <button onclick="closeDeployModal()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold">Close</button>
+                <button onclick="closeDeployModal(); showToast('Agent deployed to Live SIP Production!');" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shadow-lg shadow-blue-600/30">Confirm &amp; Launch</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Global Toast Notification Bar -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 transition-all transform translate-y-20 opacity-0 pointer-events-none" role="status" aria-live="polite">
+        <div class="bg-slate-900/95 border border-blue-500/40 text-slate-200 px-4 py-3 rounded-2xl shadow-2xl flex items-center space-x-3 text-xs backdrop-blur-md">
+            <i class="fa-solid fa-circle-info text-blue-400 text-base" id="toast-icon"></i>
+            <span id="toast-msg">Notification message</span>
+        </div>
+    </div>
+
+    <!-- Application JavaScript -->
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/app.js"></script>
+</body>
+</html>

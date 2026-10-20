@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Agent Studio — BPO Adriene Playground</title>
+  <meta name="description" content="Create, edit, duplicate, archive and version AI voice agents with backend-only secrets." />
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/assets/css/fonts.css" />
+  <script src="/assets/vendor/tailwind.js"></script>
+  <link rel="stylesheet" href="/assets/css/app.css" />
+</head>
+<body>
+  <div id="mobile-shell"></div>
+  <aside id="sidebar"></aside>
+
+  <div class="flex min-h-screen flex-col lg:pl-[268px]">
+    <main class="mx-auto w-full max-w-[1400px] flex-1 px-5 py-7 sm:px-8 lg:px-10 lg:py-9">
+      <div id="page-header"></div>
+
+      <div class="mt-6 grid items-start gap-4 lg:grid-cols-3">
+        <!-- Editor -->
+        <section class="card lg:col-span-2" id="agent-form-card">
+          <div class="flex flex-wrap items-start justify-between gap-2">
+            <div>
+              <h2 class="section-title" id="form-title">New Agent Profile</h2>
+              <p class="section-sub">Configuration is persisted to SQLite. Secrets stay backend-only.</p>
+            </div>
+            <span class="pill pill-violet" id="form-badge">Draft state</span>
+          </div>
+
+          <div id="form-message" class="mt-3 hidden rounded-lg border px-3 py-2 text-[10.5px]"></div>
+
+          <form id="agent-form" class="mt-4" novalidate>
+            <div class="grid gap-3 sm:grid-cols-2">
+              <div>
+                <label class="label" for="f-name">Name *</label>
+                <input class="input" id="f-name" maxlength="120" placeholder="Adriene — Outbound Intake" required />
+              </div>
+              <div>
+                <label class="label" for="f-campaign">Campaign</label>
+                <input class="input" id="f-campaign" maxlength="200" placeholder="Q1 Lead Qualification" />
+              </div>
+              <div>
+                <label class="label" for="f-description">Description</label>
+                <input class="input" id="f-description" maxlength="500" placeholder="Short summary for the dashboard" />
+              </div>
+              <div>
+                <label class="label" for="f-purpose">Purpose</label>
+                <input class="input" id="f-purpose" maxlength="500" placeholder="Inbound support & eligibility" />
+              </div>
+            </div>
+
+            <div class="mt-3">
+              <div class="flex items-center justify-between">
+                <label class="label mb-1.5" for="f-instructions">System instructions *</label>
+                <span class="text-[9px] text-slate-400">Required • 10+ chars</span>
+              </div>
+              <textarea class="textarea" id="f-instructions" rows="4" maxlength="8000" placeholder="You are Adriene, a professional BPO voice assistant…"></textarea>
+              <p class="hint">The deterministic engine follows policy first; this brief shapes the agent's persona and fallback replies.</p>
+            </div>
+
+            <div class="mt-3">
+              <label class="label" for="f-rules">Conversation rules</label>
+              <textarea class="textarea" id="f-rules" rows="3" maxlength="4000" placeholder="Ask account-holder check, then ZIP, then prior coverage…"></textarea>
+            </div>
+
+            <div class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              <div>
+                <label class="label" for="f-language">Language</label>
+                <select class="select" id="f-language">
+                  <option value="en-US">English (US)</option>
+                  <option value="en-GB">English (UK)</option>
+                  <option value="es-ES">Spanish (ES)</option>
+                  <option value="fr-FR">French (FR)</option>
+                </select>
+              </div>
+              <div>
+                <label class="label" for="f-voice">Voice</label>
+                <select class="select" id="f-voice">
+                  <optgroup label="Deepgram Aura">
+                    <option value="aura-asteria-en" selected>Asteria — warm female</option>
+                    <option value="aura-luna-en">Luna — calm female</option>
+                    <option value="aura-stella-en">Stella — clear female</option>
+                    <option value="aura-orion-en">Orion — warm male</option>
+                    <option value="aura-arcas-en">Arcas — deep male</option>
+                  </optgroup>
+                  <optgroup label="OpenAI / ElevenLabs aliases">
+                    <option value="alloy">Alloy</option>
+                    <option value="nova">Nova</option>
+                    <option value="onyx">Onyx</option>
+                    <option value="rachel">Rachel</option>
+                    <option value="adam">Adam</option>
+                  </optgroup>
+                </select>
+              </div>
+              <div>
+                <label class="label" for="f-tone">Tone</label>
+                <select class="select" id="f-tone">
+                  <option value="professional">Professional</option>
+                  <option value="friendly">Friendly</option>
+                  <option value="empathetic">Empathetic</option>
+                  <option value="authoritative">Authoritative</option>
+                  <option value="cheerful">Cheerful</option>
+                </select>
+              </div>
+              <div>
+                <label class="label" for="f-rate">Speaking rate <span class="mono text-violet-600" id="rate-value">100%</span></label>
+                <input class="w-full accent-violet-600 mt-2" id="f-rate" type="range" min="50" max="200" step="5" value="100" />
+                <div class="flex justify-between text-[8px] text-slate-400"><span>50%</span><span>200%</span></div>
+              </div>
+            </div>
+
+            <div class="mt-4 rounded-xl border border-slate-200 bg-slate-50/50 p-3">
+              <div class="flex items-center gap-2">
+                <span class="text-violet-600" data-icon="activity"></span>
+                <h3 class="text-[11px] font-extrabold tracking-tight text-slate-800">Provider routing</h3>
+                <span class="ml-auto pill pill-ghost no-dot">Keys backend-only</span>
+              </div>
+              <div class="mt-3 grid gap-3 sm:grid-cols-3">
+                <div>
+                  <label class="label" for="f-stt">STT provider</label>
+                  <select class="select" id="f-stt">
+                    <option value="browser">Browser Web Speech API</option>
+                    <option value="whisper">OpenAI Whisper</option>
+                    <option value="deepgram">Deepgram Nova-2</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="label" for="f-llm">LLM provider</label>
+                  <select class="select" id="f-llm">
+                    <option value="local">Local Deterministic Engine</option>
+                    <option value="openai">OpenAI GPT-4o Mini</option>
+                    <option value="anthropic">Anthropic Claude 3.5</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="label" for="f-tts">TTS provider</label>
+                  <select class="select" id="f-tts">
+                    <option value="browser-tts">Browser Speech Synthesis</option>
+                    <option value="deepgram-tts">Deepgram Aura</option>
+                    <option value="elevenlabs">ElevenLabs</option>
+                    <option value="openai-tts">OpenAI TTS</option>
+                  </select>
+                </div>
+                <div class="sm:col-span-2">
+                  <label class="label" for="f-model">LLM model</label>
+                  <input class="input" id="f-model" maxlength="80" placeholder="deterministic-rules" />
+                </div>
+                <div>
+                  <label class="label" for="f-temp">Temperature</label>
+                  <input class="input" id="f-temp" type="number" min="0" max="2" step="0.1" value="0" />
+                </div>
+              </div>
+              <p class="hint">Provider tests run in Voice Lab. This build never sends customer audio to a provider unless a backend key is configured.</p>
+            </div>
+
+            <div class="mt-4 grid gap-3 sm:grid-cols-2">
+              <div class="rounded-xl border border-slate-200 p-3">
+                <div class="label mb-2">Transfer policy</div>
+                <label class="flex items-center gap-2 text-[11px] font-medium text-slate-700">
+                  <input type="checkbox" class="checkbox" id="f-transfer-enabled" checked /> Allow mock transfers
+                </label>
+                <label class="mt-2 flex items-center gap-2 text-[11px] font-medium text-slate-700">
+                  <input type="checkbox" class="checkbox" id="f-transfer-consent" checked /> Require explicit consent
+                </label>
+                <p class="hint">A transfer request without consent must never execute. The engine asks first.</p>
+              </div>
+              <div class="rounded-xl border border-slate-200 p-3">
+                <div class="label mb-2">Enabled tools</div>
+                <input class="input" id="f-tools" placeholder="eligibility_check, schedule_callback" />
+                <p class="hint">Comma-separated. Tools are declared capabilities in this local build.</p>
+              </div>
+            </div>
+
+            <div class="mt-3">
+              <label class="label" for="f-safety">Safety restrictions</label>
+              <textarea class="textarea" id="f-safety" rows="2" maxlength="1000" placeholder="No hacking, no disallowed content. Never claim an action succeeded unless confirmed."></textarea>
+            </div>
+
+            <div class="mt-3 grid gap-3 sm:grid-cols-3">
+              <div>
+                <label class="label" for="f-max-turns">Max turns</label>
+                <input class="input" id="f-max-turns" type="number" min="1" max="100" value="20" />
+              </div>
+              <div>
+                <label class="label" for="f-silence">Silence timeout (sec)</label>
+                <input class="input" id="f-silence" type="number" min="1" max="60" value="8" />
+              </div>
+              <div>
+                <label class="label" for="f-status">Status</label>
+                <select class="select" id="f-status">
+                  <option value="draft">Draft</option>
+                  <option value="testing">Testing</option>
+                  <option value="approved">Approved</option>
+                  <option value="archived">Archived</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="mt-4 flex flex-wrap items-center gap-2">
+              <button class="btn btn-primary flex-1" id="submit-btn" type="submit">Create agent</button>
+              <button class="btn btn-outline" id="reset-btn" type="button">Reset</button>
+              <button class="btn btn-soft hidden" id="cancel-btn" type="button">Cancel edit</button>
+            </div>
+            <p class="mt-2 text-[9.5px] leading-relaxed text-slate-400">Validation: name ≥ 2 chars, instructions ≥ 10 chars, rate 50–200, max turns 1–100. Every save creates a new version snapshot.</p>
+          </form>
+        </section>
+
+        <!-- Persisted list -->
+        <aside class="lg:sticky lg:top-6">
+          <section class="card">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <h2 class="section-title">Persisted agents</h2>
+                <p class="section-sub" id="agent-count">Loading…</p>
+              </div>
+              <button class="icon-btn" id="refresh-agents" type="button" title="Refresh agents"></button>
+            </div>
+
+            <div class="mt-3 grid grid-cols-2 gap-2">
+              <select class="select input-sm" id="status-filter" aria-label="Filter by status">
+                <option value="all">All statuses</option>
+                <option value="draft">Draft</option>
+                <option value="testing">Testing</option>
+                <option value="approved">Approved</option>
+                <option value="archived">Archived</option>
+              </select>
+              <input class="input input-sm" id="search-agents" placeholder="Search agents…" aria-label="Search agents" />
+            </div>
+
+            <button class="btn btn-soft btn-wide mt-2" id="new-agent-side" type="button">New agent profile</button>
+
+            <div class="mt-3 max-h-[calc(100vh-300px)] space-y-2 overflow-y-auto pr-1" id="agent-list">
+              <div class="empty-state">
+                <div class="empty-title">Loading agents…</div>
+                <div class="empty-sub">Reading from local SQLite.</div>
+              </div>
+            </div>
+          </section>
+
+          <div class="mt-3 rounded-xl border border-violet-200 bg-violet-50/60 p-3">
+            <div class="flex items-start gap-2">
+              <span class="mt-0.5 text-violet-600" data-icon="history"></span>
+              <div>
+                <div class="text-[10.5px] font-bold text-violet-900">Versioned by design</div>
+                <p class="mt-0.5 text-[9.5px] leading-relaxed text-violet-700/80">Every save snapshots the full config. Roll back at any time — a rollback also creates a new version, so history is never rewritten.</p>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </main>
+    <footer id="footer"></footer>
+  </div>
+
+  <script src="/assets/js/api.js"></script>
+  <script src="/assets/js/shell.js"></script>
+  <script src="/assets/js/page-agents.js"></script>
+</body>
+</html>

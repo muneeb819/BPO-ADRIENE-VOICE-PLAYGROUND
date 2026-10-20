@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Foundation — BPO Adriene Playground</title>
+  <meta name="description" content="Local-first health, persistence and delivery gates for the BPO Adriene voice-agent playground." />
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/assets/css/fonts.css" />
+  <script src="/assets/vendor/tailwind.js"></script>
+  <link rel="stylesheet" href="/assets/css/app.css" />
+</head>
+<body>
+  <div id="mobile-shell"></div>
+  <aside id="sidebar"></aside>
+
+  <div class="flex min-h-screen flex-col lg:pl-[268px]">
+    <main class="mx-auto w-full max-w-[1400px] flex-1 px-5 py-7 sm:px-8 lg:px-10 lg:py-9">
+      <div id="page-header"></div>
+
+      <!-- Live status cards -->
+      <section class="mt-6 grid gap-3 sm:grid-cols-3" id="status-cards">
+        <div class="card card-tight">
+          <div class="label mb-2">Backend status</div>
+          <div class="flex items-end justify-between gap-2">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="status-dot" id="backend-dot"></span>
+                <span class="text-[16px] font-extrabold tracking-tight" id="backend-state">Checking…</span>
+              </div>
+              <div class="mt-1 text-[10.5px] text-slate-500" id="backend-detail">GET /api/health</div>
+            </div>
+            <span class="pill pill-gray no-dot" id="backend-code">—</span>
+          </div>
+          <div class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 text-[10px]">
+            <span class="text-slate-500">Round-trip <b class="mono text-slate-700" id="backend-latency">—</b></span>
+            <a href="/api/health" target="_blank" class="font-semibold text-violet-600 hover:text-violet-700">Valid JSON ↗</a>
+          </div>
+        </div>
+        <div class="card card-tight">
+          <div class="label mb-2">Frontend</div>
+          <div class="flex items-end justify-between gap-2">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="status-dot"></span>
+                <span class="text-[16px] font-extrabold tracking-tight">Connected</span>
+              </div>
+              <div class="mt-1 text-[10.5px] text-slate-500">HTML + Tailwind + vanilla JS</div>
+            </div>
+            <span class="pill pill-green no-dot">9 pages</span>
+          </div>
+          <div class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 text-[10px]">
+            <span class="text-slate-500">Shared shell</span>
+            <span class="font-semibold text-emerald-600">No client-side secrets</span>
+          </div>
+        </div>
+        <div class="card card-tight">
+          <div class="label mb-2">Persistence</div>
+          <div class="flex items-end justify-between gap-2">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="status-dot" id="db-dot"></span>
+                <span class="text-[16px] font-extrabold tracking-tight" id="db-state">Checking…</span>
+              </div>
+              <div class="mt-1 text-[10.5px] text-slate-500">SQLite • stdlib <span class="mono">sqlite3</span></div>
+            </div>
+            <span class="pill pill-green no-dot" id="db-code">local</span>
+          </div>
+          <div class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 text-[10px]">
+            <span class="text-slate-500">File</span>
+            <span class="chip chip-mono">data/adriene.db</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Counts -->
+      <section class="mt-3 grid grid-cols-2 gap-3 lg:grid-cols-4" id="counts">
+        <div class="stat-card">
+          <div class="stat-label">Agents</div>
+          <div class="mt-1 flex items-end justify-between"><span class="stat-value" id="count-agents">—</span><span class="text-[9px] text-slate-400">persisted</span></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Sessions</div>
+          <div class="mt-1 flex items-end justify-between"><span class="stat-value" id="count-sessions">—</span><span class="text-[9px] text-slate-400">voice + text</span></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Test cases</div>
+          <div class="mt-1 flex items-end justify-between"><span class="stat-value" id="count-cases">—</span><span class="text-[9px] text-slate-400">regression</span></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Providers</div>
+          <div class="mt-1 flex items-end justify-between"><span class="stat-value" id="count-providers">—</span><span class="text-[9px] text-slate-400">STT / LLM / TTS</span></div>
+        </div>
+      </section>
+
+      <!-- Workflow + gates -->
+      <section class="mt-5 grid gap-4 lg:grid-cols-2">
+        <div class="card">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <h2 class="section-title">Reproducible local workflow</h2>
+              <p class="section-sub">One process, one SQLite file, zero cloud dependencies required.</p>
+            </div>
+            <span class="pill pill-violet no-dot">Windows 11</span>
+          </div>
+          <div class="mt-4 space-y-2.5">
+            <div class="flex gap-3">
+              <span class="flex h-5 w-5 flex-none items-center justify-center rounded-md bg-violet-50 text-[10px] font-extrabold text-violet-700">1</span>
+              <div>
+                <div class="text-[11.5px] font-bold text-slate-800">Start the local server</div>
+                <div class="text-[10.5px] leading-relaxed text-slate-500">Double-click <span class="kbd">start.cmd</span> or run <span class="kbd">python server.py</span>. It auto-selects the next free port.</div>
+              </div>
+            </div>
+            <div class="flex gap-3">
+              <span class="flex h-5 w-5 flex-none items-center justify-center rounded-md bg-violet-50 text-[10px] font-extrabold text-violet-700">2</span>
+              <div>
+                <div class="text-[11.5px] font-bold text-slate-800">Pass the health gate</div>
+                <div class="text-[10.5px] leading-relaxed text-slate-500">Confirm database, API and storage checks before opening a voice session.</div>
+              </div>
+            </div>
+            <div class="flex gap-3">
+              <span class="flex h-5 w-5 flex-none items-center justify-center rounded-md bg-violet-50 text-[10px] font-extrabold text-violet-700">3</span>
+              <div>
+                <div class="text-[11.5px] font-bold text-slate-800">Configure & test</div>
+                <div class="text-[10.5px] leading-relaxed text-slate-500">Create an agent, seed regression fixtures, then run the suite. Provider keys stay in <span class="mono">.env</span>.</div>
+              </div>
+            </div>
+            <div class="flex gap-3">
+              <span class="flex h-5 w-5 flex-none items-center justify-center rounded-md bg-violet-50 text-[10px] font-extrabold text-violet-700">4</span>
+              <div>
+                <div class="text-[11.5px] font-bold text-slate-800">Run the voice loop</div>
+                <div class="text-[10.5px] leading-relaxed text-slate-500">Mic → STT → deterministic rules → TTS, with barge-in, consent gates and persisted transcripts.</div>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 grid gap-3 sm:grid-cols-2">
+            <div>
+              <div class="label">Start & health</div>
+              <div class="code-block"><span class="comment"># one-click on Windows</span>
+start.cmd
+
+<span class="comment"># manual (auto-port)</span>
+python server.py
+
+<span class="comment"># health gate</span>
+curl http<span class="comment">://</span>localhost:8000<span class="comment">/</span>api/health</div>
+            </div>
+            <div>
+              <div class="label">Project layout</div>
+              <div class="code-block">AdrieneVoiceStudio/
+  server.py        <span class="comment"># API + static</span>
+  assets/js/       <span class="comment"># shared client</span>
+  data/adriene.db  <span class="comment"># SQLite</span>
+  .env             <span class="comment"># secrets (server)</span>
+  start.cmd        <span class="comment"># launcher</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <h2 class="section-title">Implementation gates</h2>
+              <p class="section-sub">Every capability is wired to a live endpoint — not a static mock.</p>
+            </div>
+            <span class="pill pill-green no-dot" id="gates-count">—</span>
+          </div>
+          <div class="mt-3 divide-y divide-slate-100">
+            <div class="flex items-start gap-2.5 py-2.5">
+              <span class="mt-0.5 text-emerald-500" data-gate-icon></span>
+              <div class="min-w-0">
+                <div class="text-[11.5px] font-bold text-slate-800">Foundation & health</div>
+                <div class="text-[10px] text-slate-500">Live <span class="mono">/api/health</span>, DB connectivity, storage write check, uptime.</div>
+              </div>
+              <span class="ml-auto pill pill-green">pass</span>
+            </div>
+            <div class="flex items-start gap-2.5 py-2.5">
+              <span class="mt-0.5 text-emerald-500" data-gate-icon></span>
+              <div class="min-w-0">
+                <div class="text-[11.5px] font-bold text-slate-800">Agent lifecycle</div>
+                <div class="text-[10px] text-slate-500">Create, edit, duplicate, archive, delete, version history and rollback.</div>
+              </div>
+              <span class="ml-auto pill pill-green">pass</span>
+            </div>
+            <div class="flex items-start gap-2.5 py-2.5">
+              <span class="mt-0.5 text-emerald-500" data-gate-icon></span>
+              <div class="min-w-0">
+                <div class="text-[11.5px] font-bold text-slate-800">Voice pipeline</div>
+                <div class="text-[10px] text-slate-500">Browser STT/TTS, optional Deepgram Aura + Nova-2 proxy, barge-in & playback control.</div>
+              </div>
+              <span class="ml-auto pill pill-green">pass</span>
+            </div>
+            <div class="flex items-start gap-2.5 py-2.5">
+              <span class="mt-0.5 text-emerald-500" data-gate-icon></span>
+              <div class="min-w-0">
+                <div class="text-[11.5px] font-bold text-slate-800">Scenario testing</div>
+                <div class="text-[10px] text-slate-500">9 seeded fixtures, deterministic pass/fail, rule violations, JSON + CSV export.</div>
+              </div>
+              <span class="ml-auto pill pill-green">pass</span>
+            </div>
+            <div class="flex items-start gap-2.5 py-2.5">
+              <span class="mt-0.5 text-emerald-500" data-gate-icon></span>
+              <div class="min-w-0">
+                <div class="text-[11.5px] font-bold text-slate-800">Observability</div>
+                <div class="text-[10px] text-slate-500">Per-turn latency, session event timeline, provider stats, p50/p90/p95 analytics.</div>
+              </div>
+              <span class="ml-auto pill pill-green">pass</span>
+            </div>
+            <div class="flex items-start gap-2.5 py-2.5">
+              <span class="mt-0.5 text-emerald-500" data-gate-icon></span>
+              <div class="min-w-0">
+                <div class="text-[11.5px] font-bold text-slate-800">Safety & security</div>
+                <div class="text-[10px] text-slate-500">Backend-only keys, redaction, rate limits, retention policy, mock-only telephony.</div>
+              </div>
+              <span class="ml-auto pill pill-green">pass</span>
+            </div>
+            <div class="flex items-start gap-2.5 py-2.5">
+              <span class="mt-0.5 text-emerald-500" data-gate-icon></span>
+              <div class="min-w-0">
+                <div class="text-[11.5px] font-bold text-slate-800">Delivery docs</div>
+                <div class="text-[10px] text-slate-500">Launch checklist, architecture, test evidence, limitations and next steps.</div>
+              </div>
+              <span class="ml-auto pill pill-green">pass</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Env + errors -->
+      <section class="mt-4 grid gap-4 lg:grid-cols-2">
+        <div class="card">
+          <h2 class="section-title">Environment validation</h2>
+          <p class="section-sub">Startup checks that fail closed instead of guessing.</p>
+          <div class="mt-3 grid gap-2 sm:grid-cols-2" id="env-checks">
+            <div class="flex items-center gap-2 rounded-lg border border-slate-200 bg-slate-50/60 px-2.5 py-2">
+              <span class="status-dot"></span><span class="text-[10.5px] font-semibold text-slate-600">Checking…</span>
+            </div>
+          </div>
+          <div class="mt-3 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2.5">
+            <div class="flex items-start gap-2">
+              <span class="mt-0.5 text-amber-500" id="env-alert-icon"></span>
+              <p class="text-[10px] leading-relaxed text-amber-800">
+                <b>No provider keys are required.</b> Without <span class="mono">DEEPGRAM_API_KEY</span> the playground uses browser speech synthesis and the Web Speech API. Add keys to <span class="mono">.env</span> — never to frontend files.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2 class="section-title">Error handling</h2>
+          <p class="section-sub">Every failure returns a safe JSON envelope with a useful status code.</p>
+          <div class="mt-3 space-y-2">
+            <div class="flex items-center gap-2 rounded-lg border border-slate-200 px-2.5 py-2">
+              <span class="pill pill-amber no-dot">400</span><span class="text-[10.5px] text-slate-600">Validation — name, instructions, ranges, script shape</span>
+            </div>
+            <div class="flex items-center gap-2 rounded-lg border border-slate-200 px-2.5 py-2">
+              <span class="pill pill-gray no-dot">404</span><span class="text-[10.5px] text-slate-600">Missing agent, session, case, provider or version</span>
+            </div>
+            <div class="flex items-center gap-2 rounded-lg border border-slate-200 px-2.5 py-2">
+              <span class="pill pill-red no-dot">409</span><span class="text-[10.5px] text-slate-600">Archived agent or inactive session conflicts</span>
+            </div>
+            <div class="flex items-center gap-2 rounded-lg border border-slate-200 px-2.5 py-2">
+              <span class="pill pill-blue no-dot">429</span><span class="text-[10.5px] text-slate-600">Rate limit — 240 API requests / minute / client</span>
+            </div>
+            <div class="flex items-center gap-2 rounded-lg border border-slate-200 px-2.5 py-2">
+              <span class="pill pill-red no-dot">500</span><span class="text-[10.5px] text-slate-600">Internal error — generic message, never a stack trace</span>
+            </div>
+          </div>
+          <div class="mt-3 code-block"><span class="comment">// example error envelope</span>
+{ <span class="key">"error"</span>: <span class="string">"Name must be at least 2 characters"</span> }</div>
+        </div>
+      </section>
+
+      <!-- Health JSON + quick links -->
+      <section class="mt-4 grid gap-4 lg:grid-cols-3">
+        <div class="card lg:col-span-2">
+          <div class="flex items-center justify-between gap-3">
+            <div>
+              <h2 class="section-title">Live system snapshot</h2>
+              <p class="section-sub">The same payload consumed by the shell status indicator.</p>
+            </div>
+            <button class="btn btn-outline btn-xs" id="refresh-health" type="button">Refresh</button>
+          </div>
+          <pre class="code-block mt-3 max-h-[310px]" id="health-json">Loading…</pre>
+        </div>
+        <div class="card">
+          <h2 class="section-title">Quick actions</h2>
+          <p class="section-sub">Jump into the working loop.</p>
+          <div class="mt-3 space-y-2">
+            <a href="/agents" class="flex items-center justify-between rounded-xl border border-slate-200 px-3 py-2.5 transition hover:border-violet-300 hover:bg-violet-50/40">
+              <span class="flex items-center gap-2 text-[11.5px] font-bold text-slate-700"><span class="text-violet-600" data-icon="layers"></span> Create an agent</span>
+              <span class="text-slate-400" data-icon="arrow"></span>
+            </a>
+            <a href="/playground" class="flex items-center justify-between rounded-xl border border-slate-200 px-3 py-2.5 transition hover:border-violet-300 hover:bg-violet-50/40">
+              <span class="flex items-center gap-2 text-[11.5px] font-bold text-slate-700"><span class="text-violet-600" data-icon="mic"></span> Start a voice session</span>
+              <span class="text-slate-400" data-icon="arrow"></span>
+            </a>
+            <a href="/testing" class="flex items-center justify-between rounded-xl border border-slate-200 px-3 py-2.5 transition hover:border-violet-300 hover:bg-violet-50/40">
+              <span class="flex items-center gap-2 text-[11.5px] font-bold text-slate-700"><span class="text-violet-600" data-icon="clipboard"></span> Run regression suite</span>
+              <span class="text-slate-400" data-icon="arrow"></span>
+            </a>
+            <a href="/docs" class="flex items-center justify-between rounded-xl border border-slate-200 px-3 py-2.5 transition hover:border-violet-300 hover:bg-violet-50/40">
+              <span class="flex items-center gap-2 text-[11.5px] font-bold text-slate-700"><span class="text-violet-600" data-icon="book"></span> Launch checklist</span>
+              <span class="text-slate-400" data-icon="arrow"></span>
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer id="footer"></footer>
+  </div>
+
+  <script src="/assets/js/api.js"></script>
+  <script src="/assets/js/shell.js"></script>
+  <script src="/assets/js/page-foundation.js"></script>
+</body>
+</html>
