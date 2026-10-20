@@ -350,24 +350,42 @@
 
   // ---- cloud TTS smoke ---------------------------------------------------
 
+  let lastPlayKey = '';
+
+  function voiceLabel(voiceId) {
+    const voice = window.VOICE_CATALOG?.byId(voiceId);
+    if (voice) return `${voice.family} — ${voice.name} (${voice.accent}, ${voice.gender})`;
+    return voiceId || 'unknown voice';
+  }
+
   $('cloud-tts-btn').addEventListener('click', async (event) => {
     const btn = event.currentTarget;
     const text = $('cloud-tts-text').value.trim();
     if (!text) {
-      UI.toast('Enter text to synthesize.', 'error');
+      UI.toast('Enter text to play.', 'error');
       return;
     }
-    UI.setBusy(btn, true, 'Synthesizing');
+    const voice = $('cloud-tts-voice').value;
+    const key = `${voice}|${text}`;
+    const audio = $('cloud-tts-audio');
+    if (lastPlayKey === key && cloudTtsUrl) {
+      audio.src = cloudTtsUrl;
+      audio.classList.remove('hidden');
+      await audio.play().catch(() => {});
+      $('cloud-tts-status').textContent = 'Playing…';
+      return;
+    }
+    UI.setBusy(btn, true, 'Playing…');
     $('cloud-tts-error').classList.add('hidden');
-    const selectedVoice = window.VOICE_CATALOG?.byId($('cloud-tts-voice').value);
+    const selectedVoice = window.VOICE_CATALOG?.byId(voice);
     $('cloud-tts-status').textContent = `Calling Deepgram ${selectedVoice?.family || 'TTS'}…`;
     const started = performance.now();
     try {
-      const blob = await API.tts(text, $('cloud-tts-voice').value);
+      const blob = await API.tts(text, voice);
       const ms = Math.round(performance.now() - started);
       if (cloudTtsUrl) URL.revokeObjectURL(cloudTtsUrl);
       cloudTtsUrl = URL.createObjectURL(blob);
-      const audio = $('cloud-tts-audio');
+      lastPlayKey = key;
       audio.src = cloudTtsUrl;
       audio.classList.remove('hidden');
       audio.play().catch(() => {});
@@ -381,6 +399,47 @@
       const box = $('cloud-tts-error');
       box.textContent = `${err.message}. Add DEEPGRAM_API_KEY to .env and restart server.py; browser TTS remains available in the playground.`;
       box.classList.remove('hidden');
+      UI.toast(err.message, 'error');
+    } finally {
+      UI.setBusy(btn, false);
+    }
+  });
+
+  // ---- save the selected voice to an agent --------------------------------
+
+  let agentOptions = [];
+
+  async function loadAgentOptions() {
+    const select = $('cloud-tts-agent');
+    try {
+      agentOptions = await API.agents();
+      select.innerHTML = agentOptions.map((agent) => `
+        <option value="${agent.id}">${UI.esc(agent.name)} — ${UI.esc(voiceLabel(agent.voice))}</option>`).join('');
+      if (!select.value && select.options.length) select.selectedIndex = 0;
+    } catch (err) {
+      select.innerHTML = '<option value="">No agents available</option>';
+    }
+  }
+
+  $('cloud-tts-save').addEventListener('click', async (event) => {
+    const btn = event.currentTarget;
+    const agentId = $('cloud-tts-agent').value;
+    const voice = $('cloud-tts-voice').value;
+    if (!agentId) {
+      UI.toast('No agent selected.', 'error');
+      return;
+    }
+    UI.setBusy(btn, true, 'Saving');
+    try {
+      const updated = await API.updateAgent(agentId, {
+        voice,
+        ttsConfig: { model: voice },
+        changeNote: `Voice set to ${voiceLabel(voice)}`,
+      });
+      UI.toast(`Voice saved to ${updated.name}`, 'success');
+      $('cloud-tts-status').textContent = `Saved to ${updated.name}`;
+      await loadAgentOptions();
+    } catch (err) {
       UI.toast(err.message, 'error');
     } finally {
       UI.setBusy(btn, false);
@@ -464,6 +523,7 @@
   }
 
   renderAll();
+  await loadAgentOptions();
 
   if (health) {
     const ttsReady = !!health.capabilities?.deepgramTts;

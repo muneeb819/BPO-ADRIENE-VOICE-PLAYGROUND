@@ -6,6 +6,8 @@ A local-first, Windows-first port of the BPO Adriene voice-agent playground. It 
 
 The runtime is deliberately small: **Python 3.12 standard library + SQLite + static HTML/CSS/vanilla JS**. There is no Docker, Postgres, Node build step or runtime npm dependency.
 
+The whole product ships in **one dark theme** — navy surfaces (`#0a0e1a` → `#111827`), violet accent, light text — matching the Voice Lab control panel. No page ships a light variant.
+
 ---
 
 ## Quick start (Windows 11)
@@ -62,6 +64,13 @@ This enables:
 The API and frontend only expose boolean capability flags such as `deepgramTts` and `deepgramStt`. The key is never returned by `/api/*`, written into HTML/JS, stored in `localStorage`, or included in logs. `.env` is also blocked by the static server and ignored by Git.
 
 **Voice picker:** `Voice Lab → Live adapter smoke test — TTS` renders a grouped picker (Provider → Voice, `Flux` and `Aura` groups) in the same dark control-panel theme as *Voice Preview & Controls*. Flux voices are served from Deepgram `/v2/speak`, Aura voices from `/v1/speak`; the same catalogue is available in `Agent Studio → Voice`.
+
+Two actions sit under the picker:
+
+| Control | Behaviour |
+|---|---|
+| **Play** | Synthesizes the sample text with the selected voice and plays it (re-play is instant — the clip is cached) |
+| **Save voice** | Writes the selected voice to the chosen agent (`PUT /api/agents/{id}`) and stores it in `ttsConfig.model`. The save creates a new agent version, so the change is versioned and reversible |
 
 Restart the server after changing `.env`. Test the connection from **Voice Lab → Deepgram** or:
 

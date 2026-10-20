@@ -568,3 +568,181 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .voice-trigger-dark .voice-chevron { color: #94a3b8; }
 .pill-green-dark { background: rgba(16, 185, 129, .16); color: #6ee7b7; border-color: rgba(16, 185, 129, .28); }
 .pill-red-dark { background: rgba(239, 68, 68, .14); color: #fca5a5; border-color: rgba(239, 68, 68, .3); }
+
+/* ==========================================================================
+   Dark theme — applied across the whole project
+   The palette matches the "Voice Preview & Controls" control panel:
+   navy surfaces, violet accent, light text on dark.
+   ========================================================================== */
+
+:root {
+  --canvas: #070b14;
+  --line: rgba(148, 163, 184, .14);
+  --ink: #e2e8f0;
+  --muted: #94a3b8;
+}
+
+html { color-scheme: dark; }
+
+body {
+  background:
+    radial-gradient(1100px 520px at 84% -10%, rgba(124, 58, 237, .17) 0%, rgba(7, 11, 20, 0) 62%),
+    radial-gradient(900px 460px at 6% -4%, rgba(13, 148, 136, .10) 0%, rgba(7, 11, 20, 0) 58%),
+    #070b14;
+  color: var(--ink);
+}
+
+::selection { background: rgba(139, 92, 246, .35); color: #fff; }
+
+::-webkit-scrollbar { width: 9px; height: 9px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #334155; border-radius: 999px; border: 2px solid transparent; background-clip: padding-box; }
+::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+/* --- surfaces ----------------------------------------------------------- */
+.card {
+  background: linear-gradient(155deg, #111827 0%, #0a0e1a 70%);
+  border: 1px solid rgba(148, 163, 184, .13);
+  box-shadow: 0 14px 34px rgba(2, 6, 23, .34);
+}
+.card-tight { background: linear-gradient(155deg, #111827 0%, #0a0e1a 70%); }
+.hairline { background: rgba(148, 163, 184, .14); }
+
+.section-title { color: #f1f5f9; }
+.section-sub { color: #94a3b8; }
+.page-title { color: #f8fafc; }
+.page-sub { color: #9fb0c6; }
+.eyebrow { color: #a78bfa; }
+.label { color: #94a3b8; }
+.hint { color: #7c8aa3; }
+.stat-label, .metric-label { color: #8b9ab0; }
+.metric-value, .stat-value { color: #f8fafc; }
+
+/* --- form controls ------------------------------------------------------ */
+.input, .select, .textarea {
+  background: #0a1120; color: #e2e8f0;
+  border-color: rgba(148, 163, 184, .22);
+}
+.input::placeholder, .textarea::placeholder { color: #5c6b82; }
+.input:focus, .select:focus, .textarea:focus {
+  border-color: #8b5cf6; box-shadow: 0 0 0 3px rgba(124, 58, 237, .2);
+}
+.input:disabled, .select:disabled, .textarea:disabled { background: #0d1524; color: #64748b; }
+select option { background: #0f172a; color: #e2e8f0; }
+
+/* --- buttons ------------------------------------------------------------ */
+.btn-outline { background: #0f172a; color: #cbd5e1; border-color: rgba(148, 163, 184, .24); }
+.btn-outline:hover:not(:disabled) { background: #16213a; border-color: #94a3b8; color: #f1f5f9; }
+.btn-soft { background: rgba(148, 163, 184, .1); color: #cbd5e1; border-color: rgba(148, 163, 184, .18); }
+.btn-soft:hover:not(:disabled) { background: rgba(148, 163, 184, .18); }
+.btn-danger { background: rgba(239, 68, 68, .12); color: #fca5a5; border-color: rgba(239, 68, 68, .3); }
+.btn-danger:hover:not(:disabled) { background: rgba(239, 68, 68, .2); }
+.icon-btn { background: #0f172a; color: #94a3b8; border-color: rgba(148, 163, 184, .2); }
+.icon-btn:hover { background: #16213a; color: #f1f5f9; }
+.icon-btn.danger { color: #fca5a5; border-color: rgba(239, 68, 68, .3); }
+.icon-btn.danger:hover { background: rgba(239, 68, 68, .16); color: #fecaca; }
+
+/* --- pills, chips, badges ----------------------------------------------- */
+.pill-gray { background: rgba(148, 163, 184, .12); color: #cbd5e1; border-color: rgba(148, 163, 184, .2); }
+.pill-violet { background: rgba(124, 58, 237, .18); color: #c4b5fd; border-color: rgba(167, 139, 250, .3); }
+.pill-green { background: rgba(16, 185, 129, .14); color: #6ee7b7; border-color: rgba(16, 185, 129, .28); }
+.pill-amber { background: rgba(245, 158, 11, .14); color: #fcd34d; border-color: rgba(245, 158, 11, .3); }
+.pill-red { background: rgba(239, 68, 68, .13); color: #fca5a5; border-color: rgba(239, 68, 68, .3); }
+.pill-blue { background: rgba(59, 130, 246, .14); color: #93c5fd; border-color: rgba(59, 130, 246, .3); }
+.pill-ghost { background: rgba(15, 23, 42, .6); color: #a8b6c9; border-color: rgba(148, 163, 184, .2); }
+.chip { background: rgba(148, 163, 184, .1); border-color: rgba(148, 163, 184, .2); color: #cbd5e1; }
+.kbd { background: #0f172a; border-color: rgba(148, 163, 184, .24); color: #cbd5e1; }
+.code-snippet { background: #0a1120; border-color: rgba(148, 163, 184, .18); color: #b6c4d6; }
+
+/* --- tables ------------------------------------------------------------- */
+th, td { background-color: transparent; }
+.table th { color: #8b9ab0; border-bottom: 1px solid rgba(148, 163, 184, .16); background: transparent; }
+.table td { color: #cbd5e1; border-bottom: 1px solid rgba(148, 163, 184, .1); }
+.table tbody tr:hover td { background: rgba(148, 163, 184, .06); }
+.table-wrap { background: rgba(10, 17, 32, .5); border-color: rgba(148, 163, 184, .14); }
+.divide-slate-100 { border-color: rgba(148, 163, 184, .12) !important; }
+
+/* --- lists, cards, rows -------------------------------------------------- */
+.empty-state { border-color: rgba(148, 163, 184, .26); background: rgba(15, 23, 42, .45); color: #94a3b8; }
+.agent-card, .provider-card, .case-row, .stat-card {
+  background: rgba(13, 20, 34, .72);
+  border-color: rgba(148, 163, 184, .14);
+}
+.agent-card:hover, .provider-card:hover { border-color: rgba(167, 139, 250, .4); box-shadow: 0 8px 24px rgba(2, 6, 23, .4); }
+.case-row:hover { background: rgba(124, 58, 237, .1); border-color: rgba(167, 139, 250, .35); }
+.case-row.selected { background: rgba(124, 58, 237, .16); border-color: rgba(167, 139, 250, .5); }
+.metric-tile { background: rgba(148, 163, 184, .07); border-color: rgba(148, 163, 184, .14); }
+.turn-user .turn-avatar { background: rgba(148, 163, 184, .12); color: #cbd5e1; border-color: rgba(148, 163, 184, .2); }
+.turn-user .turn-bubble { background: rgba(148, 163, 184, .1); color: #dbe4f0; }
+.turn-agent .turn-bubble { background: rgba(124, 58, 237, .14); color: #e9e5ff; border-color: rgba(167, 139, 250, .26); }
+.event-row { border-bottom-color: rgba(148, 163, 184, .1); }
+.event-ts { color: #64748b; }
+.progress { background: rgba(148, 163, 184, .16); }
+.level-bar { background: rgba(148, 163, 184, .16); }
+.checkbox { border-color: rgba(148, 163, 184, .35); }
+
+/* --- filters, tabs, docs ------------------------------------------------ */
+.filter-btn { background: #0f172a; color: #a8b6c9; border-color: rgba(148, 163, 184, .22); }
+.filter-btn:hover { border-color: #a78bfa; color: #ddd6fe; }
+.filter-btn.active { background: #1e1b4b; color: #ede9fe; border-color: rgba(167, 139, 250, .45); box-shadow: 0 4px 14px rgba(76, 29, 149, .45); }
+.tabs { background: rgba(15, 23, 42, .7); border-color: rgba(148, 163, 184, .16); }
+.tab { color: #94a3b8; }
+.tab.active { background: #1e293b; color: #f1f5f9; box-shadow: 0 1px 2px rgba(2, 6, 23, .4); }
+.checklist-item { background: rgba(15, 23, 42, .55); border-color: rgba(148, 163, 184, .16); color: #cbd5e1; }
+.doc-result-label { color: #cbd5e1; }
+.doc-result-note { color: #7c8aa3; }
+.result-details[open] { border-bottom-color: rgba(148, 163, 184, .18); }
+.prose p, .prose li { color: #b6c4d6; }
+.prose code { background: rgba(148, 163, 184, .12); border-color: rgba(148, 163, 184, .2); color: #c4b5fd; }
+.prose h2, .prose h3 { color: #f1f5f9; }
+.gate-row { background: rgba(15, 23, 42, .55); border-color: rgba(148, 163, 184, .2); }
+.gate-row.pending { background: rgba(120, 53, 15, .3); border-color: rgba(245, 158, 11, .5); }
+
+/* --- Tailwind utility palette remap (inline classes in markup/templates) - */
+.text-slate-900, .text-slate-800, .text-slate-700 { color: #e2e8f0 !important; }
+.text-slate-600 { color: #a8b6c9 !important; }
+.text-slate-500 { color: #94a3b8 !important; }
+.text-slate-400 { color: #8b9ab0 !important; }
+.text-slate-300 { color: #cbd5e1 !important; }
+.text-slate-200, .text-slate-100 { color: #e2e8f0 !important; }
+.text-emerald-900, .text-emerald-800 { color: #a7f3d0 !important; }
+.text-emerald-700, .text-emerald-600, .text-emerald-500, .text-emerald-400 { color: #6ee7b7 !important; }
+.text-amber-900, .text-amber-800, .text-amber-700, .text-amber-600, .text-amber-500 { color: #fcd34d !important; }
+.text-red-800, .text-red-700, .text-red-600 { color: #fca5a5 !important; }
+.text-violet-900 { color: #ede9fe !important; }
+.text-violet-700 { color: #ddd6fe !important; }
+.text-violet-600, .text-violet-500 { color: #c4b5fd !important; }
+
+.bg-white { background-color: #0f172a !important; }
+.bg-white\/70 { background-color: rgba(15, 23, 42, .72) !important; }
+.bg-violet-100 { background-color: rgba(124, 58, 237, .25) !important; }
+.bg-slate-50 { background-color: rgba(148, 163, 184, .06) !important; }
+.bg-slate-100 { background-color: rgba(148, 163, 184, .1) !important; }
+.bg-slate-900 { background-color: #0a0e1a !important; }
+.bg-slate-950 { background-color: #060a13 !important; }
+.bg-amber-50 { background-color: rgba(245, 158, 11, .12) !important; }
+.bg-emerald-50 { background-color: rgba(16, 185, 129, .12) !important; }
+.bg-red-50 { background-color: rgba(239, 68, 68, .12) !important; }
+.bg-violet-50 { background-color: rgba(124, 58, 237, .16) !important; }
+
+.border-slate-100, .border-slate-200 { border-color: rgba(148, 163, 184, .16) !important; }
+.border-slate-300 { border-color: rgba(148, 163, 184, .24) !important; }
+.border-amber-200 { border-color: rgba(245, 158, 11, .32) !important; }
+.border-emerald-200 { border-color: rgba(16, 185, 129, .32) !important; }
+.border-red-200 { border-color: rgba(239, 68, 68, .32) !important; }
+.border-violet-200 { border-color: rgba(167, 139, 250, .3) !important; }
+
+.bg-slate-50\/40 { background-color: rgba(148, 163, 184, .05) !important; }
+.bg-slate-50\/50 { background-color: rgba(148, 163, 184, .06) !important; }
+.bg-slate-50\/60 { background-color: rgba(148, 163, 184, .07) !important; }
+.bg-emerald-50\/50 { background-color: rgba(16, 185, 129, .12) !important; }
+.bg-emerald-50\/60 { background-color: rgba(16, 185, 129, .13) !important; }
+.bg-violet-50\/20 { background-color: rgba(124, 58, 237, .12) !important; }
+.bg-violet-50\/30 { background-color: rgba(124, 58, 237, .16) !important; }
+.bg-violet-50\/40 { background-color: rgba(124, 58, 237, .2) !important; }
+.bg-violet-50\/60 { background-color: rgba(124, 58, 237, .28) !important; }
+
+.hover\:bg-violet-50:hover { background-color: rgba(124, 58, 237, .16) !important; }
+.hover\:border-violet-300:hover { border-color: rgba(167, 139, 250, .5) !important; }
+.hover\:text-violet-700:hover { color: #ede9fe !important; }
+.focus\:border-violet-400:focus { border-color: #8b5cf6 !important; }

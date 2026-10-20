@@ -147,9 +147,14 @@
             </div>
           </div>
           <div class="mt-3 flex flex-wrap items-center gap-2">
-            <button class="btn btn-primary" id="cloud-tts-btn" type="button"><span data-icon="volume"></span> Synthesize</button>
+            <button class="btn btn-primary" id="cloud-tts-btn" type="button"><span data-icon="play"></span> Play</button>
             <span class="text-[9.5px] text-slate-400" id="cloud-tts-status">Ready</span>
             <a class="btn btn-dark btn-xs ml-auto hidden border border-slate-600" id="cloud-tts-download" download="adriene-tts.mp3">Download audio</a>
+          </div>
+          <div class="mt-2 flex flex-wrap items-center gap-2 border-t border-slate-700/60 pt-2.5">
+            <span class="text-[8px] font-extrabold uppercase tracking-[0.12em] text-slate-400">Save voice for agent</span>
+            <select id="cloud-tts-agent" class="select input-sm min-w-[180px] flex-1"></select>
+            <button class="btn btn-outline btn-xs" id="cloud-tts-save" type="button"><span data-icon="save"></span> Save voice</button>
           </div>
           <audio id="cloud-tts-audio" class="mt-2 hidden w-full" controls></audio>
           <div id="cloud-tts-error" class="mt-2 hidden rounded-lg border border-amber-500/30 bg-amber-500/10 px-2.5 py-2 text-[9.5px] leading-relaxed text-amber-200"></div>
