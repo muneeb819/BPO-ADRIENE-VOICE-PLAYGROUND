@@ -2,6 +2,8 @@
 
 A local-first, Windows-first port of the BPO Adriene voice-agent playground. It covers agent design, a deterministic conversation engine, live browser voice, provider adapters, regression testing, analytics, security controls, mock telephony and delivery documentation.
 
+**Repository:** <https://github.com/muneeb819/BPO-ADRIENE-VOICE-PLAYGROUND>
+
 The runtime is deliberately small: **Python 3.12 standard library + SQLite + static HTML/CSS/vanilla JS**. There is no Docker, Postgres, Node build step or runtime npm dependency.
 
 ---
@@ -9,7 +11,8 @@ The runtime is deliberately small: **Python 3.12 standard library + SQLite + sta
 ## Quick start (Windows 11)
 
 ```powershell
-Set-Location C:\Users\Wave\Downloads\AdrieneVoiceStudio
+git clone https://github.com/muneeb819/BPO-ADRIENE-VOICE-PLAYGROUND.git
+Set-Location BPO-ADRIENE-VOICE-PLAYGROUND
 .\start.cmd
 ```
 
