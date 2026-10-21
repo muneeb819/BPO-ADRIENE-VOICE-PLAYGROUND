@@ -3,12 +3,40 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Agent Studio — BPO Adriene Playground</title>
-  <meta name="description" content="Create, edit, duplicate, archive and version AI voice agents with backend-only secrets." />
-  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+  <title>Agent Studio | BPO Nexus</title>
+  <meta name="description" content="Build Deepgram voice agents with the Voice, LLM, Functions and Transcription tabs, use-case presets and versioned rollbacks." />
+  <link rel="icon" href="/assets/brand/favicon.ico" sizes="any" />
+  <link rel="icon" href="/assets/brand/bpo-nexus-icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/assets/brand/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta name="theme-color" content="#070B1A" />
+  <meta name="apple-mobile-web-app-title" content="BPO Nexus" />
+  <meta name="application-name" content="BPO Nexus" />
+  <meta name="author" content="MMA Digital Labs" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="BPO Nexus by MMA Digital Labs" />
+  <meta property="og:title" content="Agent Studio | BPO Nexus" />
+  <meta property="og:description" content="Build Deepgram voice agents with the Voice, LLM, Functions and Transcription tabs, use-case presets and versioned rollbacks." />
+  <meta property="og:image" content="/assets/brand/og-card.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Agent Studio | BPO Nexus" />
+  <meta name="twitter:description" content="Build Deepgram voice agents with the Voice, LLM, Functions and Transcription tabs, use-case presets and versioned rollbacks." />
+  <meta name="twitter:image" content="/assets/brand/og-card.png" />
   <link rel="stylesheet" href="/assets/css/fonts.css" />
   <script src="/assets/vendor/tailwind.js"></script>
   <link rel="stylesheet" href="/assets/css/app.css" />
+  <link rel="stylesheet" href="/assets/css/brand.css" />
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('adriene.theme');
+        if (!t) t = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', t);
+        var n = localStorage.getItem('adriene.nav');
+        if (n) document.documentElement.setAttribute('data-nav', n);
+      } catch (e) {}
+    })();
+  </script>
 </head>
 <body>
   <div id="mobile-shell"></div>

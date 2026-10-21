@@ -3374,6 +3374,9 @@ PAGE_ROUTES = {
     "/telephony": "telephony.html",
     "/deepgram": "deepgram.html",
     "/livekit": "livekit.html",
+    "/marketing": "marketing/index.html",
+    "/marketing/": "marketing/index.html",
+    "/privacy": "marketing/privacy.html",
     "/docs": "docs.html",
 }
 
@@ -3699,6 +3702,28 @@ class Handler(BaseHTTPRequestHandler):
                 payload = self.json_body()
                 return self.write_api_result(livekit_build_worker(payload))
 
+            if path == "/api/demo-requests":
+                # Placeholder booking endpoint for the marketing site. It
+                # validates the payload but deliberately stores nothing until a
+                # real booking service is wired in.
+                require("POST")
+                payload = self.json_body()
+                name = str(payload.get("name") or "").strip()
+                email = str(payload.get("email") or "").strip()
+                company = str(payload.get("company") or "").strip()
+                volume = str(payload.get("volume") or "").strip()
+                if not name or not company:
+                    raise ApiError("name and company are required", 400)
+                if not re.match(r"^[^\s@]+@[^\s@]+\.[^\s@]+$", email):
+                    raise ApiError("a valid work email is required", 400)
+                if not volume:
+                    raise ApiError("monthly call volume is required", 400)
+                return self.write_api_result((202, {
+                    "accepted": True,
+                    "stored": False,
+                    "message": "Demo endpoint placeholder - connect a booking service to receive requests.",
+                }))
+
             self.send_error_json(404, "API route not found")
         except ApiError as exc:
             self.send_error_json(exc.status, exc.message)
@@ -3769,6 +3794,18 @@ class Handler(BaseHTTPRequestHandler):
             ctype = "text/javascript; charset=utf-8"
         elif target.suffix == ".css":
             ctype = "text/css; charset=utf-8"
+        elif target.suffix == ".svg":
+            ctype = "image/svg+xml"
+        elif target.suffix == ".ico":
+            ctype = "image/x-icon"
+        elif target.suffix == ".woff2":
+            ctype = "font/woff2"
+        elif target.suffix == ".woff":
+            ctype = "font/woff"
+        elif target.suffix == ".png":
+            ctype = "image/png"
+        elif target.suffix == ".webmanifest":
+            ctype = "application/manifest+json"
         cache = "no-store" if target.suffix in (".html", ".js", ".css") else "public, max-age=300"
         self.send_bytes(200, raw, {"Content-Type": ctype, "Cache-Control": cache})
 
@@ -3783,6 +3820,29 @@ class Handler(BaseHTTPRequestHandler):
 class Server(ThreadingHTTPServer):
     allow_reuse_address = True
     daemon_threads = True
+
+
+def _code_watchdog(port: int) -> None:
+    """Restart the process when server.py changes on disk.
+
+    The scheduled watchdog can only start a dead backend (it may not own the
+    running process), so the server restarts itself after a code update.
+    """
+    import subprocess
+    code = Path(__file__).resolve()
+    started = time.time()
+    while True:
+        time.sleep(20)
+        try:
+            if code.stat().st_mtime > started:
+                print("  [INFO] code changed - restarting the backend", flush=True)
+                subprocess.Popen(
+                    [sys.executable, str(code), "--port", str(port), "--no-open"],
+                    cwd=str(code.parent),
+                )
+                os._exit(0)
+        except Exception:
+            continue
 
 
 def main():
@@ -3827,6 +3887,9 @@ def main():
     # and the Voice Lab answer instantly on the first request.
     if DEEPGRAM_API_KEY:
         threading.Thread(target=_deepgram_account_refresh, daemon=True).start()
+
+    # Reload automatically after a code change (no admin rights needed).
+    threading.Thread(target=_code_watchdog, args=(port,), daemon=True).start()
 
     def shutdown(signum, frame):
         print("\n  Shutting down gracefully…")

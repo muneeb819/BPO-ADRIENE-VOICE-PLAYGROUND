@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 160" width="760" height="160" role="img" aria-label="BPO Nexus by MMA Digital Labs">
+  <rect width="760" height="160" rx="18" fill="#FFFFFF"/>
+  <g transform="translate(24 24) scale(0.22)">
+    <path d="M104 252 A152 142 0 0 1 408 252" fill="none" stroke="#6D28D9" stroke-width="26" stroke-linecap="round"/>
+    <path d="M132 440 L132 210 L200 210 L312 333 L312 210 L380 210 L380 440 L304 440 L196 317 L196 440 Z" fill="#6D28D9"/>
+    <circle cx="256.0" cy="271.0" r="27.0" fill="#14B8A6"/>
+  </g>
+  <text x="164" y="78" font-family="Sora, Inter, system-ui, sans-serif" font-size="52" font-weight="800" fill="#0F172A">BPO</text>
+  <text x="258" y="78" font-family="Sora, Inter, system-ui, sans-serif" font-size="52" font-weight="800" fill="#6D28D9">NEXUS</text>
+  <text x="166" y="116" font-family="Inter, system-ui, sans-serif" font-size="17" font-weight="500" letter-spacing="2.2" fill="#CBD5E1">by MMA DIGITAL LABS</text>
+  <text x="166" y="142" font-family="Inter, system-ui, sans-serif" font-size="13" font-weight="500" letter-spacing="1.4" fill="#0F172A">AI VOICE BOTS FOR BPOs, BUILT TO SCALE</text>
+</svg>

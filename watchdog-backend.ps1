@@ -41,6 +41,23 @@ if ($Restart) {
     }
     Start-Sleep -Seconds 1
 }
+else {
+    # Auto-restart when server.py changed after the running process started.
+    $code = Join-Path $ProjectRoot "server.py"
+    $owners = @(Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue |
+                Select-Object -ExpandProperty OwningProcess -Unique)
+    if ($owners -and (Test-Path $code)) {
+        $codeTime = (Get-Item $code).LastWriteTime
+        foreach ($owner in $owners) {
+            $proc = Get-Process -Id $owner -ErrorAction SilentlyContinue
+            if ($proc -and $proc.StartTime -lt $codeTime) {
+                Log "code changed - restarting backend pid $owner"
+                Stop-Process -Id $owner -Force -ErrorAction SilentlyContinue
+                Start-Sleep -Seconds 1
+            }
+        }
+    }
+}
 
 if (Test-Backend) {
     Log "backend healthy on 127.0.0.1:$Port - nothing to do"

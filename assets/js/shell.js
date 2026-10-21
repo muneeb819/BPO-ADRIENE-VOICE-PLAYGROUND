@@ -31,9 +31,9 @@ const Shell = (() => {
   ];
 
   const NAV_GROUPS = [
-    { id: 'workspace', label: 'Workspace', items: NAV },
     { id: 'deepgram', label: 'Deepgram', items: DEEPGRAM_NAV, accent: true, accordion: true, toggle: 'Deepgram Compliance' },
     { id: 'livekit', label: 'LiveKit', items: LIVEKIT_NAV, accent: true, accordion: true, toggle: 'LiveKit Cloud' },
+    { id: 'workspace', label: 'Workspace', items: NAV },
     { id: 'delivery', label: 'Quality & Delivery', items: DELIVERY_NAV },
   ];
 
@@ -98,6 +98,10 @@ const Shell = (() => {
     'chevron-up': '<path d="m18 15-6-6-6 6"/>',
     bolt: '<path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/>',
     radio: '<circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49M7.76 16.25a6 6 0 0 1 0-8.49M19.07 4.93a10 10 0 0 1 0 14.14M4.93 19.07a10 10 0 0 1 0-14.14"/>',
+    sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>',
+    moon: '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/>',
+    panel: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/>',
+    menu: '<path d="M4 6h16M4 12h16M4 18h16"/>',
   };
 
   function icon(name, cls = '') {
@@ -110,8 +114,8 @@ const Shell = (() => {
     return `<a href="${item.href}" class="nav-item ${isActive ? 'active' : ''}" ${isActive ? 'aria-current="page"' : ''}>
         <span class="nav-icon">${icon(item.icon)}</span>
         <span class="min-w-0 flex-1">
-          <span class="nav-title">${item.label}</span>
-          <span class="nav-sub">${item.sub}</span>
+          <span class="nav-title nav-label-text">${item.label}</span>
+          <span class="nav-sub nav-label-text">${item.sub}</span>
         </span>
         ${isActive ? '<span class="text-violet-300 text-[10px]">●</span>' : ''}
       </a>`;
@@ -165,36 +169,36 @@ const Shell = (() => {
     return `<aside class="sidebar fixed inset-y-0 left-0 z-40 hidden w-[268px] flex-col lg:flex">
       <div class="px-5 pt-6 pb-5">
         <a href="/" class="flex items-center gap-3 group">
-          <div class="logo-mark">A</div>
+          <div class="brand-mark"><img src="/assets/brand/bpo-nexus-icon.svg" alt="" width="28" height="28" /></div>
           <div class="min-w-0">
-            <div class="text-[15px] font-extrabold tracking-tight text-white leading-none">BPO ADRIENE</div>
-            <div class="mt-1 text-[8.5px] font-semibold tracking-[0.24em] text-slate-400">VOICE PLAYGROUND</div>
+            <div class="brand-name">BPO <span class="nexus">NEXUS</span></div>
+            <div class="brand-sub">Adriene Voice Playground</div>
           </div>
         </a>
-        <div class="mt-5 flex items-center gap-2 text-[10.5px] text-slate-400">
-          <span class="status-dot" id="shell-status-dot"></span>
-          <span id="shell-status-text">Local • Secure • Telephony Off</span>
+        <div class="mt-4 flex items-center justify-between gap-2">
+          <div class="flex min-w-0 items-center gap-2 text-[10.5px] text-slate-400">
+            <span class="status-dot" id="shell-status-dot"></span>
+            <span id="shell-status-text" class="truncate">Local • Secure • Telephony Off</span>
+          </div>
+          <div class="flex shrink-0 items-center gap-1.5">
+            <button class="theme-toggle-btn" id="theme-toggle" type="button" title="Switch light / dark theme" aria-label="Switch theme">
+              <span class="icon-sun">${icon('sun')}</span>
+              <span class="icon-moon">${icon('moon')}</span>
+            </button>
+            <button class="nav-toggle-btn" id="nav-toggle" type="button" title="Collapse / expand the side panel" aria-label="Toggle side panel">
+              ${icon('panel')}
+            </button>
+          </div>
         </div>
       </div>
       <nav class="flex-1 space-y-1 overflow-y-auto px-3 pb-4" aria-label="Main navigation">
         ${navItems(active)}
       </nav>
-      <div class="p-4 pt-0">
-        <div class="rounded-2xl border border-violet-400/20 bg-gradient-to-br from-violet-700 to-violet-500 p-4 shadow-lg shadow-violet-950/30">
-          <div class="flex items-center gap-2 text-[10px] font-extrabold tracking-[0.1em] text-white">
-            ${icon('server', 'w-3.5 h-3.5')} WINDOWS 11 LOCAL
-          </div>
-          <p class="mt-1.5 text-[10px] leading-relaxed text-violet-100/90">
-            No live calls enabled. All audio stays on <span class="mono">localhost</span>.
-          </p>
-          <div class="mt-3 flex flex-wrap items-center gap-1.5">
-            <span class="sidebar-badge dark" id="shell-version">v1.0.0</span>
-            <span class="sidebar-badge green">OFFLINE SAFE</span>
-          </div>
-        </div>
-        <div class="mt-3 px-1 text-[9px] leading-relaxed text-slate-500">
+      <div class="nav-foot-text p-4 pt-0">
+        <div class="px-1 text-[9px] leading-relaxed text-slate-500">
           Python stdlib API • SQLite persistence<br/>
-          Built for local-first voice QA.
+          Windows 11 local • v1.0.0 • offline safe<br/>
+          All audio stays on <span class="mono">localhost</span>.
         </div>
       </div>
     </aside>`;
@@ -204,15 +208,20 @@ const Shell = (() => {
     return `<header class="sticky top-0 z-40 border-b border-white/5 bg-[#0a0e1a] lg:hidden">
       <div class="flex items-center justify-between px-4 pt-3.5">
         <a href="/" class="flex items-center gap-2.5">
-          <div class="logo-mark" style="width:34px;height:34px;border-radius:11px;font-size:15px;">A</div>
+          <div class="brand-mark" style="width:34px;height:34px;border-radius:11px;"><img src="/assets/brand/bpo-nexus-icon-small.svg" alt="" width="22" height="22" /></div>
           <div>
-            <div class="text-[12.5px] font-extrabold tracking-tight text-white leading-none">BPO ADRIENE</div>
-            <div class="mt-1 text-[7px] font-semibold tracking-[0.22em] text-slate-400">VOICE PLAYGROUND</div>
+            <div class="brand-name" style="font-size:12.5px;">BPO <span class="nexus">NEXUS</span></div>
+            <div class="brand-sub" style="font-size:7px;letter-spacing:.18em;">Adriene Voice Playground</div>
           </div>
         </a>
         <div class="flex items-center gap-1.5">
-          <span class="status-dot"></span>
-          <span class="text-[9px] text-slate-400">Telephony Off</span>
+          <button class="theme-toggle-btn" id="theme-toggle-m" type="button" title="Switch light / dark theme" aria-label="Switch theme">
+            <span class="icon-sun">${icon('sun')}</span>
+            <span class="icon-moon">${icon('moon')}</span>
+          </button>
+          <button class="nav-toggle-btn" id="sheet-toggle" type="button" title="Open the menu" aria-label="Open menu">
+            ${icon('menu')}
+          </button>
         </div>
       </div>
       <nav class="flex gap-1.5 overflow-x-auto px-4 py-3" aria-label="Mobile navigation">
@@ -221,10 +230,37 @@ const Shell = (() => {
     </header>`;
   }
 
+  function navSheet(active) {
+    return `<div class="nav-sheet" id="nav-sheet" role="dialog" aria-modal="true" aria-label="Navigation">
+      <div class="nav-sheet-panel">
+        <div class="mb-3 flex items-center justify-between">
+          <div class="flex items-center gap-2.5">
+            <div class="brand-mark" style="width:34px;height:34px;border-radius:11px;"><img src="/assets/brand/bpo-nexus-icon-small.svg" alt="" width="22" height="22" /></div>
+            <div class="brand-name" style="font-size:13px;">BPO <span class="nexus">NEXUS</span></div>
+          </div>
+          <button class="nav-toggle-btn" id="sheet-close" type="button" aria-label="Close menu">${icon('x')}</button>
+        </div>
+        ${navItems(active)}
+      </div>
+    </div>`;
+  }
+
   function footer() {
     return `<footer class="mx-auto max-w-[1400px] px-5 pb-7 pt-2 sm:px-8 lg:px-10">
       <div class="flex flex-wrap items-center justify-between gap-2 border-t border-slate-200 pt-5 text-[10px] text-slate-400">
-        <div>BPO Adriene • Local AI Voice-Agent Playground • Telephony disabled by default</div>
+        <div class="page-footer-brand">
+          <span class="font-semibold" style="color:inherit">BPO Nexus by MMA Digital Labs</span>
+          <span class="mx-1.5">•</span>
+          <span>Adriene Voice Agent Playground</span>
+          <span class="mx-1.5">•</span>
+          <span>Windows 11 local</span>
+          <span class="mx-1.5">•</span>
+          <span>v1.0.0</span>
+          <span class="mx-1.5">•</span>
+          <span>offline safe</span>
+          <span class="mx-1.5">•</span>
+          <span>Telephony disabled by default</span>
+        </div>
         <div class="flex items-center gap-3">
           <span class="inline-flex items-center gap-1">${icon('shield', 'w-3 h-3')} Secrets backend-only</span>
           <span class="inline-flex items-center gap-1">${icon('database', 'w-3 h-3')} SQLite</span>
@@ -241,6 +277,52 @@ const Shell = (() => {
     const foot = document.getElementById('footer');
     if (foot) foot.outerHTML = footer();
     document.body.dataset.page = active;
+
+    // Mobile navigation sheet (touch friendly).
+    if (!document.getElementById('nav-sheet')) {
+      const holder = document.createElement('div');
+      holder.innerHTML = navSheet(active);
+      document.body.appendChild(holder.firstElementChild);
+    }
+    const sheetEl = document.getElementById('nav-sheet');
+    const openSheet = (open) => {
+      document.body.dataset.sheet = open ? 'open' : 'closed';
+    };
+    const sheetToggle = document.getElementById('sheet-toggle');
+    if (sheetToggle) sheetToggle.addEventListener('click', () => openSheet(true));
+    const sheetClose = document.getElementById('sheet-close');
+    if (sheetClose) sheetClose.addEventListener('click', () => openSheet(false));
+    if (sheetEl) sheetEl.addEventListener('click', (event) => {
+      if (event.target === sheetEl) openSheet(false);
+    });
+
+    // Theme (light / dark) - persisted, applied before first paint by the inline
+    // bootstrap in each page.
+    const applyTheme = (theme) => {
+      document.documentElement.setAttribute('data-theme', theme);
+      try { localStorage.setItem('adriene.theme', theme); } catch { /* private mode */ }
+    };
+    let theme = 'dark';
+    try { theme = localStorage.getItem('adriene.theme') || 'dark'; } catch { theme = 'dark'; }
+    document.documentElement.setAttribute('data-theme', theme);
+    document.querySelectorAll('#theme-toggle, #theme-toggle-m').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        applyTheme(document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
+      });
+    });
+
+    // Collapsible side panel (desktop): collapse to a rail, hover to peek open.
+    let nav = 'expanded';
+    try { nav = localStorage.getItem('adriene.nav') || 'expanded'; } catch { nav = 'expanded'; }
+    document.body.dataset.nav = nav;
+    const navToggle = document.getElementById('nav-toggle');
+    if (navToggle) {
+      navToggle.addEventListener('click', () => {
+        const next = document.body.dataset.nav === 'collapsed' ? 'expanded' : 'collapsed';
+        document.body.dataset.nav = next;
+        try { localStorage.setItem('adriene.nav', next); } catch { /* private mode */ }
+      });
+    }
 
     // Integration accordions: drop the related pages down / fold them back up.
     document.querySelectorAll('[data-accordion]').forEach((toggle) => {

@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Privacy — BPO Nexus by MMA Digital Labs</title>
+<meta name="description" content="How BPO Nexus handles data: self-hosted, provider keys server-side, explicit retention." />
+<meta name="theme-color" content="#070B1A" />
+<link rel="icon" href="/assets/brand/favicon.ico" sizes="any" />
+<link rel="icon" href="/assets/brand/bpo-nexus-icon.svg" type="image/svg+xml" />
+<link rel="stylesheet" href="/assets/css/fonts.css" />
+<style>
+@font-face{font-family:'Sora';font-style:normal;font-weight:800;font-display:swap;src:url(/assets/fonts/sora-800-latin.woff2) format('woff2')}
+:root{--violet:#7C3AED;--teal:#14B8A6;--text:#E2E8F0;--muted:#CBD5E1;--dim:#94A3B8;--line:rgba(148,163,184,.16)}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(900px 500px at 80% -10%,rgba(124,58,237,.18),transparent 62%),#070B1A;
+  color:var(--text);font-family:'Inter',ui-sans-serif,system-ui,sans-serif;line-height:1.7}
+.wrap{width:min(100% - 40px,840px);margin-inline:auto;padding:60px 0 80px}
+h1{font-family:'Sora',sans-serif;font-size:clamp(28px,4vw,42px);margin:0 0 10px}
+h2{font-family:'Sora',sans-serif;font-size:19px;margin:32px 0 8px}
+p,li{color:var(--muted);font-size:15px}
+a{color:var(--teal)}
+.brand{display:flex;align-items:center;gap:10px;font-family:'Sora',sans-serif;font-weight:800;margin-bottom:30px}
+.brand img{width:30px;height:30px}
+.brand .nexus{color:var(--violet)}
+small{color:var(--dim)}
+ul{padding-left:20px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand"><img src="/assets/brand/bpo-nexus-icon.svg" alt="" width="30" height="30" />BPO <span class="nexus">NEXUS</span></div>
+  <h1>Privacy</h1>
+  <p><small>Placeholder policy text — <a href="/marketing/">back to the product page</a>. Replace with your counsel-approved wording before launch.</small></p>
+
+  <h2>Where your data lives</h2>
+  <p>The platform is self-hosted. Transcripts, events and agent configuration are stored in your own database. Provider credentials are read from the server environment and are never returned to the browser.</p>
+
+  <h2>Audio and retention</h2>
+  <p>Call audio is processed by your configured speech provider and is retained for the period you set. Telephony is disabled by default, so no live calls are placed unless an operator enables them.</p>
+
+  <h2>Consent</h2>
+  <ul>
+    <li>Transfers to a human require explicit consent from the caller.</li>
+    <li>Consent state is stored with the session so it can be reviewed later.</li>
+    <li>Analytics are computed from stored events, never from estimates.</li>
+  </ul>
+
+  <h2>Contact</h2>
+  <p><small>[REPLACE WITH REAL DATA] privacy contact address</small></p>
+</div>
+</body>
+</html>

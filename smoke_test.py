@@ -97,6 +97,15 @@ class Client:
     def get(self, path: str):
         return self.request("GET", path)
 
+    def get_with_headers(self, path: str):
+        """GET returning (status, content-type, body)."""
+        req = urllib.request.Request(f"{self.base}{path}")
+        try:
+            with urllib.request.urlopen(req, timeout=self.timeout) as resp:
+                return resp.status, resp.headers.get("Content-Type", ""), resp.read()
+        except urllib.error.HTTPError as exc:
+            return exc.code, exc.headers.get("Content-Type", ""), exc.read()
+
     def post(self, path: str, body=None):
         return self.request("POST", path, body=body if body is not None else {})
 
@@ -407,6 +416,40 @@ def check_agent_transcription(c: Client):
             c.delete(f"/api/agents/{agent_id}")
 
 
+def check_brand_assets(c: Client):
+    """BPO Nexus brand assets, manifest, favicon and a no-CDN guarantee."""
+    expectations = [
+        ("/assets/brand/bpo-nexus-icon.svg", "image/svg+xml"),
+        ("/assets/brand/bpo-nexus-icon-small.svg", "image/svg+xml"),
+        ("/assets/brand/bpo-nexus-logo-dark.svg", "image/svg+xml"),
+        ("/assets/brand/bpo-nexus-icon-192.png", "image/png"),
+        ("/assets/brand/apple-touch-icon.png", "image/png"),
+        ("/assets/brand/og-card.png", "image/png"),
+        ("/assets/brand/favicon.ico", "image/x-icon"),
+        ("/assets/fonts/sora-700-latin.woff2", "font/woff2"),
+        ("/assets/fonts/sora-800-latin.woff2", "font/woff2"),
+        ("/site.webmanifest", "application/manifest+json"),
+    ]
+    for path, ctype in expectations:
+        status, got, _ = c.get_with_headers(path)
+        require(status == 200, f"{path} returned {status}")
+        got = (got or "").split(";")[0].strip()
+        require(got == ctype, f"{path} content type is {got} (expected {ctype})")
+
+    # No remote font or CDN reference in any page.
+    remote_markers = ("fonts.googleapis.com", "fonts.gstatic.com", "cdn.jsdelivr.net",
+                      "unpkg.com", "cdnjs.cloudflare.com", "ajax.googleapis.com")
+    for route in PAGE_ROUTES + ["/marketing", "/privacy"]:
+        status, body = c.get(route)
+        require(status == 200, f"{route} returned {status}")
+        text = body.decode("utf-8", "ignore") if isinstance(body, bytes) else str(body)
+        for marker in remote_markers:
+            require(marker not in text, f"{route} references the remote host {marker}")
+        require("BPO Nexus" in text or "NEXUS" in text, f"{route} is missing the BPO Nexus brand")
+        require("/assets/brand/" in text, f"{route} does not link the brand assets")
+    return f"{len(expectations)} brand assets + {len(PAGE_ROUTES) + 2} pages clean"
+
+
 def check_livekit(c: Client):
     """LiveKit Cloud: connect, control (rooms), use (token/dispatch), build."""
     code, status = c.get("/api/livekit/status")
@@ -656,6 +699,7 @@ def main() -> int:
               skip=args.skip_live, skip_reason="--skip-live")
     run_check(report, "LiveKit", "Connect, control, use and build", lambda: check_livekit(client),
               skip=args.skip_live, skip_reason="--skip-live")
+    run_check(report, "Brand", "Assets, manifest and no-CDN audit", lambda: check_brand_assets(client))
     run_check(report, "Providers", "Connection tests", lambda: check_provider_tests(client),
               skip=args.skip_live, skip_reason="--skip-live")
     run_check(report, "TTS", "Flux + Aura synthesis", lambda: check_tts(client),

@@ -1,12 +1,43 @@
-# BPO Adriene — AI Voice Agent Playground
+<img src="/assets/brand/bpo-nexus-logo-dark.svg" alt="BPO Nexus by MMA Digital Labs" width="380" />
 
-A local-first, Windows-first port of the BPO Adriene voice-agent playground. It covers agent design, a deterministic conversation engine, live browser voice, provider adapters, regression testing, analytics, security controls, mock telephony and delivery documentation.
+# BPO Nexus: Adriene Voice Agent Playground
+
+A local-first, Windows-first platform for building, testing and operating BPO voice agents. It covers agent design, a deterministic conversation engine, live browser voice, provider adapters, regression testing, analytics, security controls, mock telephony and delivery documentation.
+
+**BPO Nexus by MMA Digital Labs** is the platform brand; the demo agent inside it is still called *Adriene*.
 
 **Repository:** <https://github.com/muneeb819/BPO-ADRIENE-VOICE-PLAYGROUND>
 
 The runtime is deliberately small: **Python 3.12 standard library + SQLite + static HTML/CSS/vanilla JS**. There is no Docker, Postgres, Node build step or runtime npm dependency.
 
-The whole product ships in **one dark theme** — navy surfaces (`#0a0e1a` → `#111827`), violet accent, light text — matching the Voice Lab control panel. No page ships a light variant.
+The product ships in **two themes** - a navy dark theme (default) and a light theme - toggled from the side panel and remembered per browser. Both use the same brand tokens.
+
+---
+
+## Brand
+
+| Token | Value | Use |
+|---|---|---|
+| `--brand-violet` | `#7C3AED` | primary actions, accent surfaces |
+| `--brand-violet-hover` | `#6D28D9` | primary hover |
+| `--brand-teal` | `#14B8A6` | accent, status dots, focus rings |
+| `--brand-navy` | `#070B1A` | darkest surface (page background) |
+| `--brand-slate` | `#E2E8F0` | primary text |
+| `--text-muted` | `#CBD5E1` | secondary text |
+
+**Type:** Sora (700/800) for headings and the brand name, Inter (400-800) for body and UI, JetBrains Mono for code and metrics - all self-hosted as woff2 in `assets/fonts/`. No Google Fonts or CDN request at runtime.
+
+**Asset locations**
+
+| Path | Contents |
+|---|---|
+| `assets/brand/` | `bpo-nexus-icon.svg`, `bpo-nexus-icon-small.svg`, mono white/dark variants, app tile, logo dark/light, PNG sizes 16-512, `favicon.ico`, `apple-touch-icon.png`, `og-card.png`, avatar 400 |
+| `assets/css/brand.css` | brand tokens, light/dark theme layers, collapsible side panel |
+| `assets/fonts/sora-*.woff2` | self-hosted Sora 700/800 |
+| `marketing/index.html` | the public marketing site (single file, no dependencies) |
+| `site.webmanifest` | PWA manifest (name "BPO Nexus", theme/background `#070B1A`) |
+
+---
 
 ---
 

@@ -1,0 +1,15 @@
+{
+  "name": "BPO Nexus - Adriene Voice Agent Playground",
+  "short_name": "BPO Nexus",
+  "description": "AI voice bots for BPOs, built to scale.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#070B1A",
+  "theme_color": "#070B1A",
+  "icons": [
+    { "src": "/assets/brand/bpo-nexus-icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/assets/brand/bpo-nexus-icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/assets/brand/bpo-nexus-app-tile-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

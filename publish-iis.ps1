@@ -167,6 +167,9 @@ try {
     New-Item -ItemType Directory -Path $WebRoot -Force | Out-Null
     Copy-Item (Join-Path $ProjectRoot "*.html") $WebRoot -Force
     Copy-Item (Join-Path $ProjectRoot "assets") $WebRoot -Recurse -Force
+    if (Test-Path (Join-Path $ProjectRoot "site.webmanifest")) {
+        Copy-Item (Join-Path $ProjectRoot "site.webmanifest") $WebRoot -Force
+    }
     $copied = (Get-ChildItem $WebRoot -Recurse -File).Count
     Write-Log "Published $copied static files to $WebRoot (no .env, no data, no .py)"
 
@@ -187,6 +190,16 @@ try {
     <staticContent>
       <remove fileExtension=".woff2" />
       <mimeMap fileExtension=".woff2" mimeType="font/woff2" />
+      <remove fileExtension=".js" />
+      <mimeMap fileExtension=".js" mimeType="text/javascript" />
+      <remove fileExtension=".svg" />
+      <mimeMap fileExtension=".svg" mimeType="image/svg+xml" />
+      <remove fileExtension=".ico" />
+      <mimeMap fileExtension=".ico" mimeType="image/x-icon" />
+      <remove fileExtension=".png" />
+      <mimeMap fileExtension=".png" mimeType="image/png" />
+      <remove fileExtension=".webmanifest" />
+      <mimeMap fileExtension=".webmanifest" mimeType="application/manifest+json" />
     </staticContent>
 "@
     $headers = @"
