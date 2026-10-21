@@ -1564,6 +1564,61 @@ def deepgram_account() -> dict:
             }
     except Exception:
         pass
+
+    # Console-level project data: agents created in the Deepgram console, the
+    # key inventory (ids and labels only - never a secret), members and the
+    # project-scoped model catalogue.
+    console = {"agents": [], "keys": [], "members": [], "models": {}}
+    project_id = (info.get("project") or {}).get("id")
+    if project_id:
+        headers = {"Authorization": f"Token {DEEPGRAM_API_KEY}"}
+        base = f"https://api.deepgram.com/v1/projects/{project_id}"
+
+        ok, code, body, latency, err = http_json("GET", f"{base}/agents", headers, timeout=8)
+        if ok and isinstance(body, list):
+            console["agents"] = [
+                {
+                    "id": a.get("agent_id") or a.get("id") or "",
+                    "name": a.get("name") or a.get("title") or "Deepgram agent",
+                    "status": a.get("status") or "",
+                    "voice": a.get("voice") or (a.get("config") or {}).get("voice") or "",
+                    "model": a.get("model") or (a.get("config") or {}).get("model") or "",
+                    "created": a.get("created") or a.get("created_at") or "",
+                }
+                for a in body if isinstance(a, dict)
+            ]
+
+        ok, code, body, latency, err = http_json("GET", f"{base}/keys", headers, timeout=8)
+        if ok and isinstance(body, dict):
+            for entry in body.get("api_keys") or []:
+                key_info = entry.get("api_key") or {}
+                console["keys"].append({
+                    "id": key_info.get("api_key_id") or "",
+                    "comment": key_info.get("comment") or "",
+                    "scopes": key_info.get("scopes") or [],
+                    "created": key_info.get("created") or "",
+                    "expires": key_info.get("expiration_date") or "",
+                })
+
+        ok, code, body, latency, err = http_json("GET", f"{base}/members", headers, timeout=8)
+        if ok and isinstance(body, dict):
+            for member in body.get("members") or []:
+                console["members"].append({
+                    "email": member.get("email") or "",
+                    "name": " ".join(x for x in [member.get("first_name"), member.get("last_name")] if x),
+                    "provider": member.get("provider") or "",
+                    "scopes": member.get("scopes") or [],
+                })
+
+        ok, code, body, latency, err = http_json("GET", f"{base}/models", headers, timeout=8)
+        if ok and isinstance(body, dict):
+            console["models"] = {
+                "stt": len(body.get("stt") or []),
+                "tts": len(body.get("tts") or []),
+                "ttsNames": [m.get("name") for m in (body.get("tts") or [])
+                             if isinstance(m, dict) and m.get("name")][:120],
+            }
+    info["console"] = console
     _DEEPGRAM_ACCOUNT_CACHE["at"] = time.time()
     _DEEPGRAM_ACCOUNT_CACHE["data"] = info
     return info

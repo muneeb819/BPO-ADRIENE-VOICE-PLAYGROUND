@@ -203,8 +203,47 @@
     </tr>`).join('');
   }
 
+  function renderConsole() {
+    const console_ = data.account?.console || {};
+    const agents = console_.agents || [];
+    const keys = console_.keys || [];
+    const members = console_.members || [];
+    const models = console_.models || {};
+    $('dg-console-summary').textContent = `${agents.length} console agent(s) · ${keys.length} key(s) · ${members.length} member(s)`;
+
+    $('dg-console-agents').innerHTML = agents.length
+      ? agents.map((a) => `<div class="rounded-lg border border-slate-200/60 bg-white/50 px-2 py-1.5">
+          <div class="text-[9.5px] font-semibold text-slate-700">${UI.esc(a.name)}</div>
+          <div class="mt-0.5 text-[8.5px] text-slate-500">${UI.esc([a.voice, a.model].filter(Boolean).join(' · ') || a.id)}</div>
+        </div>`).join('')
+      : '<div class="text-[9.5px] leading-relaxed text-slate-500">No agents created in the Deepgram console for this project yet. Create one in the Deepgram console and it will be listed here for verification.</div>';
+
+    $('dg-console-keys').innerHTML = keys.length
+      ? keys.map((k) => `<div class="rounded-lg border border-slate-200/60 bg-white/50 px-2 py-1.5">
+          <div class="flex items-center justify-between gap-2">
+            <span class="truncate text-[9.5px] font-semibold text-slate-700">${UI.esc(k.comment || 'Unnamed key')}</span>
+            <span class="chip chip-mono shrink-0">${(k.scopes || []).length ? UI.esc((k.scopes || []).join(', ')) : 'no scope'}</span>
+          </div>
+          <div class="mono mt-0.5 truncate text-[8px] text-slate-400">${UI.esc(k.id)}</div>
+          <div class="mt-0.5 text-[8px] text-slate-400">created ${UI.fmtDate(k.created)}${k.expires ? ` · expires ${UI.fmtDate(k.expires)}` : ''} · secret hidden</div>
+        </div>`).join('')
+      : '<div class="text-[9.5px] text-slate-500">No keys visible for this key.</div>';
+
+    const memberRows = members.map((m) => `<div class="rounded-lg border border-slate-200/60 bg-white/50 px-2 py-1.5">
+        <div class="text-[9.5px] font-semibold text-slate-700">${UI.esc(m.name || m.email)}</div>
+        <div class="mt-0.5 text-[8.5px] text-slate-500">${UI.esc(m.email)} · ${UI.esc(m.provider || '')} ${(m.scopes || []).length ? `· ${UI.esc((m.scopes || []).join(', '))}` : ''}</div>
+      </div>`).join('');
+    $('dg-console-members').innerHTML = `${memberRows}
+      <div class="rounded-lg border border-slate-200/60 bg-white/50 px-2 py-1.5">
+        <div class="text-[8px] font-extrabold uppercase tracking-[0.1em] text-slate-500">Project model catalogue</div>
+        <div class="mt-1 text-[9px] text-slate-600">${models.stt || 0} speech-to-text · ${models.tts || 0} Aura-family text-to-speech models</div>
+        <div class="mt-0.5 text-[8px] text-slate-400">Plus ${(data.account?.tts?.voices) || 0} Flux + Aura voices verified by live synthesis</div>
+      </div>`;
+  }
+
   function renderAll() {
     renderHero();
+    renderConsole();
     renderCapabilities();
     renderAgents();
     renderProjectChecks();
