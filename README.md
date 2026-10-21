@@ -221,6 +221,8 @@ What it does:
 
 The backend keeps listening on loopback only, so the API is never exposed directly — IIS is the only public entry point.
 
+**Self-healing:** IIS reverse-proxies to `127.0.0.1:8010`, so the site depends on the Python backend being alive. A scheduled task (`AdrienneVoiceBackend`) starts it at logon and re-checks it every 5 minutes; `watchdog-backend.ps1` restarts it automatically if it stops. Verified by a real crash test: killing the backend turned the site into `502`, and the watchdog restored `200` on every route within seconds.
+
 **Live on this machine:**
 
 | URL | Purpose |

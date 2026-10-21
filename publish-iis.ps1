@@ -145,11 +145,16 @@ try {
 
     if (-not $backendUp) {
         Write-Log "Starting Python backend on 127.0.0.1:$BackendPort"
-        $python = (Get-Command python -ErrorAction SilentlyContinue).Source
-        if (-not $python) { throw "python not found on PATH" }
-        Start-Process -FilePath $python `
-            -ArgumentList "server.py", "--port", "$BackendPort", "--no-open" `
-            -WorkingDirectory $ProjectRoot -WindowStyle Minimized
+        $watchdog = Join-Path $ProjectRoot "watchdog-backend.ps1"
+        if (Test-Path $watchdog) {
+            & powershell -NoProfile -ExecutionPolicy Bypass -File $watchdog -Port $BackendPort -ProjectRoot $ProjectRoot | Out-Null
+        } else {
+            $python = (Get-Command python -ErrorAction SilentlyContinue).Source
+            if (-not $python) { throw "python not found on PATH" }
+            Start-Process -FilePath $python `
+                -ArgumentList "server.py", "--port", "$BackendPort", "--no-open" `
+                -WorkingDirectory $ProjectRoot -WindowStyle Minimized
+        }
         Start-Sleep -Seconds 3
         $probe = Invoke-RestMethod -Uri "http://127.0.0.1:$BackendPort/api/health" -TimeoutSec 8
         $backendUp = ($probe.ok -eq $true)
@@ -342,14 +347,29 @@ try {
         Write-Log "Firewall rule skipped: $($_.Exception.Message)" "WARN"
     }
 
-    # --- 9. optional startup task ------------------------------------------
-    if ($RegisterStartup) {
-        $python = (Get-Command python -ErrorAction SilentlyContinue).Source
-        $action = New-ScheduledTaskAction -Execute $python `
-            -Argument "server.py --port $BackendPort --no-open" -WorkingDirectory $ProjectRoot
-        Register-ScheduledTask -TaskName "AdrienneVoiceBackend" -Action $action `
-            -Trigger (New-ScheduledTaskTrigger -AtLogOn) -Force | Out-Null
-        Write-Log "Scheduled task 'AdrienneVoiceBackend' registered"
+    # --- 9. keep the backend alive (self-healing) ---------------------------
+    # The IIS site is a reverse proxy, so a dead backend means a 502. A
+    # scheduled task restarts it at logon and re-checks it every few minutes.
+    $watchdog = Join-Path $ProjectRoot "watchdog-backend.ps1"
+    if (Test-Path $watchdog) {
+        try {
+            $taskAction = New-ScheduledTaskAction -Execute "powershell.exe" `
+                -Argument "-NoProfile -ExecutionPolicy Bypass -File `"$watchdog`" -Port $BackendPort" `
+                -WorkingDirectory $ProjectRoot
+            $repeat = New-ScheduledTaskTrigger -Once -At (Get-Date).AddMinutes(1) `
+                -RepetitionInterval (New-TimeSpan -Minutes 5) `
+                -RepetitionDuration (New-TimeSpan -Days 3650)
+            $logon = New-ScheduledTaskTrigger -AtLogOn
+            $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries `
+                -StartWhenAvailable -MultipleInstances IgnoreNew -ExecutionTimeLimit (New-TimeSpan -Minutes 5)
+            Register-ScheduledTask -TaskName "AdrienneVoiceBackend" -Action $taskAction `
+                -Trigger @($repeat, $logon) -Settings $settings `
+                -Description "Keeps the Adriene Voice Playground API alive on 127.0.0.1 so the IIS site never returns 502." `
+                -Force | Out-Null
+            Write-Log "Scheduled task 'AdrienneVoiceBackend' registered (at logon + every 5 minutes)"
+        } catch {
+            Write-Log "Scheduled task registration failed: $($_.Exception.Message)" "WARN"
+        }
     }
 
     # --- 10. find a working web.config, then verify every route ------------
