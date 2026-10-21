@@ -14,12 +14,14 @@
     description: '',
     purpose: '',
     instructions: 'You are Adriene, a professional BPO voice assistant. Be concise, empathetic, and follow deterministic rules before LLM generation. Never override transfer or eligibility policies. Ask required questions in order.',
+    greeting: '',
     rules: 'Ask account-holder check, then ZIP, then prior coverage. Validate consent before transfer. Retry once on unclear input. Terminate gracefully.',
     language: 'en-US',
     voice: 'flux-brittany-en',
     tone: 'professional',
     rate: 100,
     stt: 'deepgram',
+    sttConfig: { model: 'nova-2', smartFormat: true, punctuate: true, interimResults: true, endpointing: 300 },
     llm: 'local',
     tts: 'deepgram-tts',
     model: 'deterministic-rules',
@@ -58,24 +60,140 @@
     const select = $('f-voice');
     if (!window.VOICE_CATALOG) return;
     const current = select.value || DEFAULTS.voice;
+    const deepgram = $('f-tts').value === 'deepgram-tts';
     const aliases = ['alloy', 'nova', 'onyx', 'rachel', 'adam'].map((id) => ({
       id,
       name: id.charAt(0).toUpperCase() + id.slice(1),
     }));
-    const groups = [
-      ['Deepgram Flux', window.VOICE_CATALOG.flux],
-      ['Deepgram Aura', window.VOICE_CATALOG.aura],
-      ['OpenAI / ElevenLabs aliases', aliases],
-    ];
+    const groups = deepgram
+      ? [
+        ['Deepgram Flux', window.VOICE_CATALOG.flux],
+        ['Deepgram Aura', window.VOICE_CATALOG.aura],
+      ]
+      : [['OpenAI / ElevenLabs aliases', aliases]];
     select.innerHTML = groups.map(([label, voices]) => `
       <optgroup label="${label}">
-        ${voices.map((voice) => `<option value="${voice.id}">${UI.esc(voice.name)}${voice.accent ? ` (${UI.esc(voice.accent)}, ${UI.esc(voice.gender)})` : ''}</option>`).join('')}
+        ${voices.map((voice) => `<option value="${voice.id}">${voice.family} - ${UI.esc(voice.name)} (${UI.esc(voice.accent)}, ${UI.esc(voice.gender)})</option>`).join('')}
       </optgroup>`).join('');
     select.value = current;
-    if (!select.value) select.value = 'flux-brittany-en';
+    if (!select.value) select.value = deepgram ? 'flux-brittany-en' : 'alloy';
+    $('voice-hint').textContent = deepgram
+      ? 'Deepgram Flux / Aura catalogue for this account.'
+      : 'Provider aliases — the browser maps them to a local voice.';
   }
 
   populateVoiceOptions();
+
+  // ---- Deepgram account + model catalogue --------------------------------
+
+  const USE_CASES = {
+    custom: {
+      label: 'Custom',
+      prompt: 'You are a professional voice agent. Be concise, empathetic, and follow deterministic rules before any generation. Never override transfer or eligibility policies.',
+      greeting: '',
+      tone: 'professional',
+      purpose: 'Custom voice agent',
+    },
+    general: {
+      label: 'General',
+      prompt: 'You are a friendly general-purpose voice assistant. Answer the caller directly, keep replies under three sentences, and confirm anything you could not verify. Ask for the missing detail once, then continue.',
+      greeting: 'Hi, this is your voice assistant. How can I help you today?',
+      tone: 'friendly',
+      purpose: 'General enquiries and guidance',
+    },
+    healthcare: {
+      label: 'Healthcare',
+      prompt: 'You are a healthcare scheduling assistant. Collect the required details in order, never give medical advice, and never confirm coverage. Only a licensed provider may approve an eligible service. Escalate clinical questions to a human.',
+      greeting: "Hi, this is your healthcare scheduling assistant. How can I help you today?",
+      tone: 'empathetic',
+      purpose: 'Scheduling, eligibility and coverage questions',
+    },
+    support: {
+      label: 'Customer support',
+      prompt: 'You are a customer support agent. Acknowledge the issue, gather the account details you need, then give the next concrete step. Never guess an order status - confirm it with the backend first.',
+      greeting: "Hi, thanks for calling. How can I help you today?",
+      tone: 'professional',
+      purpose: 'Order, account and billing support',
+    },
+    sales: {
+      label: 'Sales',
+      prompt: 'You are a sales development assistant for inbound leads. Qualify need, timeline and budget, note objections, and book a follow-up. Never quote a price that is not on the approved list.',
+      greeting: "Hi, thanks for reaching out. What can I help you with today?",
+      tone: 'cheerful',
+      purpose: 'Inbound lead qualification',
+    },
+    financial: {
+      label: 'Financial services',
+      prompt: 'You are a financial services assistant. Verify the account holder before any balance or coverage detail, explain fees in plain language, and require explicit consent before transferring to an advisor.',
+      greeting: "Hi, this is your financial services assistant. How can I help you today?",
+      tone: 'authoritative',
+      purpose: 'Billing, coverage and account questions',
+    },
+  };
+
+  let llmCatalog = [];
+
+  async function loadLlmCatalog() {
+    try {
+      const res = await fetch('/api/deepgram/account');
+      if (!res.ok) return;
+      const data = await res.json();
+      llmCatalog = Array.isArray(data.llmModels) ? data.llmModels : [];
+    } catch {
+      llmCatalog = [];
+    }
+    const select = $('f-model');
+    const current = select.value || 'deterministic-rules';
+    const options = llmCatalog.length
+      ? llmCatalog
+      : [{ id: 'deterministic-rules', label: 'Local Deterministic Engine', provider: 'local', requiresKey: false, note: '' }];
+    select.innerHTML = options.map((model) => `
+      <option value="${model.id}">${UI.esc(model.label)}${model.requiresKey ? ' (key required)' : ''}</option>`).join('');
+    select.value = current;
+    if (!select.value) select.value = options[0].id;
+    updateLlmNote();
+  }
+
+  function updateLlmNote() {
+    const model = llmCatalog.find((m) => m.id === $('f-model').value);
+    const note = $('llm-note');
+    if (!model) {
+      note.textContent = '';
+      return;
+    }
+    note.textContent = model.requiresKey
+      ? `${model.note} Until that key is present the agent keeps running on the local deterministic engine.`
+      : (model.note || '');
+  }
+
+  // ---- tabs, use cases, counters -----------------------------------------
+
+  function selectTab(name) {
+    document.querySelectorAll('#agent-tabs .tab').forEach((tab) => {
+      tab.classList.toggle('active', tab.dataset.tab === name);
+    });
+    document.querySelectorAll('[data-panel]').forEach((panel) => {
+      panel.classList.toggle('hidden', panel.dataset.panel !== name);
+    });
+  }
+
+  function updateGreetingCount() {
+    const value = $('f-greeting').value;
+    $('greeting-count').textContent = `Characters: ${value.length} / 500`;
+  }
+
+  function applyUseCase(key) {
+    const preset = USE_CASES[key];
+    if (!preset) return;
+    $('f-instructions').value = preset.prompt;
+    $('f-greeting').value = preset.greeting;
+    $('f-tone').value = preset.tone;
+    $('f-purpose').value = preset.purpose;
+    updateGreetingCount();
+    document.querySelectorAll('#use-case-chips .use-case-chip').forEach((chip) => {
+      chip.classList.toggle('active', chip.dataset.usecase === key);
+    });
+  }
 
   // ---- form helpers ------------------------------------------------------
 
@@ -102,17 +220,24 @@
     $('f-description').value = a.description || '';
     $('f-purpose').value = a.purpose || '';
     $('f-instructions').value = a.instructions || a.systemInstructions || '';
+    $('f-greeting').value = a.greeting || '';
     $('f-rules').value = a.rules || a.conversationRules || '';
     $('f-language').value = a.language || 'en-US';
     $('f-voice').value = a.voice || 'flux-brittany-en';
     $('f-tone').value = a.tone || 'professional';
     $('f-rate').value = a.rate ?? a.speakingRate ?? 100;
-    $('f-stt').value = a.stt || a.sttProvider || 'browser';
+    $('f-stt').value = a.stt || a.sttProvider || 'deepgram';
     $('f-llm').value = a.llm || a.llmProvider || 'local';
-    $('f-tts').value = a.tts || a.ttsProvider || 'browser-tts';
+    $('f-tts').value = a.tts || a.ttsProvider || 'deepgram-tts';
     const llmConfig = a.llmConfig || {};
     $('f-model').value = a.model || llmConfig.model || 'deterministic-rules';
     $('f-temp').value = a.temp ?? llmConfig.temperature ?? 0;
+    const sttConfig = a.sttConfig || {};
+    $('f-stt-model').value = sttConfig.model || 'nova-2';
+    $('f-stt-smart').checked = sttConfig.smartFormat !== false;
+    $('f-stt-punctuate').checked = sttConfig.punctuate !== false;
+    $('f-stt-interim').checked = sttConfig.interimResults !== false;
+    $('f-stt-endpointing').value = sttConfig.endpointing || 300;
     $('f-transfer-enabled').checked = (a.transferPolicy ? a.transferPolicy.enabled : a.transferEnabled) !== false;
     $('f-transfer-consent').checked = (a.transferPolicy ? a.transferPolicy.requireConsent : a.transferConsent) !== false;
     const tools = a.tools ?? a.enabledTools ?? [];
@@ -123,12 +248,18 @@
     $('f-silence').value = a.silence ?? timeout.silenceTimeoutSec ?? 8;
     $('f-status').value = a.status || 'draft';
     setRateLabel();
+    updateGreetingCount();
+    populateVoiceOptions();
+    updateLlmNote();
   }
 
   function resetForm() {
     editingId = null;
     form.reset();
     fillForm({ ...DEFAULTS });
+    document.querySelectorAll('#use-case-chips .use-case-chip').forEach((chip) => {
+      chip.classList.toggle('active', chip.dataset.usecase === 'custom');
+    });
     $('form-title').textContent = 'New Agent Profile';
     $('form-badge').textContent = 'Draft state';
     $('form-badge').className = 'pill pill-violet';
@@ -138,22 +269,36 @@
   }
 
   function readForm() {
+    const model = $('f-model').value.trim() || 'deterministic-rules';
+    const catalogEntry = llmCatalog.find((m) => m.id === model);
+    const llmProvider = catalogEntry && !catalogEntry.requiresKey
+      ? (catalogEntry.provider || 'local')
+      : $('f-llm').value;
     return {
       name: $('f-name').value.trim(),
       campaign: $('f-campaign').value.trim(),
       description: $('f-description').value.trim(),
       purpose: $('f-purpose').value.trim(),
       systemInstructions: $('f-instructions').value.trim(),
+      greeting: $('f-greeting').value.trim(),
       conversationRules: $('f-rules').value.trim(),
       language: $('f-language').value,
       voice: $('f-voice').value,
       tone: $('f-tone').value,
       speakingRate: Number($('f-rate').value),
       sttProvider: $('f-stt').value,
-      llmProvider: $('f-llm').value,
+      llmProvider,
       ttsProvider: $('f-tts').value,
+      sttConfig: {
+        model: $('f-stt-model').value,
+        language: $('f-language').value,
+        smartFormat: $('f-stt-smart').checked,
+        punctuate: $('f-stt-punctuate').checked,
+        interimResults: $('f-stt-interim').checked,
+        endpointing: Number($('f-stt-endpointing').value || 300),
+      },
       llmConfig: {
-        model: $('f-model').value.trim() || 'deterministic-rules',
+        model,
         temperature: Number($('f-temp').value || 0),
       },
       transferPolicy: {
@@ -439,6 +584,25 @@
   $('status-filter').addEventListener('change', (event) => { filterStatus = event.target.value; renderAgents(); });
   $('search-agents').addEventListener('input', UI.debounce((event) => { search = event.target.value.trim().toLowerCase(); renderAgents(); }, 150));
 
+  // Deepgram-style builder interactions
+  $('agent-tabs').addEventListener('click', (event) => {
+    const tab = event.target.closest('[data-tab]');
+    if (tab) selectTab(tab.dataset.tab);
+  });
+  $('use-case-chips').addEventListener('click', (event) => {
+    const chip = event.target.closest('[data-usecase]');
+    if (chip) applyUseCase(chip.dataset.usecase);
+  });
+  $('f-greeting').addEventListener('input', updateGreetingCount);
+  $('f-tts').addEventListener('change', populateVoiceOptions);
+  $('f-model').addEventListener('change', () => {
+    updateLlmNote();
+    const model = llmCatalog.find((m) => m.id === $('f-model').value);
+    if (model && !model.requiresKey) $('f-llm').value = model.provider || 'local';
+  });
+
+  selectTab('voice');
+  await loadLlmCatalog();
   resetForm();
   await loadAgents();
 })();

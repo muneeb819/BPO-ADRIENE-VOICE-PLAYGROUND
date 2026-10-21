@@ -72,6 +72,33 @@ Two actions sit under the picker:
 | **Play** | Synthesizes the sample text with the selected voice and plays it (re-play is instant — the clip is cached) |
 | **Save voice** | Writes the selected voice to the chosen agent (`PUT /api/agents/{id}`) and stores it in `ttsConfig.model`. The save creates a new agent version, so the change is versioned and reversible |
 
+---
+
+## Connected Deepgram account
+
+Your Deepgram project is live in the app — the key stays in `.env` and is never returned by the API.
+
+| Check | Result on this account |
+|---|---|
+| Project | `mmadigitallabs@gmail.com's Project` (`15f2146b-…`) |
+| Speech to text | `nova-3`, `nova-2`, `conversationalai` — all verified with a real transcription |
+| Text to speech | 41 voices — 36 Flux + 5 Aura, all verified with a real synthesis |
+| Voice agent models | Local Deterministic Engine, Google Gemini 3.1 Flash Lite, OpenAI GPT-4o Mini, Anthropic Claude 3.5 Sonnet |
+
+`GET /api/deepgram/account` returns exactly this (project name/id, model lists, voice count — never the key). **Voice Lab → Deepgram account** renders it live, and **Agent Studio → LLM** lists the voice-agent models straight from that response. Cloud LLM models are shown as *(key required)* until the matching key is in `.env`; until then the agent keeps running on the local deterministic engine.
+
+### Agent Studio — Deepgram Voice Agent builder
+
+Agent Studio now mirrors the Deepgram voice-agent builder:
+
+- **Try a use case** presets — Custom, General, Healthcare, Customer support, Sales, Financial services — that prefill the prompt, greeting, tone and purpose.
+- **Voice** tab — Provider (Deepgram), Voice (`Flux - Brittany (American, feminine)`), **Greeting (Optional)** with a live `Characters: n / 500` counter, and the agent prompt.
+- **LLM** tab — Model picker fed by the live account response, provider routing, temperature and max turns.
+- **Functions** tab — enabled tools, transfer policy and safety restrictions.
+- **Transcription** tab — provider, model (`Nova-3` / `Nova-2` / `Flux` turn-based), smart formatting, punctuation, interim results and endpointing.
+
+The transcription settings are stored per agent in `sttConfig` and are applied by the backend on every clip: `POST /api/stt?sessionId=…` transcribes with that agent's own model and flags.
+
 Restart the server after changing `.env`. Test the connection from **Voice Lab → Deepgram** or:
 
 ```powershell
@@ -89,7 +116,7 @@ Without a key, the playground still works in text mode and uses browser Speech S
 | Route | Purpose |
 |---|---|
 | `/` | Foundation status, architecture, live health snapshot, quick actions |
-| `/agents` | Agent CRUD, persona, providers, tools, version history and rollback |
+| `/agents` | Agent CRUD, Deepgram voice-agent builder (Voice/LLM/Functions/Transcription tabs, use-case presets, greeting), providers, tools, version history and rollback |
 | `/playground` | Live voice session: mic → STT → deterministic rules → TTS, barge-in, latency |
 | `/lab` | Provider catalogue, connection tests, Deepgram TTS/STT smoke tests, voice preview |
 | `/testing` | Test cases, fixture seeding, regression runs, transcripts, JSON/CSV export |
@@ -167,6 +194,7 @@ Public, localhost-only by default:
 | POST | `/api/sessions/{id}/turns` | Submit a caller turn |
 | POST | `/api/sessions/{id}/end` | End session |
 | GET | `/api/providers` | Provider catalogue (no secrets) |
+| GET | `/api/deepgram/account` | Live Deepgram project, model lists and voice count (never the key) |
 | POST | `/api/providers/{id}/test` | Connection test |
 | POST | `/api/tts` | Flux / Aura TTS proxy (max 1200 chars) |
 | POST | `/api/stt` | Nova-2 STT proxy (audio ≤ 8 MB) |

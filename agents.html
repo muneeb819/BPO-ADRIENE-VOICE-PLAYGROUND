@@ -32,7 +32,7 @@
           <div id="form-message" class="mt-3 hidden rounded-lg border px-3 py-2 text-[10.5px]"></div>
 
           <form id="agent-form" class="mt-4" novalidate>
-            <div class="grid gap-3 sm:grid-cols-2">
+            <div class="grid gap-3 sm:grid-cols-[1fr_1fr_auto]">
               <div>
                 <label class="label" for="f-name">Name *</label>
                 <input class="input" id="f-name" maxlength="120" placeholder="Adriene — Outbound Intake" required />
@@ -40,152 +40,6 @@
               <div>
                 <label class="label" for="f-campaign">Campaign</label>
                 <input class="input" id="f-campaign" maxlength="200" placeholder="Q1 Lead Qualification" />
-              </div>
-              <div>
-                <label class="label" for="f-description">Description</label>
-                <input class="input" id="f-description" maxlength="500" placeholder="Short summary for the dashboard" />
-              </div>
-              <div>
-                <label class="label" for="f-purpose">Purpose</label>
-                <input class="input" id="f-purpose" maxlength="500" placeholder="Inbound support & eligibility" />
-              </div>
-            </div>
-
-            <div class="mt-3">
-              <div class="flex items-center justify-between">
-                <label class="label mb-1.5" for="f-instructions">System instructions *</label>
-                <span class="text-[9px] text-slate-400">Required • 10+ chars</span>
-              </div>
-              <textarea class="textarea" id="f-instructions" rows="4" maxlength="8000" placeholder="You are Adriene, a professional BPO voice assistant…"></textarea>
-              <p class="hint">The deterministic engine follows policy first; this brief shapes the agent's persona and fallback replies.</p>
-            </div>
-
-            <div class="mt-3">
-              <label class="label" for="f-rules">Conversation rules</label>
-              <textarea class="textarea" id="f-rules" rows="3" maxlength="4000" placeholder="Ask account-holder check, then ZIP, then prior coverage…"></textarea>
-            </div>
-
-            <div class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-              <div>
-                <label class="label" for="f-language">Language</label>
-                <select class="select" id="f-language">
-                  <option value="en-US">English (US)</option>
-                  <option value="en-GB">English (UK)</option>
-                  <option value="es-ES">Spanish (ES)</option>
-                  <option value="fr-FR">French (FR)</option>
-                </select>
-              </div>
-              <div>
-                <label class="label" for="f-voice">Voice</label>
-                <select class="select" id="f-voice">
-                  <optgroup label="Deepgram Aura">
-                    <option value="aura-asteria-en" selected>Asteria — warm female</option>
-                    <option value="aura-luna-en">Luna — calm female</option>
-                    <option value="aura-stella-en">Stella — clear female</option>
-                    <option value="aura-orion-en">Orion — warm male</option>
-                    <option value="aura-arcas-en">Arcas — deep male</option>
-                  </optgroup>
-                  <optgroup label="OpenAI / ElevenLabs aliases">
-                    <option value="alloy">Alloy</option>
-                    <option value="nova">Nova</option>
-                    <option value="onyx">Onyx</option>
-                    <option value="rachel">Rachel</option>
-                    <option value="adam">Adam</option>
-                  </optgroup>
-                </select>
-              </div>
-              <div>
-                <label class="label" for="f-tone">Tone</label>
-                <select class="select" id="f-tone">
-                  <option value="professional">Professional</option>
-                  <option value="friendly">Friendly</option>
-                  <option value="empathetic">Empathetic</option>
-                  <option value="authoritative">Authoritative</option>
-                  <option value="cheerful">Cheerful</option>
-                </select>
-              </div>
-              <div>
-                <label class="label" for="f-rate">Speaking rate <span class="mono text-violet-600" id="rate-value">100%</span></label>
-                <input class="w-full accent-violet-600 mt-2" id="f-rate" type="range" min="50" max="200" step="5" value="100" />
-                <div class="flex justify-between text-[8px] text-slate-400"><span>50%</span><span>200%</span></div>
-              </div>
-            </div>
-
-            <div class="mt-4 rounded-xl border border-slate-200 bg-slate-50/50 p-3">
-              <div class="flex items-center gap-2">
-                <span class="text-violet-600" data-icon="activity"></span>
-                <h3 class="text-[11px] font-extrabold tracking-tight text-slate-800">Provider routing</h3>
-                <span class="ml-auto pill pill-ghost no-dot">Keys backend-only</span>
-              </div>
-              <div class="mt-3 grid gap-3 sm:grid-cols-3">
-                <div>
-                  <label class="label" for="f-stt">STT provider</label>
-                  <select class="select" id="f-stt">
-                    <option value="browser">Browser Web Speech API</option>
-                    <option value="whisper">OpenAI Whisper</option>
-                    <option value="deepgram">Deepgram Nova-2</option>
-                  </select>
-                </div>
-                <div>
-                  <label class="label" for="f-llm">LLM provider</label>
-                  <select class="select" id="f-llm">
-                    <option value="local">Local Deterministic Engine</option>
-                    <option value="openai">OpenAI GPT-4o Mini</option>
-                    <option value="anthropic">Anthropic Claude 3.5</option>
-                  </select>
-                </div>
-                <div>
-                  <label class="label" for="f-tts">TTS provider</label>
-                  <select class="select" id="f-tts">
-                    <option value="browser-tts">Browser Speech Synthesis</option>
-                    <option value="deepgram-tts">Deepgram Aura</option>
-                    <option value="elevenlabs">ElevenLabs</option>
-                    <option value="openai-tts">OpenAI TTS</option>
-                  </select>
-                </div>
-                <div class="sm:col-span-2">
-                  <label class="label" for="f-model">LLM model</label>
-                  <input class="input" id="f-model" maxlength="80" placeholder="deterministic-rules" />
-                </div>
-                <div>
-                  <label class="label" for="f-temp">Temperature</label>
-                  <input class="input" id="f-temp" type="number" min="0" max="2" step="0.1" value="0" />
-                </div>
-              </div>
-              <p class="hint">Provider tests run in Voice Lab. This build never sends customer audio to a provider unless a backend key is configured.</p>
-            </div>
-
-            <div class="mt-4 grid gap-3 sm:grid-cols-2">
-              <div class="rounded-xl border border-slate-200 p-3">
-                <div class="label mb-2">Transfer policy</div>
-                <label class="flex items-center gap-2 text-[11px] font-medium text-slate-700">
-                  <input type="checkbox" class="checkbox" id="f-transfer-enabled" checked /> Allow mock transfers
-                </label>
-                <label class="mt-2 flex items-center gap-2 text-[11px] font-medium text-slate-700">
-                  <input type="checkbox" class="checkbox" id="f-transfer-consent" checked /> Require explicit consent
-                </label>
-                <p class="hint">A transfer request without consent must never execute. The engine asks first.</p>
-              </div>
-              <div class="rounded-xl border border-slate-200 p-3">
-                <div class="label mb-2">Enabled tools</div>
-                <input class="input" id="f-tools" placeholder="eligibility_check, schedule_callback" />
-                <p class="hint">Comma-separated. Tools are declared capabilities in this local build.</p>
-              </div>
-            </div>
-
-            <div class="mt-3">
-              <label class="label" for="f-safety">Safety restrictions</label>
-              <textarea class="textarea" id="f-safety" rows="2" maxlength="1000" placeholder="No hacking, no disallowed content. Never claim an action succeeded unless confirmed."></textarea>
-            </div>
-
-            <div class="mt-3 grid gap-3 sm:grid-cols-3">
-              <div>
-                <label class="label" for="f-max-turns">Max turns</label>
-                <input class="input" id="f-max-turns" type="number" min="1" max="100" value="20" />
-              </div>
-              <div>
-                <label class="label" for="f-silence">Silence timeout (sec)</label>
-                <input class="input" id="f-silence" type="number" min="1" max="60" value="8" />
               </div>
               <div>
                 <label class="label" for="f-status">Status</label>
@@ -198,12 +52,212 @@
               </div>
             </div>
 
+            <div class="mt-4">
+              <div class="text-[9px] font-extrabold uppercase tracking-[0.12em] text-slate-400">Try a use case</div>
+              <div class="mt-1.5 flex flex-wrap gap-1.5" id="use-case-chips">
+                <button class="use-case-chip active" data-usecase="custom" type="button">Custom</button>
+                <button class="use-case-chip" data-usecase="general" type="button">General</button>
+                <button class="use-case-chip" data-usecase="healthcare" type="button">Healthcare</button>
+                <button class="use-case-chip" data-usecase="support" type="button">Customer support</button>
+                <button class="use-case-chip" data-usecase="sales" type="button">Sales</button>
+                <button class="use-case-chip" data-usecase="financial" type="button">Financial services</button>
+              </div>
+            </div>
+
+            <div class="tabs mt-4" role="tablist" id="agent-tabs">
+              <button class="tab active" data-tab="voice" type="button" role="tab">Voice</button>
+              <button class="tab" data-tab="llm" type="button" role="tab">LLM</button>
+              <button class="tab" data-tab="functions" type="button" role="tab">Functions</button>
+              <button class="tab" data-tab="transcription" type="button" role="tab">Transcription</button>
+            </div>
+
+            <!-- Voice -->
+            <div class="tab-panel mt-4" data-panel="voice">
+              <div class="dg-label"><span class="dg-dot"></span>Voice</div>
+              <div class="mt-3 grid gap-3 sm:grid-cols-2">
+                <div>
+                  <label class="label" for="f-tts">Provider</label>
+                  <select class="select" id="f-tts">
+                    <option value="deepgram-tts">Deepgram</option>
+                    <option value="browser-tts">Browser Speech Synthesis</option>
+                    <option value="elevenlabs">ElevenLabs</option>
+                    <option value="openai-tts">OpenAI TTS</option>
+                  </select>
+                  <p class="hint">The provider key stays on the server — never in the browser.</p>
+                </div>
+                <div>
+                  <label class="label" for="f-voice">Voice</label>
+                  <select class="select" id="f-voice"></select>
+                  <p class="hint" id="voice-hint">Deepgram Flux / Aura catalogue for this account.</p>
+                </div>
+              </div>
+
+              <div class="mt-4">
+                <label class="label" for="f-greeting">Greeting (Optional)</label>
+                <textarea class="textarea" id="f-greeting" rows="2" maxlength="500" placeholder="Hi, this is Adriene from BPO Adriene. How's your day going so far?"></textarea>
+                <div class="mt-1 flex flex-wrap items-start justify-between gap-2 text-[9px] text-slate-400">
+                  <span class="max-w-[70%]">The first thing the agent will say. If left blank, the agent will wait for the user to initiate the conversation.</span>
+                  <span class="mono" id="greeting-count">Characters: 0 / 500</span>
+                </div>
+              </div>
+
+              <div class="mt-4">
+                <div class="flex items-center justify-between">
+                  <label class="label mb-1.5" for="f-instructions">Agent prompt</label>
+                  <span class="text-[9px] text-slate-400">Required • 10+ chars</span>
+                </div>
+                <textarea class="textarea" id="f-instructions" rows="7" maxlength="8000" placeholder="You are Adriene, a professional BPO voice assistant…"></textarea>
+                <p class="hint">The deterministic engine follows policy first; this prompt shapes the persona and fallback replies.</p>
+              </div>
+
+              <div class="mt-4 grid gap-3 sm:grid-cols-3">
+                <div>
+                  <label class="label" for="f-tone">Tone</label>
+                  <select class="select" id="f-tone">
+                    <option value="professional">Professional</option>
+                    <option value="friendly">Friendly</option>
+                    <option value="empathetic">Empathetic</option>
+                    <option value="authoritative">Authoritative</option>
+                    <option value="cheerful">Cheerful</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="label" for="f-rate">Speaking rate <span class="mono text-violet-600" id="rate-value">100%</span></label>
+                  <input class="w-full accent-violet-600 mt-2" id="f-rate" type="range" min="50" max="200" step="5" value="100" />
+                  <div class="flex justify-between text-[8px] text-slate-400"><span>50%</span><span>200%</span></div>
+                </div>
+                <div>
+                  <label class="label" for="f-language">Language</label>
+                  <select class="select" id="f-language">
+                    <option value="en-US">English (US)</option>
+                    <option value="en-GB">English (UK)</option>
+                    <option value="es-ES">Spanish (ES)</option>
+                    <option value="fr-FR">French (FR)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- LLM -->
+            <div class="tab-panel mt-4 hidden" data-panel="llm">
+              <div class="dg-label"><span class="dg-dot"></span>LLM</div>
+              <div class="mt-3">
+                <label class="label" for="f-model">Model</label>
+                <select class="select" id="f-model"></select>
+                <p class="hint">Select a Large Language Model to do the thinking for your voice agent.</p>
+                <p class="hint" id="llm-note"></p>
+              </div>
+              <div class="mt-3 grid gap-3 sm:grid-cols-3">
+                <div>
+                  <label class="label" for="f-llm">Provider</label>
+                  <select class="select" id="f-llm">
+                    <option value="local">Local Deterministic Engine</option>
+                    <option value="gemini">Google Gemini</option>
+                    <option value="openai">OpenAI</option>
+                    <option value="anthropic">Anthropic</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="label" for="f-temp">Temperature</label>
+                  <input class="input" id="f-temp" type="number" min="0" max="2" step="0.1" value="0" />
+                </div>
+                <div>
+                  <label class="label" for="f-max-turns">Max turns</label>
+                  <input class="input" id="f-max-turns" type="number" min="1" max="100" value="20" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Functions -->
+            <div class="tab-panel mt-4 hidden" data-panel="functions">
+              <div class="dg-label"><span class="dg-dot"></span>Functions</div>
+              <div class="mt-3">
+                <label class="label" for="f-tools">Enabled tools</label>
+                <input class="input" id="f-tools" placeholder="eligibility_check, schedule_callback" />
+                <p class="hint">Comma-separated. These are the functions your agent is allowed to call.</p>
+              </div>
+              <div class="mt-4 grid gap-3 sm:grid-cols-2">
+                <div class="rounded-xl border border-slate-200 p-3">
+                  <div class="label mb-2">Transfer policy</div>
+                  <label class="flex items-center gap-2 text-[11px] font-medium text-slate-700">
+                    <input type="checkbox" class="checkbox" id="f-transfer-enabled" checked /> Allow mock transfers
+                  </label>
+                  <label class="mt-2 flex items-center gap-2 text-[11px] font-medium text-slate-700">
+                    <input type="checkbox" class="checkbox" id="f-transfer-consent" checked /> Require explicit consent
+                  </label>
+                  <p class="hint">A transfer request without consent must never execute. The engine asks first.</p>
+                </div>
+                <div class="rounded-xl border border-slate-200 p-3">
+                  <div class="label mb-2">Safety restrictions</div>
+                  <textarea class="textarea" id="f-safety" rows="3" maxlength="1000" placeholder="No hacking, no disallowed content. Never claim an action succeeded unless confirmed."></textarea>
+                </div>
+              </div>
+              <div class="mt-3">
+                <label class="label" for="f-rules">Conversation rules</label>
+                <textarea class="textarea" id="f-rules" rows="3" maxlength="4000" placeholder="Ask account-holder check, then ZIP, then prior coverage…"></textarea>
+              </div>
+            </div>
+
+            <!-- Transcription -->
+            <div class="tab-panel mt-4 hidden" data-panel="transcription">
+              <div class="dg-label"><span class="dg-dot"></span>Transcription</div>
+              <div class="mt-3 grid gap-3 sm:grid-cols-2">
+                <div>
+                  <label class="label" for="f-stt">Provider</label>
+                  <select class="select" id="f-stt">
+                    <option value="deepgram">Deepgram Nova</option>
+                    <option value="whisper">OpenAI Whisper</option>
+                    <option value="browser">Browser Web Speech API</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="label" for="f-stt-model">Model</label>
+                  <select class="select" id="f-stt-model">
+                    <option value="nova-3">Nova-3 (General)</option>
+                    <option value="nova-2">Nova-2 (General)</option>
+                    <option value="flux">Flux (Turn-based)</option>
+                  </select>
+                </div>
+              </div>
+              <div class="mt-3 grid gap-2 sm:grid-cols-2">
+                <label class="flex items-center gap-2 text-[11px] font-medium text-slate-700">
+                  <input type="checkbox" class="checkbox" id="f-stt-smart" checked /> Smart formatting
+                </label>
+                <label class="flex items-center gap-2 text-[11px] font-medium text-slate-700">
+                  <input type="checkbox" class="checkbox" id="f-stt-punctuate" checked /> Punctuation
+                </label>
+                <label class="flex items-center gap-2 text-[11px] font-medium text-slate-700">
+                  <input type="checkbox" class="checkbox" id="f-stt-interim" checked /> Interim results
+                </label>
+                <div>
+                  <label class="label" for="f-stt-endpointing">Endpointing (ms)</label>
+                  <input class="input" id="f-stt-endpointing" type="number" min="50" max="5000" step="50" value="300" />
+                </div>
+              </div>
+              <div class="mt-3">
+                <label class="label" for="f-silence">Silence timeout (sec)</label>
+                <input class="input" id="f-silence" type="number" min="1" max="60" value="8" />
+              </div>
+              <p class="hint">Deepgram Nova-3 handles general streaming, Nova-2 the classic general model, Flux turn-based streaming. The backend applies these settings on every clip.</p>
+            </div>
+
+            <div class="mt-4 grid gap-3 sm:grid-cols-2">
+              <div>
+                <label class="label" for="f-description">Description</label>
+                <input class="input" id="f-description" maxlength="500" placeholder="Short summary for the dashboard" />
+              </div>
+              <div>
+                <label class="label" for="f-purpose">Purpose</label>
+                <input class="input" id="f-purpose" maxlength="500" placeholder="Inbound support & eligibility" />
+              </div>
+            </div>
+
             <div class="mt-4 flex flex-wrap items-center gap-2">
               <button class="btn btn-primary flex-1" id="submit-btn" type="submit">Create agent</button>
               <button class="btn btn-outline" id="reset-btn" type="button">Reset</button>
               <button class="btn btn-soft hidden" id="cancel-btn" type="button">Cancel edit</button>
             </div>
-            <p class="mt-2 text-[9.5px] leading-relaxed text-slate-400">Validation: name ≥ 2 chars, instructions ≥ 10 chars, rate 50–200, max turns 1–100. Every save creates a new version snapshot.</p>
+            <p class="mt-2 text-[9.5px] leading-relaxed text-slate-400">Validation: name ≥ 2 chars, prompt ≥ 10 chars, rate 50–200, max turns 1–100. Every save creates a new version snapshot.</p>
           </form>
         </section>
 

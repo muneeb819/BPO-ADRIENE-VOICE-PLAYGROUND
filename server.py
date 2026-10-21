@@ -87,6 +87,7 @@ DEEPGRAM_API_KEY = os.environ.get("DEEPGRAM_API_KEY", "").strip()
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY", "").strip()
 ELEVENLABS_API_KEY = os.environ.get("ELEVENLABS_API_KEY", "").strip()
 ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "").strip()
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "").strip()
 AUTH_ENABLED = os.environ.get("AUTH_ENABLED", "false").lower() == "true"
 AUTH_SECRET = os.environ.get("AUTH_SECRET", "").strip()
 TELEPHONY_ENABLED = os.environ.get("TELEPHONY_ENABLED", "false").lower() == "true"
@@ -117,7 +118,30 @@ ALLOWED_VOICES = set(FLUX_VOICES + AURA_VOICES + VOICE_ALIASES)
 ALLOWED_TONES = {"professional", "friendly", "empathetic", "authoritative", "cheerful"}
 ALLOWED_STATUSES = {"draft", "testing", "approved", "archived"}
 ALLOWED_STT = {"browser", "whisper", "deepgram"}
-ALLOWED_LLM = {"local", "openai", "anthropic"}
+ALLOWED_STT_MODELS = {"nova-3", "nova-2", "nova-3-general", "flux"}
+ALLOWED_LLM = {"local", "openai", "anthropic", "gemini"}
+LLM_MODEL_CATALOG = [
+    {
+        "id": "deterministic-rules", "label": "Local Deterministic Engine",
+        "provider": "local", "requiresKey": False,
+        "note": "Offline policy engine - no key, deterministic answers.",
+    },
+    {
+        "id": "google/gemini-3.1-flash-lite", "label": "Google Gemini 3.1 Flash Lite",
+        "provider": "gemini", "requiresKey": True, "key": "GEMINI_API_KEY",
+        "note": "Deepgram voice-agent model - needs GEMINI_API_KEY in .env.",
+    },
+    {
+        "id": "openai/gpt-4o-mini", "label": "OpenAI GPT-4o Mini",
+        "provider": "openai", "requiresKey": True, "key": "OPENAI_API_KEY",
+        "note": "Deepgram voice-agent model - needs OPENAI_API_KEY in .env.",
+    },
+    {
+        "id": "anthropic/claude-3-5-sonnet", "label": "Anthropic Claude 3.5 Sonnet",
+        "provider": "anthropic", "requiresKey": True, "key": "ANTHROPIC_API_KEY",
+        "note": "Deepgram voice-agent model - needs ANTHROPIC_API_KEY in .env.",
+    },
+]
 ALLOWED_TTS = {"browser-tts", "elevenlabs", "openai-tts", "deepgram-tts"}
 ALLOWED_CATEGORIES = {
     "positive", "negative", "ambiguous", "silence",
@@ -160,6 +184,7 @@ CREATE TABLE IF NOT EXISTS agents (
     purpose TEXT NOT NULL DEFAULT '',
     campaign TEXT NOT NULL DEFAULT '',
     system_instructions TEXT NOT NULL,
+    greeting TEXT NOT NULL DEFAULT '',
     conversation_rules TEXT NOT NULL DEFAULT '',
     language TEXT NOT NULL DEFAULT 'en-US',
     voice TEXT NOT NULL DEFAULT 'alloy',
@@ -301,6 +326,13 @@ def init_db() -> None:
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     with db() as conn:
         conn.executescript(SCHEMA)
+        # Lightweight column migrations for databases created by older builds.
+        for table, column, ddl in (
+            ("agents", "greeting", "TEXT NOT NULL DEFAULT ''"),
+        ):
+            cols = {r["name"] for r in conn.execute(f"PRAGMA table_info({table})").fetchall()}
+            if column not in cols:
+                conn.execute(f"ALTER TABLE {table} ADD COLUMN {column} {ddl}")
         conn.execute("PRAGMA journal_mode = WAL")
     seed_db()
 
@@ -349,14 +381,15 @@ def seed_db() -> None:
             conn.execute(
                 """INSERT INTO agents (
                     id, name, description, purpose, campaign, system_instructions,
-                    conversation_rules, language, voice, tone, speaking_rate,
+                    greeting, conversation_rules, language, voice, tone, speaking_rate,
                     stt_provider, stt_config, llm_provider, llm_config, tts_provider,
                     tts_config, transfer_policy, enabled_tools, safety_restrictions,
                     timeout_settings, status, version, created_at, updated_at
-                ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+                ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
                 (
                     agent["id"], agent["name"], agent["description"], agent["purpose"],
-                    agent["campaign"], agent["systemInstructions"], agent["conversationRules"],
+                    agent["campaign"], agent["systemInstructions"], agent.get("greeting", ""),
+                    agent["conversationRules"],
                     agent["language"], agent["voice"], agent["tone"], agent["speakingRate"],
                     agent["sttProvider"], json.dumps(agent["sttConfig"]), agent["llmProvider"],
                     json.dumps(agent["llmConfig"]), agent["ttsProvider"],
@@ -388,6 +421,10 @@ def seed_db() -> None:
                  {"model": "claude-3-5-sonnet", "temperature": 0.7},
                  ["streaming", "extended-thinking"], [],
                  "connected" if ANTHROPIC_API_KEY else "disconnected"),
+                ("llm", "gemini", "Google Gemini 3.1 Flash Lite", 0, 0,
+                 {"model": "google/gemini-3.1-flash-lite", "temperature": 0.7},
+                 ["streaming", "low-latency"], [],
+                 "connected" if GEMINI_API_KEY else "disconnected"),
                 ("llm", "local", "Local Deterministic Engine", 1, 0,
                  {"deterministic": True},
                  ["offline", "rule-based", "no-key"], [], "connected"),
@@ -565,6 +602,7 @@ def agent_row(row) -> dict:
         "purpose": row["purpose"],
         "campaign": row["campaign"],
         "systemInstructions": row["system_instructions"],
+        "greeting": row["greeting"] if "greeting" in row.keys() else "",
         "conversationRules": row["conversation_rules"],
         "language": row["language"],
         "voice": row["voice"],
@@ -703,7 +741,7 @@ def validate_agent_payload(payload: dict, existing: dict | None = None) -> dict:
         "status": "draft",
     }
     for key in [
-        "name", "description", "purpose", "campaign", "systemInstructions",
+        "name", "description", "purpose", "campaign", "systemInstructions", "greeting",
         "conversationRules", "language", "voice", "tone", "speakingRate",
         "sttProvider", "llmProvider", "ttsProvider", "transferPolicy",
         "enabledTools", "safetyRestrictions", "timeoutSettings", "status",
@@ -721,6 +759,7 @@ def validate_agent_payload(payload: dict, existing: dict | None = None) -> dict:
     for field, limit in [
         ("description", 500), ("purpose", 500), ("campaign", 200),
         ("conversationRules", 4000), ("safetyRestrictions", 1000),
+        ("greeting", 500),
     ]:
         base[field] = _clean_str(base.get(field), limit)
 
@@ -783,6 +822,22 @@ def validate_agent_payload(payload: dict, existing: dict | None = None) -> dict:
             raise ValueError(f"{cfg} must be an object")
     if len(json.dumps(base.get("llmConfig", {}))) > 4000:
         raise ValueError("llmConfig is too large")
+    if len(json.dumps(base.get("sttConfig", {}))) > 4000:
+        raise ValueError("sttConfig is too large")
+
+    # Transcription settings (Deepgram voice-agent style).
+    stt = base.get("sttConfig") or {}
+    model = str(stt.get("model") or "nova-2")
+    if model not in ALLOWED_STT_MODELS:
+        raise ValueError("Invalid transcription model")
+    base["sttConfig"] = {
+        "model": model,
+        "language": str(stt.get("language") or base.get("language") or "en-US")[:12],
+        "smartFormat": bool(stt.get("smartFormat", True)),
+        "punctuate": bool(stt.get("punctuate", True)),
+        "interimResults": bool(stt.get("interimResults", True)),
+        "endpointing": int(stt.get("endpointing") or 300),
+    }
     return base
 
 
@@ -1240,13 +1295,20 @@ def deepgram_tts(text: str, voice: str) -> tuple[bytes | None, str]:
         return None, str(exc)[:200]
 
 
-def deepgram_stt(audio: bytes, content_type: str) -> tuple[str | None, str]:
+def deepgram_stt(audio: bytes, content_type: str, config: dict | None = None) -> tuple[str | None, str]:
     if not DEEPGRAM_API_KEY:
         return None, "DEEPGRAM_API_KEY is not configured on the server."
     if content_type not in ("audio/webm", "audio/ogg", "audio/wav", "audio/mpeg", "audio/mp4") and not content_type.startswith("audio/"):
         return None, "Unsupported audio format. Send audio/webm, audio/ogg or audio/wav."
-    url = ("https://api.deepgram.com/v1/listen?model=nova-2&smart_format=true"
-           "&punctuate=true&language=en-US")
+    cfg = config or {}
+    model = str(cfg.get("model") or "nova-2")
+    if model not in ALLOWED_STT_MODELS:
+        model = "nova-2"
+    language = str(cfg.get("language") or "en-US")
+    smart = "true" if cfg.get("smartFormat", True) else "false"
+    punctuate = "true" if cfg.get("punctuate", True) else "false"
+    url = (f"https://api.deepgram.com/v1/listen?model={model}&smart_format={smart}"
+           f"&punctuate={punctuate}&language={urllib.parse.quote(language)}")
     req = urllib.request.Request(
         url, data=audio,
         headers={"Authorization": f"Token {DEEPGRAM_API_KEY}", "Content-Type": content_type},
@@ -1261,6 +1323,63 @@ def deepgram_stt(audio: bytes, content_type: str) -> tuple[str | None, str]:
         return None, f"Deepgram STT error {exc.code}"
     except Exception as exc:
         return None, str(exc)[:200]
+
+
+_DEEPGRAM_ACCOUNT_CACHE: dict = {"at": 0.0, "data": None}
+
+
+def deepgram_account() -> dict:
+    """Live view of the connected Deepgram account (never returns the key)."""
+    if not DEEPGRAM_API_KEY:
+        return {"connected": False, "message": "DEEPGRAM_API_KEY is not configured on the server."}
+    # 60 second cache - the Voice Lab polls this on every page load.
+    cached = _DEEPGRAM_ACCOUNT_CACHE.get("data")
+    if cached and (time.time() - _DEEPGRAM_ACCOUNT_CACHE["at"]) < 60:
+        return cached
+
+    info = {
+        "connected": True,
+        "project": None,
+        "sttModels": ["nova-3", "nova-2", "conversationalai"],
+        "tts": {"families": ["Flux", "Aura"], "voices": len(FLUX_VOICES) + len(AURA_VOICES)},
+        "llmModels": LLM_MODEL_CATALOG,
+        "checkedAt": now_iso(),
+    }
+    try:
+        ok, code, body, latency, err = http_json(
+            "GET", "https://api.deepgram.com/v1/projects",
+            {"Authorization": f"Token {DEEPGRAM_API_KEY}"},
+        )
+        if ok and isinstance(body, dict):
+            projects = body.get("projects") or []
+            if projects:
+                first = projects[0]
+                info["project"] = {
+                    "name": first.get("name") or "Deepgram project",
+                    "id": first.get("project_id") or "",
+                    "mipOptOut": bool(first.get("mip_opt_out")),
+                }
+            info["latencyMs"] = latency
+        else:
+            info["message"] = f"Deepgram account check failed ({code})"
+    except Exception as exc:  # pragma: no cover - defensive
+        info["message"] = str(exc)[:160]
+    try:
+        ok, code, body, latency, err = http_json(
+            "GET", "https://api.deepgram.com/v1/models",
+            {"Authorization": f"Token {DEEPGRAM_API_KEY}"}, timeout=6,
+        )
+        if ok and isinstance(body, dict):
+            info["catalogue"] = {
+                group: len(body.get(group) or [])
+                for group in ("stt", "tts")
+                if isinstance(body.get(group), list)
+            }
+    except Exception:
+        pass
+    _DEEPGRAM_ACCOUNT_CACHE["at"] = time.time()
+    _DEEPGRAM_ACCOUNT_CACHE["data"] = info
+    return info
 
 
 # --------------------------------------------------------------------------
@@ -1422,14 +1541,15 @@ def api_agents(handler, query, method):
         with db() as conn:
             conn.execute(
                 """INSERT INTO agents (id, name, description, purpose, campaign,
-                   system_instructions, conversation_rules, language, voice, tone,
+                   system_instructions, greeting, conversation_rules, language, voice, tone,
                    speaking_rate, stt_provider, stt_config, llm_provider, llm_config,
                    tts_provider, tts_config, transfer_policy, enabled_tools,
                    safety_restrictions, timeout_settings, status, version, created_at,
-                   updated_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+                   updated_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
                 (
                     agent_id, data["name"], data["description"], data["purpose"],
-                    data["campaign"], data["systemInstructions"], data["conversationRules"],
+                    data["campaign"], data["systemInstructions"], data.get("greeting", ""),
+                    data["conversationRules"],
                     data["language"], data["voice"], data["tone"], data["speakingRate"],
                     data["sttProvider"], json.dumps(data["sttConfig"]), data["llmProvider"],
                     json.dumps(data["llmConfig"]), data["ttsProvider"],
@@ -1466,14 +1586,15 @@ def api_agent_detail(handler, agent_id, query, method):
             data["updatedAt"] = ts
             conn.execute(
                 """UPDATE agents SET name=?, description=?, purpose=?, campaign=?,
-                   system_instructions=?, conversation_rules=?, language=?, voice=?,
+                   system_instructions=?, greeting=?, conversation_rules=?, language=?, voice=?,
                    tone=?, speaking_rate=?, stt_provider=?, stt_config=?, llm_provider=?,
                    llm_config=?, tts_provider=?, tts_config=?, transfer_policy=?,
                    enabled_tools=?, safety_restrictions=?, timeout_settings=?, status=?,
                    version=?, updated_at=? WHERE id=?""",
                 (
                     data["name"], data["description"], data["purpose"], data["campaign"],
-                    data["systemInstructions"], data["conversationRules"], data["language"],
+                    data["systemInstructions"], data.get("greeting", ""),
+                    data["conversationRules"], data["language"],
                     data["voice"], data["tone"], data["speakingRate"], data["sttProvider"],
                     json.dumps(data["sttConfig"]), data["llmProvider"],
                     json.dumps(data["llmConfig"]), data["ttsProvider"],
@@ -1533,12 +1654,12 @@ def api_agent_duplicate(handler, agent_id, method):
         name = (original["name"] + " (Copy)")[:120]
         conn.execute(
             """INSERT INTO agents (id, name, description, purpose, campaign,
-               system_instructions, conversation_rules, language, voice, tone,
+               system_instructions, greeting, conversation_rules, language, voice, tone,
                speaking_rate, stt_provider, stt_config, llm_provider, llm_config,
                tts_provider, tts_config, transfer_policy, enabled_tools,
                safety_restrictions, timeout_settings, status, version, created_at, updated_at)
                SELECT ?, ?, description, purpose, campaign, system_instructions,
-               conversation_rules, language, voice, tone, speaking_rate, stt_provider,
+               greeting, conversation_rules, language, voice, tone, speaking_rate, stt_provider,
                stt_config, llm_provider, llm_config, tts_provider, tts_config,
                transfer_policy, enabled_tools, safety_restrictions, timeout_settings,
                'draft', 1, ?, ? FROM agents WHERE id = ?""",
@@ -2241,7 +2362,7 @@ def api_tts(handler, method):
                         "X-TTS-Voice": meta, "Cache-Control": "no-store"}
 
 
-def api_stt(handler, method):
+def api_stt(handler, method, query=None):
     if method != "POST":
         raise ApiError("Method not allowed", 405)
     ctype = handler.headers.get("Content-Type", "audio/webm").split(";")[0].strip()
@@ -2250,10 +2371,25 @@ def api_stt(handler, method):
         raise ApiError("No audio received", 400)
     if len(audio) < 200:
         raise ApiError("Audio too short — hold the mic and speak, then stop.", 400)
-    transcript, error = deepgram_stt(audio, ctype)
+
+    # Per-agent transcription settings (model, smart format, punctuation).
+    config = {}
+    session_id = (query or {}).get("sessionId", [None])[0]
+    if session_id:
+        with db() as conn:
+            row = conn.execute(
+                "SELECT a.stt_config FROM sessions s JOIN agents a ON a.id = s.agent_id "
+                "WHERE s.id = ?", (session_id,)).fetchone()
+            if row:
+                config = jloads(row["stt_config"], {}) or {}
+    transcript, error = deepgram_stt(audio, ctype, config)
     if transcript is None:
         return 503, {"error": error, "fallback": "browser-stt"}
-    return 200, {"transcript": transcript, "provider": "deepgram", "model": "nova-2"}
+    return 200, {
+        "transcript": transcript,
+        "provider": "deepgram",
+        "model": config.get("model") or "nova-2",
+    }
 
 
 def api_telephony(handler, query, method):
@@ -2682,7 +2818,11 @@ class Handler(BaseHTTPRequestHandler):
 
             if path == "/api/stt":
                 require("POST")
-                return self.write_api_result(api_stt(self, method))
+                return self.write_api_result(api_stt(self, method, query))
+
+            if path == "/api/deepgram/account":
+                require("GET")
+                return self.write_api_result(deepgram_account())
 
             self.send_error_json(404, "API route not found")
         except ApiError as exc:

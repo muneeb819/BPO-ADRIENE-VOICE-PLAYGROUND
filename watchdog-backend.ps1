@@ -10,7 +10,8 @@
 param(
     [int]$Port = 8010,
     [int]$TimeoutSec = 5,
-    [string]$ProjectRoot = "C:\Users\Wave\Downloads\AdrieneVoiceStudio"
+    [string]$ProjectRoot = "C:\Users\Wave\Downloads\AdrieneVoiceStudio",
+    [switch]$Restart
 )
 
 $ErrorActionPreference = "Continue"
@@ -27,6 +28,18 @@ function Test-Backend {
     } catch {
         return $false
     }
+}
+
+if ($Restart) {
+    $owners = @(Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue |
+                Select-Object -ExpandProperty OwningProcess -Unique)
+    foreach ($owner in $owners) {
+        if ($owner) {
+            Stop-Process -Id $owner -Force -ErrorAction SilentlyContinue
+            Log "stopped backend pid $owner (restart requested)"
+        }
+    }
+    Start-Sleep -Seconds 1
 }
 
 if (Test-Backend) {

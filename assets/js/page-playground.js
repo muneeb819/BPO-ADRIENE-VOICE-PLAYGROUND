@@ -770,7 +770,7 @@
         }
         const started = performance.now();
         $('record-btn').disabled = true;
-        const data = await API.stt(blob);
+        const data = await API.stt(blob, session?.id);
         const text = (data.transcript || '').trim();
         if (!text) {
           UI.toast('No speech detected. Try again or type.', 'info');

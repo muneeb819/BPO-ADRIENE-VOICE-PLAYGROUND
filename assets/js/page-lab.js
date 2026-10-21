@@ -512,6 +512,64 @@
     }
   });
 
+  // ---- Deepgram account ---------------------------------------------------
+
+  function renderDeepgramAccount(info) {
+    const body = $('dg-account-body');
+    const pill = $('dg-account-pill');
+    if (!info || !info.connected) {
+      pill.textContent = 'not connected';
+      pill.className = 'pill pill-red-dark';
+      body.innerHTML = `<div class="rounded-lg border border-amber-500/30 bg-amber-500/10 p-2.5 text-[10px] text-amber-200 sm:col-span-2 lg:col-span-4">${UI.esc(info?.message || 'Add DEEPGRAM_API_KEY to .env and restart the server to connect your Deepgram project.')}</div>`;
+      return;
+    }
+    pill.textContent = 'connected';
+    pill.className = 'pill pill-green-dark';
+    const project = info.project || {};
+    const models = (info.sttModels || []).slice(0, 6);
+    const llm = (info.llmModels || []).map((m) => m.label);
+    body.innerHTML = `
+      <div class="rounded-lg border border-slate-700/60 bg-slate-900/60 p-2.5">
+        <div class="text-[8px] font-extrabold uppercase tracking-[0.12em] text-slate-500">Project</div>
+        <div class="mt-1 truncate text-[10.5px] font-bold text-slate-100">${UI.esc(project.name || 'Deepgram project')}</div>
+        <div class="mono mt-0.5 truncate text-[8px] text-slate-500">${UI.esc(project.id || '')}</div>
+      </div>
+      <div class="rounded-lg border border-slate-700/60 bg-slate-900/60 p-2.5">
+        <div class="text-[8px] font-extrabold uppercase tracking-[0.12em] text-slate-500">Speech to text</div>
+        <div class="mt-1 flex flex-wrap gap-1">${models.map((m) => `<span class="chip chip-mono">${UI.esc(m)}</span>`).join('') || '<span class="text-[10px] text-slate-500">—</span>'}</div>
+        <div class="mt-1 text-[8.5px] text-slate-500">${info.availableModels ? `${info.availableModels} models visible on this key` : 'Deepgram Nova'}</div>
+      </div>
+      <div class="rounded-lg border border-slate-700/60 bg-slate-900/60 p-2.5">
+        <div class="text-[8px] font-extrabold uppercase tracking-[0.12em] text-slate-500">Text to speech</div>
+        <div class="mt-1 text-[10.5px] font-bold text-slate-100">${info.tts?.voices || 0} voices</div>
+        <div class="mt-0.5 flex flex-wrap gap-1">${(info.tts?.families || []).map((f) => `<span class="chip">${UI.esc(f)}</span>`).join('')}</div>
+      </div>
+      <div class="rounded-lg border border-slate-700/60 bg-slate-900/60 p-2.5">
+        <div class="text-[8px] font-extrabold uppercase tracking-[0.12em] text-slate-500">Voice agent models</div>
+        <div class="mt-1 space-y-0.5">${llm.map((label) => `<div class="truncate text-[9.5px] text-slate-300">${UI.esc(label)}</div>`).join('') || '<span class="text-[10px] text-slate-500">—</span>'}</div>
+      </div>`;
+  }
+
+  async function loadDeepgramAccount() {
+    const pill = $('dg-account-pill');
+    pill.textContent = 'checking';
+    pill.className = 'pill pill-dark';
+    try {
+      const res = await fetch('/api/deepgram/account');
+      const info = await res.json();
+      renderDeepgramAccount(info);
+    } catch (err) {
+      renderDeepgramAccount({ connected: false, message: err.message });
+    }
+  }
+
+  $('dg-account-refresh').addEventListener('click', async (event) => {
+    const btn = event.currentTarget;
+    btn.disabled = true;
+    await loadDeepgramAccount();
+    btn.disabled = false;
+  });
+
   // ---- boot --------------------------------------------------------------
 
   try {
@@ -524,6 +582,7 @@
 
   renderAll();
   await loadAgentOptions();
+  await loadDeepgramAccount();
 
   if (health) {
     const ttsReady = !!health.capabilities?.deepgramTts;

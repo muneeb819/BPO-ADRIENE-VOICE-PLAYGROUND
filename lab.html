@@ -47,6 +47,22 @@
         </section>
       </div>
 
+      <section class="mt-4 card-dark p-4" id="dg-account-card">
+        <div class="flex flex-wrap items-start justify-between gap-2">
+          <div>
+            <h2 class="text-[12px] font-extrabold tracking-tight text-white">Deepgram account</h2>
+            <p class="mt-1 text-[9.5px] leading-relaxed text-slate-400">Live view of the connected project — the API key never leaves the server.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="pill pill-dark" id="dg-account-pill">checking</span>
+            <button class="btn btn-dark btn-xs border border-slate-600" id="dg-account-refresh" type="button"><span data-icon="refresh"></span> Refresh</button>
+          </div>
+        </div>
+        <div class="mt-3 grid gap-2.5 sm:grid-cols-2 lg:grid-cols-4" id="dg-account-body">
+          <div class="rounded-lg border border-slate-700/60 bg-slate-900/60 p-2.5 text-[10px] text-slate-400">Reading the account…</div>
+        </div>
+      </section>
+
       <div class="mt-4 grid items-start gap-4 lg:grid-cols-3">
         <section class="card lg:col-span-2">
           <div class="flex flex-wrap items-start justify-between gap-2">

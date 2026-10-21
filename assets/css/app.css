@@ -558,6 +558,31 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .voice-menu { width: min(310px, calc(100vw - 48px)); }
 }
 
+/* Deepgram-style agent builder */
+.use-case-chip {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 10px; border-radius: 8px;
+  border: 1px solid rgba(148, 163, 184, .22);
+  background: rgba(15, 23, 42, .6); color: #cbd5e1;
+  font-size: 10.5px; font-weight: 650; cursor: pointer;
+  transition: all .15s ease;
+}
+.use-case-chip:hover { border-color: rgba(167, 139, 250, .5); color: #f1f5f9; }
+.use-case-chip.active {
+  background: linear-gradient(180deg, #7c3aed, #6d28d9);
+  border-color: rgba(167, 139, 250, .55); color: #fff;
+  box-shadow: 0 4px 12px rgba(109, 40, 217, .3);
+}
+.tab-panel { animation: fade-in .18s ease; }
+.dg-label {
+  display: flex; align-items: center; gap: 7px;
+  font-size: 10.5px; font-weight: 800; letter-spacing: .02em; color: #e2e8f0;
+}
+.dg-dot {
+  width: 7px; height: 7px; border-radius: 999px; flex: none;
+  background: #10b981; box-shadow: 0 0 0 3px rgba(16, 185, 129, .16);
+}
+
 /* Dark variant — matches the "Voice Preview & Controls" control panel */
 .voice-trigger-dark {
   background: #0a0e1a; border-color: rgba(100, 116, 139, .55); color: #e2e8f0;

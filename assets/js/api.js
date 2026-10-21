@@ -102,8 +102,9 @@ const API = (() => {
       return res.blob();
     },
 
-    async stt(blob) {
-      const res = await fetch('/api/stt', {
+    async stt(blob, sessionId) {
+      const url = sessionId ? `/api/stt?sessionId=${encodeURIComponent(sessionId)}` : '/api/stt';
+      const res = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': blob.type || 'audio/webm' },
         body: blob,

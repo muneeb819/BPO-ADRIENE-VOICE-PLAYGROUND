@@ -314,13 +314,17 @@ def check_agents_crud(c: Client):
             "description": "Created by smoke_test.py",
             "purpose": "Automated verification",
             "systemInstructions": "You are a smoke test agent. Answer briefly and deterministically.",
+            "greeting": "Hi, this is the smoke test agent. How can I help?",
             "conversationRules": "Echo the intent. Never escalate.",
             "language": "en-US",
             "voice": "flux-brittany-en",
             "tone": "professional",
             "speakingRate": 100,
             "sttProvider": "deepgram",
+            "sttConfig": {"model": "nova-3", "smartFormat": True, "punctuate": True,
+                          "interimResults": True, "endpointing": 250},
             "llmProvider": "local",
+            "llmConfig": {"model": "deterministic-rules", "temperature": 0},
             "ttsProvider": "deepgram-tts",
             "status": "draft",
         })
@@ -328,18 +332,29 @@ def check_agents_crud(c: Client):
         created_id = agent.get("id")
         require(created_id, "created agent has no id")
         require(agent.get("voice") == "flux-brittany-en", "voice not persisted on create")
+        require(agent.get("greeting", "").startswith("Hi, this is the smoke test"),
+                "greeting not persisted on create")
+        require((agent.get("sttConfig") or {}).get("model") == "nova-3",
+                "transcription model not persisted")
 
         code, fetched = c.get(f"/api/agents/{created_id}")
         require(code == 200, f"read back returned {code}")
         require(fetched.get("name") == "Smoke Test Agent", "agent name mismatch")
+        require((fetched.get("sttConfig") or {}).get("endpointing") == 250,
+                "transcription settings not persisted")
 
         code, updated = c.put(f"/api/agents/{created_id}", body={
             "voice": "flux-haley-en",
+            "greeting": "Updated greeting.",
             "ttsConfig": {"model": "flux-haley-en"},
+            "sttConfig": {"model": "nova-2", "smartFormat": True, "punctuate": True,
+                          "interimResults": True, "endpointing": 300},
             "changeNote": "Smoke test voice swap",
         })
         require(code == 200, f"update returned {code}")
         require(updated.get("voice") == "flux-haley-en", "voice not updated")
+        require(updated.get("greeting") == "Updated greeting.", "greeting not updated")
+        require((updated.get("sttConfig") or {}).get("model") == "nova-2", "stt model not updated")
         require(updated.get("version", 0) >= 2, "update did not create a new version")
 
         code, versions = c.get(f"/api/agents/{created_id}/versions")
@@ -347,10 +362,63 @@ def check_agents_crud(c: Client):
 
         code, bad = c.put(f"/api/agents/{created_id}", body={"voice": "not-a-real-voice"})
         require(code == 400, f"invalid voice accepted ({code})")
+        code, bad_model = c.put(f"/api/agents/{created_id}", body={
+            "sttConfig": {"model": "not-a-model"}})
+        require(code == 400, f"invalid transcription model accepted ({code})")
         return f"created/updated/deleted agent v{updated.get('version')}"
     finally:
         if created_id:
             c.delete(f"/api/agents/{created_id}")
+
+
+def check_agent_transcription(c: Client):
+    """The STT proxy must honour the agent's own transcription settings."""
+    agent_id = None
+    session_id = None
+    try:
+        code, agent = c.post("/api/agents", body={
+            "name": "Smoke Transcription Agent",
+            "systemInstructions": "Verify that the per-agent transcription model is applied.",
+            "voice": "flux-haley-en",
+            "sttProvider": "deepgram",
+            "sttConfig": {"model": "nova-3", "smartFormat": True, "punctuate": True,
+                          "interimResults": True, "endpointing": 300},
+            "ttsProvider": "deepgram-tts",
+            "status": "draft",
+        })
+        require(code in (200, 201), f"agent create returned {code}")
+        agent_id = agent.get("id")
+        code, session = c.post("/api/sessions", body={"agentId": agent_id, "userInputMode": "voice"})
+        require(code in (200, 201), f"session create returned {code}")
+        session_id = session.get("id")
+        code, mp3 = c.request("POST", "/api/tts",
+                              body={"text": "Per agent transcription check.", "voice": "flux-haley-en"})
+        require(code == 200, f"tts returned {code}")
+        code, data = c.request("POST", f"/api/stt?sessionId={session_id}", raw=mp3, content_type="audio/mpeg")
+        require(code == 200, f"stt returned {code}: {str(data)[:120]}")
+        require(data.get("model") == "nova-3",
+                f"agent transcription model not applied (got {data.get('model')})")
+        require((data.get("transcript") or "").strip(), "empty transcript")
+        return f"session used {data.get('model')}"
+    finally:
+        if session_id:
+            c.delete(f"/api/sessions/{session_id}")
+        if agent_id:
+            c.delete(f"/api/agents/{agent_id}")
+
+
+def check_deepgram_account(c: Client):
+    code, account = c.get("/api/deepgram/account")
+    require(code == 200, f"account endpoint returned {code}")
+    require(account.get("connected") is True, "Deepgram account is not connected")
+    project = account.get("project") or {}
+    require(project.get("name"), "no project name on the account")
+    models = account.get("sttModels") or []
+    require("nova-3" in models and "nova-2" in models, f"unexpected STT models: {models}")
+    require((account.get("tts") or {}).get("voices", 0) >= 40, "voice catalogue is small")
+    require(len(account.get("llmModels") or []) >= 3, "LLM model catalogue is missing")
+    require("apiKey" not in json.dumps(account), "the account payload leaks a key field")
+    return f"{project.get('name')} · {len(models)} STT · {account['tts']['voices']} voices"
 
 
 def check_session_loop(c: Client):
@@ -469,12 +537,16 @@ def main() -> int:
     run_check(report, "Static app", "All 9 page routes render", lambda: check_pages(client))
     run_check(report, "Static app", "No secret or source files served", lambda: check_no_secret_leak(client))
     run_check(report, "Providers", "Registry and voice catalogue", lambda: check_providers(client))
+    run_check(report, "Providers", "Deepgram account connection", lambda: check_deepgram_account(client),
+              skip=args.skip_live, skip_reason="--skip-live")
     run_check(report, "Providers", "Connection tests", lambda: check_provider_tests(client),
               skip=args.skip_live, skip_reason="--skip-live")
     run_check(report, "TTS", "Flux + Aura synthesis", lambda: check_tts(client),
               skip=args.skip_live, skip_reason="--skip-live")
     run_check(report, "TTS", "Input validation", lambda: check_tts_guardrails(client))
     run_check(report, "STT", "Nova-2 transcription", lambda: check_stt(client),
+              skip=args.skip_live, skip_reason="--skip-live")
+    run_check(report, "STT", "Per-agent transcription settings", lambda: check_agent_transcription(client),
               skip=args.skip_live, skip_reason="--skip-live")
     run_check(report, "STT", "Short-clip rejection", lambda: check_stt_guardrails(client))
     run_check(report, "Agents", "CRUD + versioning + validation", lambda: check_agents_crud(client))
