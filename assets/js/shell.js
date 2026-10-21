@@ -141,8 +141,8 @@ const Shell = (() => {
         data-accordion="${group.id}" aria-expanded="${open}" aria-controls="acc-${group.id}-items">
         <span class="nav-icon">${icon(first.icon)}</span>
         <span class="min-w-0 flex-1 text-left">
-          <span class="nav-title">${group.toggle || group.label}</span>
-          <span class="nav-sub">${group.items.map((i) => i.label).join(' • ')}</span>
+          <span class="nav-title nav-label-text">${group.toggle || group.label}</span>
+          <span class="nav-sub nav-label-text">${group.items.map((i) => i.label).join(' • ')}</span>
         </span>
         <span class="nav-chevron" data-accordion-chevron>${icon(open ? 'chevron-up' : 'chevron')}</span>
       </button>

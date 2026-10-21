@@ -12,6 +12,8 @@ The runtime is deliberately small: **Python 3.12 standard library + SQLite + sta
 
 The product ships in **two themes** - a navy dark theme (default) and a light theme - toggled from the side panel and remembered per browser. Both use the same brand tokens.
 
+**Side panel:** the **Deepgram Compliance** and **LiveKit Cloud** sections sit at the top of the panel, each a single collapsible button (click to drop the related pages down, click again to fold them up; the choice is remembered). The panel itself can be collapsed to a 76 px icon rail with the button in the brand block, and on desktop it peeks open again when the pointer moves over it. On mobile the ☰ button opens a full navigation sheet. The purple "Windows 11 local" card is gone - that information is now plain text in the page footer.
+
 ---
 
 ## Brand
