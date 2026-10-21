@@ -12,7 +12,7 @@ const Shell = (() => {
 
   // Everything this project consumes from Deepgram lives in this one section.
   const DEEPGRAM_NAV = [
-    { href: '/deepgram', key: 'deepgram', label: 'Deepgram Compliance', sub: 'Account • Agents • Voices', icon: 'bolt' },
+    { href: '/deepgram', key: 'deepgram', label: 'Compliance Overview', sub: 'Account • Agents • Voices', icon: 'bolt' },
     { href: '/agents', key: 'agents', label: 'Agent Studio', sub: 'Voice Agent Builder', icon: 'layers' },
     { href: '/lab', key: 'lab', label: 'Voice Lab', sub: 'STT • LLM • TTS', icon: 'flask' },
   ];
@@ -26,11 +26,13 @@ const Shell = (() => {
 
   const NAV_GROUPS = [
     { id: 'workspace', label: 'Workspace', items: NAV },
-    { id: 'deepgram', label: 'Deepgram Compliance', items: DEEPGRAM_NAV, accent: true },
+    { id: 'deepgram', label: 'Deepgram', items: DEEPGRAM_NAV, accent: true, accordion: true },
     { id: 'delivery', label: 'Quality & Delivery', items: DELIVERY_NAV },
   ];
 
   const ALL_NAV = [...NAV, ...DEEPGRAM_NAV, ...DELIVERY_NAV];
+  const DG_KEYS = DEEPGRAM_NAV.map((item) => item.key);
+  const DG_STORAGE_KEY = 'adriene.dgSectionOpen';
 
   const ICONS = {
     home: '<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9.5 21v-6h5v6"/>',
@@ -80,6 +82,7 @@ const Shell = (() => {
     phoneOut: '<path d="M14 2h6v6"/><path d="M22 2 11 13"/><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.4 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.9 2.2Z"/>',
     git: '<circle cx="6" cy="6" r="3"/><circle cx="18" cy="18" r="3"/><path d="m6 9v6a3 3 0 0 0 3 3h6"/><path d="M9 6h6a3 3 0 0 1 3 3v3"/>',
     chevron: '<path d="m6 9 6 6 6-6"/>',
+    'chevron-up': '<path d="m18 15-6-6-6 6"/>',
     bolt: '<path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/>',
   };
 
@@ -100,11 +103,40 @@ const Shell = (() => {
       </a>`;
   }
 
+  // The Deepgram section is a single collapsible button: one click drops the
+  // related pages down, the next click folds them back up.
+  function deepgramOpen(active) {
+    // On a Deepgram page the section is always unfolded so the current item
+    // is visible; elsewhere the user's last choice is remembered.
+    if (DG_KEYS.includes(active)) return true;
+    let stored = null;
+    try { stored = localStorage.getItem(DG_STORAGE_KEY); } catch { stored = null; }
+    return stored === '1';
+  }
+
+  function deepgramSection(active) {
+    const open = deepgramOpen(active);
+    const isActive = DG_KEYS.includes(active);
+    return `
+      <button class="nav-item nav-toggle ${isActive ? 'active' : ''}" type="button"
+        data-dg-toggle aria-expanded="${open}" aria-controls="dg-section-items">
+        <span class="nav-icon">${icon('bolt')}</span>
+        <span class="min-w-0 flex-1 text-left">
+          <span class="nav-title">Deepgram Compliance</span>
+          <span class="nav-sub">Account • Agents • Voices</span>
+        </span>
+        <span class="nav-chevron" data-dg-chevron>${icon(open ? 'chevron-up' : 'chevron')}</span>
+      </button>
+      <div class="dg-subitems ${open ? '' : 'hidden'}" id="dg-section-items">
+        ${DEEPGRAM_NAV.map((item) => navItem(item, active)).join('')}
+      </div>`;
+  }
+
   function navItems(active) {
     return NAV_GROUPS.map((group) => `
       <div class="nav-group ${group.accent ? 'nav-group-accent' : ''}">
         <div class="nav-group-label">${group.accent ? '<span class="status-dot"></span>' : ''}${group.label}</div>
-        ${group.items.map((item) => navItem(item, active)).join('')}
+        ${group.accordion ? deepgramSection(active) : group.items.map((item) => navItem(item, active)).join('')}
       </div>`).join('');
   }
 
@@ -194,6 +226,21 @@ const Shell = (() => {
     const foot = document.getElementById('footer');
     if (foot) foot.outerHTML = footer();
     document.body.dataset.page = active;
+
+    // Deepgram accordion: drop the related pages down / fold them back up.
+    const toggle = document.querySelector('[data-dg-toggle]');
+    if (toggle) {
+      toggle.addEventListener('click', () => {
+        const items = document.getElementById('dg-section-items');
+        if (!items) return;
+        const willOpen = items.classList.contains('hidden');
+        items.classList.toggle('hidden', !willOpen);
+        toggle.setAttribute('aria-expanded', String(willOpen));
+        const chevron = toggle.querySelector('[data-dg-chevron]');
+        if (chevron) chevron.innerHTML = icon(willOpen ? 'chevron-up' : 'chevron');
+        try { localStorage.setItem(DG_STORAGE_KEY, willOpen ? '1' : '0'); } catch { /* private mode */ }
+      });
+    }
 
     // Live status from the local API (never blocks the page).
     try {

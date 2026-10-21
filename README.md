@@ -76,7 +76,7 @@ Two actions sit under the picker:
 
 ## Connected Deepgram account
 
-**One side-panel section holds everything Deepgram.** The sidebar is grouped into *Workspace*, *Deepgram Compliance* and *Quality & Delivery*; the **Deepgram Compliance** section contains the compliance page plus the two Deepgram-powered editors (Agent Studio = voice-agent builder, Voice Lab = adapters). Clicking **Deepgram Compliance** opens `/deepgram`, which shows:
+**One side-panel section holds everything Deepgram.** The sidebar is grouped into *Workspace*, *Deepgram* and *Quality & Delivery*. The **Deepgram Compliance** entry is a single collapsible button: one click drops the related pages down (chevron points up), the next click folds them back (chevron points down) and the choice is remembered between visits. Clicking **Deepgram Compliance → Compliance Overview** opens `/deepgram`, which shows:
 
 - the connected project, key posture (backend-only), models and last check,
 - the four Deepgram console surfaces — **Speech to Text** (Streaming: General / Streaming: Turn-based / Pre-recorded: Upload audio), **Text to Speech** (Flux / Aura), **Voice Agent** and **Text Intelligence** (explicitly *not implemented*),

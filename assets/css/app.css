@@ -94,6 +94,30 @@ code, pre, .mono, .stat-value, .metric-value {
 }
 .nav-group-accent .nav-group-label { color: #6ee7b7; padding-left: 8px; }
 .nav-group-accent .status-dot { width: 6px; height: 6px; }
+.nav-toggle {
+  width: 100%; background: transparent; border: 0; font: inherit;
+  color: inherit; text-align: left; cursor: pointer;
+}
+.nav-toggle.active { background: rgba(16, 185, 129, .12); }
+.nav-toggle.active::before { background: #10b981; }
+.nav-chevron {
+  display: flex; align-items: center; justify-content: center;
+  width: 18px; height: 18px; flex: none; color: #7c8aa3;
+  transition: transform .18s ease, color .18s ease;
+}
+.nav-chevron svg { width: 14px; height: 14px; }
+.nav-toggle:hover .nav-chevron { color: #cbd5e1; }
+.dg-subitems {
+  display: flex; flex-direction: column; gap: 2px;
+  margin: 3px 0 2px 16px; padding-left: 11px;
+  border-left: 1px solid rgba(148, 163, 184, .16);
+}
+.dg-subitems.hidden { display: none; }
+.dg-subitems .nav-item { padding: 7px 9px; }
+.dg-subitems .nav-icon { width: 26px; height: 26px; border-radius: 8px; }
+.dg-subitems .nav-icon svg { width: 13px; height: 13px; }
+.dg-subitems .nav-title { font-size: 12px; }
+.dg-subitems .nav-sub { font-size: 9px; }
 
 .nav-icon {
   width: 32px; height: 32px; border-radius: 9px;
