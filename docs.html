@@ -45,6 +45,15 @@ python -m py_compile server.py
 # In the browser: /security -> Run Authorization & Validation Tests
 # Regression:    /testing -> Seed Fixtures -> Run Regression Suite
 
+# End-to-end smoke tests (Python automation, stdlib only)
+python smoke_test.py --base-url http://127.0.0.1:8000
+# -> 16 checks: health, routes, secrets, TTS/STT, agents, sessions,
+#    regression, security, telephony, analytics
+
+# Publish on IIS and bind the LAN address (approve the UAC prompt)
+publish-iis.cmd
+# -> http://&lt;your-lan-ip&gt;:8088   (logs to publish-iis.log)
+
 # Backup (stop the server first)
 Copy-Item data\adriene.db data\adriene-backup.db
 
@@ -132,6 +141,8 @@ Copy-Item data\adriene-backup.db data\adriene.db</pre>
                   <tr><td class="font-mono text-[8.5px]">07</td><td>Analytics</td><td><span class="pill pill-green no-dot">Implemented</span></td><td>Stored-event percentiles, filters, inspector</td></tr>
                   <tr><td class="font-mono text-[8.5px]">07</td><td>Token cost estimation</td><td><span class="pill pill-gray no-dot">Not implemented</span></td><td>No reliable pricing — marked unavailable</td></tr>
                   <tr><td class="font-mono text-[8.5px]">08</td><td>Security & retention</td><td><span class="pill pill-green no-dot">Implemented</span></td><td>Redaction, scan, validation, rate limits</td></tr>
+                  <tr><td class="font-mono text-[8.5px]">06</td><td>Python smoke-test automation</td><td><span class="pill pill-green no-dot">Implemented</span></td><td>smoke_test.py - 16 end-to-end checks, stdlib only</td></tr>
+                  <tr><td class="font-mono text-[8.5px]">08</td><td>IIS publish on LAN address</td><td><span class="pill pill-green no-dot">Implemented</span></td><td>publish-iis.cmd - static site + /api reverse proxy</td></tr>
                   <tr><td class="font-mono text-[8.5px]">09</td><td>Telephony mock</td><td><span class="pill pill-green no-dot">Implemented</span></td><td>Sandbox calls, transfers, correlation IDs</td></tr>
                   <tr><td class="font-mono text-[8.5px]">09</td><td>Real SIP / VICIdial</td><td><span class="pill pill-red no-dot">Not implemented</span></td><td>Blocked pending operator auth + test env</td></tr>
                   <tr><td class="font-mono text-[8.5px]">10</td><td>Hardening & delivery</td><td><span class="pill pill-green no-dot">Implemented</span></td><td>Launch guide, backup, live verification</td></tr>

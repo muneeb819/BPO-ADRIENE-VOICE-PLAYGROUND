@@ -193,16 +193,45 @@
           </section>
 
           <section class="card">
-            <h2 class="section-title">Error handling</h2>
-            <p class="section-sub">Fallbacks are explicit, never silent.</p>
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <h2 class="section-title">Provider status &amp; fallbacks</h2>
+                <p class="section-sub">Live adapter state — failures are explicit, never silent.</p>
+              </div>
+              <span class="pill pill-gray" id="err-summary">checking</span>
+            </div>
             <div class="mt-2.5 space-y-2">
               <div class="flex items-start gap-2">
                 <span class="mt-0.5 text-slate-400" data-icon="mic"></span>
                 <div class="min-w-0 flex-1">
-                  <div class="text-[10.5px] font-bold text-slate-700">Mic permission denied</div>
-                  <div class="text-[9px] text-slate-400">Text-only fallback stays available</div>
+                  <div class="text-[10.5px] font-bold text-slate-700">Microphone</div>
+                  <div class="text-[9px] text-slate-400" id="err-mic-sub">Text-only fallback stays available</div>
                 </div>
                 <span class="pill pill-gray" id="err-mic">text</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="mt-0.5 text-slate-400" data-icon="wave"></span>
+                <div class="min-w-0 flex-1">
+                  <div class="text-[10.5px] font-bold text-slate-700" id="err-stt-name">Speech-to-text (STT)</div>
+                  <div class="text-[9px] text-slate-400" id="err-stt-sub">Checking adapter…</div>
+                </div>
+                <span class="pill pill-gray" id="err-audio">checking</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="mt-0.5 text-slate-400" data-icon="volume"></span>
+                <div class="min-w-0 flex-1">
+                  <div class="text-[10.5px] font-bold text-slate-700" id="err-tts-name">Text-to-speech (TTS)</div>
+                  <div class="text-[9px] text-slate-400" id="err-tts-sub">Checking adapter…</div>
+                </div>
+                <span class="pill pill-gray" id="err-provider">checking</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="mt-0.5 text-slate-400" data-icon="layers"></span>
+                <div class="min-w-0 flex-1">
+                  <div class="text-[10.5px] font-bold text-slate-700">Deterministic rule engine</div>
+                  <div class="text-[9px] text-slate-400">Policy first, offline, no key required</div>
+                </div>
+                <span class="pill pill-green" id="err-engine">ready</span>
               </div>
               <div class="flex items-start gap-2">
                 <span class="mt-0.5 text-slate-400" data-icon="clock"></span>
@@ -211,22 +240,6 @@
                   <div class="text-[9px] text-slate-400">Clarifying prompt, once per idle stretch</div>
                 </div>
                 <span class="pill pill-blue" id="err-silence">8s</span>
-              </div>
-              <div class="flex items-start gap-2">
-                <span class="mt-0.5 text-slate-400" data-icon="wave"></span>
-                <div class="min-w-0 flex-1">
-                  <div class="text-[10.5px] font-bold text-slate-700">Unsupported audio</div>
-                  <div class="text-[9px] text-slate-400">Server returns 400/503 → type instead</div>
-                </div>
-                <span class="pill pill-gray" id="err-audio">fallback</span>
-              </div>
-              <div class="flex items-start gap-2">
-                <span class="mt-0.5 text-slate-400" data-icon="alert"></span>
-                <div class="min-w-0 flex-1">
-                  <div class="text-[10.5px] font-bold text-slate-700">Provider failure</div>
-                  <div class="text-[9px] text-slate-400">Apology + session marked error</div>
-                </div>
-                <span class="pill pill-amber" id="err-provider">safe</span>
               </div>
               <div class="flex items-start gap-2">
                 <span class="mt-0.5 text-slate-400" data-icon="stop"></span>

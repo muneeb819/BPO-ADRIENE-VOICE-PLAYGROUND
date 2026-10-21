@@ -182,7 +182,44 @@ Public, localhost-only by default:
 | POST | `/api/telephony/enable` | Deliberately refuses live dialing |
 | DELETE | `/api/sessions` | Delete sessions, telephony logs and test runs |
 
-Errors are JSON `{ "error": "..." }`. There are no stack traces in responses.
+Errors are JSON `{ "error": "..." }`. There are no stack traces in responses. Payload validation problems always return **400** (never 500) with an actionable message.
+
+---
+
+## Smoke tests (Python automation)
+
+`smoke_test.py` drives the running app end-to-end the same way the browser does — health, all nine page routes, secret exposure, provider adapters, Deepgram Flux/Aura TTS, Nova-2 STT, agent CRUD + versioning, the playground session loop, the regression suite, the security selftest, mock telephony and analytics. Standard library only.
+
+```powershell
+python smoke_test.py                                   # http://127.0.0.1:8000
+python smoke_test.py --base-url http://127.0.0.1:8010
+python smoke_test.py --skip-live                       # skip provider network calls
+python smoke_test.py --json smoke-report.json          # machine readable report
+```
+
+The runner prints a PASS/FAIL report per section, cleans up the temporary agent and session it creates, and exits non-zero if anything failed.
+
+---
+
+## Publish on IIS (LAN address)
+
+`publish-iis.cmd` publishes the app on IIS and binds it to this machine's LAN address. It self-elevates (approve the UAC prompt) and is idempotent.
+
+```powershell
+.\publish-iis.cmd
+.\publish-iis.cmd -Port 8088 -BindAddress 192.168.18.29
+```
+
+What it does:
+
+1. Repairs the IIS config ACLs that block `appcmd` for non-elevated users.
+2. Starts the Python backend on loopback (`127.0.0.1:8010`) if it is not already running.
+3. Copies **only** the static front-end (`*.html`, `assets/`) to `C:\inetpub\AdrieneVoice` — no `.env`, no `data/`, no `.py`.
+4. Writes a `web.config` that maps `/agents`, `/playground`, `/lab`, … to their pages and reverse-proxies `/api/*` to the local backend, with `nosniff`, `SAMEORIGIN` and `no-referrer` headers plus `.env`/`.py`/`.db` blocked.
+5. Creates the IIS site + app pool, adds an inbound firewall rule and verifies every route over the LAN address.
+6. Logs everything to `publish-iis.log`.
+
+The backend keeps listening on loopback only, so the API is never exposed directly — IIS is the only public entry point.
 
 ---
 

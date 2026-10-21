@@ -8,6 +8,7 @@
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
 
   let agents = [];
+  let providers = [];
   let agent = null;
   let health = null;
   let session = null;
@@ -94,8 +95,51 @@
     $('m-session').textContent = session ? session.status : 'idle';
   }
 
-  function agentSummary(a) {
-    if (!a) {
+  function renderProviderStatus() {
+    const caps = health?.capabilities || {};
+    const sttReady = !!caps.deepgramStt;
+    const ttsReady = !!caps.deepgramTts;
+    const sttProvider = providers.find((p) => p.name === 'deepgram');
+    const ttsProvider = providers.find((p) => p.name === 'deepgram-tts');
+    const sttFailed = sttProvider?.status === 'error';
+    const ttsFailed = ttsProvider?.status === 'error';
+
+    $('err-stt-name').textContent = sttReady ? 'Deepgram Nova-2' : 'Browser Web Speech API';
+    $('err-stt-sub').textContent = sttFailed
+      ? 'Adapter test failed - browser fallback active'
+      : (sttReady ? 'Server-side transcription, smart formatting' : 'Browser recognition only - no key configured');
+    $('err-audio').textContent = sttFailed ? 'failed' : (sttReady ? 'connected' : 'fallback');
+    $('err-audio').className = `pill ${sttFailed ? 'pill-red' : (sttReady ? 'pill-green' : 'pill-amber')}`;
+
+    $('err-tts-name').textContent = ttsReady ? 'Deepgram Flux / Aura' : 'Browser Speech Synthesis';
+    $('err-tts-sub').textContent = ttsFailed
+      ? 'Adapter test failed - browser fallback active'
+      : (ttsReady ? 'Server-side synthesis, Flux + Aura voices' : 'Local voices only - no key configured');
+    $('err-provider').textContent = ttsFailed ? 'failed' : (ttsReady ? 'connected' : 'fallback');
+    $('err-provider').className = `pill ${ttsFailed ? 'pill-red' : (ttsReady ? 'pill-green' : 'pill-amber')}`;
+
+    $('err-engine').textContent = 'ready';
+    $('err-engine').className = 'pill pill-green';
+
+    const fallbacks = (sttReady ? 0 : 1) + (ttsReady ? 0 : 1);
+    const failures = (sttFailed ? 1 : 0) + (ttsFailed ? 1 : 0);
+    const summary = $('err-summary');
+    if (!health) {
+      summary.textContent = 'offline';
+      summary.className = 'pill pill-red';
+    } else if (failures) {
+      summary.textContent = `${failures} failed`;
+      summary.className = 'pill pill-red';
+    } else if (fallbacks) {
+      summary.textContent = `${fallbacks} fallback`;
+      summary.className = 'pill pill-amber';
+    } else {
+      summary.textContent = 'all live';
+      summary.className = 'pill pill-green';
+    }
+  }
+
+  function agentSummary(a) {    if (!a) {
       return `<span class="chip text-amber-700">No agent selected</span><a href="/agents" class="text-[10px] font-semibold text-violet-600 hover:underline">Create one →</a>`;
     }
     const policy = a.transferPolicy || {};
@@ -483,6 +527,9 @@
       : 'Click Enable mic';
     $('err-mic').textContent = micOn ? 'granted' : 'text';
     $('err-mic').className = `pill ${micOn ? 'pill-green' : 'pill-gray'}`;
+    $('err-mic-sub').textContent = micOn
+      ? 'Live capture - levels on the meter'
+      : 'Text-only fallback stays available';
     $('stt-toggle').textContent = `STT: ${sttAuto ? 'Auto' : 'Off'}`;
     $('stt-toggle').className = `btn btn-xs ${sttAuto ? 'btn-primary' : 'btn-outline'}`;
     $('record-btn').classList.toggle('hidden', !micOn);
@@ -495,6 +542,7 @@
       UI.toast('This browser does not expose microphone capture. Text mode remains available.', 'error');
       $('err-mic').textContent = 'unsupported';
       $('err-mic').className = 'pill pill-amber';
+      $('err-mic-sub').textContent = 'Browser exposes no microphone API - type instead';
       return;
     }
     try {
@@ -527,6 +575,7 @@
       setMicUI();
       $('err-mic').textContent = 'denied';
       $('err-mic').className = 'pill pill-red';
+      $('err-mic-sub').textContent = 'Permission refused - type instead';
       UI.toast(`Microphone unavailable: ${err.message}. Text mode remains active.`, 'error');
     }
   }
@@ -602,6 +651,7 @@
           setMicUI();
           $('err-mic').textContent = 'blocked';
           $('err-mic').className = 'pill pill-red';
+          $('err-mic-sub').textContent = 'Recognition blocked - type instead';
           UI.toast('Speech recognition permission was denied. Type instead.', 'error');
         } else if (event.error !== 'no-speech' && event.error !== 'aborted') {
           $('mic-status').textContent = `STT: ${event.error}`;
@@ -697,6 +747,7 @@
         UI.toast(`${err.message} - you can type instead.`, 'error');
         $('err-audio').textContent = 'fallback';
         $('err-audio').className = 'pill pill-amber';
+        $('err-stt-sub').textContent = 'Transcription failed - type instead';
       } finally {
         $('record-btn').disabled = false;
         $('record-btn').textContent = recordButtonLabel();
@@ -764,6 +815,7 @@
         if (res.sessionStatus === 'error') {
           $('err-provider').textContent = 'error';
           $('err-provider').className = 'pill pill-red';
+          $('err-tts-sub').textContent = 'Provider failure - session marked error';
           UI.toast(res.error || 'Provider failure surfaced safely.', 'error');
         } else {
           UI.toast('Session completed.', 'success', 2200);
@@ -853,8 +905,7 @@
       renderEvents(detail.events);
       renderSession();
       renderMetrics();
-      $('err-provider').textContent = 'safe';
-      $('err-provider').className = 'pill pill-amber';
+      renderProviderStatus();
       if (detail.turns?.[0]?.content) {
         playText(detail.turns[0].content, {
           onStart: (ms) => {
@@ -945,19 +996,21 @@
   setMicUI();
   renderMetrics();
   try {
-    health = await API.health();
+    const [healthData, providerList] = await Promise.all([API.health(), API.providers()]);
+    health = healthData;
+    providers = providerList;
     $('connection-value').textContent = health.ok ? 'Connected' : 'Degraded';
     $('connection-sub').textContent = `localhost:${location.port || 80} • v${health.version}`;
     $('pg-api-pill').textContent = health.ok ? 'Local API' : 'API degraded';
     $('pg-api-pill').className = `pill ${health.ok ? 'pill-green' : 'pill-red'}`;
-    $('err-audio').textContent = health.capabilities?.deepgramStt ? 'Deepgram' : 'fallback';
-    $('err-audio').className = `pill ${health.capabilities?.deepgramStt ? 'pill-green' : 'pill-gray'}`;
     $('err-silence').textContent = `${agent?.timeoutSettings?.silenceTimeoutSec ?? 8}s`;
+    renderProviderStatus();
   } catch {
     $('connection-value').textContent = 'Offline';
     $('connection-sub').textContent = 'Start server.py';
     $('pg-api-pill').textContent = 'API offline';
     $('pg-api-pill').className = 'pill pill-red';
+    renderProviderStatus();
   }
 
   await loadAgents();

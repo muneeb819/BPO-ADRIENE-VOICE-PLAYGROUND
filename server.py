@@ -1352,7 +1352,10 @@ def mock_call(session_id: str | None, request_transfer: bool) -> dict:
 # --------------------------------------------------------------------------
 
 
-class ApiError(Exception):
+class ApiError(ValueError):
+    """Raised for client-side problems. Subclasses ValueError so payload
+    validators can raise either type and still surface as a 400, never a 500."""
+
     def __init__(self, message, status=400):
         super().__init__(message)
         self.message = message
@@ -2684,6 +2687,12 @@ class Handler(BaseHTTPRequestHandler):
             self.send_error_json(404, "API route not found")
         except ApiError as exc:
             self.send_error_json(exc.status, exc.message)
+        except ValueError as exc:
+            # Payload validation problems are client errors, never server errors.
+            self.send_error_json(400, str(exc) or "Invalid request payload")
+        except (ConnectionAbortedError, ConnectionResetError, BrokenPipeError) as exc:
+            # The browser closed the tab or cancelled the fetch mid-response.
+            print(f"  [INFO] {method} {path}: client disconnected ({exc.__class__.__name__})")
         except Exception as exc:
             print(f"  [ERROR] {method} {path}: {exc.__class__.__name__}: {exc}")
             self.send_error_json(500, "Internal server error")
