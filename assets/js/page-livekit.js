@@ -12,6 +12,16 @@
   let section = 'overview';
   let room = null;      // livekit Room
   let testState = 'idle';
+  let voices = [];          // voice catalogue from the server
+  let voiceInUse = {};      // voice id -> [agent names]
+  let voiceQuery = '';
+  let voiceFamily = 'all';
+  let selectedVoice = null;
+  let voiceTargetAgent = '';
+  let agents = [];
+  let builder = null;       // saved Agent Builder config
+  let builderFiles = null;  // generated worker files
+  let audio = null;         // preview player
 
   document.getElementById('page-header').innerHTML = Shell.header({
     eyebrow: '12 — LiveKit Cloud',
@@ -218,20 +228,127 @@
     },
     voices: {
       title: 'Voices',
-      sub: 'The voice catalogue available to your agents.',
+      sub: 'Search, preview, bind to the Agent Builder or save straight to an agent.',
       render(c) {
-        const voices = window.VOICE_CATALOG ? window.VOICE_CATALOG.all : [];
-        return `<div class="grid gap-2.5 sm:grid-cols-3">
-            ${stat('TTS voices', c.voices?.ttsVoices || voices.length, 'Deepgram Flux + Aura')}
+        const catalogue = window.VOICE_CATALOG ? window.VOICE_CATALOG.all : [];
+        const list = catalogue.filter((v) => {
+          if (voiceFamily !== 'all' && v.family !== voiceFamily) return false;
+          if (!voiceQuery) return true;
+          const hay = `${v.family} ${v.name} ${v.accent} ${v.gender} ${v.id}`.toLowerCase();
+          return hay.includes(voiceQuery);
+        });
+        const inUse = voiceInUse || {};
+        const usedCount = Object.keys(inUse).filter((k) => k).length;
+        return `<div class="grid gap-2.5 sm:grid-cols-4">
+            ${stat('TTS voices', c.voices?.ttsVoices || catalogue.length, 'Deepgram Flux + Aura')}
             ${stat('Families', (c.voices?.families || ['Flux', 'Aura']).join(' + '), 'LiveKit Inference + Deepgram')}
+            ${stat('In use', usedCount, 'voices bound to agents')}
             ${stat('Default dispatch', c.project?.agentName || '—', 'agent used by Test the bot')}
           </div>
-          <div class="mt-3 max-h-[320px] overflow-y-auto pr-1">
-            <div class="grid gap-1 sm:grid-cols-2">
-              ${voices.map((v) => `<div class="flex items-center justify-between gap-2 rounded-lg border border-slate-200/60 bg-white/40 px-2 py-1.5">
-                <span class="truncate text-[9.5px] text-slate-700">${UI.esc(v.family)} · ${UI.esc(v.name)}</span>
-                <span class="text-[8.5px] text-slate-500">${UI.esc(v.accent)}, ${UI.esc(v.gender)}</span>
-              </div>`).join('')}
+
+          <div class="mt-3 flex flex-wrap items-center gap-2">
+            <input class="input input-sm min-w-[180px] flex-1" id="lk-voice-search" placeholder="Search name, accent, gender or model id" value="${UI.esc(voiceQuery)}" aria-label="Search voices" />
+            ${['all', 'Flux', 'Aura'].map((f) => `<button class="btn btn-xs ${voiceFamily === f ? 'btn-primary' : 'btn-outline'}" data-family="${f}" type="button">${f === 'all' ? 'All' : f}</button>`).join('')}
+          </div>
+
+          <div class="mt-3 grid gap-2 sm:grid-cols-[minmax(0,1fr)_auto]">
+            <select class="select input-sm" id="lk-voice-target" aria-label="Target agent">
+              <option value="">Select an agent to save the voice to…</option>
+              ${agents.map((a) => `<option value="${UI.esc(a.id)}" ${voiceTargetAgent === a.id ? 'selected' : ''}>${UI.esc(a.name)} — ${UI.esc(a.voice || 'no voice')}</option>`).join('')}
+            </select>
+            <button class="btn btn-outline btn-xs" id="lk-voice-save" type="button" ${selectedVoice ? '' : 'disabled'}>
+              <span data-icon="save"></span> Save voice to agent
+            </button>
+          </div>
+
+          <div class="mt-3 max-h-[340px] space-y-1 overflow-y-auto pr-1">
+            ${list.length ? list.map((v) => {
+              const used = inUse[v.id] || [];
+              const active = selectedVoice === v.id;
+              return `<div data-select-voice="${UI.esc(v.id)}" class="flex cursor-pointer flex-wrap items-center justify-between gap-2 rounded-lg border px-2 py-1.5 ${active ? 'border-violet-400 bg-violet-50' : 'border-slate-200/60 bg-white/40'}">
+                <div class="min-w-0">
+                  <div class="flex items-center gap-1.5">
+                    <span class="truncate text-[9.5px] font-semibold text-slate-700">${UI.esc(v.family)} · ${UI.esc(v.name)}</span>
+                    ${used.length ? `<span class="chip">in use: ${used.map((n) => UI.esc(n)).join(', ')}</span>` : ''}
+                  </div>
+                  <div class="text-[8.5px] text-slate-500">${UI.esc(v.accent)}, ${UI.esc(v.gender)} · ${UI.esc(v.id)}</div>
+                </div>
+                <div class="flex flex-wrap items-center gap-1.5">
+                  <button class="btn btn-xs btn-soft" data-preview="${UI.esc(v.id)}" type="button">▶ Preview</button>
+                  <button class="btn btn-xs btn-outline" data-use-voice="${UI.esc(v.id)}" type="button">Use in builder</button>
+                </div>
+              </div>`;
+            }).join('') : '<div class="rounded-lg border border-dashed border-slate-300 px-3 py-6 text-center text-[10px] text-slate-500">No voice matches that filter.</div>'}
+          </div>
+          <p class="mt-2 text-[9px] text-slate-500">Preview synthesizes the voice with the real Deepgram key. "Use in builder" binds it to the Agent Builder's TTS voice.</p>`;
+      },
+    },
+    builder: {
+      title: 'Agent Builder',
+      sub: 'Configure the agent, generate the worker and deploy it to LiveKit Cloud.',
+      render() {
+        const b = builder || {};
+        const catalogue = window.VOICE_CATALOG ? window.VOICE_CATALOG.all : [];
+        const cloudAgents = (console_?.agents || []);
+        return `<div class="grid gap-3 lg:grid-cols-2">
+            <div class="space-y-2.5">
+              <div class="grid gap-2.5 sm:grid-cols-2">
+                <div>
+                  <label class="label" for="lb-name">Agent name</label>
+                  <input class="input input-sm" id="lb-name" value="${UI.esc(b.name || '')}" />
+                </div>
+                <div>
+                  <label class="label" for="lb-agent">Deploy target (cloud agent)</label>
+                  <select class="select input-sm" id="lb-agent">
+                    <option value="">— new agent —</option>
+                    ${cloudAgents.map((a) => `<option value="${UI.esc(a.id)}" ${b.agentId === a.id ? 'selected' : ''}>${UI.esc(a.name)} (${UI.esc(a.id)})</option>`).join('')}
+                  </select>
+                </div>
+                <div>
+                  <label class="label" for="lb-stt">STT model</label>
+                  <input class="input input-sm" id="lb-stt" value="${UI.esc(b.sttModel || 'xai/stt-1')}" />
+                </div>
+                <div>
+                  <label class="label" for="lb-llm">LLM model</label>
+                  <input class="input input-sm" id="lb-llm" value="${UI.esc(b.llmModel || 'google/gemma-4-31b-it')}" />
+                </div>
+                <div>
+                  <label class="label" for="lb-tts">TTS model</label>
+                  <input class="input input-sm" id="lb-tts" value="${UI.esc(b.ttsModel || 'fishaudio/s2.1-pro')}" />
+                </div>
+                <div>
+                  <label class="label" for="lb-voice">TTS voice</label>
+                  <select class="select input-sm" id="lb-voice">
+                    ${catalogue.map((v) => `<option value="${UI.esc(v.id)}" ${b.ttsVoice === v.id ? 'selected' : ''}>${UI.esc(v.family)} - ${UI.esc(v.name)} (${UI.esc(v.accent)}, ${UI.esc(v.gender)})</option>`).join('')}
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label class="label" for="lb-greeting">Greeting (Optional)</label>
+                <textarea class="textarea input-sm" id="lb-greeting" rows="2" maxlength="500">${UI.esc(b.greeting || '')}</textarea>
+              </div>
+              <div>
+                <label class="label" for="lb-prompt">Agent prompt</label>
+                <textarea class="textarea input-sm" id="lb-prompt" rows="7" maxlength="8000">${UI.esc(b.prompt || '')}</textarea>
+              </div>
+              <div class="flex flex-wrap items-center gap-3">
+                <label class="flex items-center gap-2 text-[10px] text-slate-600"><input type="checkbox" class="checkbox" id="lb-interrupt" ${b.interruption !== false ? 'checked' : ''} /> Interruption</label>
+                <label class="flex items-center gap-2 text-[10px] text-slate-600"><input type="checkbox" class="checkbox" id="lb-preemptive" ${b.preemptive !== false ? 'checked' : ''} /> Preemptive generation</label>
+                <select class="select input-sm w-auto" id="lb-turn">
+                  ${['vad', 'stt', 'manual'].map((t) => `<option value="${t}" ${b.turnDetection === t ? 'selected' : ''}>turn detection: ${t}</option>`).join('')}
+                </select>
+              </div>
+            </div>
+            <div class="space-y-2.5">
+              <div class="flex flex-wrap items-center gap-2">
+                <button class="btn btn-primary btn-xs" id="lb-generate" type="button"><span data-icon="code"></span> Generate worker</button>
+                <button class="btn btn-outline btn-xs" id="lb-zip" type="button"><span data-icon="download"></span> Download ZIP</button>
+                <button class="btn btn-outline btn-xs" id="lb-deploy" type="button"><span data-icon="upload"></span> Deploy to LiveKit</button>
+                <span class="text-[9px] text-slate-500" id="lb-status">${builderFiles ? 'worker generated' : 'not generated yet'}</span>
+              </div>
+              <div class="flex flex-wrap gap-1.5" id="lb-file-tabs"></div>
+              <pre class="mono max-h-[420px] overflow-auto rounded-xl border border-slate-200/70 bg-slate-50/50 p-3 text-[8.5px] leading-relaxed text-slate-600" id="lb-code">Generate the worker to preview the code that will be deployed.</pre>
+              <div class="hidden rounded-lg border border-slate-200/70 bg-slate-50/50 p-2.5 text-[9px] leading-relaxed text-slate-600" id="lb-output"></div>
             </div>
           </div>`;
       },
@@ -346,6 +463,8 @@
     }
     body.innerHTML = view.render(console_);
     wireDetailButtons(body);
+    wireSection(body);
+    if (section === 'builder') renderBuilderFiles();
     const run = body.querySelector('#lk-sim-run');
     if (run) {
       run.addEventListener('click', () => runSimulation(console_.project?.agentName || ''));
@@ -548,6 +667,252 @@
     await loadConsole();
     btn.disabled = false;
   });
+
+  // --- voices ------------------------------------------------------------
+  async function loadVoices() {
+    try {
+      const res = await fetch('/api/livekit/voices');
+      const data = await res.json();
+      voiceInUse = data.inUse || {};
+    } catch { /* keep empty */ }
+  }
+
+  async function loadAgents() {
+    try {
+      agents = await API.agents();
+    } catch { agents = []; }
+  }
+
+  async function loadBuilder() {
+    try {
+      const res = await fetch('/api/livekit/builder');
+      builder = await res.json();
+    } catch { builder = null; }
+  }
+
+  function builderFromForm() {
+    const get = (id) => document.getElementById(id);
+    if (!get('lb-name')) return null;   // builder panel is not rendered
+    return {
+      name: get('lb-name')?.value.trim() || 'Agent',
+      agentId: get('lb-agent')?.value || '',
+      sttModel: get('lb-stt')?.value.trim() || 'xai/stt-1',
+      llmModel: get('lb-llm')?.value.trim() || 'google/gemma-4-31b-it',
+      ttsModel: get('lb-tts')?.value.trim() || 'fishaudio/s2.1-pro',
+      ttsVoice: get('lb-voice')?.value || 'flux-brittany-en',
+      greeting: get('lb-greeting')?.value.trim() || '',
+      prompt: get('lb-prompt')?.value || '',
+      interruption: get('lb-interrupt')?.checked !== false,
+      preemptive: get('lb-preemptive')?.checked !== false,
+      turnDetection: get('lb-turn')?.value || 'vad',
+    };
+  }
+
+  async function saveBuilder(silent) {
+    if (!builder) return;
+    const fromForm = builderFromForm();
+    if (fromForm) builder = fromForm;
+    try {
+      await fetch('/api/livekit/builder', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(builder),
+      });
+      if (!silent) {
+        const status = document.getElementById('lb-status');
+        if (status) status.textContent = 'saved';
+      }
+    } catch { /* ignore */ }
+  }
+
+  async function previewVoice(voiceId) {
+    const name = voiceId.split('-').slice(1, -1).join(' ') || voiceId;
+    try {
+      if (audio) { audio.pause(); }
+      const blob = await API.tts(`Hi, this is ${name}. This is how I sound.`, voiceId);
+      audio = new Audio(URL.createObjectURL(blob));
+      await audio.play();
+      UI.toast(`Playing ${name}`, 'success', 1800);
+    } catch (err) {
+      UI.toast(err.message, 'error');
+    }
+  }
+
+  async function useVoiceInBuilder(voiceId) {
+    selectedVoice = voiceId;
+    builder = builder || {};
+    builder.ttsVoice = voiceId;
+    await saveBuilder(true);
+    section = 'builder';
+    $('lk-rail').querySelectorAll('.lk-rail-item').forEach((btn) => {
+      btn.classList.toggle('active', btn.dataset.section === 'builder');
+    });
+    renderSection();
+    UI.toast('Voice bound to the Agent Builder', 'success', 2000);
+  }
+
+  async function saveVoiceToAgent() {
+    if (!selectedVoice) { UI.toast('Pick a voice first.', 'error'); return; }
+    const agentId = voiceTargetAgent;
+    if (!agentId) { UI.toast('Choose the agent that should use this voice.', 'error'); return; }
+    try {
+      const updated = await API.updateAgent(agentId, {
+        voice: selectedVoice,
+        ttsConfig: { model: selectedVoice },
+        changeNote: `Voice set to ${selectedVoice}`,
+      });
+      UI.toast(`Voice saved to ${updated.name}`, 'success');
+      await loadVoices();
+      await loadAgents();
+      renderSection();
+    } catch (err) {
+      UI.toast(err.message, 'error');
+    }
+  }
+
+  function wireSection(root) {
+    // Voices panel
+    const search = root.querySelector('#lk-voice-search');
+    if (search) {
+      search.addEventListener('input', UI.debounce((event) => {
+        voiceQuery = event.target.value.trim().toLowerCase();
+        renderSection();
+        const field = document.getElementById('lk-voice-search');
+        if (field) { field.focus(); field.setSelectionRange(field.value.length, field.value.length); }
+      }, 220));
+    }
+    root.querySelectorAll('[data-family]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        voiceFamily = btn.dataset.family;
+        renderSection();
+      });
+    });
+    root.querySelectorAll('[data-select-voice]').forEach((row) => {
+      row.addEventListener('click', (event) => {
+        if (event.target.closest('button')) return;
+        selectedVoice = selectedVoice === row.dataset.selectVoice ? null : row.dataset.selectVoice;
+        renderSection();
+      });
+    });
+    root.querySelectorAll('[data-preview]').forEach((btn) => {
+      btn.addEventListener('click', (event) => {
+        event.stopPropagation();
+        selectedVoice = btn.dataset.preview;
+        previewVoice(btn.dataset.preview);
+      });
+    });
+    root.querySelectorAll('[data-use-voice]').forEach((btn) => {
+      btn.addEventListener('click', (event) => {
+        event.stopPropagation();
+        useVoiceInBuilder(btn.dataset.useVoice);
+      });
+    });
+    const target = root.querySelector('#lk-voice-target');
+    if (target) {
+      target.addEventListener('change', (event) => { voiceTargetAgent = event.target.value; });
+    }
+    const saveBtn = root.querySelector('#lk-voice-save');
+    if (saveBtn) saveBtn.addEventListener('click', saveVoiceToAgent);
+
+    // Agent Builder
+    ['lb-name', 'lb-agent', 'lb-stt', 'lb-llm', 'lb-tts', 'lb-voice', 'lb-turn'].forEach((id) => {
+      const field = root.querySelector('#' + id);
+      if (field) field.addEventListener('change', () => saveBuilder(true));
+    });
+    ['lb-greeting', 'lb-prompt'].forEach((id) => {
+      const field = root.querySelector('#' + id);
+      if (field) field.addEventListener('input', UI.debounce(() => saveBuilder(true), 500));
+    });
+    ['lb-interrupt', 'lb-preemptive'].forEach((id) => {
+      const field = root.querySelector('#' + id);
+      if (field) field.addEventListener('change', () => saveBuilder(true));
+    });
+    const generate = root.querySelector('#lb-generate');
+    if (generate) {
+      generate.addEventListener('click', async () => {
+        const status = document.getElementById('lb-status');
+        status.textContent = 'generating…';
+        await saveBuilder(true);
+        try {
+          const res = await fetch('/api/livekit/build', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(builderFromForm() || builder),
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || 'generate failed');
+          builderFiles = data.files;
+          status.textContent = `worker generated (${Object.keys(builderFiles).length} files)`;
+          renderBuilderFiles();
+        } catch (err) {
+          status.textContent = 'failed';
+          UI.toast(err.message, 'error');
+        }
+      });
+    }
+    const zip = root.querySelector('#lb-zip');
+    if (zip) {
+      zip.addEventListener('click', async () => {
+        await saveBuilder(true);
+        window.location.href = '/api/livekit/build.zip';
+      });
+    }
+    const deploy = root.querySelector('#lb-deploy');
+    if (deploy) {
+      deploy.addEventListener('click', async () => {
+        const out = document.getElementById('lb-output');
+        const status = document.getElementById('lb-status');
+        deploy.disabled = true;
+        status.textContent = 'deploying…';
+        out.classList.remove('hidden');
+        out.textContent = 'Building the image and pushing it to LiveKit Cloud…';
+        try {
+          const res = await fetch('/api/livekit/deploy', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(builderFromForm() || builder),
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || 'deploy failed');
+          status.textContent = data.ok ? 'deployed' : 'deploy failed';
+          out.textContent = `${data.command}\n\n${data.output || '(no output)'}`;
+        } catch (err) {
+          status.textContent = 'deploy failed';
+          out.classList.remove('hidden');
+          out.textContent = `${err.message}\n\nRun it from a machine with Docker, or download the ZIP and deploy manually.`;
+        } finally {
+          deploy.disabled = false;
+        }
+      });
+    }
+  }
+
+  function renderBuilderFiles() {
+    const tabs = document.getElementById('lb-file-tabs');
+    const code = document.getElementById('lb-code');
+    if (!tabs || !code || !builderFiles) return;
+    const names = Object.keys(builderFiles);
+    tabs.innerHTML = names.map((name, index) => `
+      <button class="btn btn-xs ${index === 0 ? 'btn-primary' : 'btn-outline'}" data-file="${UI.esc(name)}" type="button">${UI.esc(name)}</button>`).join('');
+    tabs.querySelectorAll('[data-file]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        code.textContent = builderFiles[btn.dataset.file] || '';
+        tabs.querySelectorAll('[data-file]').forEach((b) => b.classList.toggle('btn-primary', b === btn));
+      });
+    });
+    code.textContent = builderFiles[names[0]] || '';
+  }
+
+  await loadVoices();
+  await loadAgents();
+  await loadBuilder();
+
+  if (location.hash === '#builder') {
+    section = 'builder';
+    $('lk-rail').querySelectorAll('.lk-rail-item').forEach((btn) => {
+      btn.classList.toggle('active', btn.dataset.section === 'builder');
+    });
+  }
 
   await loadConsole();
 })();

@@ -141,6 +141,26 @@ The **LiveKit** side-panel section in the sidebar holds the console and the agen
 
 The **Test the bot** panel at the top of the page creates a room, dispatches the deployed agent and joins it from the browser with the microphone live — using the self-hosted LiveKit browser client (`assets/vendor/livekit-client.umd.js`, no CDN). You get the live transcript, the participant list (bot included) and the bot's audio. Mic capture needs a secure context, so use `https://192.168.18.29` or `http://localhost:8088`.
 
+### Voices panel (fully functional)
+
+The **Voices** section is not a static list any more:
+
+- **Search** by name, accent, gender or model id, and filter by **Flux / Aura** family.
+- **Preview** synthesises that exact voice with the real Deepgram key and plays it back.
+- **Use in builder** binds the voice to the Agent Builder's TTS voice and jumps to the builder.
+- **Save voice to agent** writes the voice to a chosen BPO Nexus agent (versioned, same mechanism as the Voice Lab) and refreshes the "in use" badges.
+- Live counters: total voices, families, voices bound to agents, and the default dispatch agent.
+
+### Agent Builder (active)
+
+The **Agent Builder** section (also reachable from the sidebar → LiveKit → Agent Builder) is a working builder, not a mock-up:
+
+- Agent name, deploy target (your cloud agents), STT / LLM / TTS models, TTS voice from the Deepgram catalogue, greeting, agent prompt, turn detection, interruption and preemptive-generation switches.
+- The configuration is **saved server-side** (`data/livekit-builder.json`) and restored on every visit.
+- **Generate worker** renders the real deployable project: `agent.py` (LiveKit `AgentSession` with STT → LLM → TTS, VAD, turn handling), `.env.example`, `Dockerfile`, `requirements.txt` and `livekit.toml` — switchable per file.
+- **Download ZIP** returns the same project as an archive you can deploy anywhere.
+- **Deploy to LiveKit** runs the official `lk agent deploy --id <AGENT_ID>` against your project and shows the CLI output. Docker is required to build the image; without it the panel shows the exact error and command to run on a Docker-capable machine.
+
 ## Connected Deepgram account
 
 **One side-panel section holds everything Deepgram.** The sidebar is grouped into *Workspace*, *Deepgram* and *Quality & Delivery*. The **Deepgram Compliance** entry is a single collapsible button: one click drops the related pages down (chevron points up), the next click folds them back (chevron points down) and the choice is remembered between visits. Clicking **Deepgram Compliance → Compliance Overview** opens `/deepgram`, which shows:
