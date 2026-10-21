@@ -28,9 +28,9 @@ import urllib.parse
 import urllib.request
 
 try:
-    import ssl  # noqa: F401  (kept for parity with future https support)
+    import ssl
 except Exception:  # pragma: no cover
-    pass
+    ssl = None
 
 GREEN = "\033[92m"
 RED = "\033[91m"
@@ -55,9 +55,15 @@ class SmokeError(Exception):
 
 
 class Client:
-    def __init__(self, base_url: str, timeout: float = 30.0):
+    def __init__(self, base_url: str, timeout: float = 30.0, insecure: bool = False):
         self.base = base_url.rstrip("/")
         self.timeout = timeout
+        self.insecure = insecure
+        self._opener = None
+        if insecure and ssl is not None:
+            context = ssl._create_unverified_context()
+            self._opener = urllib.request.build_opener(
+                urllib.request.HTTPSHandler(context=context))
 
     def request(self, method: str, path: str, body=None, raw: bytes | None = None,
                 content_type: str | None = None):
@@ -71,8 +77,9 @@ class Client:
             data = json.dumps(body).encode("utf-8")
             headers["Content-Type"] = "application/json"
         req = urllib.request.Request(url, data=data, headers=headers, method=method)
+        opener = self._opener.open if self._opener else urllib.request.urlopen
         try:
-            with urllib.request.urlopen(req, timeout=self.timeout) as resp:
+            with opener(req, timeout=self.timeout) as resp:
                 payload = resp.read()
                 ctype = resp.headers.get("Content-Type", "")
                 status = resp.status
@@ -437,13 +444,26 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="BPO Adriene end-to-end smoke tests")
     parser.add_argument("--base-url", default="http://127.0.0.1:8000", help="backend base URL")
     parser.add_argument("--skip-live", action="store_true", help="skip provider network calls")
+    parser.add_argument("--insecure", action="store_true",
+                        help="accept a self-signed TLS certificate (local IIS https publish)")
     parser.add_argument("--json", dest="json_path", help="write a JSON report to this path")
     args = parser.parse_args()
 
-    client = Client(args.base_url)
+    client = Client(args.base_url, insecure=args.insecure)
     report = Report()
 
     print(f"{BOLD}BPO Adriene smoke tests{RESET} {DIM}{args.base_url}{RESET}")
+
+    # The local IIS publish uses a self-signed certificate that is trusted by
+    # Windows but not by Python's bundled CA store - fall back automatically.
+    if not args.insecure and args.base_url.startswith("https"):
+        try:
+            client.get("/api/health")
+        except ssl.SSLCertVerificationError:
+            client = Client(args.base_url, insecure=True)
+            print(f"{YELLOW}note: self-signed certificate accepted (local IIS publish){RESET}")
+        except Exception:
+            pass
 
     run_check(report, "Reachability", "GET /api/health", lambda: check_health(client))
     run_check(report, "Static app", "All 9 page routes render", lambda: check_pages(client))

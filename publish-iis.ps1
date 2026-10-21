@@ -303,22 +303,23 @@ try {
             $httpsBindings = @($site.Bindings) | Where-Object { $_.protocol -eq "https" }
             if ($httpsBindings) {
                 foreach ($b in $httpsBindings) {
-                    $b.CertificateHash = $hash
                     $b.CertificateStoreName = "My"
+                    $b.CertificateHash = $hash
                     $b.SslFlags = 0
                 }
                 Write-Log "certificate attached to the existing https binding"
             } else {
-                # Add the binding first, then attach the certificate hash to it
-                # (the collection overload that takes the hash byte[] is not
-                # reachable from PowerShell's binder).
-                $b = $site.Bindings.Add("https", "$BindAddress`:$HttpsPort`:*")
-                $b.CertificateHash = $hash
+                # BindingCollection.Add takes (bindingInformation, protocol).
+                $b = $site.Bindings.Add("$BindAddress`:$HttpsPort`:*", "https")
                 $b.CertificateStoreName = "My"
+                $b.CertificateHash = $hash
                 $b.SslFlags = 0
                 Write-Log "https binding created with the certificate"
             }
             $mgr.CommitChanges()
+            Start-Sleep -Seconds 2
+            $bindingXml = @($site.Bindings) | ForEach-Object { "$($_.protocol)|$($_.BindingInformation)|$($_.CertificateStoreName)|$($_.SslFlags)" }
+            Write-Log ("bindings after commit :: " + ($bindingXml -join " ; "))
             & cmd /c "`"$AppCmd`" restart site `"$SiteName`"" 2>&1 | Out-Null
             Start-Sleep -Seconds 3
             Write-Log "HTTPS binding added on $BindAddress`:$HttpsPort (thumbprint $($cert.Thumbprint))"

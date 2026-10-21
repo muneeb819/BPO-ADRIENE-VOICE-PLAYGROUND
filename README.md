@@ -221,7 +221,21 @@ What it does:
 
 The backend keeps listening on loopback only, so the API is never exposed directly — IIS is the only public entry point.
 
-**Live on this machine:** <http://192.168.18.29:8088> — verified with the full smoke suite (`python smoke_test.py --base-url http://192.168.18.29:8088` → 16/16).
+**Live on this machine:**
+
+| URL | Purpose |
+|---|---|
+| <https://192.168.18.29> | **Mic enabled** — secure context, native browser microphone |
+| <http://192.168.18.29:8088> | Same app over plain HTTP (mic needs `start-mic-browser.cmd`) |
+| <http://localhost:8088> | Local host — browsers always treat `localhost` as secure, so the mic works here too |
+
+The HTTPS certificate is self-signed and trusted in `LocalMachine\Root` (no browser warning on this machine). Verified with the full smoke suite — **16/16 on every origin**:
+
+```powershell
+python smoke_test.py --base-url https://192.168.18.29        # 16/16
+python smoke_test.py --base-url http://192.168.18.29:8088    # 16/16
+python smoke_test.py --base-url http://localhost:8088         # 16/16
+```
 
 ---
 
@@ -231,9 +245,9 @@ Browsers only expose `navigator.mediaDevices.getUserMedia` in a **secure context
 
 | Option | Command / URL | Notes |
 |---|---|---|
+| **HTTPS (recommended)** | <https://192.168.18.29/playground> | Live now — self-signed certificate trusted in `LocalMachine\Root`, so the mic works in any browser with no extra flags |
 | Local host | <http://localhost:8088/playground> | Browsers always treat `localhost` as secure — no setup, no admin rights |
-| LAN IP | `start-mic-browser.cmd` | Starts Chrome/Edge with `--unsafely-treat-insecure-origin-as-secure=http://192.168.18.29:8088` in a dedicated profile |
-| HTTPS | `publish-iis.cmd` (elevated) | Creates a self-signed certificate (IP + localhost SAN), trusts it in `LocalMachine\Root` and binds `https://192.168.18.29` (443) — the mic then works natively in any browser |
+| LAN IP over HTTP | `start-mic-browser.cmd` | Starts Chrome/Edge with `--unsafely-treat-insecure-origin-as-secure=http://192.168.18.29:8088` in a dedicated profile |
 
 The app detects the situation instead of failing silently: the Microphone panel shows an amber banner with the exact URLs, and the *Provider status & fallbacks* card reports `https needed` for the microphone row while the STT/TTS adapters stay `connected`.
 
