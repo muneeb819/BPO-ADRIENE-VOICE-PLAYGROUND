@@ -89,6 +89,12 @@ OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY", "").strip()
 ELEVENLABS_API_KEY = os.environ.get("ELEVENLABS_API_KEY", "").strip()
 ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "").strip()
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "").strip()
+LIVEKIT_URL = os.environ.get("LIVEKIT_URL", "").strip()
+LIVEKIT_API_KEY = os.environ.get("LIVEKIT_API_KEY", "").strip()
+LIVEKIT_API_SECRET = os.environ.get("LIVEKIT_API_SECRET", "").strip()
+LIVEKIT_AGENT_NAME = os.environ.get("LIVEKIT_AGENT_NAME", "").strip()
+LIVEKIT_CLOUD_API_KEY = os.environ.get("LIVEKIT_CLOUD_API_KEY", "").strip()
+LIVEKIT_CLOUD_API_SECRET = os.environ.get("LIVEKIT_CLOUD_API_SECRET", "").strip()
 AUTH_ENABLED = os.environ.get("AUTH_ENABLED", "false").lower() == "true"
 AUTH_SECRET = os.environ.get("AUTH_SECRET", "").strip()
 TELEPHONY_ENABLED = os.environ.get("TELEPHONY_ENABLED", "false").lower() == "true"
@@ -1773,8 +1779,382 @@ def api_health(handler, query) -> tuple[int, dict]:
             "openai": bool(OPENAI_API_KEY),
             "elevenlabs": bool(ELEVENLABS_API_KEY),
             "anthropic": bool(ANTHROPIC_API_KEY),
+            "livekit": livekit_configured(),
             "auth": AUTH_ENABLED,
         },
+    }
+
+
+# --------------------------------------------------------------------------
+# LiveKit Cloud (server-side only)
+# --------------------------------------------------------------------------
+
+_LIVEKIT_LOOP = None
+_LIVEKIT_LOOP_THREAD = None
+
+
+def _livekit_loop():
+    """One background event loop for the async LiveKit SDK."""
+    global _LIVEKIT_LOOP, _LIVEKIT_LOOP_THREAD
+    if _LIVEKIT_LOOP is None:
+        import asyncio
+        _LIVEKIT_LOOP = asyncio.new_event_loop()
+        _LIVEKIT_LOOP_THREAD = threading.Thread(target=_LIVEKIT_LOOP.run_forever, daemon=True)
+        _LIVEKIT_LOOP_THREAD.start()
+    return _LIVEKIT_LOOP
+
+
+def _livekit_call(factory, timeout: float = 25.0):
+    """Run an async LiveKit SDK call from the sync request handler.
+
+    A fresh event loop per call keeps the SDK session bound to the loop that
+    created it, which avoids hangs inside the threaded HTTP server.
+    """
+    import asyncio
+
+    async def _runner():
+        return await asyncio.wait_for(factory(), timeout=timeout)
+
+    return asyncio.run(_runner())
+
+
+def livekit_configured() -> bool:
+    return bool(LIVEKIT_URL and LIVEKIT_API_KEY and LIVEKIT_API_SECRET)
+
+
+def livekit_host() -> str:
+    if not LIVEKIT_URL:
+        return ""
+    return LIVEKIT_URL.split("//")[-1].split("/")[0]
+
+
+async def _livekit_with_api(fn):
+    from livekit import api
+    client = api.LiveKitAPI(LIVEKIT_URL, LIVEKIT_API_KEY, LIVEKIT_API_SECRET)
+    try:
+        return await fn(client)
+    finally:
+        try:
+            await client.aclose()
+        except Exception:
+            pass
+
+
+def livekit_status() -> dict:
+    """Connection + control surface for the connected LiveKit project."""
+    info = {
+        "configured": livekit_configured(),
+        "url": LIVEKIT_URL,
+        "host": livekit_host(),
+        "agentName": LIVEKIT_AGENT_NAME,
+        "connected": False,
+        "latencyMs": None,
+        "rooms": 0,
+        "participants": 0,
+        "cloudApi": {
+            "configured": bool(LIVEKIT_CLOUD_API_KEY and LIVEKIT_CLOUD_API_SECRET),
+            "authorized": False,
+            "message": "Cloud API key not configured - project key cannot manage agents, versions or builds.",
+        },
+        "message": "",
+    }
+    if not info["configured"]:
+        info["message"] = "LIVEKIT_URL / LIVEKIT_API_KEY / LIVEKIT_API_SECRET are not configured."
+        return info
+
+    started = time.perf_counter()
+    try:
+        from livekit import api
+
+        async def _run():
+            client = api.LiveKitAPI(LIVEKIT_URL, LIVEKIT_API_KEY, LIVEKIT_API_SECRET)
+            try:
+                listed = await client.room.list_rooms(api.ListRoomsRequest())
+                rooms = list(getattr(listed, "rooms", listed) or [])
+                participants = 0
+                for room in rooms:
+                    try:
+                        found = await client.room.list_participants(
+                            api.ListParticipantsRequest(room=room.name))
+                        participants += len(getattr(found, "participants", []) or [])
+                    except Exception:
+                        pass
+                return len(rooms), participants
+            finally:
+                try:
+                    await client.aclose()
+                except Exception:
+                    pass
+
+        rooms, participants = _livekit_call(_run)
+        info["connected"] = True
+        info["rooms"] = rooms
+        info["participants"] = participants
+        info["latencyMs"] = int((time.perf_counter() - started) * 1000)
+    except Exception as exc:
+        info["message"] = f"{exc.__class__.__name__}: {str(exc)[:160]}"
+
+    # Cloud management API (agents / versions / builds) needs a Cloud API key.
+    if LIVEKIT_CLOUD_API_KEY and LIVEKIT_CLOUD_API_SECRET:
+        try:
+            import base64
+            pair = base64.b64encode(
+                f"{LIVEKIT_CLOUD_API_KEY}:{LIVEKIT_CLOUD_API_SECRET}".encode()).decode()
+            req = urllib.request.Request(
+                "https://cloud-api.livekit.io/api/v1/agents",
+                headers={"Authorization": f"Basic {pair}"})
+            with urllib.request.urlopen(req, timeout=12) as resp:
+                payload = json.loads(resp.read().decode("utf-8"))
+            info["cloudApi"]["authorized"] = True
+            info["cloudApi"]["agents"] = payload.get("agents") if isinstance(payload, dict) else []
+            info["cloudApi"]["message"] = "Cloud API authorized - agents, versions and builds are manageable."
+        except urllib.error.HTTPError as exc:
+            info["cloudApi"]["message"] = f"Cloud API returned {exc.code} - create a Cloud API key in LiveKit Cloud."
+        except Exception as exc:
+            info["cloudApi"]["message"] = f"Cloud API error: {str(exc)[:120]}"
+    return info
+
+
+def livekit_rooms() -> list[dict]:
+    from livekit import api
+
+    async def _run():
+        client = api.LiveKitAPI(LIVEKIT_URL, LIVEKIT_API_KEY, LIVEKIT_API_SECRET)
+        try:
+            listed = await client.room.list_rooms(api.ListRoomsRequest())
+            rooms = list(getattr(listed, "rooms", listed) or [])
+            out = []
+            for room in rooms:
+                participants = []
+                try:
+                    found = await client.room.list_participants(
+                        api.ListParticipantsRequest(room=room.name))
+                    for p in (getattr(found, "participants", []) or []):
+                        participants.append({
+                            "identity": p.identity,
+                            "name": p.name,
+                            "state": str(p.state),
+                            "isAgent": bool(getattr(p, "is_agent", False)),
+                        })
+                except Exception:
+                    pass
+                out.append({
+                    "name": getattr(room, "name", "") or "",
+                    "participants": len(participants),
+                    "participantList": participants,
+                    "metadata": getattr(room, "metadata", "") or "",
+                    "emptyTimeoutSec": getattr(room, "empty_timeout", 0),
+                    "maxParticipants": getattr(room, "max_participants", 0),
+                    "createdAt": str(getattr(room, "created_at", "") or ""),
+                })
+            return out
+        finally:
+            try:
+                await client.aclose()
+            except Exception:
+                pass
+
+    return _livekit_call(_run)
+
+
+def livekit_create_room(name: str, metadata: str = "") -> dict:
+    from livekit import api
+
+    async def _run():
+        client = api.LiveKitAPI(LIVEKIT_URL, LIVEKIT_API_KEY, LIVEKIT_API_SECRET)
+        try:
+            room = await client.room.create_room(api.CreateRoomRequest(
+                name=name, empty_timeout=1800, max_participants=20))
+            return {"name": getattr(room, "name", name), "created": True,
+                    "metadata": metadata}
+        finally:
+            try:
+                await client.aclose()
+            except Exception:
+                pass
+
+    return _livekit_call(_run)
+
+
+def livekit_delete_room(name: str) -> dict:
+    from livekit import api
+
+    async def _run():
+        client = api.LiveKitAPI(LIVEKIT_URL, LIVEKIT_API_KEY, LIVEKIT_API_SECRET)
+        try:
+            await client.room.delete_room(api.DeleteRoomRequest(room=name))
+            return {"deleted": True, "room": name}
+        finally:
+            try:
+                await client.aclose()
+            except Exception:
+                pass
+
+    return _livekit_call(_run)
+
+
+def livekit_dispatch(room: str, agent_name: str = "") -> dict:
+    """Start the deployed LiveKit agent in a room (the 'use' action)."""
+    from livekit import api
+
+    target = agent_name or LIVEKIT_AGENT_NAME
+    if not target:
+        raise ApiError("No agent name configured for dispatch", 400)
+
+    async def _run():
+        client = api.LiveKitAPI(LIVEKIT_URL, LIVEKIT_API_KEY, LIVEKIT_API_SECRET)
+        try:
+            dispatch = await client.agent_dispatch.create_dispatch(
+                api.CreateAgentDispatchRequest(room=room, agent_name=target))
+            created = getattr(dispatch, "created_at", None)
+            return {
+                "dispatchId": getattr(dispatch, "id", "") or "",
+                "room": getattr(dispatch, "room", room),
+                "agentName": getattr(dispatch, "agent_name", target),
+                "created": str(created) if created else "",
+            }
+        finally:
+            try:
+                await client.aclose()
+            except Exception:
+                pass
+
+    return _livekit_call(_run)
+
+
+def livekit_token(room: str, identity: str) -> dict:
+    """Mint a browser join token for a LiveKit room."""
+    from livekit import api
+    token = api.AccessToken(LIVEKIT_API_KEY, LIVEKIT_API_SECRET)
+    token = token.with_identity(identity)
+    token = token.with_grants(api.VideoGrants(
+        room_join=True, room=room, can_publish=True, can_subscribe=True,
+        can_publish_data=True, can_update_own_metadata=True))
+    return {"token": token.to_jwt(), "room": room, "identity": identity, "url": LIVEKIT_URL}
+
+
+LIVEKIT_WORKER_TEMPLATE = '''"""
+LiveKit voice agent - generated by the BPO Adriene Admin Panel.
+
+STT   : {stt_model}
+LLM   : {llm_model}
+TTS   : {tts_model} (voice {tts_voice})
+Greeting: {greeting}
+
+Deploy:
+    export LIVEKIT_URL=...
+    export LIVEKIT_API_KEY=...
+    export LIVEKIT_API_SECRET=...
+    python agent.py console     # local microphone test
+    python agent.py dev         # LiveKit Cloud
+    python agent.py start       # production worker
+"""
+
+from __future__ import annotations
+
+import os
+
+from livekit import agents
+from livekit.agents import Agent, AgentSession, JobContext, TurnHandlingOptions, inference
+from livekit.plugins import silero
+
+INSTRUCTIONS = """{prompt}"""
+
+GREETING = "{greeting}"
+
+STT_MODEL = os.getenv("STT_MODEL", "{stt_model}")
+LLM_MODEL = os.getenv("LLM_MODEL", "{llm_model}")
+TTS_MODEL = os.getenv("TTS_MODEL", "{tts_model}")
+TTS_VOICE = os.getenv("TTS_VOICE", "{tts_voice}")
+
+
+class {agent_class}(Agent):
+    def __init__(self) -> None:
+        super().__init__(instructions=INSTRUCTIONS)
+
+    async def on_first_turn(self, ctx: JobContext) -> None:
+        await ctx.session.say(GREETING)
+
+
+async def entrypoint(ctx: JobContext) -> None:
+    session = AgentSession(
+        stt=inference.STT(model=STT_MODEL, language="{stt_language}"),
+        llm=inference.LLM(model=LLM_MODEL),
+        tts=inference.TTS(model=TTS_MODEL, voice=TTS_VOICE),
+        vad=silero.VAD.load(),
+        turn_handling=TurnHandlingOptions(
+            turn_detection="vad",
+            interruption={{"enabled": True}},
+            preemptive_generation={{"enabled": {preemptive}}},
+        ),
+    )
+    await session.start(
+        agent={agent_class}(),
+        room=ctx.room,
+        room_input_options=agents.RoomInputOptions(noise_cancellation=None, transcription=True),
+    )
+
+
+if __name__ == "__main__":
+    agents.cli.run_app(agents.WorkerOptions(entrypoint_fnc=entrypoint))
+'''
+
+
+def livekit_build_worker(settings: dict) -> dict:
+    """Render a deployable LiveKit worker from the builder settings."""
+    prompt = str(settings.get("prompt") or "You are a helpful voice assistant.").replace('"""', "'''")
+    greeting = str(settings.get("greeting") or "Hi, how can I help you today?").replace('"', "'")
+    name = "".join(part.capitalize() for part in re.split(r"[^A-Za-z0-9]+", str(settings.get("name") or "Agent")) if part) or "Agent"
+    code = LIVEKIT_WORKER_TEMPLATE.format(
+        stt_model=settings.get("sttModel") or "xai/stt-1",
+        stt_language=settings.get("sttLanguage") or "en",
+        llm_model=settings.get("llmModel") or "google/gemma-4-31b-it",
+        tts_model=settings.get("ttsModel") or "fishaudio/s2.1-pro",
+        tts_voice=settings.get("ttsVoice") or "",
+        greeting=greeting,
+        prompt=prompt,
+        agent_class=name,
+        preemptive="True" if settings.get("preemptive", True) else "False",
+    )
+    env = "\n".join([
+        "# LiveKit Cloud (server-side only)",
+        f"LIVEKIT_URL={LIVEKIT_URL}",
+        f"LIVEKIT_API_KEY={LIVEKIT_API_KEY}",
+        f"LIVEKIT_API_SECRET={LIVEKIT_API_SECRET}",
+        "",
+        "# Agent dispatch name",
+        f"LIVEKIT_AGENT_NAME={LIVEKIT_AGENT_NAME}",
+        "",
+        "# Pipeline models",
+        f"STT_MODEL={settings.get('sttModel') or 'xai/stt-1'}",
+        f"STT_LANGUAGE={settings.get('sttLanguage') or 'en'}",
+        f"LLM_MODEL={settings.get('llmModel') or 'google/gemma-4-31b-it'}",
+        f"TTS_MODEL={settings.get('ttsModel') or 'fishaudio/s2.1-pro'}",
+        f"TTS_VOICE={settings.get('ttsVoice') or ''}",
+    ])
+    return {
+        "files": {
+            "agent.py": code,
+            ".env.example": env,
+            "Dockerfile": (
+                "FROM python:3.12-slim\n"
+                "WORKDIR /app\n"
+                "COPY requirements.txt .\n"
+                "RUN pip install --no-cache-dir -r requirements.txt\n"
+                "COPY agent.py .\n"
+                "CMD [\"python\", \"agent.py\", \"start\"]\n"
+            ),
+            "requirements.txt": (
+                "livekit-agents[silero]==1.8.8\n"
+                "livekit-api==1.2.2\n"
+                "python-dotenv>=1.1,<2\n"
+            ),
+        },
+        "deployCommand": (
+            f"lk agent create \"{settings.get('name') or 'Agent'}\"  "
+            f"# then lk agent deploy / lk cloud agent deploy"
+        ),
+        "generatedAt": now_iso(),
     }
 
 
@@ -2993,6 +3373,7 @@ PAGE_ROUTES = {
     "/security": "security.html",
     "/telephony": "telephony.html",
     "/deepgram": "deepgram.html",
+    "/livekit": "livekit.html",
     "/docs": "docs.html",
 }
 
@@ -3266,6 +3647,57 @@ class Handler(BaseHTTPRequestHandler):
             if path == "/api/admin/overview":
                 require("GET")
                 return self.write_api_result(api_admin_overview())
+
+            if path == "/api/livekit/status":
+                require("GET")
+                return self.write_api_result(livekit_status())
+
+            if path == "/api/livekit/rooms":
+                require("GET", "POST")
+                if not livekit_configured():
+                    raise ApiError("LiveKit is not configured on the server", 400)
+                if method == "GET":
+                    return self.write_api_result({"rooms": livekit_rooms()})
+                payload = self.json_body()
+                name = str(payload.get("name") or "").strip()
+                if not name or len(name) > 64:
+                    raise ApiError("Room name is required (max 64 characters)", 400)
+                result = livekit_create_room(name, str(payload.get("metadata") or ""))
+                return self.write_api_result((201, result))
+
+            m = re.fullmatch(r"/api/livekit/rooms/([^/]+)", path)
+            if m:
+                require("DELETE")
+                if not livekit_configured():
+                    raise ApiError("LiveKit is not configured on the server", 400)
+                return self.write_api_result(livekit_delete_room(urllib.parse.unquote(m.group(1))))
+
+            if path == "/api/livekit/token":
+                require("POST")
+                if not livekit_configured():
+                    raise ApiError("LiveKit is not configured on the server", 400)
+                payload = self.json_body()
+                room = str(payload.get("room") or "").strip()
+                identity = str(payload.get("identity") or "adriene-operator").strip()
+                if not room:
+                    raise ApiError("room is required", 400)
+                return self.write_api_result(livekit_token(room, identity))
+
+            if path == "/api/livekit/dispatch":
+                require("POST")
+                if not livekit_configured():
+                    raise ApiError("LiveKit is not configured on the server", 400)
+                payload = self.json_body()
+                room = str(payload.get("room") or "").strip()
+                if not room:
+                    raise ApiError("room is required", 400)
+                return self.write_api_result(livekit_dispatch(
+                    room, str(payload.get("agentName") or "").strip()))
+
+            if path == "/api/livekit/build":
+                require("POST")
+                payload = self.json_body()
+                return self.write_api_result(livekit_build_worker(payload))
 
             self.send_error_json(404, "API route not found")
         except ApiError as exc:

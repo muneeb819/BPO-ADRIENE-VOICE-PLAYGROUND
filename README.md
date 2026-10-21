@@ -74,6 +74,20 @@ Two actions sit under the picker:
 
 ---
 
+## LiveKit Cloud
+
+LiveKit is bound to this project the same way Deepgram is: credentials in `.env` only, presence booleans in the API, nothing secret in the browser.
+
+| Goal | How |
+|---|---|
+| **Access** | `GET /api/livekit/status` — project host, agent dispatch name, latency, live room/participant counts, Cloud API authorisation state |
+| **Control** | `GET/POST/DELETE /api/livekit/rooms` — list, create and delete rooms on the live project |
+| **Use** | `POST /api/livekit/dispatch` starts the deployed agent in a room; `POST /api/livekit/token` mints a browser join token |
+| **Build** | `POST /api/livekit/build` renders a deployable worker from the builder: `agent.py` (LiveKit `AgentSession` with STT → LLM → TTS, VAD, turn handling), `.env.example`, `Dockerfile`, `requirements.txt`. The TTS voice is picked from the connected **Deepgram** catalogue |
+| **Deploy** | `lk cloud api-key create` → `LIVEKIT_CLOUD_API_KEY` / `LIVEKIT_CLOUD_API_SECRET` in `.env` unlocks agents, versions, builds and secrets in the Cloud API. Without it the project key still controls rooms and dispatch |
+
+The **LiveKit** side-panel section in the sidebar holds the console and the agent builder.
+
 ## Connected Deepgram account
 
 **One side-panel section holds everything Deepgram.** The sidebar is grouped into *Workspace*, *Deepgram* and *Quality & Delivery*. The **Deepgram Compliance** entry is a single collapsible button: one click drops the related pages down (chevron points up), the next click folds them back (chevron points down) and the choice is remembered between visits. Clicking **Deepgram Compliance → Compliance Overview** opens `/deepgram`, which shows:
@@ -133,6 +147,7 @@ Without a key, the playground still works in text mode and uses browser Speech S
 | `/security` | Secret posture, frontend scan, validation selftest, retention, cleanup |
 | `/telephony` | Mock calls/transfers, correlation logs, live-dial safety gate |
 | `/deepgram` | **Deepgram Compliance** — connected account, the four Deepgram console surfaces, per-agent compliance verdicts, voice catalogue and a data-source map |
+| `/livekit` | **LiveKit Cloud** — project status, live rooms & participants, agent dispatch, join-token minting and a worker builder (STT → LLM → TTS, greeting, prompt) |
 | `/docs` | Windows launch guide, SQLite operations, feature inventory, live verification |
 
 ---
@@ -207,6 +222,12 @@ Public, localhost-only by default:
 | GET | `/api/deepgram/account` | Live Deepgram project, model lists and voice count (never the key) |
 | GET | `/api/deepgram/compliance` | Everything the project consumes from Deepgram: surfaces, per-agent checks, voice catalogue, source map |
 | GET | `/api/admin/overview` | Combined admin payload: system facts, counts, latency, daily traffic, intents, provider mix, module registry |
+| GET | `/api/livekit/status` | LiveKit project status, room/participant counts and Cloud API authorisation state |
+| GET/POST | `/api/livekit/rooms` | List live rooms / create a room |
+| DELETE | `/api/livekit/rooms/{name}` | Delete a room |
+| POST | `/api/livekit/token` | Mint a browser join token for a room |
+| POST | `/api/livekit/dispatch` | Dispatch the deployed agent into a room |
+| POST | `/api/livekit/build` | Generate a deployable LiveKit worker (agent.py, .env, Dockerfile, requirements) |
 | POST | `/api/providers/{id}/test` | Connection test |
 | POST | `/api/tts` | Flux / Aura TTS proxy (max 1200 chars) |
 | POST | `/api/stt` | Nova-2 STT proxy (audio ≤ 8 MB) |

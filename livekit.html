@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LiveKit Cloud — BPO Adriene Playground</title>
+  <meta name="description" content="Connect, control, use, build and deploy LiveKit voice agents: project status, rooms, agent dispatch, join tokens and a worker builder." />
+  <link rel="icon" href="/assets/favicon.svg" type="image/x-icon" />
+  <link rel="stylesheet" href="/assets/css/fonts.css" />
+  <script src="/assets/vendor/tailwind.js"></script>
+  <link rel="stylesheet" href="/assets/css/app.css" />
+</head>
+<body>
+  <div id="mobile-shell"></div>
+  <aside id="sidebar"></aside>
+
+  <div class="flex min-h-screen flex-col lg:pl-[268px]">
+    <main class="mx-auto w-full max-w-[1400px] flex-1 px-4 py-5 sm:px-6 lg:px-8 lg:py-7">
+      <div id="page-header"></div>
+
+      <!-- connection -->
+      <section class="card-dark p-4" id="lk-connection">
+        <div class="flex flex-wrap items-start justify-between gap-3">
+          <div class="min-w-0">
+            <div class="flex flex-wrap items-center gap-2">
+              <h2 class="text-[12px] font-extrabold tracking-tight text-white">LiveKit project</h2>
+              <span class="pill pill-dark" id="lk-state">checking</span>
+            </div>
+            <p class="mt-1 text-[9.5px] leading-relaxed text-slate-400">
+              Server-side only — the API key never reaches the browser. Control rooms, dispatch the deployed agent and mint join tokens.
+            </p>
+          </div>
+          <button class="btn btn-dark btn-xs border border-slate-600" id="lk-refresh" type="button">
+            <span data-icon="refresh"></span> Refresh
+          </button>
+        </div>
+        <div class="mt-3 grid gap-2.5 sm:grid-cols-2 lg:grid-cols-4" id="lk-connection-body">
+          <div class="rounded-lg border border-slate-700/60 bg-slate-900/60 p-2.5 text-[10px] text-slate-400">Connecting…</div>
+        </div>
+      </section>
+
+      <div class="mt-3 grid items-start gap-4 xl:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)]">
+        <!-- rooms -->
+        <section class="card">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h2 class="section-title">Rooms &amp; participants</h2>
+              <p class="section-sub">Create a room, dispatch the deployed agent into it, then mint a join token.</p>
+            </div>
+            <span class="pill pill-ghost no-dot" id="lk-rooms-count">—</span>
+          </div>
+
+          <div class="mt-3 flex flex-wrap items-center gap-2">
+            <input class="input input-sm min-w-[150px] flex-1" id="lk-room-name" placeholder="adriene-room" aria-label="New room name" />
+            <button class="btn btn-outline btn-xs" id="lk-create-room" type="button"><span data-icon="plus"></span> Create room</button>
+          </div>
+
+          <div class="mt-3 space-y-2" id="lk-rooms">
+            <div class="text-[10px] text-slate-400">Loading rooms…</div>
+          </div>
+
+          <div class="mt-3 border-t border-slate-200/70 pt-3">
+            <div class="text-[8px] font-extrabold uppercase tracking-[0.12em] text-slate-500">Join token</div>
+            <div class="mt-1.5 flex flex-wrap items-center gap-2">
+              <input class="input input-sm min-w-[130px] flex-1" id="lk-token-room" placeholder="room name" aria-label="Room for token" />
+              <input class="input input-sm min-w-[130px] flex-1" id="lk-token-identity" value="adriene-operator" aria-label="Identity" />
+              <button class="btn btn-soft btn-xs" id="lk-mint-token" type="button"><span data-icon="key"></span> Mint token</button>
+            </div>
+            <pre class="mono mt-2 hidden max-h-40 overflow-auto rounded-lg border border-slate-200/70 bg-slate-50/50 p-2 text-[8.5px] leading-relaxed text-slate-600" id="lk-token-output"></pre>
+          </div>
+        </section>
+
+        <!-- cloud agents -->
+        <section class="card">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h2 class="section-title">Cloud agents &amp; builds</h2>
+              <p class="section-sub">Manage agents, versions, builds and secrets in LiveKit Cloud.</p>
+            </div>
+            <span class="pill pill-gray no-dot" id="lk-cloud-state">checking</span>
+          </div>
+          <div class="mt-3 space-y-2" id="lk-cloud-body">
+            <div class="text-[10px] text-slate-400">Checking Cloud API access…</div>
+          </div>
+        </section>
+      </div>
+
+      <!-- builder -->
+      <section class="card mt-4">
+        <div class="flex flex-wrap items-start justify-between gap-2">
+          <div>
+            <h2 class="section-title">LiveKit agent builder</h2>
+            <p class="section-sub">Configure STT → LLM → TTS, greeting and prompt, then generate a deployable worker for LiveKit Cloud.</p>
+          </div>
+          <span class="pill pill-ghost no-dot">build → deploy</span>
+        </div>
+
+        <div class="mt-3 grid gap-3 lg:grid-cols-2">
+          <div class="space-y-3">
+            <div class="grid gap-3 sm:grid-cols-2">
+              <div>
+                <label class="label" for="lk-b-name">Agent name</label>
+                <input class="input" id="lk-b-name" value="Adriene LiveKit Agent" maxlength="60" />
+              </div>
+              <div>
+                <label class="label" for="lk-b-stt">STT model</label>
+                <input class="input" id="lk-b-stt" value="xai/stt-1" maxlength="60" />
+              </div>
+              <div>
+                <label class="label" for="lk-b-llm">LLM model</label>
+                <input class="input" id="lk-b-llm" value="google/gemma-4-31b-it" maxlength="60" />
+              </div>
+              <div>
+                <label class="label" for="lk-b-tts">TTS model</label>
+                <input class="input" id="lk-b-tts" value="fishaudio/s2.1-pro" maxlength="60" />
+              </div>
+            </div>
+            <div>
+              <label class="label" for="lk-b-voice">TTS voice</label>
+              <select class="select" id="lk-b-voice"></select>
+              <p class="hint">Deepgram Flux / Aura voices from the connected account, or a LiveKit Inference voice id.</p>
+            </div>
+            <div>
+              <label class="label" for="lk-b-greeting">Greeting</label>
+              <textarea class="textarea" id="lk-b-greeting" rows="2" maxlength="500">Hi, this is Adriene from BPO Adriene. How can I help you today?</textarea>
+            </div>
+            <div class="flex flex-wrap items-center gap-3">
+              <label class="flex items-center gap-2 text-[10px] text-slate-600"><input type="checkbox" class="checkbox" id="lk-b-interrupt" checked /> Interruption</label>
+              <label class="flex items-center gap-2 text-[10px] text-slate-600"><input type="checkbox" class="checkbox" id="lk-b-preemptive" checked /> Preemptive generation</label>
+            </div>
+          </div>
+          <div class="space-y-3">
+            <div>
+              <label class="label" for="lk-b-prompt">Agent prompt</label>
+              <textarea class="textarea" id="lk-b-prompt" rows="12" maxlength="8000">You are Adriene, a professional BPO voice assistant. Be concise, empathetic, and follow deterministic rules before any generation. Never override transfer or eligibility policies. Ask required questions in order.</textarea>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+              <button class="btn btn-primary btn-xs" id="lk-b-build" type="button"><span data-icon="code"></span> Generate worker</button>
+              <button class="btn btn-outline btn-xs" id="lk-b-download" type="button" disabled><span data-icon="download"></span> Download agent.py</button>
+              <span class="text-[9px] text-slate-400" id="lk-b-status">Not generated yet</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-3 hidden" id="lk-b-output-wrap">
+          <div class="flex items-center justify-between">
+            <div class="text-[8px] font-extrabold uppercase tracking-[0.12em] text-slate-500">Generated worker</div>
+            <div class="flex gap-1.5" id="lk-b-tabs"></div>
+          </div>
+          <pre class="mono mt-1.5 max-h-[420px] overflow-auto rounded-xl border border-slate-200/70 bg-slate-50/50 p-3 text-[9px] leading-relaxed text-slate-600" id="lk-b-output"></pre>
+          <p class="hint mt-1.5" id="lk-b-deploy"></p>
+        </div>
+      </section>
+    </main>
+    <footer id="footer"></footer>
+  </div>
+
+  <script src="/assets/js/api.js"></script>
+  <script src="/assets/js/shell.js"></script>
+  <script src="/assets/js/voice-catalog.js"></script>
+  <script src="/assets/js/page-livekit.js"></script>
+</body>
+</html>

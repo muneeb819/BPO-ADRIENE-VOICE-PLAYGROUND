@@ -18,6 +18,11 @@ const Shell = (() => {
     { href: '/lab', key: 'lab', label: 'Voice Lab', sub: 'STT • LLM • TTS', icon: 'flask' },
   ];
 
+  const LIVEKIT_NAV = [
+    { href: '/livekit', key: 'livekit', label: 'LiveKit Cloud', sub: 'Rooms • Dispatch • Tokens', icon: 'radio' },
+    { href: '/livekit#builder', key: 'livekit-builder', label: 'Agent Builder', sub: 'Build & Deploy', icon: 'code' },
+  ];
+
   const DELIVERY_NAV = [
     { href: '/testing', key: 'testing', label: 'Scenario Testing', sub: 'Regression & QA', icon: 'clipboard' },
     { href: '/security', key: 'security', label: 'Security', sub: 'Secrets & Retention', icon: 'shield' },
@@ -27,13 +32,19 @@ const Shell = (() => {
 
   const NAV_GROUPS = [
     { id: 'workspace', label: 'Workspace', items: NAV },
-    { id: 'deepgram', label: 'Deepgram', items: DEEPGRAM_NAV, accent: true, accordion: true },
+    { id: 'deepgram', label: 'Deepgram', items: DEEPGRAM_NAV, accent: true, accordion: true, toggle: 'Deepgram Compliance' },
+    { id: 'livekit', label: 'LiveKit', items: LIVEKIT_NAV, accent: true, accordion: true, toggle: 'LiveKit Cloud' },
     { id: 'delivery', label: 'Quality & Delivery', items: DELIVERY_NAV },
   ];
 
-  const ALL_NAV = [...NAV, ...DEEPGRAM_NAV, ...DELIVERY_NAV];
+  const ACCORDION_GROUPS = NAV_GROUPS.filter((g) => g.accordion);
+  const ALL_NAV = [...NAV, ...DEEPGRAM_NAV, ...LIVEKIT_NAV, ...DELIVERY_NAV];
   const DG_KEYS = DEEPGRAM_NAV.map((item) => item.key);
-  const DG_STORAGE_KEY = 'adriene.dgSectionOpen';
+  const LK_KEYS = LIVEKIT_NAV.map((item) => item.key);
+  const ACCORDION_STORAGE = {
+    deepgram: 'adriene.dgSectionOpen',
+    livekit: 'adriene.lkSectionOpen',
+  };
 
   const ICONS = {
     home: '<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9.5 21v-6h5v6"/>',
@@ -86,6 +97,7 @@ const Shell = (() => {
     chevron: '<path d="m6 9 6 6 6-6"/>',
     'chevron-up': '<path d="m18 15-6-6-6 6"/>',
     bolt: '<path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/>',
+    radio: '<circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49M7.76 16.25a6 6 0 0 1 0-8.49M19.07 4.93a10 10 0 0 1 0 14.14M4.93 19.07a10 10 0 0 1 0-14.14"/>',
   };
 
   function icon(name, cls = '') {
@@ -105,32 +117,33 @@ const Shell = (() => {
       </a>`;
   }
 
-  // The Deepgram section is a single collapsible button: one click drops the
-  // related pages down, the next click folds them back up.
-  function deepgramOpen(active) {
-    // On a Deepgram page the section is always unfolded so the current item
-    // is visible; elsewhere the user's last choice is remembered.
-    if (DG_KEYS.includes(active)) return true;
+  // Each integration section is a single collapsible button: one click drops
+  // the related pages down, the next click folds them back up.
+  function accordionOpen(group, active) {
+    const keys = group.items.map((item) => item.key);
+    if (keys.includes(active)) return true;
     let stored = null;
-    try { stored = localStorage.getItem(DG_STORAGE_KEY); } catch { stored = null; }
+    try { stored = localStorage.getItem(ACCORDION_STORAGE[group.id]); } catch { stored = null; }
     return stored === '1';
   }
 
-  function deepgramSection(active) {
-    const open = deepgramOpen(active);
-    const isActive = DG_KEYS.includes(active);
+  function accordionSection(group, active) {
+    const open = accordionOpen(group, active);
+    const keys = group.items.map((item) => item.key);
+    const isActive = keys.includes(active);
+    const first = group.items[0];
     return `
       <button class="nav-item nav-toggle ${isActive ? 'active' : ''}" type="button"
-        data-dg-toggle aria-expanded="${open}" aria-controls="dg-section-items">
-        <span class="nav-icon">${icon('bolt')}</span>
+        data-accordion="${group.id}" aria-expanded="${open}" aria-controls="acc-${group.id}-items">
+        <span class="nav-icon">${icon(first.icon)}</span>
         <span class="min-w-0 flex-1 text-left">
-          <span class="nav-title">Deepgram Compliance</span>
-          <span class="nav-sub">Account • Agents • Voices</span>
+          <span class="nav-title">${group.toggle || group.label}</span>
+          <span class="nav-sub">${group.items.map((i) => i.label).join(' • ')}</span>
         </span>
-        <span class="nav-chevron" data-dg-chevron>${icon(open ? 'chevron-up' : 'chevron')}</span>
+        <span class="nav-chevron" data-accordion-chevron>${icon(open ? 'chevron-up' : 'chevron')}</span>
       </button>
-      <div class="dg-subitems ${open ? '' : 'hidden'}" id="dg-section-items">
-        ${DEEPGRAM_NAV.map((item) => navItem(item, active)).join('')}
+      <div class="dg-subitems ${open ? '' : 'hidden'}" id="acc-${group.id}-items">
+        ${group.items.map((item) => navItem(item, active)).join('')}
       </div>`;
   }
 
@@ -138,7 +151,7 @@ const Shell = (() => {
     return NAV_GROUPS.map((group) => `
       <div class="nav-group ${group.accent ? 'nav-group-accent' : ''}">
         <div class="nav-group-label">${group.accent ? '<span class="status-dot"></span>' : ''}${group.label}</div>
-        ${group.accordion ? deepgramSection(active) : group.items.map((item) => navItem(item, active)).join('')}
+        ${group.accordion ? accordionSection(group, active) : group.items.map((item) => navItem(item, active)).join('')}
       </div>`).join('');
   }
 
@@ -229,20 +242,20 @@ const Shell = (() => {
     if (foot) foot.outerHTML = footer();
     document.body.dataset.page = active;
 
-    // Deepgram accordion: drop the related pages down / fold them back up.
-    const toggle = document.querySelector('[data-dg-toggle]');
-    if (toggle) {
+    // Integration accordions: drop the related pages down / fold them back up.
+    document.querySelectorAll('[data-accordion]').forEach((toggle) => {
       toggle.addEventListener('click', () => {
-        const items = document.getElementById('dg-section-items');
+        const group = toggle.dataset.accordion;
+        const items = document.getElementById(`acc-${group}-items`);
         if (!items) return;
         const willOpen = items.classList.contains('hidden');
         items.classList.toggle('hidden', !willOpen);
         toggle.setAttribute('aria-expanded', String(willOpen));
-        const chevron = toggle.querySelector('[data-dg-chevron]');
+        const chevron = toggle.querySelector('[data-accordion-chevron]');
         if (chevron) chevron.innerHTML = icon(willOpen ? 'chevron-up' : 'chevron');
-        try { localStorage.setItem(DG_STORAGE_KEY, willOpen ? '1' : '0'); } catch { /* private mode */ }
+        try { localStorage.setItem(ACCORDION_STORAGE[group], willOpen ? '1' : '0'); } catch { /* private mode */ }
       });
-    }
+    });
 
     // Live status from the local API (never blocks the page).
     try {
