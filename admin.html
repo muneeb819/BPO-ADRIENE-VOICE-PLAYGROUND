@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Panel — BPO Adriene Playground</title>
+  <meta name="description" content="Combined admin dashboard: every system, module and adapter in one view with live charts and scales." />
+  <link rel="icon" href="/assets/favicon.svg" type="image/x-icon" />
+  <link rel="stylesheet" href="/assets/css/fonts.css" />
+  <script src="/assets/vendor/tailwind.js"></script>
+  <link rel="stylesheet" href="/assets/css/app.css" />
+</head>
+<body>
+  <div id="mobile-shell"></div>
+  <aside id="sidebar"></aside>
+
+  <div class="flex min-h-screen flex-col lg:pl-[268px]">
+    <main class="mx-auto w-full max-w-[1600px] flex-1 px-4 py-5 sm:px-6 lg:px-8 lg:py-7">
+      <div id="page-header"></div>
+
+      <!-- toolbar -->
+      <div class="mt-4 flex flex-wrap items-center gap-2">
+        <div class="flex items-center gap-2 rounded-xl border border-slate-200/70 bg-slate-50/40 px-3 py-2 text-[10.5px] text-slate-500">
+          <span data-icon="layers"></span>
+          <span>Admin / Overview</span>
+        </div>
+        <input class="input input-sm min-w-[180px] flex-1" id="admin-search" placeholder="Filter modules, providers, agents…" aria-label="Filter dashboard" />
+        <button class="btn btn-outline btn-xs" id="admin-refresh" type="button"><span data-icon="refresh"></span> Refresh</button>
+        <button class="btn btn-primary btn-xs" id="admin-export" type="button"><span data-icon="download"></span> Export JSON</button>
+        <span class="pill pill-ghost no-dot ml-auto" id="admin-updated">loading…</span>
+      </div>
+
+      <!-- KPI row -->
+      <section class="mt-3 grid gap-3 xl:grid-cols-[minmax(0,2.2fr)_repeat(3,minmax(0,1fr))]">
+        <div class="card" id="kpi-ops">
+          <div class="flex items-center justify-between gap-2">
+            <h2 class="section-title">Voice Operations</h2>
+            <span class="chip chip-mono" id="ops-range">last 30 days</span>
+          </div>
+          <p class="section-sub">Sessions and turns per day with the stored latency trend.</p>
+          <div class="mt-2" id="ops-chart"></div>
+          <div class="mt-2 flex flex-wrap gap-3 text-[9px] text-slate-400">
+            <span class="flex items-center gap-1.5"><span class="h-2 w-2 rounded-sm bg-violet-500"></span>Sessions</span>
+            <span class="flex items-center gap-1.5"><span class="h-2 w-2 rounded-sm bg-cyan-400"></span>Turns</span>
+            <span class="flex items-center gap-1.5"><span class="h-0.5 w-3 rounded bg-emerald-400"></span>p95 latency</span>
+          </div>
+        </div>
+
+        <div class="card flex flex-col" id="kpi-agents">
+          <div class="flex items-center justify-between gap-2">
+            <h2 class="section-title">Agents</h2>
+            <span class="chip chip-mono" id="agents-count">—</span>
+          </div>
+          <div class="mt-2 flex-1" id="agents-donut"></div>
+          <div class="mt-2 space-y-1" id="agents-legend"></div>
+        </div>
+
+        <div class="card flex flex-col" id="kpi-providers">
+          <div class="flex items-center justify-between gap-2">
+            <h2 class="section-title">Adapter health</h2>
+            <span class="chip chip-mono" id="providers-count">—</span>
+          </div>
+          <div class="mt-2 flex-1" id="providers-donut"></div>
+          <div class="mt-2 space-y-1" id="providers-legend"></div>
+        </div>
+
+        <div class="card flex flex-col" id="kpi-deepgram">
+          <div class="flex items-center justify-between gap-2">
+            <h2 class="section-title">Deepgram</h2>
+            <span class="pill pill-green no-dot" id="dg-state">—</span>
+          </div>
+          <p class="section-sub truncate" id="dg-project">—</p>
+          <div class="mt-2 flex-1" id="deepgram-donut"></div>
+          <div class="mt-2 space-y-1" id="deepgram-legend"></div>
+        </div>
+      </section>
+
+      <!-- row 2 -->
+      <section class="mt-3 grid gap-3 xl:grid-cols-4">
+        <div class="card" id="kpi-sessions">
+          <div class="flex items-center justify-between gap-2">
+            <h2 class="section-title">Session outcomes</h2>
+            <span class="chip chip-mono" id="sessions-count">—</span>
+          </div>
+          <div class="mt-2" id="sessions-donut"></div>
+          <div class="mt-2 space-y-1" id="sessions-legend"></div>
+        </div>
+
+        <div class="card" id="kpi-latency">
+          <div class="flex items-center justify-between gap-2">
+            <h2 class="section-title">Latency profile</h2>
+            <span class="chip chip-mono" id="latency-samples">—</span>
+          </div>
+          <div class="mt-2" id="latency-gauge"></div>
+          <div class="mt-2" id="latency-bars"></div>
+        </div>
+
+        <div class="card" id="kpi-intents">
+          <div class="flex items-center justify-between gap-2">
+            <h2 class="section-title">Intent mix</h2>
+            <span class="chip chip-mono" id="intents-count">—</span>
+          </div>
+          <div class="mt-2" id="intents-bars"></div>
+        </div>
+
+        <div class="card" id="kpi-quality">
+          <div class="flex items-center justify-between gap-2">
+            <h2 class="section-title">Quality &amp; assurance</h2>
+            <span class="pill pill-green no-dot" id="quality-state">—</span>
+          </div>
+          <div class="mt-2" id="quality-bars"></div>
+          <div class="mt-2 text-[9px] leading-relaxed text-slate-400" id="quality-note"></div>
+        </div>
+      </section>
+
+      <!-- row 3 -->
+      <section class="mt-3 grid gap-3 xl:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+        <div class="card">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h2 class="section-title">Modules &amp; systems</h2>
+              <p class="section-sub">Every module of the project with its live state and headline metric.</p>
+            </div>
+            <span class="chip chip-mono" id="modules-count">—</span>
+          </div>
+          <div class="mt-3 grid gap-2 sm:grid-cols-2 xl:grid-cols-3" id="modules-grid"></div>
+        </div>
+
+        <div class="card">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h2 class="section-title">Runtime &amp; Deepgram</h2>
+              <p class="section-sub">Infrastructure facts and the connected Deepgram project.</p>
+            </div>
+          </div>
+          <div class="mt-3 space-y-1.5" id="runtime-list"></div>
+        </div>
+      </section>
+    </main>
+    <footer id="footer"></footer>
+  </div>
+
+  <script src="/assets/js/api.js"></script>
+  <script src="/assets/js/shell.js"></script>
+  <script src="/assets/js/page-admin.js"></script>
+</body>
+</html>

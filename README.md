@@ -123,7 +123,8 @@ Without a key, the playground still works in text mode and uses browser Speech S
 
 | Route | Purpose |
 |---|---|
-| `/` | Foundation status, architecture, live health snapshot, quick actions |
+| `/` | **Admin Panel** — combined dashboard: live operations chart, adapter/agent/session/Deepgram donuts, latency gauge, intent & quality bars, module registry, runtime facts |
+| `/foundation` | Foundation status, architecture, live health snapshot, quick actions |
 | `/agents` | Agent CRUD, Deepgram voice-agent builder (Voice/LLM/Functions/Transcription tabs, use-case presets, greeting), providers, tools, version history and rollback |
 | `/playground` | Live voice session: mic → STT → deterministic rules → TTS, barge-in, latency |
 | `/lab` | Provider catalogue, connection tests, Deepgram TTS/STT smoke tests, voice preview |
@@ -205,6 +206,7 @@ Public, localhost-only by default:
 | GET | `/api/providers` | Provider catalogue (no secrets) |
 | GET | `/api/deepgram/account` | Live Deepgram project, model lists and voice count (never the key) |
 | GET | `/api/deepgram/compliance` | Everything the project consumes from Deepgram: surfaces, per-agent checks, voice catalogue, source map |
+| GET | `/api/admin/overview` | Combined admin payload: system facts, counts, latency, daily traffic, intents, provider mix, module registry |
 | POST | `/api/providers/{id}/test` | Connection test |
 | POST | `/api/tts` | Flux / Aura TTS proxy (max 1200 chars) |
 | POST | `/api/stt` | Nova-2 STT proxy (audio ≤ 8 MB) |

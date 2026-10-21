@@ -40,6 +40,7 @@ import signal
 import sqlite3
 import string
 import sys
+import sys
 import threading
 import time
 import urllib.error
@@ -1325,7 +1326,19 @@ def deepgram_stt(audio: bytes, content_type: str, config: dict | None = None) ->
         return None, str(exc)[:200]
 
 
-_DEEPGRAM_ACCOUNT_CACHE: dict = {"at": 0.0, "data": None}
+_DEEPGRAM_ACCOUNT_CACHE: dict = {"at": 0.0, "data": None, "refreshing": False}
+DEEPGRAM_ACCOUNT_TTL = 300  # seconds - project data changes rarely
+
+
+def _deepgram_account_refresh() -> None:
+    """Refresh the cached account view in the background (stale-while-revalidate)."""
+    if _DEEPGRAM_ACCOUNT_CACHE.get("refreshing"):
+        return
+    _DEEPGRAM_ACCOUNT_CACHE["refreshing"] = True
+    try:
+        deepgram_account(force=True)
+    finally:
+        _DEEPGRAM_ACCOUNT_CACHE["refreshing"] = False
 
 
 def deepgram_compliance() -> dict:
@@ -1515,13 +1528,18 @@ def deepgram_compliance() -> dict:
     }
 
 
-def deepgram_account() -> dict:
+def deepgram_account(force: bool = False) -> dict:
     """Live view of the connected Deepgram account (never returns the key)."""
     if not DEEPGRAM_API_KEY:
         return {"connected": False, "message": "DEEPGRAM_API_KEY is not configured on the server."}
-    # 60 second cache - the Voice Lab polls this on every page load.
     cached = _DEEPGRAM_ACCOUNT_CACHE.get("data")
-    if cached and (time.time() - _DEEPGRAM_ACCOUNT_CACHE["at"]) < 60:
+    age = time.time() - _DEEPGRAM_ACCOUNT_CACHE.get("at", 0)
+    if cached and not force:
+        if age < DEEPGRAM_ACCOUNT_TTL:
+            return cached
+        # Serve the cached snapshot immediately, refresh out of band so the
+        # dashboard and the Voice Lab never wait on Deepgram.
+        threading.Thread(target=_deepgram_account_refresh, daemon=True).start()
         return cached
 
     info = {
@@ -1757,6 +1775,179 @@ def api_health(handler, query) -> tuple[int, dict]:
             "anthropic": bool(ANTHROPIC_API_KEY),
             "auth": AUTH_ENABLED,
         },
+    }
+
+
+def api_admin_overview():
+    """Combined admin panel data: every system and module in one payload."""
+    started = time.perf_counter()
+    now = time.time()
+
+    with db() as conn:
+        def count(table, where=""):
+            sql = f"SELECT COUNT(*) FROM {table}" + (f" WHERE {where}" if where else "")
+            return conn.execute(sql).fetchone()[0]
+
+        agents = [agent_row(r) for r in conn.execute(
+            "SELECT * FROM agents ORDER BY updated_at DESC").fetchall()]
+        providers = [provider_row(r) for r in conn.execute(
+            "SELECT * FROM providers").fetchall()]
+        sessions = [dict(r) for r in conn.execute(
+            "SELECT id, agent_id, status, started_at, ended_at FROM sessions "
+            "ORDER BY started_at DESC").fetchall()]
+        turns = conn.execute(
+            "SELECT role, intent, latency_ms, created_at FROM turns").fetchall()
+        events = conn.execute("SELECT type FROM session_events").fetchall()
+        test_runs = conn.execute(
+            "SELECT status, passed, failed, total_cases FROM test_runs").fetchall()
+        telephony = conn.execute(
+            "SELECT event_type FROM telephony_logs").fetchall()
+        retention = conn.execute("SELECT * FROM retention LIMIT 1").fetchone()
+        cases = conn.execute("SELECT COUNT(*) FROM test_cases").fetchone()[0]
+
+    # --- module registry (one row per module of the project) ----------------
+    deepgram_online = bool(DEEPGRAM_API_KEY)
+    connected = sum(1 for p in providers if p.get("status") == "connected")
+    total_providers = len(providers)
+    completed = sum(1 for s in sessions if s.get("status") == "completed")
+    errored = sum(1 for s in sessions if s.get("status") == "error")
+    interrupted = sum(1 for s in sessions if s.get("status") == "interrupted")
+    active = sum(1 for s in sessions if s.get("status") == "active")
+    pass_runs = sum(1 for r in test_runs if r["status"] == "passed")
+    total_cases = sum(r["total_cases"] or 0 for r in test_runs)
+    passed_cases = sum(r["passed"] or 0 for r in test_runs)
+
+    latencies = [r["latency_ms"] for r in turns if r["latency_ms"]]
+    intents = {}
+    for r in turns:
+        if r["intent"]:
+            intents[r["intent"]] = intents.get(r["intent"], 0) + 1
+    daily = {}
+    for r in turns:
+        day = (r["created_at"] or "")[:10]
+        if day:
+            daily[day] = daily.get(day, 0) + 1
+    session_daily = {}
+    for s in sessions:
+        day = (s.get("started_at") or "")[:10]
+        if day:
+            session_daily[day] = session_daily.get(day, 0) + 1
+
+    voice_counts = {}
+    for a in agents:
+        voice = a.get("voice") or "unset"
+        family = "Flux" if voice.startswith("flux-") else ("Aura" if voice.startswith("aura-") else "Other")
+        voice_counts[family] = voice_counts.get(family, 0) + 1
+
+    modules = [
+        {"id": "foundation", "name": "Foundation", "route": "/",
+         "status": "live", "metric": f"{len(agents)} agents", "note": "Health, storage, capability flags"},
+        {"id": "agents", "name": "Agent Studio", "route": "/agents",
+         "status": "live", "metric": f"{len(agents)} profiles", "note": "Voice-agent builder, versions, rollback"},
+        {"id": "playground", "name": "Voice Playground", "route": "/playground",
+         "status": "live", "metric": f"{len(sessions)} sessions", "note": "Mic → STT → policy → TTS"},
+        {"id": "lab", "name": "Voice Lab", "route": "/lab",
+         "status": "live" if deepgram_online else "degraded",
+         "metric": f"{connected}/{total_providers} adapters", "note": "Provider adapters and smoke tests"},
+        {"id": "testing", "name": "Scenario Testing", "route": "/testing",
+         "status": "live", "metric": f"{cases} fixtures", "note": "Regression runs, transcripts, export"},
+        {"id": "analytics", "name": "Analytics", "route": "/analytics",
+         "status": "live", "metric": f"{len(turns)} turns", "note": "Stored latency, intents, provider mix"},
+        {"id": "security", "name": "Security", "route": "/security",
+         "status": "live", "metric": "redaction + scan", "note": "Secret posture, validation, retention"},
+        {"id": "telephony", "name": "Telephony", "route": "/telephony",
+         "status": "mock-only", "metric": f"{len(telephony)} log rows",
+         "note": "Mock SIP - live dialling blocked"},
+        {"id": "deepgram", "name": "Deepgram Compliance", "route": "/deepgram",
+         "status": "live" if deepgram_online else "offline",
+         "metric": f"{len(FLUX_VOICES) + len(AURA_VOICES)} voices" if deepgram_online else "no key",
+         "note": "Account, surfaces, per-agent compliance"},
+        {"id": "docs", "name": "Docs & Hardening", "route": "/docs",
+         "status": "live", "metric": f"v{VERSION}", "note": "Launch guide, live verification"},
+    ]
+
+    account = deepgram_account()
+    compliance = deepgram_compliance()
+    agent_verdicts = {}
+    for row in compliance.get("agents") or []:
+        agent_verdicts[row.get("verdict")] = agent_verdicts.get(row.get("verdict"), 0) + 1
+
+    db_bytes = 0
+    try:
+        db_bytes = (DATA_DIR / "adriene.db").stat().st_size
+    except OSError:
+        pass
+
+    return {
+        "generatedAt": now_iso(),
+        "buildMs": int((time.perf_counter() - started) * 1000),
+        "system": {
+            "ok": True,
+            "version": VERSION,
+            "environment": "local",
+            "database": "SQLite",
+            "dbBytes": db_bytes,
+            "uptimeSec": int(now - SERVER_STARTED),
+            "telephony": "enabled" if TELEPHONY_ENABLED else "disabled",
+            "auth": AUTH_ENABLED,
+            "python": f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}",
+            "rateLimitPerMin": RATE_LIMIT,
+            "retention": jloads(retention["audio_days"], 7) if retention else 7,
+        },
+        "counts": {
+            "agents": len(agents),
+            "sessions": len(sessions),
+            "turns": len(turns),
+            "events": len(events),
+            "testCases": cases,
+            "testRuns": len(test_runs),
+            "telephonyLogs": len(telephony),
+            "providers": total_providers,
+            "providersConnected": connected,
+        },
+        "sessions": {
+            "completed": completed, "error": errored,
+            "interrupted": interrupted, "active": active,
+            "total": len(sessions),
+        },
+        "latency": {
+            "p50": percentile(latencies, 50), "p90": percentile(latencies, 90),
+            "p95": percentile(latencies, 95), "sampleSize": len(latencies),
+        },
+        "daily": [
+            {"day": day, "turns": daily.get(day, 0), "sessions": session_daily.get(day, 0)}
+            for day in sorted(set(daily) | set(session_daily))
+        ][-30:],
+        "intents": [{"intent": k, "count": v} for k, v in
+                    sorted(intents.items(), key=lambda kv: -kv[1])][:10],
+        "providers": [
+            {"name": p.get("displayName"), "type": p.get("type"), "status": p.get("status"),
+             "default": p.get("isDefault")}
+            for p in providers
+        ],
+        "agentStatus": [
+            {"status": s, "count": sum(1 for a in agents if a.get("status") == s)}
+            for s in sorted({a.get("status") for a in agents if a.get("status")})
+        ],
+        "voiceMix": [{"family": k, "count": v} for k, v in sorted(voice_counts.items())],
+        "quality": {
+            "runs": len(test_runs),
+            "runsPassed": pass_runs,
+            "cases": total_cases,
+            "casesPassed": passed_cases,
+            "passRate": round((passed_cases / total_cases) * 100, 1) if total_cases else None,
+        },
+        "deepgram": {
+            "connected": bool(account.get("connected")),
+            "project": account.get("project") or {},
+            "voices": len(FLUX_VOICES) + len(AURA_VOICES),
+            "sttModels": account.get("sttModels") or [],
+            "llmModels": len(LLM_MODEL_CATALOG),
+            "verdicts": agent_verdicts,
+            "consoleAgents": len((account.get("console") or {}).get("agents") or []),
+            "consoleKeys": len((account.get("console") or {}).get("keys") or []),
+        },
+        "modules": modules,
     }
 
 
@@ -2791,8 +2982,9 @@ def api_delete_artifacts(handler, method):
 
 
 PAGE_ROUTES = {
-    "/": "index.html",
+    "/": "admin.html",
     "/foundation": "index.html",
+    "/admin": "admin.html",
     "/agents": "agents.html",
     "/playground": "playground.html",
     "/lab": "lab.html",
@@ -3071,6 +3263,10 @@ class Handler(BaseHTTPRequestHandler):
                 require("GET")
                 return self.write_api_result(deepgram_compliance())
 
+            if path == "/api/admin/overview":
+                require("GET")
+                return self.write_api_result(api_admin_overview())
+
             self.send_error_json(404, "API route not found")
         except ApiError as exc:
             self.send_error_json(exc.status, exc.message)
@@ -3194,6 +3390,11 @@ def main():
 
     if not args.no_open:
         threading.Timer(1.0, lambda: webbrowser.open(url)).start()
+
+    # Warm the Deepgram account cache in the background so the admin panel
+    # and the Voice Lab answer instantly on the first request.
+    if DEEPGRAM_API_KEY:
+        threading.Thread(target=_deepgram_account_refresh, daemon=True).start()
 
     def shutdown(signum, frame):
         print("\n  Shutting down gracefully…")

@@ -5,7 +5,8 @@
 
 const Shell = (() => {
   const NAV = [
-    { href: '/', key: 'foundation', label: 'Foundation', sub: 'Health & Status', icon: 'home' },
+    { href: '/', key: 'admin', label: 'Admin Panel', sub: 'Combined Dashboard', icon: 'grid' },
+    { href: '/foundation', key: 'foundation', label: 'Foundation', sub: 'Health & Status', icon: 'home' },
     { href: '/playground', key: 'playground', label: 'Voice Playground', sub: 'Mic → Response Loop', icon: 'mic' },
     { href: '/analytics', key: 'analytics', label: 'Analytics', sub: 'Latency & Usage', icon: 'chart' },
   ];
@@ -36,6 +37,7 @@ const Shell = (() => {
 
   const ICONS = {
     home: '<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9.5 21v-6h5v6"/>',
+    grid: '<rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/>',
     layers: '<path d="m12 2 9 5-9 5-9-5 9-5Z"/><path d="m3 12 9 5 9-5"/><path d="m3 17 9 5 9-5"/>',
     mic: '<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><path d="M12 17v5"/><path d="M8 22h8"/>',
     flask: '<path d="M9 3h6"/><path d="M10 3v6L4.5 19a2 2 0 0 0 1.8 3h11.4a2 2 0 0 0 1.8-3L14 9V3"/><path d="M7.5 14h9"/>',

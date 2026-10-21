@@ -407,6 +407,35 @@ def check_agent_transcription(c: Client):
             c.delete(f"/api/agents/{agent_id}")
 
 
+def check_admin_overview(c: Client):
+    """The combined admin dashboard payload must cover every system/module."""
+    code, data = c.get("/api/admin/overview")
+    require(code == 200, f"admin overview returned {code}")
+    modules = data.get("modules") or []
+    require(len(modules) >= 9, f"only {len(modules)} modules reported")
+    for module in modules:
+        require(module.get("status") and module.get("metric") and module.get("route"),
+                f"module {module.get('id')} is missing status/metric/route")
+    counts = data.get("counts") or {}
+    for key in ("agents", "sessions", "turns", "providers", "testRuns"):
+        require(key in counts, f"admin counts missing '{key}'")
+    require("latency" in data and "p95" in data["latency"], "latency percentiles missing")
+    require(isinstance(data.get("daily"), list), "daily series missing")
+    require(isinstance(data.get("intents"), list), "intent mix missing")
+    require(isinstance(data.get("voiceMix"), list), "voice mix missing")
+    require((data.get("deepgram") or {}).get("connected") is True,
+            "admin panel does not report the Deepgram connection")
+    require(data.get("buildMs") is not None, "admin overview has no build time")
+    # The default route must serve the combined dashboard.
+    status, body = c.get("/")
+    require(status == 200, f"default route returned {status}")
+    text = body.decode("utf-8", "ignore") if isinstance(body, bytes) else str(body)
+    require("Combined Operations Dashboard" in text or "Admin Panel" in text,
+            "the default route is not the admin dashboard")
+    return (f"{len(modules)} modules · {counts.get('turns')} turns · "
+            f"p95={data['latency'].get('p95')} ms · {data.get('buildMs')} ms build")
+
+
 def check_deepgram_compliance(c: Client):
     """The Deepgram Compliance page data must be complete and leak nothing."""
     code, data = c.get("/api/deepgram/compliance")
@@ -568,6 +597,8 @@ def main() -> int:
     run_check(report, "Providers", "Deepgram account connection", lambda: check_deepgram_account(client),
               skip=args.skip_live, skip_reason="--skip-live")
     run_check(report, "Providers", "Deepgram compliance view", lambda: check_deepgram_compliance(client),
+              skip=args.skip_live, skip_reason="--skip-live")
+    run_check(report, "Admin panel", "Combined dashboard overview", lambda: check_admin_overview(client),
               skip=args.skip_live, skip_reason="--skip-live")
     run_check(report, "Providers", "Connection tests", lambda: check_provider_tests(client),
               skip=args.skip_live, skip_reason="--skip-live")
