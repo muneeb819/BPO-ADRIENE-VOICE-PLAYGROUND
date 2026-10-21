@@ -63,7 +63,7 @@ class Client:
                 content_type: str | None = None):
         url = path if path.startswith("http") else f"{self.base}{path}"
         data = None
-        headers = {"Accept": "application/json"}
+        headers = {"Accept": "*/*"}
         if raw is not None:
             data = raw
             headers["Content-Type"] = content_type or "application/octet-stream"
@@ -213,17 +213,21 @@ def check_no_secret_leak(c: Client):
     for path in FORBIDDEN_PATHS:
         status, _ = c.get(path)
         require(status == 404, f"{path} returned {status} (expected 404)")
+    # README is served by the Python backend but intentionally not published to
+    # IIS - either answer is acceptable, it just must never contain a secret.
     status, body = c.get("/README.md")
-    require(status == 200, f"README.md returned {status}")
-    text = body.decode("utf-8", "ignore") if isinstance(body, bytes) else str(body)
-    require("DEEPGRAM_API_KEY=your_rotated_key" in text, "README placeholder missing")
-    for marker in ("sk-", "xoxb-", "AKIA"):
-        require(marker not in text, f"README leaks a credential marker ({marker})")
-    for line in text.splitlines():
-        if line.strip().startswith("DEEPGRAM_API_KEY="):
-            require(line.split("=", 1)[1].strip() == "your_rotated_key",
-                    "README contains a non-placeholder Deepgram key")
-    return f"{len(FORBIDDEN_PATHS)} sensitive paths blocked"
+    if status == 200:
+        text = body.decode("utf-8", "ignore") if isinstance(body, bytes) else str(body)
+        require("DEEPGRAM_API_KEY=your_rotated_key" in text, "README placeholder missing")
+        for marker in ("sk-", "xoxb-", "AKIA"):
+            require(marker not in text, f"README leaks a credential marker ({marker})")
+        for line in text.splitlines():
+            if line.strip().startswith("DEEPGRAM_API_KEY="):
+                require(line.split("=", 1)[1].strip() == "your_rotated_key",
+                        "README contains a non-placeholder Deepgram key")
+        return f"{len(FORBIDDEN_PATHS)} sensitive paths blocked, README clean"
+    require(status == 404, f"README.md returned {status} (expected 200 or 404)")
+    return f"{len(FORBIDDEN_PATHS)} sensitive paths blocked, README not published"
 
 
 def check_providers(c: Client):

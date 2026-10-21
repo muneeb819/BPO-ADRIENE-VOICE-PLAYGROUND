@@ -183,7 +183,25 @@ try {
       <mimeMap fileExtension=".woff2" mimeType="font/woff2" />
     </staticContent>
 "@
-    $security = @"
+    $headers = @"
+    <httpProtocol>
+      <customHeaders>
+        <add name="X-Content-Type-Options" value="nosniff" />
+        <add name="X-Frame-Options" value="SAMEORIGIN" />
+        <add name="Referrer-Policy" value="no-referrer" />
+      </customHeaders>
+    </httpProtocol>
+"@
+    $securityHeaders = @"
+    <security>
+      <headers>
+        <add name="X-Content-Type-Options" value="nosniff" />
+        <add name="X-Frame-Options" value="SAMEORIGIN" />
+        <add name="Referrer-Policy" value="no-referrer" />
+      </headers>
+    </security>
+"@
+    $requestFiltering = @"
     <security>
       <requestFiltering>
         <fileExtensions>
@@ -192,11 +210,6 @@ try {
           <add fileExtension=".db" allowed="false" />
         </fileExtensions>
       </requestFiltering>
-      <headers>
-        <add name="X-Content-Type-Options" value="nosniff" />
-        <add name="X-Frame-Options" value="SAMEORIGIN" />
-        <add name="Referrer-Policy" value="no-referrer" />
-      </headers>
     </security>
 "@
     $rewrite = @"
@@ -221,12 +234,6 @@ try {
   </system.webServer>
 </configuration>
 "@
-    $variants = @(
-        @{ name = "minimal";      body = $head + $tail },
-        @{ name = "static+fonts"; body = $head + $static + $tail },
-        @{ name = "security";     body = $head + $static + $security + $tail },
-        @{ name = "rewrite+proxy"; body = $head + $static + $security + $rewrite + $tail }
-    )
 
     # --- 6. create / refresh the IIS site ----------------------------------
     Invoke-AppCmd "delete site `"$SiteName`"" "delete old site" -AllowFailure | Out-Null
@@ -281,24 +288,41 @@ try {
     # --- 9. find a working web.config, then verify every route -------------
     $lan = "http://$BindAddress`:$Port"
     $loop = "http://127.0.0.1`:$Port"
+    $webConfigPath = Join-Path $WebRoot "web.config"
+
+    # Each optional fragment is validated on its own; a fragment that IIS
+    # rejects (locked section, bad value) is dropped instead of breaking the site.
+    $assembled = $head
+    $fragments = @(
+        @{ name = "staticContent";        body = $static },
+        @{ name = "httpProtocol headers"; body = $headers },
+        @{ name = "security headers";     body = $securityHeaders },
+        @{ name = "requestFiltering";     body = $requestFiltering }
+    )
+    foreach ($fragment in $fragments) {
+        Set-Content -Path $webConfigPath -Value ($assembled + $fragment.body + $tail) -Encoding UTF8
+        Start-Sleep -Milliseconds 1200
+        $probe = Test-Http $lan
+        if ($probe.status -eq 200) {
+            $assembled += $fragment.body
+            Write-Log "web.config fragment '$($fragment.name)' accepted"
+        } else {
+            Write-Log "web.config fragment '$($fragment.name)' rejected (HTTP $($probe.status)) - skipped" "WARN"
+        }
+    }
+
+    # Finally the rewrite rules: page routes + the /api reverse proxy.
+    Set-Content -Path $webConfigPath -Value ($assembled + $rewrite + $tail) -Encoding UTF8
+    Start-Sleep -Milliseconds 1500
     $probePaths = @("/", "/agents", "/api/health")
-    $chosenVariant = $null
-    foreach ($variant in $variants) {
-        Set-Content -Path (Join-Path $WebRoot "web.config") -Value $variant.body -Encoding UTF8
-        Start-Sleep -Milliseconds 1500
-        $probeResults = @()
-        foreach ($p in $probePaths) { $probeResults += Test-Http "$lan$p" }
-        $codes = ($probeResults | ForEach-Object { $_.status }) -join ","
-        Write-Log "config variant '$($variant.name)' -> [$codes]"
-        $bad = @($probeResults | Where-Object { $_.status -ne 200 })
-        if ($bad.Count -eq 0) { $chosenVariant = $variant; break }
-        if ($bad[0].body) { Write-Log "   body: $($bad[0].body.Substring(0, [Math]::Min(240, $bad[0].body.Length)))" }
+    $probeResults = @()
+    foreach ($p in $probePaths) { $probeResults += Test-Http "$lan$p" }
+    Write-Log ("rewrite rules -> [" + (($probeResults | ForEach-Object { $_.status }) -join ",") + "]")
+    if (@($probeResults | Where-Object { $_.status -ne 200 }).Count -gt 0) {
+        Write-Log "Rewrite rules did not serve every probe route - falling back to static-only." "WARN"
+        Set-Content -Path $webConfigPath -Value ($assembled + $tail) -Encoding UTF8
+        Start-Sleep -Milliseconds 1200
     }
-    if (-not $chosenVariant) {
-        Write-Log "No web.config variant served every probe route - see the variant results above." "ERROR"
-        throw "IIS site does not answer on $lan"
-    }
-    Write-Log "Using web.config variant '$($chosenVariant.name)'"
 
     $paths = @("/", "/agents", "/playground", "/lab", "/testing", "/analytics", "/security", "/telephony", "/docs", "/api/health")
     $results = @{}
