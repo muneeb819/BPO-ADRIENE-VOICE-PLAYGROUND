@@ -423,40 +423,42 @@ def check_livekit(c: Client):
     require(isinstance(rooms.get("rooms"), list), "rooms payload is wrong")
 
     room_name = "adriene-smoke-room"
-    code, created = c.post("/api/livekit/rooms", body={"name": room_name, "metadata": "smoke"})
-    require(code in (200, 201), f"room create returned {code}: {str(created)[:120]}")
-    require(created.get("name") == room_name, f"room not created: {created}")
+    try:
+        code, created = c.post("/api/livekit/rooms", body={"name": room_name, "metadata": "smoke"})
+        require(code in (200, 201), f"room create returned {code}: {str(created)[:120]}")
+        require(created.get("name") == room_name, f"room not created: {created}")
 
-    code, token = c.post("/api/livekit/token", body={"room": room_name, "identity": "smoke"})
-    require(code == 200, f"token returned {code}")
-    require(len(token.get("token") or "") > 100, "join token is empty")
-    require(token.get("room") == room_name, "token room mismatch")
+        code, token = c.post("/api/livekit/token", body={"room": room_name, "identity": "smoke"})
+        require(code == 200, f"token returned {code}")
+        require(len(token.get("token") or "") > 100, "join token is empty")
+        require(token.get("room") == room_name, "token room mismatch")
 
-    # The room list is eventually consistent - give it a moment to register.
-    listed = []
-    for _ in range(8):
-        code, rooms2 = c.get("/api/livekit/rooms")
-        require(code == 200, f"rooms after create returned {code}")
-        listed = rooms2.get("rooms") or []
-        if any(r.get("name") == room_name for r in listed):
-            break
-        time.sleep(1.5)
-    require(any(r.get("name") == room_name for r in listed),
-            "created room is not listed")
+        # The room list is eventually consistent - give it a moment to register.
+        listed = []
+        for _ in range(8):
+            code, rooms2 = c.get("/api/livekit/rooms")
+            require(code == 200, f"rooms after create returned {code}")
+            listed = rooms2.get("rooms") or []
+            if any(r.get("name") == room_name for r in listed):
+                break
+            time.sleep(1.5)
+        require(any(r.get("name") == room_name for r in listed),
+                "created room is not listed")
 
-    code, built = c.post("/api/livekit/build", body={
-        "name": "Smoke Agent", "greeting": "Hi there", "prompt": "You are a smoke test agent.",
-        "sttModel": "xai/stt-1", "llmModel": "google/gemma-4-31b-it",
-        "ttsModel": "fishaudio/s2.1-pro", "ttsVoice": "flux-brittany-en"})
-    require(code == 200, f"builder returned {code}")
-    files = built.get("files") or {}
-    for name in ("agent.py", ".env.example", "Dockerfile", "requirements.txt"):
-        require(name in files, f"generated bundle is missing {name}")
-    require("AgentSession" in files["agent.py"], "generated worker has no AgentSession")
-    require("flux-brittany-en" not in files[".env.example"] or True, "env check")
-    require("LIVEKIT_API_SECRET" in files[".env.example"], "generated env has no LiveKit secret")
-    return (f"{status.get('host')} · {len(rooms2.get('rooms') or [])} room(s) · "
-            f"bundle {len(files)} files")
+        code, built = c.post("/api/livekit/build", body={
+            "name": "Smoke Agent", "greeting": "Hi there", "prompt": "You are a smoke test agent.",
+            "sttModel": "xai/stt-1", "llmModel": "google/gemma-4-31b-it",
+            "ttsModel": "fishaudio/s2.1-pro", "ttsVoice": "flux-brittany-en"})
+        require(code == 200, f"builder returned {code}")
+        files = built.get("files") or {}
+        for name in ("agent.py", ".env.example", "Dockerfile", "requirements.txt"):
+            require(name in files, f"generated bundle is missing {name}")
+        require("AgentSession" in files["agent.py"], "generated worker has no AgentSession")
+        require("LIVEKIT_API_SECRET" in files[".env.example"], "generated env has no LiveKit secret")
+        return (f"{status.get('host')} · {len(listed)} room(s) · "
+                f"bundle {len(files)} files")
+    finally:
+        c.delete(f"/api/livekit/rooms/{room_name}")
 
 
 def check_admin_overview(c: Client):
