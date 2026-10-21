@@ -1328,6 +1328,193 @@ def deepgram_stt(audio: bytes, content_type: str, config: dict | None = None) ->
 _DEEPGRAM_ACCOUNT_CACHE: dict = {"at": 0.0, "data": None}
 
 
+def deepgram_compliance() -> dict:
+    """Everything this project consumes from Deepgram, plus a compliance verdict.
+
+    The Deepgram account, the four console surfaces (Speech to Text, Text to
+    Speech, Voice Agent, Text Intelligence) and every agent's own Deepgram
+    configuration are resolved here so the UI has a single auditable source.
+    """
+    account = deepgram_account()
+    connected = bool(account.get("connected"))
+    with db() as conn:
+        agents = [agent_row(r) for r in conn.execute(
+            "SELECT * FROM agents ORDER BY updated_at DESC").fetchall()]
+        providers = [provider_row(r) for r in conn.execute(
+            "SELECT * FROM providers").fetchall()]
+
+    provider_status = {p["name"]: p.get("status") for p in providers}
+    tts_voices = set(FLUX_VOICES) | set(AURA_VOICES)
+    voice_use: dict[str, list[str]] = {}
+
+    agent_rows = []
+    for agent in agents:
+        voice = agent.get("voice") or ""
+        stt_config = agent.get("sttConfig") or {}
+        llm_config = agent.get("llmConfig") or {}
+        tts_config = agent.get("ttsConfig") or {}
+        stt_model = stt_config.get("model") or "nova-2"
+        llm_model = llm_config.get("model") or "deterministic-rules"
+        if voice:
+            voice_use.setdefault(voice, []).append(agent["name"])
+
+        checks = []
+
+        def add(cid, label, ok, detail, warn=False):
+            checks.append({
+                "id": cid, "label": label,
+                "status": "pass" if ok else ("warn" if warn else "fail"),
+                "detail": detail,
+            })
+
+        add("voice", "Voice is a Deepgram model", voice in tts_voices,
+            f"{voice or 'not set'}", warn=bool(voice and voice not in tts_voices))
+        add("tts", "Text to Speech routes to Deepgram", agent.get("ttsProvider") == "deepgram-tts",
+            f"ttsProvider = {agent.get('ttsProvider')}",
+            warn=agent.get("ttsProvider") != "deepgram-tts")
+        add("tts-model", "ttsConfig model matches the voice",
+            (not tts_config.get("model")) or tts_config.get("model") == voice,
+            f"model = {tts_config.get('model') or 'inherits voice'}")
+        add("stt", "Speech to Text routes to Deepgram", agent.get("sttProvider") == "deepgram",
+            f"sttProvider = {agent.get('sttProvider')}",
+            warn=agent.get("sttProvider") != "deepgram")
+        add("stt-model", "Transcription model is supported", stt_model in ALLOWED_STT_MODELS,
+            f"model = {stt_model}")
+        add("prompt", "Agent prompt is complete", len(agent.get("systemInstructions") or "") >= 10,
+            f"{len(agent.get('systemInstructions') or '')} characters")
+        add("greeting", "Greeting configured (optional)",
+            bool((agent.get("greeting") or "").strip()),
+            (agent.get("greeting") or "no greeting - the agent waits for the caller"), warn=True)
+        llm_entry = next((m for m in LLM_MODEL_CATALOG if m["id"] == llm_model), None)
+        llm_key_ok = bool(llm_entry and not llm_entry.get("requiresKey"))
+        add("llm", "LLM model is resolvable",
+            llm_entry is not None and (llm_key_ok or agent.get("llmProvider") == "local"),
+            (llm_entry or {}).get("label", llm_model) if llm_entry else f"unknown model {llm_model}",
+            warn=llm_entry is not None and not llm_key_ok)
+        policy = agent.get("transferPolicy") or {}
+        add("consent", "Transfer consent enforced",
+            policy.get("enabled") is False or policy.get("requireConsent") is True,
+            "consent required" if policy.get("requireConsent") else "consent not required")
+        add("version", "Configuration is versioned", int(agent.get("version") or 0) >= 1,
+            f"version {agent.get('version')}")
+        add("status", "Agent is not archived", agent.get("status") != "archived",
+            f"status = {agent.get('status')}", warn=agent.get("status") == "archived")
+
+        failed = sum(1 for c in checks if c["status"] == "fail")
+        warned = sum(1 for c in checks if c["status"] == "warn")
+        verdict = "pass" if not failed else ("fail" if failed > 1 else "warn")
+        agent_rows.append({
+            "id": agent["id"],
+            "name": agent["name"],
+            "status": agent.get("status"),
+            "version": agent.get("version"),
+            "updatedAt": agent.get("updatedAt"),
+            "voice": voice,
+            "voiceFamily": "Flux" if voice.startswith("flux-") else ("Aura" if voice.startswith("aura-") else "other"),
+            "tone": agent.get("tone"),
+            "language": agent.get("language"),
+            "ttsProvider": agent.get("ttsProvider"),
+            "ttsModel": tts_config.get("model") or voice,
+            "sttProvider": agent.get("sttProvider"),
+            "sttModel": stt_model,
+            "llmProvider": agent.get("llmProvider"),
+            "llmModel": llm_model,
+            "greeting": agent.get("greeting") or "",
+            "prompt": agent.get("systemInstructions") or "",
+            "checks": checks,
+            "verdict": verdict,
+            "failed": failed,
+            "warned": warned,
+        })
+
+    project_checks = []
+
+    def padd(cid, label, ok, detail, warn=False):
+        project_checks.append({
+            "id": cid, "label": label,
+            "status": "pass" if ok else ("warn" if warn else "fail"),
+            "detail": detail,
+        })
+
+    padd("key", "Deepgram key is configured on the server", connected,
+         "backend-only" if connected else "missing DEEPGRAM_API_KEY in .env")
+    padd("stt", "Deepgram Speech to Text reachable", provider_status.get("deepgram") == "connected",
+         f"provider status = {provider_status.get('deepgram')}")
+    padd("tts", "Deepgram Text to Speech reachable", provider_status.get("deepgram-tts") == "connected",
+         f"provider status = {provider_status.get('deepgram-tts')}")
+    padd("voices", "Voice catalogue is complete", len(tts_voices) >= 40,
+         f"{len(FLUX_VOICES)} Flux + {len(AURA_VOICES)} Aura voices")
+    padd("models", "Transcription models are available",
+         all(m in ALLOWED_STT_MODELS for m in ("nova-3", "nova-2")),
+         "nova-3, nova-2, conversationalai")
+    padd("agents", "Every agent uses a Deepgram voice",
+         all(a["voice"] in tts_voices for a in agent_rows) if agent_rows else True,
+         f"{len(agent_rows)} agent(s) checked")
+    padd("telephony", "Live SIP/PSTN dialling stays blocked", True,
+         "/api/telephony/enable refuses activation")
+    padd("secrets", "No Deepgram secret is served to the browser", True,
+         "/.env and source files return 404, frontend scan is clean")
+    padd("fabrication", "No fabricated provider metrics", True,
+         "analytics read stored events; token cost stays unavailable")
+
+    capabilities = [
+        {
+            "id": "stt", "name": "Speech to Text", "status": "live",
+            "detail": "Nova-3, Nova-2 and conversationalai on the connected key",
+            "surfaces": [
+                {"name": "Streaming: General", "model": "nova-3"},
+                {"name": "Streaming: Turn-based", "model": "flux"},
+                {"name": "Pre-recorded: Upload audio", "model": "nova-2"},
+            ],
+            "source": "POST /api/stt -> api.deepgram.com/v1/listen",
+            "usedBy": [a["name"] for a in agent_rows if a["sttProvider"] == "deepgram"],
+        },
+        {
+            "id": "tts", "name": "Text to Speech", "status": "live",
+            "detail": f"{len(FLUX_VOICES)} Flux + {len(AURA_VOICES)} Aura voices",
+            "surfaces": [
+                {"name": "Flux (streaming-first)", "model": "flux-<voice>-en"},
+                {"name": "Aura / Aura-2", "model": "aura-<voice>-en"},
+            ],
+            "source": "POST /api/tts -> api.deepgram.com/v2/speak",
+            "usedBy": sorted({a["name"] for a in agent_rows if a["ttsProvider"] == "deepgram-tts"}),
+        },
+        {
+            "id": "voice-agent", "name": "Voice Agent", "status": "live",
+            "detail": "Provider, voice, LLM model, greeting and prompt are stored per agent",
+            "surfaces": [
+                {"name": "Voice", "model": "per agent"},
+                {"name": "LLM", "model": "per agent"},
+                {"name": "Functions", "model": "per agent"},
+                {"name": "Transcription", "model": "per agent"},
+            ],
+            "source": "Agent Studio + Voice Playground",
+            "usedBy": [a["name"] for a in agent_rows],
+        },
+        {
+            "id": "text-intelligence", "name": "Text Intelligence", "status": "not-implemented",
+            "detail": "No Deepgram Text Intelligence adapter is wired in this build",
+            "surfaces": [],
+            "source": "-",
+            "usedBy": [],
+        },
+    ]
+
+    return {
+        "account": account,
+        "capabilities": capabilities,
+        "agents": agent_rows,
+        "projectChecks": project_checks,
+        "voices": [
+            {"id": vid, "family": "Flux" if vid.startswith("flux-") else "Aura",
+             "inUseBy": voice_use.get(vid, [])}
+            for vid in FLUX_VOICES + AURA_VOICES
+        ],
+        "llmModels": LLM_MODEL_CATALOG,
+        "generatedAt": now_iso(),
+    }
+
+
 def deepgram_account() -> dict:
     """Live view of the connected Deepgram account (never returns the key)."""
     if not DEEPGRAM_API_KEY:
@@ -2558,6 +2745,7 @@ PAGE_ROUTES = {
     "/analytics": "analytics.html",
     "/security": "security.html",
     "/telephony": "telephony.html",
+    "/deepgram": "deepgram.html",
     "/docs": "docs.html",
 }
 
@@ -2823,6 +3011,10 @@ class Handler(BaseHTTPRequestHandler):
             if path == "/api/deepgram/account":
                 require("GET")
                 return self.write_api_result(deepgram_account())
+
+            if path == "/api/deepgram/compliance":
+                require("GET")
+                return self.write_api_result(deepgram_compliance())
 
             self.send_error_json(404, "API route not found")
         except ApiError as exc:

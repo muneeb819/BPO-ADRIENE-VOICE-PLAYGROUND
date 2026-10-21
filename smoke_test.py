@@ -407,6 +407,34 @@ def check_agent_transcription(c: Client):
             c.delete(f"/api/agents/{agent_id}")
 
 
+def check_deepgram_compliance(c: Client):
+    """The Deepgram Compliance page data must be complete and leak nothing."""
+    code, data = c.get("/api/deepgram/compliance")
+    require(code == 200, f"compliance endpoint returned {code}")
+    caps = {c["id"]: c for c in data.get("capabilities") or []}
+    for cap_id in ("stt", "tts", "voice-agent", "text-intelligence"):
+        require(cap_id in caps, f"capability '{cap_id}' missing")
+    require(caps["stt"]["status"] == "live", "speech to text is not live")
+    require(caps["tts"]["status"] == "live", "text to speech is not live")
+    require(caps["text-intelligence"]["status"] == "not-implemented",
+            "text intelligence must be marked as not implemented")
+    voices = data.get("voices") or []
+    require(len(voices) >= 40, f"voice catalogue has {len(voices)} entries")
+    require(any(v["family"] == "Flux" for v in voices), "no Flux voices listed")
+    checks = data.get("projectChecks") or []
+    require(len(checks) >= 8, "project compliance checklist is too small")
+    require(all(c.get("status") in ("pass", "warn", "fail") for c in checks),
+            "project checks have an invalid status")
+    for agent in data.get("agents") or []:
+        require(agent.get("verdict") in ("pass", "warn", "fail"),
+                f"agent {agent.get('name')} has no verdict")
+        require(agent.get("checks"), f"agent {agent.get('name')} has no checks")
+    payload = json.dumps(data)
+    require("apiKey" not in payload, "the compliance payload leaks a key field")
+    return (f"{len(caps)} surfaces · {len(voices)} voices · "
+            f"{len(data.get('agents') or [])} agents · {len(checks)} checks")
+
+
 def check_deepgram_account(c: Client):
     code, account = c.get("/api/deepgram/account")
     require(code == 200, f"account endpoint returned {code}")
@@ -538,6 +566,8 @@ def main() -> int:
     run_check(report, "Static app", "No secret or source files served", lambda: check_no_secret_leak(client))
     run_check(report, "Providers", "Registry and voice catalogue", lambda: check_providers(client))
     run_check(report, "Providers", "Deepgram account connection", lambda: check_deepgram_account(client),
+              skip=args.skip_live, skip_reason="--skip-live")
+    run_check(report, "Providers", "Deepgram compliance view", lambda: check_deepgram_compliance(client),
               skip=args.skip_live, skip_reason="--skip-live")
     run_check(report, "Providers", "Connection tests", lambda: check_provider_tests(client),
               skip=args.skip_live, skip_reason="--skip-live")

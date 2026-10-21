@@ -76,6 +76,14 @@ Two actions sit under the picker:
 
 ## Connected Deepgram account
 
+**One side-panel section holds everything Deepgram.** The sidebar is grouped into *Workspace*, *Deepgram Compliance* and *Quality & Delivery*; the **Deepgram Compliance** section contains the compliance page plus the two Deepgram-powered editors (Agent Studio = voice-agent builder, Voice Lab = adapters). Clicking **Deepgram Compliance** opens `/deepgram`, which shows:
+
+- the connected project, key posture (backend-only), models and last check,
+- the four Deepgram console surfaces — **Speech to Text** (Streaming: General / Streaming: Turn-based / Pre-recorded: Upload audio), **Text to Speech** (Flux / Aura), **Voice Agent** and **Text Intelligence** (explicitly *not implemented*),
+- **agent compliance** — every agent with its Deepgram voice, TTS/STT/LLM routing, greeting and prompt, expandable into 12 checks and a verdict,
+- the **project compliance** checklist (key, reachability, catalogue, telephony gate, no fabricated metrics),
+- the **voice catalogue** (41 voices with the agents using each), and
+- a **source map** showing which local endpoint backs each Deepgram value.
 Your Deepgram project is live in the app — the key stays in `.env` and is never returned by the API.
 
 | Check | Result on this account |
@@ -123,6 +131,7 @@ Without a key, the playground still works in text mode and uses browser Speech S
 | `/analytics` | Volume, intents, latency percentiles, provider mix, session inspector |
 | `/security` | Secret posture, frontend scan, validation selftest, retention, cleanup |
 | `/telephony` | Mock calls/transfers, correlation logs, live-dial safety gate |
+| `/deepgram` | **Deepgram Compliance** — connected account, the four Deepgram console surfaces, per-agent compliance verdicts, voice catalogue and a data-source map |
 | `/docs` | Windows launch guide, SQLite operations, feature inventory, live verification |
 
 ---
@@ -195,6 +204,7 @@ Public, localhost-only by default:
 | POST | `/api/sessions/{id}/end` | End session |
 | GET | `/api/providers` | Provider catalogue (no secrets) |
 | GET | `/api/deepgram/account` | Live Deepgram project, model lists and voice count (never the key) |
+| GET | `/api/deepgram/compliance` | Everything the project consumes from Deepgram: surfaces, per-agent checks, voice catalogue, source map |
 | POST | `/api/providers/{id}/test` | Connection test |
 | POST | `/api/tts` | Flux / Aura TTS proxy (max 1200 chars) |
 | POST | `/api/stt` | Nova-2 STT proxy (audio ≤ 8 MB) |

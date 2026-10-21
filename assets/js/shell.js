@@ -6,15 +6,31 @@
 const Shell = (() => {
   const NAV = [
     { href: '/', key: 'foundation', label: 'Foundation', sub: 'Health & Status', icon: 'home' },
-    { href: '/agents', key: 'agents', label: 'Agent Studio', sub: 'Create & Configure', icon: 'layers' },
     { href: '/playground', key: 'playground', label: 'Voice Playground', sub: 'Mic → Response Loop', icon: 'mic' },
-    { href: '/lab', key: 'lab', label: 'Voice Lab', sub: 'STT • LLM • TTS', icon: 'flask' },
-    { href: '/testing', key: 'testing', label: 'Scenario Testing', sub: 'Regression & QA', icon: 'clipboard' },
     { href: '/analytics', key: 'analytics', label: 'Analytics', sub: 'Latency & Usage', icon: 'chart' },
+  ];
+
+  // Everything this project consumes from Deepgram lives in this one section.
+  const DEEPGRAM_NAV = [
+    { href: '/deepgram', key: 'deepgram', label: 'Deepgram Compliance', sub: 'Account • Agents • Voices', icon: 'bolt' },
+    { href: '/agents', key: 'agents', label: 'Agent Studio', sub: 'Voice Agent Builder', icon: 'layers' },
+    { href: '/lab', key: 'lab', label: 'Voice Lab', sub: 'STT • LLM • TTS', icon: 'flask' },
+  ];
+
+  const DELIVERY_NAV = [
+    { href: '/testing', key: 'testing', label: 'Scenario Testing', sub: 'Regression & QA', icon: 'clipboard' },
     { href: '/security', key: 'security', label: 'Security', sub: 'Secrets & Retention', icon: 'shield' },
     { href: '/telephony', key: 'telephony', label: 'Telephony', sub: 'Mock SIP / VICIdial', icon: 'phone' },
     { href: '/docs', key: 'docs', label: 'Docs & Hardening', sub: 'Launch Checklist', icon: 'book' },
   ];
+
+  const NAV_GROUPS = [
+    { id: 'workspace', label: 'Workspace', items: NAV },
+    { id: 'deepgram', label: 'Deepgram Compliance', items: DEEPGRAM_NAV, accent: true },
+    { id: 'delivery', label: 'Quality & Delivery', items: DELIVERY_NAV },
+  ];
+
+  const ALL_NAV = [...NAV, ...DEEPGRAM_NAV, ...DELIVERY_NAV];
 
   const ICONS = {
     home: '<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9.5 21v-6h5v6"/>',
@@ -64,6 +80,7 @@ const Shell = (() => {
     phoneOut: '<path d="M14 2h6v6"/><path d="M22 2 11 13"/><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.4 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.9 2.2Z"/>',
     git: '<circle cx="6" cy="6" r="3"/><circle cx="18" cy="18" r="3"/><path d="m6 9v6a3 3 0 0 0 3 3h6"/><path d="M9 6h6a3 3 0 0 1 3 3v3"/>',
     chevron: '<path d="m6 9 6 6 6-6"/>',
+    bolt: '<path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/>',
   };
 
   function icon(name, cls = '') {
@@ -71,10 +88,9 @@ const Shell = (() => {
     return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="${cls}" aria-hidden="true">${body}</svg>`;
   }
 
-  function navItems(active) {
-    return NAV.map((item) => {
-      const isActive = item.key === active;
-      return `<a href="${item.href}" class="nav-item ${isActive ? 'active' : ''}" ${isActive ? 'aria-current="page"' : ''}>
+  function navItem(item, active) {
+    const isActive = item.key === active;
+    return `<a href="${item.href}" class="nav-item ${isActive ? 'active' : ''}" ${isActive ? 'aria-current="page"' : ''}>
         <span class="nav-icon">${icon(item.icon)}</span>
         <span class="min-w-0 flex-1">
           <span class="nav-title">${item.label}</span>
@@ -82,11 +98,18 @@ const Shell = (() => {
         </span>
         ${isActive ? '<span class="text-violet-300 text-[10px]">●</span>' : ''}
       </a>`;
-    }).join('');
+  }
+
+  function navItems(active) {
+    return NAV_GROUPS.map((group) => `
+      <div class="nav-group ${group.accent ? 'nav-group-accent' : ''}">
+        <div class="nav-group-label">${group.accent ? '<span class="status-dot"></span>' : ''}${group.label}</div>
+        ${group.items.map((item) => navItem(item, active)).join('')}
+      </div>`).join('');
   }
 
   function mobileItems(active) {
-    return NAV.map((item) => `<a href="${item.href}" class="mobile-chip ${item.key === active ? 'active' : ''}">
+    return ALL_NAV.map((item) => `<a href="${item.href}" class="mobile-chip ${item.key === active ? 'active' : ''}">
       ${icon(item.icon, 'w-3 h-3')}<span>${item.label}</span>
     </a>`).join('');
   }

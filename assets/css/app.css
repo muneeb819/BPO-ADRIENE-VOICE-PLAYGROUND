@@ -78,6 +78,23 @@ code, pre, .mono, .stat-value, .metric-value {
   content: ""; position: absolute; left: -12px; top: 12px; bottom: 12px;
   width: 3px; border-radius: 0 4px 4px 0; background: #a78bfa;
 }
+.nav-group { margin-bottom: 14px; }
+.nav-group:last-child { margin-bottom: 0; }
+.nav-group-label {
+  display: flex; align-items: center; gap: 6px;
+  padding: 4px 10px 6px;
+  font-size: 8px; font-weight: 800; letter-spacing: .16em;
+  text-transform: uppercase; color: #64748b;
+}
+.nav-group-accent {
+  margin: 4px -4px 14px; padding: 8px 4px 10px;
+  border: 1px solid rgba(16, 185, 129, .18);
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(16, 185, 129, .10), rgba(16, 185, 129, .02));
+}
+.nav-group-accent .nav-group-label { color: #6ee7b7; padding-left: 8px; }
+.nav-group-accent .status-dot { width: 6px; height: 6px; }
+
 .nav-icon {
   width: 32px; height: 32px; border-radius: 9px;
   display: flex; align-items: center; justify-content: center; flex: none;
