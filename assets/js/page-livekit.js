@@ -1,19 +1,22 @@
-/* LiveKit Cloud - connect, control, use, build and deploy LiveKit voice agents. */
+/* LiveKit Cloud console for BPO Nexus.
+   Sections mirror the LiveKit Cloud console: Overview, Sessions, Simulations,
+   Agents, Voices, Telephony, Egress & Ingress, Usage, Settings — plus a live
+   "Test the bot" panel that joins a room with the deployed agent. */
 'use strict';
 
 (async function initLivekit() {
   await Shell.mount('livekit');
 
   const $ = (id) => document.getElementById(id);
-  let status = null;
-  let rooms = [];
-  let bundle = null;
-  let activeFile = 'agent.py';
+  let console_ = null;
+  let section = 'overview';
+  let room = null;      // livekit Room
+  let testState = 'idle';
 
   document.getElementById('page-header').innerHTML = Shell.header({
     eyebrow: '12 — LiveKit Cloud',
     title: 'LiveKit Cloud',
-    sub: 'Everything this project does with LiveKit: project status, live rooms, agent dispatch, join tokens and a worker builder that emits a deployable agent.',
+    sub: 'Access, control, use, build and deploy LiveKit voice agents: the console sections, your cloud agents and a live bot test from this browser.',
     right: `<a class="btn btn-outline" href="/deepgram">${Shell.icon('bolt')} Deepgram</a>
       <a class="btn btn-primary" href="/admin">${Shell.icon('grid')} Admin Panel</a>`,
   });
@@ -22,99 +25,47 @@
     el.innerHTML = Shell.icon(el.dataset.icon, 'w-3.5 h-3.5');
   });
 
-  // --- voice catalogue (Deepgram voices usable as the TTS voice) -----------
-  function populateVoices() {
-    const select = $('lk-b-voice');
-    if (!window.VOICE_CATALOG) return;
-    const groups = [
-      ['Deepgram Flux', window.VOICE_CATALOG.flux],
-      ['Deepgram Aura', window.VOICE_CATALOG.aura],
-    ];
-    select.innerHTML = groups.map(([label, voices]) => `
-      <optgroup label="${label}">
-        ${voices.map((v) => `<option value="${v.id}">${v.family} - ${v.name} (${v.accent}, ${v.gender})</option>`).join('')}
-      </optgroup>`).join('');
-    select.value = 'flux-brittany-en';
+  // --- helpers ------------------------------------------------------------
+  function stat(label, value, sub) {
+    return `<div class="rounded-xl border border-slate-200/70 bg-slate-50/40 p-3">
+      <div class="text-[8px] font-extrabold uppercase tracking-[0.12em] text-slate-500">${UI.esc(label)}</div>
+      <div class="mt-1 font-mono text-[18px] font-bold text-slate-800">${UI.esc(String(value))}</div>
+      ${sub ? `<div class="mt-0.5 text-[8.5px] text-slate-500">${UI.esc(sub)}</div>` : ''}
+    </div>`;
   }
 
-  // --- rendering ----------------------------------------------------------
-  function renderStatus() {
-    const pill = $('lk-state');
-    const body = $('lk-connection-body');
-    if (!status) return;
-    if (!status.configured) {
-      pill.textContent = 'not configured';
-      pill.className = 'pill pill-red-dark';
-      body.innerHTML = `<div class="rounded-lg border border-amber-500/30 bg-amber-500/10 p-2.5 text-[10px] leading-relaxed text-amber-200 sm:col-span-2 lg:col-span-4">${UI.esc(status.message || 'Add LIVEKIT_URL, LIVEKIT_API_KEY and LIVEKIT_API_SECRET to .env and restart the server.')}</div>`;
-      return;
-    }
-    pill.textContent = status.connected ? 'connected' : 'unreachable';
-    pill.className = `pill ${status.connected ? 'pill-green-dark' : 'pill-red-dark'}`;
-    body.innerHTML = `
-      <div class="rounded-lg border border-slate-700/60 bg-slate-900/60 p-2.5">
-        <div class="text-[8px] font-extrabold uppercase tracking-[0.12em] text-slate-500">Project</div>
-        <div class="mt-1 truncate text-[10.5px] font-bold text-slate-100">${UI.esc(status.host || '')}</div>
-        <div class="mono mt-0.5 truncate text-[8px] text-slate-500">${UI.esc(status.url || '')}</div>
-      </div>
-      <div class="rounded-lg border border-slate-700/60 bg-slate-900/60 p-2.5">
-        <div class="text-[8px] font-extrabold uppercase tracking-[0.12em] text-slate-500">Agent dispatch</div>
-        <div class="mt-1 truncate text-[10.5px] font-bold text-slate-100">${UI.esc(status.agentName || 'not set')}</div>
-        <div class="mt-0.5 text-[8.5px] text-slate-500">${status.connected ? `latency ${status.latencyMs ?? '—'} ms` : 'not reachable'}</div>
-      </div>
-      <div class="rounded-lg border border-slate-700/60 bg-slate-900/60 p-2.5">
-        <div class="text-[8px] font-extrabold uppercase tracking-[0.12em] text-slate-500">Live rooms</div>
-        <div class="mt-1 text-[10.5px] font-bold text-slate-100">${status.rooms ?? 0} room(s)</div>
-        <div class="mt-0.5 text-[8.5px] text-slate-500">${status.participants ?? 0} participant(s)</div>
-      </div>
-      <div class="rounded-lg border border-slate-700/60 bg-slate-900/60 p-2.5">
-        <div class="text-[8px] font-extrabold uppercase tracking-[0.12em] text-slate-500">API key</div>
-        <div class="mt-1 text-[10.5px] font-bold text-slate-100">Server only</div>
-        <div class="mt-0.5 text-[8.5px] text-slate-500">never sent to the browser</div>
-      </div>`;
+  function empty(text) {
+    return `<div class="rounded-lg border border-dashed border-slate-300 bg-slate-50/50 px-3 py-4 text-center text-[10px] text-slate-500">${UI.esc(text)}</div>`;
   }
 
-  function renderCloud() {
-    const cloud = status?.cloudApi || {};
-    const pill = $('lk-cloud-state');
-    const body = $('lk-cloud-body');
-    if (cloud.authorized) {
-      pill.textContent = 'authorized';
-      pill.className = 'pill pill-green no-dot';
-      const agents = cloud.agents || [];
-      body.innerHTML = agents.length
-        ? `<div class="space-y-2">${agents.map((a) => `
-            <div class="rounded-xl border border-slate-200/70 bg-slate-50/40 p-2.5">
-              <div class="flex flex-wrap items-center justify-between gap-2">
-                <span class="truncate text-[10.5px] font-extrabold text-slate-800">${UI.esc(a.name || a.id || 'agent')}</span>
-                <span class="chip chip-mono">v${UI.esc(a.version || '-')}</span>
-              </div>
-              <div class="mono mt-0.5 truncate text-[8px] text-slate-400">${UI.esc(a.id || '')}</div>
-              <div class="mt-1.5 flex flex-wrap gap-1.5 text-[8.5px] text-slate-500">
-                ${(a.deployments || []).map((d) => `<span class="chip">${UI.esc(d.region || '-')} \u00b7 ${UI.esc(d.status || '-')}</span>`).join('')}
-                ${a.deployedAt ? `<span class="chip">deployed ${UI.esc(String(a.deployedAt).slice(0, 10))}</span>` : ''}
-              </div>
-              <div class="mt-2 flex flex-wrap gap-1.5">
-                <button class="btn btn-xs btn-outline" data-versions="${UI.esc(a.id || '')}" type="button">Versions</button>
-                <button class="btn btn-xs btn-soft" data-secrets="${UI.esc(a.id || '')}" type="button">Secrets</button>
-              </div>
-              <div class="mt-2 hidden space-y-1" id="cloud-detail-${UI.esc(a.id || '')}"></div>
-            </div>`).join('')}</div>`
-        : '<div class="text-[9.5px] text-slate-500">No agents returned by the Cloud API.</div>';
-      body.querySelectorAll('[data-versions]').forEach((btn) => {
-        btn.addEventListener('click', () => showCloudDetail(btn.dataset.versions, 'versions'));
-      });
-      body.querySelectorAll('[data-secrets]').forEach((btn) => {
-        btn.addEventListener('click', () => showCloudDetail(btn.dataset.secrets, 'secrets'));
-      });
-      return;
-    }
-    pill.textContent = cloud.configured ? 'forbidden' : 'no cloud key';
-    pill.className = 'pill pill-amber no-dot';
-    body.innerHTML = `<div class="rounded-lg border border-amber-500/30 bg-amber-500/10 p-2.5 text-[9.5px] leading-relaxed text-amber-200">
-        ${UI.esc(cloud.message || 'Cloud API key not configured.')}
-        <div class="mt-1.5 text-slate-300">Managing <span class="mono">agents, versions</span> and <span class="mono">secrets</span> needs a Cloud API key in <span class="mono">.env</span>:</div>
-        <div class="mono mt-1 rounded bg-black/30 px-2 py-1 text-[8.5px] text-slate-200">LIVEKIT_CLOUD_API_KEY=...<br/>LIVEKIT_CLOUD_API_SECRET=...</div>
-      </div>`;
+  function agentCard(agent) {
+    const deployments = (agent.deployments || []).map((d) => `<span class="chip">${UI.esc(d.region || '-')} · ${UI.esc(d.status || '-')}</span>`).join(' ');
+    return `<div class="rounded-xl border border-slate-200/70 bg-slate-50/40 p-3">
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <span class="truncate text-[10.5px] font-extrabold text-slate-800">${UI.esc(agent.name || agent.id)}</span>
+        <span class="chip chip-mono">v${UI.esc(agent.version || '-')}</span>
+      </div>
+      <div class="mono mt-0.5 truncate text-[8px] text-slate-400">${UI.esc(agent.id || '')}</div>
+      <div class="mt-1.5 flex flex-wrap gap-1.5">${deployments}</div>
+      <div class="mt-2 flex flex-wrap gap-1.5">
+        <button class="btn btn-xs btn-outline" data-versions="${UI.esc(agent.id || '')}" type="button">Versions</button>
+        <button class="btn btn-xs btn-soft" data-secrets="${UI.esc(agent.id || '')}" type="button">Secrets</button>
+        <button class="btn btn-xs btn-soft" data-simulate="${UI.esc(agent.name || '')}" type="button">Simulate</button>
+      </div>
+      <div class="mt-2 hidden space-y-1" id="cloud-detail-${UI.esc(agent.id || '')}"></div>
+    </div>`;
+  }
+
+  function wireDetailButtons(root) {
+    root.querySelectorAll('[data-versions]').forEach((btn) => {
+      btn.addEventListener('click', () => showCloudDetail(btn.dataset.versions, 'versions'));
+    });
+    root.querySelectorAll('[data-secrets]').forEach((btn) => {
+      btn.addEventListener('click', () => showCloudDetail(btn.dataset.secrets, 'secrets'));
+    });
+    root.querySelectorAll('[data-simulate]').forEach((btn) => {
+      btn.addEventListener('click', () => runSimulation(btn.dataset.simulate));
+    });
   }
 
   async function showCloudDetail(agentId, kind) {
@@ -125,7 +76,7 @@
       return;
     }
     target.classList.remove('hidden');
-    target.innerHTML = '<div class="text-[9px] text-slate-400">Loading\u2026</div>';
+    target.innerHTML = '<div class="text-[9px] text-slate-400">Loading…</div>';
     try {
       const res = await fetch(`/api/livekit/cloud/agents/${encodeURIComponent(agentId)}/${kind}`);
       const data = await res.json();
@@ -138,7 +89,7 @@
                 <span class="mono text-[9px] font-semibold text-slate-700">${UI.esc(v.version)}</span>
                 ${v.current ? '<span class="pill pill-green no-dot">current</span>' : ''}
               </div>
-              <div class="mt-0.5 text-[8px] text-slate-500">${UI.esc(v.status || '')}${v.active ? ' \u00b7 active' : ''} \u00b7 created ${UI.esc(String(v.createdAt).slice(0, 10))}</div>
+              <div class="mt-0.5 text-[8px] text-slate-500">${UI.esc(v.status || '')}${v.active ? ' · active' : ''} · created ${UI.esc(String(v.createdAt).slice(0, 10))}</div>
             </div>`).join('')
           : '<div class="text-[9px] text-slate-400">No versions.</div>';
       } else {
@@ -146,7 +97,7 @@
         target.innerHTML = secrets.length
           ? secrets.map((s) => `<div class="rounded-lg border border-slate-200/60 bg-white/40 px-2 py-1.5">
               <div class="text-[9px] font-semibold text-slate-700">${UI.esc(s.name)}</div>
-              <div class="mt-0.5 text-[8px] text-slate-500">${UI.esc(s.kind || 'environment')} \u00b7 value hidden</div>
+              <div class="mt-0.5 text-[8px] text-slate-500">${UI.esc(s.kind || 'environment')} · value hidden</div>
             </div>`).join('')
           : '<div class="text-[9px] text-slate-400">No secrets.</div>';
       }
@@ -155,218 +106,448 @@
     }
   }
 
-  function renderRooms() {
-    $('lk-rooms-count').textContent = `${rooms.length} live`;
-    $('lk-rooms').innerHTML = rooms.length
-      ? rooms.map((room) => `<div class="rounded-xl border border-slate-200/70 bg-slate-50/40 p-2.5">
-          <div class="flex flex-wrap items-center justify-between gap-2">
-            <span class="truncate text-[10.5px] font-extrabold text-slate-800">${UI.esc(room.name)}</span>
-            <span class="chip chip-mono">${room.participants} participant(s)</span>
-          </div>
-          ${(room.participantList || []).length ? `<div class="mt-1.5 space-y-1">${room.participantList.map((p) => `<div class="flex items-center justify-between gap-2 text-[9px] text-slate-500">
-            <span class="truncate">${UI.esc(p.name || p.identity)}${p.isAgent ? ' · agent' : ''}</span>
-            <span class="chip">${UI.esc(p.state)}</span>
-          </div>`).join('')}</div>` : '<div class="mt-1 text-[9px] text-slate-400">No participants</div>'}
-          <div class="mt-2 flex flex-wrap gap-1.5">
-            <button class="btn btn-xs btn-outline" data-dispatch="${UI.esc(room.name)}" type="button"><span data-icon="bot"></span> Dispatch agent</button>
-            <button class="btn btn-xs btn-soft" data-token="${UI.esc(room.name)}" type="button"><span data-icon="key"></span> Token</button>
-            <button class="btn btn-xs btn-danger" data-delete="${UI.esc(room.name)}" type="button"><span data-icon="trash"></span> Delete</button>
-          </div>
-        </div>`).join('')
-      : '<div class="empty-state"><div class="empty-title">No live rooms</div><div class="empty-sub">Create a room to dispatch the agent into it.</div></div>';
-
-    $('lk-rooms').querySelectorAll('[data-dispatch]').forEach((btn) => {
-      btn.addEventListener('click', async () => {
-        btn.disabled = true;
-        try {
-          const res = await fetch('/api/livekit/dispatch', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ room: btn.dataset.dispatch }),
-          });
-          const data = await res.json();
-          if (!res.ok) throw new Error(data.error || 'dispatch failed');
-          UI.toast(`Agent dispatched to ${data.room} (${data.agentName})`, 'success');
-          await loadRooms();
-        } catch (err) {
-          UI.toast(err.message, 'error');
-        } finally {
-          btn.disabled = false;
-        }
-      });
-    });
-    $('lk-rooms').querySelectorAll('[data-token]').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        $('lk-token-room').value = btn.dataset.token;
-        mintToken();
-      });
-    });
-    $('lk-rooms').querySelectorAll('[data-delete]').forEach((btn) => {
-      btn.addEventListener('click', async () => {
-        btn.disabled = true;
-        try {
-          const res = await fetch(`/api/livekit/rooms/${encodeURIComponent(btn.dataset.delete)}`, { method: 'DELETE' });
-          const data = await res.json();
-          if (!res.ok) throw new Error(data.error || 'delete failed');
-          UI.toast(`Room ${btn.dataset.delete} deleted`, 'success');
-          await loadRooms();
-        } catch (err) {
-          UI.toast(err.message, 'error');
-        } finally {
-          btn.disabled = false;
-        }
-      });
-    });
-    $('lk-rooms').querySelectorAll('[data-icon]').forEach((el) => {
-      el.innerHTML = Shell.icon(el.dataset.icon, 'w-3 h-3');
-    });
-  }
-
-  // --- actions ------------------------------------------------------------
-  async function loadStatus() {
+  async function runSimulation(agentName) {
+    const body = $('lk-section-body');
+    body.innerHTML = '<div class="text-[10px] text-slate-400">Running judged simulations on LiveKit Cloud — this can take a minute…</div>';
     try {
-      const res = await fetch('/api/livekit/status');
-      status = await res.json();
-      renderStatus();
-      renderCloud();
-    } catch (err) {
-      UI.toast(err.message, 'error');
-    }
-  }
-
-  async function loadRooms() {
-    if (!status?.configured) return;
-    try {
-      const res = await fetch('/api/livekit/rooms');
-      const data = await res.json();
-      rooms = data.rooms || [];
-      renderRooms();
-    } catch (err) {
-      $('lk-rooms').innerHTML = `<div class="text-[10px] text-red-300">${UI.esc(err.message)}</div>`;
-    }
-  }
-
-  async function mintToken() {
-    const room = $('lk-token-room').value.trim();
-    const identity = $('lk-token-identity').value.trim() || 'adriene-operator';
-    if (!room) {
-      UI.toast('Room name is required.', 'error');
-      return;
-    }
-    try {
-      const res = await fetch('/api/livekit/token', {
+      const res = await fetch('/api/livekit/console/simulate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ room, identity }),
+        body: JSON.stringify({ agentName, scenarios: 2 }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'token failed');
-      const out = $('lk-token-output');
-      out.classList.remove('hidden');
-      out.textContent = `url=${data.url}\nroom=${data.room}\nidentity=${data.identity}\ntoken=${data.token}`;
-      UI.toast('Join token minted', 'success');
+      if (!res.ok) throw new Error(data.error || 'simulation failed');
+      await loadConsole();
+      renderSection();
     } catch (err) {
-      UI.toast(err.message, 'error');
+      body.innerHTML = `<div class="rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-[9.5px] text-red-700">${UI.esc(err.message)}</div>`;
     }
   }
 
-  $('lk-create-room').addEventListener('click', async () => {
-    const name = $('lk-room-name').value.trim();
-    if (!name) {
-      UI.toast('Room name is required.', 'error');
+  // --- sections -----------------------------------------------------------
+  const SECTIONS = {
+    overview: {
+      title: 'Overview',
+      sub: 'Project, agents, deployments and live rooms.',
+      render(c) {
+        const u = c.usage || {};
+        return `<div class="grid gap-2.5 sm:grid-cols-2 lg:grid-cols-4">
+            ${stat('Agents', u.agents || 0, 'in LiveKit Cloud')}
+            ${stat('Deployments', u.deployments || 0, 'regions running the agent')}
+            ${stat('Live rooms', u.rooms || 0, 'right now')}
+            ${stat('Participants', u.participants || 0, 'connected callers')}
+          </div>
+          <div class="mt-3 grid gap-3 lg:grid-cols-2">
+            <div>
+              <div class="label">Agents</div>
+              <div class="space-y-2">${(c.agents || []).map(agentCard).join('') || empty('No cloud agents visible.')}</div>
+            </div>
+            <div>
+              <div class="label">Live rooms</div>
+              <div class="space-y-2">${(c.rooms || []).map((r) => `<div class="rounded-xl border border-slate-200/70 bg-slate-50/40 p-3">
+                  <div class="flex items-center justify-between gap-2">
+                    <span class="truncate text-[10.5px] font-extrabold text-slate-800">${UI.esc(r.name)}</span>
+                    <span class="chip chip-mono">${r.participants} in</span>
+                  </div>
+                  <div class="mt-1 flex flex-wrap gap-1.5 text-[8.5px] text-slate-500">
+                    ${(r.dispatches || []).map((d) => `<span class="chip">agent ${UI.esc(d.agentName)}</span>`).join('')}
+                  </div>
+                </div>`).join('') || empty('No live rooms. Create one from “Test the bot”.')}</div>
+            </div>
+          </div>`;
+      },
+    },
+    sessions: {
+      title: 'Sessions',
+      sub: 'Live rooms, their participants and the agents dispatched into them.',
+      render(c) {
+        return `<div class="space-y-2">${(c.rooms || []).map((r) => `<div class="rounded-xl border border-slate-200/70 bg-slate-50/40 p-3">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <span class="truncate text-[10.5px] font-extrabold text-slate-800">${UI.esc(r.name)}</span>
+              <span class="chip chip-mono">${r.participants} participant(s)</span>
+            </div>
+            <div class="mt-1.5 grid gap-1 sm:grid-cols-2">
+              <div>
+                <div class="text-[8px] font-extrabold uppercase tracking-[0.1em] text-slate-500">Participants</div>
+                <div class="mt-1 space-y-1">
+                  ${(r.participantList || []).map((p) => `<div class="flex items-center justify-between gap-2 text-[9px] text-slate-600">
+                    <span class="truncate">${UI.esc(p.name || p.identity)}${p.isAgent ? ' · agent' : ''}</span>
+                    <span class="chip">${UI.esc(p.state || '')}</span>
+                  </div>`).join('') || '<div class="text-[9px] text-slate-400">Nobody in the room.</div>'}
+                </div>
+              </div>
+              <div>
+                <div class="text-[8px] font-extrabold uppercase tracking-[0.1em] text-slate-500">Dispatches</div>
+                <div class="mt-1 space-y-1">
+                  ${(r.dispatches || []).map((d) => `<div class="flex items-center justify-between gap-2 text-[9px] text-slate-600">
+                    <span class="truncate">${UI.esc(d.agentName || d.id)}</span>
+                    <span class="chip">running</span>
+                  </div>`).join('') || '<div class="text-[9px] text-slate-400">No agent dispatched.</div>'}
+                </div>
+              </div>
+            </div>
+          </div>`).join('') || empty('No sessions yet — create a room and dispatch the agent from “Test the bot”.')}</div>`;
+      },
+    },
+    simulations: {
+      title: 'Simulations',
+      sub: 'Judged simulations of the deployed agent, run on LiveKit Cloud.',
+      render(c) {
+        return `<div class="flex flex-wrap items-center gap-2">
+            <button class="btn btn-outline btn-xs" id="lk-sim-run" type="button"><span data-icon="play"></span> Run text simulation</button>
+            <span class="text-[9px] text-slate-500">Runs against the registered agent on LiveKit Cloud and reports pass/fail per scenario.</span>
+          </div>
+          <div class="mt-3 space-y-2">
+            ${(c.simulations || []).map((s) => `<div class="rounded-xl border border-slate-200/70 bg-slate-50/40 p-3">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                  <span class="mono text-[9.5px] font-semibold text-slate-700">${UI.esc(s.id || s.agentName || 'run')}</span>
+                  <span class="chip">${UI.esc(s.status || 'unknown')}</span>
+                </div>
+                <div class="mt-1 text-[8.5px] text-slate-500">${UI.esc(s.agentName || '')} · ${s.numSimulations || 0} scenario(s) · ${s.passed || 0} passed / ${s.failed || 0} failed · ${UI.esc(String(s.createdAt).slice(0, 19))}</div>
+              </div>`).join('') || empty('No simulation runs yet.')}`;
+      },
+    },
+    agents: {
+      title: 'Agents',
+      sub: 'Agents created in the LiveKit Cloud console, with versions and secrets.',
+      render(c) {
+        return `<div class="grid gap-2.5 sm:grid-cols-2">
+            ${(c.agents || []).map(agentCard).join('') || empty('No cloud agents visible for this key.')}
+          </div>`;
+      },
+    },
+    voices: {
+      title: 'Voices',
+      sub: 'The voice catalogue available to your agents.',
+      render(c) {
+        const voices = window.VOICE_CATALOG ? window.VOICE_CATALOG.all : [];
+        return `<div class="grid gap-2.5 sm:grid-cols-3">
+            ${stat('TTS voices', c.voices?.ttsVoices || voices.length, 'Deepgram Flux + Aura')}
+            ${stat('Families', (c.voices?.families || ['Flux', 'Aura']).join(' + '), 'LiveKit Inference + Deepgram')}
+            ${stat('Default dispatch', c.project?.agentName || '—', 'agent used by Test the bot')}
+          </div>
+          <div class="mt-3 max-h-[320px] overflow-y-auto pr-1">
+            <div class="grid gap-1 sm:grid-cols-2">
+              ${voices.map((v) => `<div class="flex items-center justify-between gap-2 rounded-lg border border-slate-200/60 bg-white/40 px-2 py-1.5">
+                <span class="truncate text-[9.5px] text-slate-700">${UI.esc(v.family)} · ${UI.esc(v.name)}</span>
+                <span class="text-[8.5px] text-slate-500">${UI.esc(v.accent)}, ${UI.esc(v.gender)}</span>
+              </div>`).join('')}
+            </div>
+          </div>`;
+      },
+    },
+    telephony: {
+      title: 'Telephony',
+      sub: 'SIP trunks, dispatch rules and participants.',
+      render(c) {
+        const t = c.telephony || {};
+        const rows = [
+          ['Inbound trunks', (t.inbound || []).length],
+          ['Outbound trunks', (t.outbound || []).length],
+          ['Dispatch rules', (t.dispatchRules || []).length],
+          ['SIP participants', (t.participants || []).length],
+        ];
+        return `<div class="grid gap-2.5 sm:grid-cols-4">
+            ${rows.map(([label, value]) => stat(label, value, 'LiveKit Cloud')).join('')}
+          </div>
+          <div class="mt-3 space-y-2">
+            ${(t.inbound || []).concat(t.outbound || []).map((trunk) => `<div class="rounded-xl border border-slate-200/70 bg-slate-50/40 p-3 text-[9.5px] text-slate-700">
+              <div class="font-semibold">${UI.esc(trunk.name || trunk.trunk_id || 'trunk')}</div>
+              <div class="mt-0.5 text-[8.5px] text-slate-500">${UI.esc(JSON.stringify(trunk).slice(0, 220))}</div>
+            </div>`).join('')}
+          </div>
+          <p class="mt-3 text-[9px] leading-relaxed text-slate-500">Telephony in this build stays mock-only: the BPO Nexus app refuses live dialling on purpose, so trunks and dispatch rules are read-only here.</p>`;
+      },
+    },
+    media: {
+      title: 'Egress & Ingress',
+      sub: 'Recording/streaming jobs and external media ingress.',
+      render(c) {
+        const m = c.media || {};
+        return `<div class="grid gap-2.5 sm:grid-cols-2">
+            ${stat('Egress jobs', (m.egress || []).length, 'recording / streaming')}
+            ${stat('Ingress endpoints', (m.ingress || []).length, 'external media in')}
+          </div>
+          <div class="mt-3 space-y-2">
+            ${(m.egress || []).map((job) => `<div class="rounded-xl border border-slate-200/70 bg-slate-50/40 p-3 text-[9.5px] text-slate-700">
+              <div class="font-semibold">${UI.esc(job.egress_id || job.room_name || 'egress')}</div>
+              <div class="mt-0.5 text-[8.5px] text-slate-500">${UI.esc(JSON.stringify(job).slice(0, 220))}</div>
+            </div>`).join('')}
+            ${(m.ingress || []).map((job) => `<div class="rounded-xl border border-slate-200/70 bg-slate-50/40 p-3 text-[9.5px] text-slate-700">
+              <div class="font-semibold">${UI.esc(job.ingress_id || job.name || 'ingress')}</div>
+              <div class="mt-0.5 text-[8.5px] text-slate-500">${UI.esc(JSON.stringify(job).slice(0, 220))}</div>
+            </div>`).join('')}
+            ${(!(m.egress || []).length && !(m.ingress || []).length) ? empty('No active egress or ingress jobs.') : ''}
+          </div>`;
+      },
+    },
+    usage: {
+      title: 'Usage',
+      sub: 'What the platform is doing right now.',
+      render(c) {
+        const u = c.usage || {};
+        return `<div class="grid gap-2.5 sm:grid-cols-2 lg:grid-cols-4">
+            ${stat('Rooms', u.rooms || 0, 'live now')}
+            ${stat('Participants', u.participants || 0, 'in rooms')}
+            ${stat('Agents', u.agents || 0, 'in the cloud')}
+            ${stat('Simulations', u.simulations || 0, 'runs recorded')}
+          </div>
+          <div class="mt-3 rounded-xl border border-slate-200/70 bg-slate-50/40 p-3 text-[9.5px] text-slate-600">
+            Session-level usage for the BPO Nexus side (turns, latency percentiles, intent mix) lives in
+            <a class="font-semibold text-violet-600 underline" href="/analytics">Analytics</a>.
+          </div>`;
+      },
+    },
+    settings: {
+      title: 'Settings',
+      sub: 'Projects, credentials and deployment commands.',
+      render(c) {
+        const p = c.project || {};
+        return `<div class="grid gap-2.5 sm:grid-cols-2">
+            <div class="rounded-xl border border-slate-200/70 bg-slate-50/40 p-3">
+              <div class="text-[8px] font-extrabold uppercase tracking-[0.12em] text-slate-500">Project</div>
+              <div class="mt-1.5 space-y-1 text-[9.5px] text-slate-700">
+                <div>URL <span class="mono">${UI.esc(p.url || '-')}</span></div>
+                <div>Agent dispatch <span class="mono">${UI.esc(p.agentName || '-')}</span></div>
+                <div>Project key ${p.hasProjectKey ? '<span class="pill pill-green no-dot">configured</span>' : '<span class="pill pill-red no-dot">missing</span>'}</div>
+                <div>Cloud key ${p.hasCloudKey ? '<span class="pill pill-green no-dot">configured</span>' : '<span class="pill pill-amber no-dot">missing</span>'}</div>
+              </div>
+            </div>
+            <div class="rounded-xl border border-slate-200/70 bg-slate-50/40 p-3">
+              <div class="text-[8px] font-extrabold uppercase tracking-[0.12em] text-slate-500">Configured projects</div>
+              <div class="mt-1.5 space-y-1">
+                ${(p.projects || []).map((proj) => `<div class="flex items-center justify-between gap-2 text-[9.5px] text-slate-700">
+                  <span class="truncate">${UI.esc(proj.name || proj.projectId)}</span>
+                  <span class="chip chip-mono">${UI.esc(proj.apiKey || '••••')}</span>
+                </div>`).join('') || '<div class="text-[9px] text-slate-400">No projects in the CLI config.</div>'}
+              </div>
+              <p class="mt-2 text-[8.5px] leading-relaxed text-slate-500">Secret values are never read or returned — only key prefixes and project names.</p>
+            </div>
+          </div>
+          <div class="mt-3 rounded-xl border border-slate-200/70 bg-slate-50/40 p-3">
+            <div class="text-[8px] font-extrabold uppercase tracking-[0.12em] text-slate-500">Deploy</div>
+            <p class="mt-1.5 text-[9.5px] leading-relaxed text-slate-600">
+              Generate a worker from the builder below, then deploy it with the official CLI:
+            </p>
+            <pre class="mono mt-2 overflow-auto rounded-lg border border-slate-200/70 bg-white/60 p-2.5 text-[8.5px] leading-relaxed text-slate-600">lk agent deploy --url ${UI.esc(p.url || '')} --agent ${UI.esc(p.agentName || '')}</pre>
+          </div>`;
+      },
+    },
+  };
+
+  function renderSection() {
+    const view = SECTIONS[section] || SECTIONS.overview;
+    $('lk-section-title').textContent = view.title;
+    $('lk-section-sub').textContent = view.sub;
+    const body = $('lk-section-body');
+    if (!console_) {
+      body.innerHTML = '<div class="text-[10px] text-slate-400">Loading the console…</div>';
       return;
     }
+    body.innerHTML = view.render(console_);
+    wireDetailButtons(body);
+    const run = body.querySelector('#lk-sim-run');
+    if (run) {
+      run.addEventListener('click', () => runSimulation(console_.project?.agentName || ''));
+    }
+    $('lk-section-stamp').textContent = `updated ${UI.fmtDate(console_.generatedAt)}`;
+  }
+
+  async function loadConsole() {
     try {
-      const res = await fetch('/api/livekit/rooms', {
+      const res = await fetch('/api/livekit/console');
+      console_ = await res.json();
+      if (!res.ok) throw new Error(console_.error || 'console failed');
+    } catch (err) {
+      console_ = null;
+      $('lk-section-body').innerHTML = `<div class="rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-[9.5px] text-red-700">${UI.esc(err.message)}</div>`;
+      return;
+    }
+    renderSection();
+  }
+
+  // --- test the bot -------------------------------------------------------
+  function setTestState(state, detail) {
+    testState = state;
+    const pill = $('lk-test-state');
+    pill.textContent = detail || state;
+    pill.className = `pill ${state === 'connected' ? 'pill-green-dark' : (state === 'error' ? 'pill-red-dark' : 'pill-dark')}`;
+  }
+
+  function showError(message) {
+    const box = $('lk-test-error');
+    if (!message) {
+      box.classList.add('hidden');
+      box.textContent = '';
+      return;
+    }
+    box.classList.remove('hidden');
+    box.textContent = message;
+  }
+
+  async function api(path, options) {
+    const res = await fetch(path, options);
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || `request failed (${res.status})`);
+    return data;
+  }
+
+  $('lk-test-create').addEventListener('click', async () => {
+    showError('');
+    const name = $('lk-test-room').value.trim() || 'adriene-bot-test';
+    try {
+      await api('/api/livekit/rooms', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'create failed');
-      UI.toast(`Room ${name} created`, 'success');
-      $('lk-room-name').value = '';
-      await loadRooms();
-      await loadStatus();
+      setTestState('room created', `${name} ready`);
+      await loadConsole();
     } catch (err) {
-      UI.toast(err.message, 'error');
+      setTestState('error');
+      showError(err.message);
     }
   });
 
-  $('lk-mint-token').addEventListener('click', mintToken);
+  $('lk-test-dispatch').addEventListener('click', async () => {
+    showError('');
+    const name = $('lk-test-room').value.trim() || 'adriene-bot-test';
+    // Prefer the agent that actually exists in LiveKit Cloud.
+    const cloudAgent = (console_?.agents || [])[0];
+    const agentName = cloudAgent?.name || console_?.project?.agentName || '';
+    try {
+      const data = await api('/api/livekit/dispatch', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ room: name, agentName }),
+      });
+      setTestState('agent dispatched', `${data.agentName} → ${data.room}`);
+      await loadConsole();
+    } catch (err) {
+      setTestState('error');
+      showError(err.message);
+    }
+  });
+
+  $('lk-test-join').addEventListener('click', async () => {
+    showError('');
+    const name = $('lk-test-room').value.trim() || 'adriene-bot-test';
+    if (!window.LivekitClient) {
+      setTestState('error');
+      showError('The LiveKit browser client failed to load.');
+      return;
+    }
+    try {
+      setTestState('connecting…', 'joining room');
+      const token = await api('/api/livekit/token', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ room: name, identity: `operator-${Math.random().toString(36).slice(2, 8)}` }),
+      });
+      const { Room, RoomEvent, Track } = window.LivekitClient;
+      room = new Room({
+        adaptiveStream: true,
+        dynacast: true,
+      });
+      room.on(RoomEvent.TranscriptionReceived, (transcription, participant) => {
+        appendTranscript(participant?.identity || 'bot', transcription?.text || '');
+      });
+      room.on(RoomEvent.ParticipantConnected, (p) => {
+        appendTranscript('system', `${p.identity} joined`);
+        renderParticipants();
+      });
+      room.on(RoomEvent.ParticipantDisconnected, (p) => {
+        appendTranscript('system', `${p.identity} left`);
+        renderParticipants();
+      });
+      room.on(RoomEvent.TrackSubscribed, async (track) => {
+        if (track.kind === Track.Kind.Audio) {
+          try {
+            const attached = track.attach();
+            const el = attached && typeof attached.then === 'function' ? await attached : attached;
+            if (el) {
+              el.className = 'lk-audio';
+              el.style.display = 'none';
+              const host = document.getElementById('lk-test-audio-host');
+              if (host) host.appendChild(el);
+            }
+          } catch (err) {
+            appendTranscript('system', `audio attach failed: ${err.message}`);
+          }
+        }
+      });
+      await room.connect(token.url, token.token);
+      await room.localParticipant.setMicrophoneEnabled(true);
+      setTestState('connected', `live in ${name}`);
+      $('lk-test-leave').disabled = false;
+      renderParticipants();
+      appendTranscript('system', `you joined ${name} with the microphone live`);
+      loadConsole();
+    } catch (err) {
+      setTestState('error');
+      const denied = /permission|not allowed|denied/i.test(err.message || '');
+      showError(denied
+        ? 'Microphone permission was denied. Allow the microphone for this site in the browser (the padlock icon) and join again.'
+        : `${err.message}. Microphone capture needs a secure context — use https://${location.hostname} or http://localhost.`);
+    }
+  });
+
+  $('lk-test-leave').addEventListener('click', async () => {
+    try {
+      if (room) await room.disconnect();
+    } catch { /* ignore */ }
+    room = null;
+    $('lk-test-leave').disabled = true;
+    setTestState('idle', 'left the room');
+    renderParticipants();
+    await loadConsole();
+  });
+
+  function appendTranscript(who, text) {
+    const box = $('lk-test-transcript');
+    if (!box) return;
+    if (box.querySelector('.placeholder-note')) box.innerHTML = '';
+    const line = document.createElement('div');
+    line.className = 'flex items-start gap-2 text-[9.5px]';
+    line.innerHTML = `<span class="mono w-[72px] shrink-0 text-teal-400">${UI.esc(who)}</span><span class="text-slate-300">${UI.esc(text)}</span>`;
+    box.appendChild(line);
+    box.scrollTop = box.scrollHeight;
+  }
+
+  function renderParticipants() {
+    const box = $('lk-test-participants');
+    if (!box) return;
+    if (!room) {
+      box.innerHTML = '<div class="text-slate-500">Not connected.</div>';
+      return;
+    }
+    const people = [...room.remoteParticipants.values()].map((p) => ({
+      identity: p.identity,
+      state: p.isSpeaking ? 'speaking' : 'connected',
+    }));
+    people.push({ identity: room.localParticipant.identity, state: 'you (mic on)' });
+    box.innerHTML = people.map((p) => `<div class="flex items-center justify-between gap-2">
+        <span class="truncate">${UI.esc(p.identity)}</span><span class="chip">${UI.esc(p.state)}</span>
+      </div>`).join('') || '<div class="text-slate-500">Nobody else in the room.</div>';
+  }
+
+  // --- rail + refresh -----------------------------------------------------
+  $('lk-rail').addEventListener('click', (event) => {
+    const item = event.target.closest('[data-section]');
+    if (!item) return;
+    section = item.dataset.section;
+    $('lk-rail').querySelectorAll('.lk-rail-item').forEach((btn) => {
+      btn.classList.toggle('active', btn === item);
+    });
+    renderSection();
+  });
 
   $('lk-refresh').addEventListener('click', async (event) => {
     const btn = event.currentTarget;
     btn.disabled = true;
-    await loadStatus();
-    await loadRooms();
+    await loadConsole();
     btn.disabled = false;
   });
 
-  // --- builder -------------------------------------------------------------
-  $('lk-b-build').addEventListener('click', async () => {
-    const btn = $('lk-b-build');
-    btn.disabled = true;
-    $('lk-b-status').textContent = 'Generating…';
-    try {
-      const res = await fetch('/api/livekit/build', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: $('lk-b-name').value.trim(),
-          sttModel: $('lk-b-stt').value.trim(),
-          llmModel: $('lk-b-llm').value.trim(),
-          ttsModel: $('lk-b-tts').value.trim(),
-          ttsVoice: $('lk-b-voice').value,
-          greeting: $('lk-b-greeting').value.trim(),
-          prompt: $('lk-b-prompt').value,
-          preemptive: $('lk-b-preemptive').checked,
-        }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'build failed');
-      bundle = data.files;
-      activeFile = 'agent.py';
-      $('lk-b-output-wrap').classList.remove('hidden');
-      $('lk-b-download').disabled = false;
-      $('lk-b-status').textContent = `Generated ${Object.keys(bundle).length} file(s)`;
-      $('lk-b-deploy').textContent = `${data.deployCommand} — or push the files to LiveKit Cloud and run “python agent.py start”.`;
-      renderBundle();
-    } catch (err) {
-      $('lk-b-status').textContent = 'Failed';
-      UI.toast(err.message, 'error');
-    } finally {
-      btn.disabled = false;
-    }
-  });
-
-  function renderBundle() {
-    if (!bundle) return;
-    $('lk-b-output').textContent = bundle[activeFile] || '';
-    $('lk-b-tabs').innerHTML = Object.keys(bundle).map((name) => `
-      <button class="btn btn-xs ${name === activeFile ? 'btn-primary' : 'btn-outline'}" data-file="${name}" type="button">${name}</button>`).join('');
-    $('lk-b-tabs').querySelectorAll('[data-file]').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        activeFile = btn.dataset.file;
-        renderBundle();
-      });
-    });
-  }
-
-  $('lk-b-download').addEventListener('click', () => {
-    if (!bundle) return;
-    const content = bundle[activeFile] || '';
-    const blob = new Blob([content], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = activeFile;
-    a.click();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-    UI.toast(`${activeFile} downloaded`, 'success');
-  });
-
-  populateVoices();
-  await loadStatus();
-  await loadRooms();
+  await loadConsole();
 })();

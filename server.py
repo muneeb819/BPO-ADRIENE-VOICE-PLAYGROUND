@@ -2182,14 +2182,20 @@ def livekit_cloud_cli(args: list[str], timeout: int = 30) -> dict:
     except subprocess.TimeoutExpired:
         raise ApiError("LiveKit Cloud API timed out", 502)
     out = (proc.stdout or "").strip()
-    start = out.find("{")
-    if start < 0:
+    starts = [i for i in (out.find("{"), out.find("[")) if i >= 0]
+    if not starts:
         detail = (proc.stderr or out or "").strip().splitlines()
         raise ApiError(f"LiveKit Cloud API error: {detail[-1][:160] if detail else 'no output'}", 502)
-    try:
-        return json.loads(out[start:])
-    except ValueError:
+    payload = None
+    for start in sorted(starts):
+        try:
+            payload = json.loads(out[start:])
+            break
+        except ValueError:
+            continue
+    if payload is None:
         raise ApiError("LiveKit Cloud API returned an unreadable payload", 502)
+    return payload
 
 
 def livekit_cloud_agents() -> list[dict]:
@@ -2266,6 +2272,191 @@ def livekit_cloud_status(agent_id: str) -> dict:
         return livekit_cloud_cli(["agent", "status", "--id", agent_id])
     except ApiError:
         return {}
+
+
+def livekit_cloud_simulations() -> list[dict]:
+    if not (LIVEKIT_CLOUD_API_KEY and LIVEKIT_CLOUD_API_SECRET):
+        return []
+    try:
+        data = livekit_cloud_cli(["agent", "simulate", "list"])
+    except ApiError:
+        return []
+    runs = data.get("runs") or data.get("simulations") or []
+    if isinstance(runs, dict):
+        runs = [runs]
+    return [{
+        "id": r.get("id") or r.get("simulationId") or "",
+        "status": r.get("status") or "",
+        "agentName": r.get("agentName") or r.get("agent_name") or "",
+        "createdAt": r.get("createdAt") or r.get("created_at") or "",
+        "numSimulations": r.get("numSimulations") or r.get("num_simulations") or 0,
+        "passed": r.get("passed") or 0,
+        "failed": r.get("failed") or 0,
+    } for r in runs if isinstance(r, dict)]
+
+
+def livekit_cloud_sip() -> dict:
+    """SIP trunks, dispatch rules and participants (LiveKit telephony)."""
+    out = {"inbound": [], "outbound": [], "dispatchRules": [], "participants": []}
+    if not (LIVEKIT_CLOUD_API_KEY and LIVEKIT_CLOUD_API_SECRET):
+        return out
+    for key, args in (("inbound", ["sip", "inbound", "list"]),
+                      ("outbound", ["sip", "outbound", "list"]),
+                      ("dispatchRules", ["sip", "dispatch", "list"]),
+                      ("participants", ["sip", "participant", "list"])):
+        try:
+            data = livekit_cloud_cli(args)
+        except ApiError:
+            continue
+        items = data if isinstance(data, list) else (data.get(key) or [])
+        out[key] = [i for i in items if isinstance(i, dict)]
+    return out
+
+
+def livekit_cloud_media() -> dict:
+    """Active egress (recording/streaming) and ingress (external media) jobs."""
+    out = {"egress": [], "ingress": []}
+    if not (LIVEKIT_CLOUD_API_KEY and LIVEKIT_CLOUD_API_SECRET):
+        return out
+    for key, args in (("egress", ["egress", "list"]), ("ingress", ["ingress", "list"])):
+        try:
+            data = livekit_cloud_cli(args)
+        except ApiError:
+            continue
+        items = data if isinstance(data, list) else (data.get(key) or [])
+        out[key] = [i for i in items if isinstance(i, dict)]
+    return out
+
+
+def livekit_cloud_projects() -> list[dict]:
+    """Configured LiveKit projects - API secrets are redacted before returning."""
+    if not (LIVEKIT_CLOUD_API_KEY and LIVEKIT_CLOUD_API_SECRET):
+        return []
+    try:
+        data = livekit_cloud_cli(["project", "list"])
+    except ApiError:
+        return []
+    projects = data if isinstance(data, list) else (data.get("projects") or [])
+    out = []
+    for project in projects:
+        if not isinstance(project, dict):
+            continue
+        out.append({
+            "name": project.get("Name") or project.get("name") or "",
+            "projectId": project.get("ProjectId") or project.get("project_id") or "",
+            "url": project.get("URL") or project.get("url") or "",
+            "apiKey": (project.get("APIKey") or "")[:4] + "…" if project.get("APIKey") else "",
+            "hasSecret": bool(project.get("APISecret") or project.get("api_secret")),
+        })
+    return out
+
+
+def livekit_dispatches(room_name: str) -> list[dict]:
+    """Agent dispatches (running bots) in a room."""
+    from livekit import api
+
+    async def _run():
+        client = api.LiveKitAPI(LIVEKIT_URL, LIVEKIT_API_KEY, LIVEKIT_API_SECRET)
+        try:
+            items = await client.agent_dispatch.list_dispatch(room_name)
+            return [{
+                "id": getattr(d, "id", "") or "",
+                "agentName": getattr(d, "agent_name", "") or "",
+                "roomName": getattr(d, "room_name", "") or room_name,
+                "metadata": getattr(d, "metadata", "") or "",
+            } for d in (items or [])]
+        finally:
+            try:
+                await client.aclose()
+            except Exception:
+                pass
+
+    return _livekit_call(_run)
+
+
+_LIVEKIT_CONSOLE_CACHE: dict = {"at": 0.0, "data": None}
+
+
+def livekit_console() -> dict:
+    """Everything the LiveKit Cloud console shows, aggregated for the UI."""
+    cached = _LIVEKIT_CONSOLE_CACHE.get("data")
+    if cached and (time.time() - _LIVEKIT_CONSOLE_CACHE["at"]) < 120:
+        return cached
+
+    from concurrent.futures import ThreadPoolExecutor
+
+    results: dict = {}
+
+    def run(key, fn, default):
+        try:
+            results[key] = fn()
+        except Exception as exc:
+            results[key] = default
+            results.setdefault("errors", {})[key] = str(exc)[:120]
+
+    with ThreadPoolExecutor(max_workers=6) as pool:
+        jobs = [
+            ("agents", livekit_cloud_agents, []),
+            ("simulations", livekit_cloud_simulations, []),
+            ("telephony", livekit_cloud_sip, {"inbound": [], "outbound": [], "dispatchRules": [], "participants": []}),
+            ("media", livekit_cloud_media, {"egress": [], "ingress": []}),
+            ("projects", livekit_cloud_projects, []),
+        ]
+        for key, fn, default in jobs:
+            pool.submit(run, key, fn, default)
+
+    agents = results.get("agents") or []
+    rooms = []
+    try:
+        rooms = livekit_rooms()
+    except Exception:
+        rooms = []
+    for room in rooms:
+        try:
+            room["dispatches"] = livekit_dispatches(room.get("name"))
+        except Exception:
+            room["dispatches"] = []
+
+    participants = sum(int(r.get("participants") or 0) for r in rooms)
+    agent_deployments = sum(len(a.get("deployments") or []) for a in agents)
+    live_agents = sum(1 for a in agents if any(
+        str(d.get("status") or "").lower() in ("running", "available", "active") for d in (a.get("deployments") or [])))
+
+    payload = {
+        "generatedAt": now_iso(),
+        "authorized": bool(LIVEKIT_CLOUD_API_KEY and LIVEKIT_CLOUD_API_SECRET),
+        "project": {
+            "url": LIVEKIT_URL,
+            "host": livekit_host(),
+            "agentName": LIVEKIT_AGENT_NAME,
+            "projects": results.get("projects") or [],
+            "hasProjectKey": bool(LIVEKIT_API_KEY and LIVEKIT_API_SECRET),
+            "hasCloudKey": bool(LIVEKIT_CLOUD_API_KEY and LIVEKIT_CLOUD_API_SECRET),
+        },
+        "agents": agents,
+        "rooms": rooms,
+        "simulations": results.get("simulations") or [],
+        "telephony": results.get("telephony") or {},
+        "media": results.get("media") or {},
+        "projects": results.get("projects") or [],
+        "errors": results.get("errors") or {},
+        "usage": {
+            "rooms": len(rooms),
+            "participants": participants,
+            "agents": len(agents),
+            "deployments": agent_deployments,
+            "liveAgents": live_agents,
+            "simulations": len(results.get("simulations") or []),
+        },
+        "voices": {
+            "ttsVoices": len(FLUX_VOICES) + len(AURA_VOICES),
+            "families": ["Flux", "Aura"],
+            "provider": "Deepgram + LiveKit Inference",
+        },
+    }
+    _LIVEKIT_CONSOLE_CACHE["at"] = time.time()
+    _LIVEKIT_CONSOLE_CACHE["data"] = payload
+    return payload
 
 
 def api_admin_overview():
@@ -3843,6 +4034,48 @@ class Handler(BaseHTTPRequestHandler):
                 agent_id = urllib.parse.unquote(m.group(1))
                 return self.write_api_result(livekit_cloud_status(agent_id))
 
+            if path == "/api/livekit/console":
+                require("GET")
+                return self.write_api_result(livekit_console())
+
+            if path == "/api/livekit/console/simulate":
+                require("POST")
+                payload = self.json_body()
+                agent_name = str(payload.get("agentName") or LIVEKIT_AGENT_NAME).strip()
+                count = max(1, min(10, int(payload.get("scenarios") or 2)))
+                if not agent_name:
+                    raise ApiError("agentName is required to run a simulation", 400)
+                scenarios = payload.get("scenarios") or [
+                    {"name": "Greeting", "prompt": "Say hello and ask how you can help."},
+                    {"name": "Pricing", "prompt": "Ask what the price is and how billing works."},
+                    {"name": "Transfer", "prompt": "Ask to be transferred to a human representative."},
+                ]
+                if not isinstance(scenarios, list):
+                    raise ApiError("scenarios must be a list", 400)
+                # The CLI expects a YAML scenarios file.
+                lines = ["scenarios:"]
+                for item in scenarios[:count]:
+                    if isinstance(item, dict):
+                        lines.append(f"  - name: {json.dumps(str(item.get('name') or 'Scenario'))}")
+                        lines.append(f"    prompt: {json.dumps(str(item.get('prompt') or ''))}")
+                    else:
+                        lines.append(f"  - name: {json.dumps(str(item))}")
+                        lines.append(f"    prompt: {json.dumps(str(item))}")
+                tmp = Path(DATA_DIR) / "livekit-scenarios.yaml"
+                tmp.parent.mkdir(parents=True, exist_ok=True)
+                tmp.write_text("\n".join(lines) + "\n", encoding="utf-8")
+                try:
+                    data = livekit_cloud_cli([
+                        "agent", "simulate", "--agent-name", agent_name,
+                        "--scenarios", str(tmp), "--num-simulations", str(count), "--yes",
+                    ], timeout=240)
+                finally:
+                    try:
+                        tmp.unlink()
+                    except OSError:
+                        pass
+                return 200, {"started": True, "agentName": agent_name, "result": data}
+
             if path == "/api/demo-requests":
                 # Placeholder booking endpoint for the marketing site. It
                 # validates the payload but deliberately stores nothing until a
@@ -3963,6 +4196,14 @@ class Server(ThreadingHTTPServer):
     daemon_threads = True
 
 
+def _warm_livekit_console() -> None:
+    """Pre-fetch the LiveKit console so the page renders without a cold wait."""
+    try:
+        livekit_console()
+    except Exception:
+        pass
+
+
 def _code_watchdog(port: int) -> None:
     """Restart the process when server.py changes on disk.
 
@@ -4038,6 +4279,10 @@ def main():
 
     # Reload automatically after a code change (no admin rights needed).
     threading.Thread(target=_code_watchdog, args=(port,), daemon=True).start()
+
+    # Warm the LiveKit console cache so the page opens instantly.
+    if LIVEKIT_CLOUD_API_KEY and LIVEKIT_CLOUD_API_SECRET:
+        threading.Thread(target=_warm_livekit_console, daemon=True).start()
 
     def shutdown(signum, frame):
         print("\n  Shutting down gracefully…")

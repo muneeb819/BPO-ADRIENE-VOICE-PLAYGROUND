@@ -286,3 +286,21 @@ html[data-theme="light"] .focus\:border-violet-400:focus { border-color: var(--b
 .dg-dot { background: var(--brand-teal); box-shadow: 0 0 0 3px rgba(20, 184, 166, .18); }
 .metric-tile.primary { background: linear-gradient(145deg, #7c3aed, #5b21b6); }
 .page-footer-brand { color: #64748b; }
+
+/* LiveKit console rail */
+.lk-rail-item {
+  display: flex; align-items: center; gap: 8px; width: 100%;
+  padding: 7px 9px; border-radius: 9px; border: 1px solid transparent;
+  background: transparent; color: #475569; cursor: pointer;
+  font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 650; text-align: left;
+  transition: all .15s ease;
+}
+.lk-rail-item:hover { background: rgba(124, 58, 237, .10); color: #0f172a; }
+.lk-rail-item.active {
+  background: linear-gradient(180deg, #7c3aed, #6d28d9);
+  color: #fff; border-color: rgba(167, 139, 250, .4);
+  box-shadow: 0 6px 16px rgba(109, 40, 217, .22);
+}
+html[data-theme="light"] .lk-rail-item { color: #64748b; }
+html[data-theme="light"] .lk-rail-item:hover { background: #f5f3ff; color: #0f172a; }
+.lk-audio { display: none; }

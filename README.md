@@ -121,6 +121,26 @@ LiveKit is bound to this project the same way Deepgram is: credentials in `.env`
 
 The **LiveKit** side-panel section in the sidebar holds the console and the agent builder.
 
+### LiveKit console
+
+`/livekit` mirrors the LiveKit Cloud console, every section backed by the live project:
+
+| Section | What it shows |
+|---|---|
+| **Overview** | agents, deployments, live rooms, participants |
+| **Sessions** | live rooms with their participants and dispatched agents |
+| **Simulations** | judged simulation runs on LiveKit Cloud (`lk agent simulate`) + a *Run text simulation* action |
+| **Agents** | console agents with **Versions**, **Secrets** and a **Simulate** action |
+| **Voices** | the 41-voice Deepgram catalogue the agents can use |
+| **Telephony** | SIP trunks, dispatch rules and SIP participants (read-only — live dialling stays blocked here) |
+| **Egress & Ingress** | active recording/streaming jobs and external media ingress |
+| **Usage** | rooms, participants, agents and simulation runs at a glance |
+| **Settings** | project, credentials posture, configured projects (secrets redacted) and the deploy command |
+
+### Test the bot
+
+The **Test the bot** panel at the top of the page creates a room, dispatches the deployed agent and joins it from the browser with the microphone live — using the self-hosted LiveKit browser client (`assets/vendor/livekit-client.umd.js`, no CDN). You get the live transcript, the participant list (bot included) and the bot's audio. Mic capture needs a secure context, so use `https://192.168.18.29` or `http://localhost:8088`.
+
 ## Connected Deepgram account
 
 **One side-panel section holds everything Deepgram.** The sidebar is grouped into *Workspace*, *Deepgram* and *Quality & Delivery*. The **Deepgram Compliance** entry is a single collapsible button: one click drops the related pages down (chevron points up), the next click folds them back (chevron points down) and the choice is remembered between visits. Clicking **Deepgram Compliance → Compliance Overview** opens `/deepgram`, which shows:

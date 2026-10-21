@@ -513,7 +513,17 @@ def check_livekit(c: Client):
             require(code == 200, f"cloud secrets returned {code}")
             for secret in secrets.get("secrets") or []:
                 require("value" not in secret, "the secrets payload leaks a value")
-            return (f"{status.get('host')} - {len(listed)} room(s) - "
+
+            # The console view powers every LiveKit Cloud section.
+            code, console_data = c.get("/api/livekit/console")
+            require(code == 200, f"console returned {code}")
+            for key in ("agents", "rooms", "simulations", "telephony", "media", "usage", "project"):
+                require(key in console_data, f"console payload is missing '{key}'")
+            require(console_data.get("agents"), "console shows no cloud agents")
+            for project in console_data.get("projects") or []:
+                require("apiSecret" not in project and "APISecret" not in project,
+                        "the console payload leaks a project secret")
+        return (f"{status.get('host')} - {len(listed)} room(s) - "
                     f"cloud {len(agents)} agent(s) - bundle {len(files)} files")
         return (f"{status.get('host')} - {len(listed)} room(s) - "
                 f"bundle {len(files)} files")
