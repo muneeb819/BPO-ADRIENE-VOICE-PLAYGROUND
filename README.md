@@ -221,6 +221,8 @@ What it does:
 
 The backend keeps listening on loopback only, so the API is never exposed directly — IIS is the only public entry point.
 
+**Live on this machine:** <http://192.168.18.29:8088> — verified with the full smoke suite (`python smoke_test.py --base-url http://192.168.18.29:8088` → 16/16).
+
 ---
 
 ## Data, backup and reset
