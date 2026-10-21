@@ -57,6 +57,38 @@
 
   // ---- helpers -----------------------------------------------------------
 
+  // The browser only exposes microphone capture in a secure context
+  // (https, or http on localhost). The mic therefore works on the published
+  // HTTPS address; on plain HTTP we point the user at it instead of failing
+  // silently.
+  function secureContext() {
+    return window.isSecureContext !== false;
+  }
+
+  function micHttpsUrl() {
+    const host = location.hostname || 'localhost';
+    return `https://${host}:443/playground`;
+  }
+
+  function updateMicSecurityHint() {
+    const hint = $('mic-https-hint');
+    const text = $('mic-https-text');
+    if (!hint || !text) return;
+    const hasCapture = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+    if (secureContext() && hasCapture) {
+      hint.classList.add('hidden');
+      return;
+    }
+    const httpsUrl = micHttpsUrl();
+    const localUrl = `http://localhost:${location.port || 80}${location.pathname || '/playground'}`;
+    text.innerHTML = `This page is not a secure context, so the browser blocks microphone capture. `
+      + `Pick one: `
+      + `<a class="font-bold underline" href="${httpsUrl}">${httpsUrl}</a> (HTTPS), `
+      + `<a class="font-bold underline" href="${localUrl}">${localUrl}</a> (localhost is always secure), `
+      + `or run <span class="font-mono font-bold">start-mic-browser.cmd</span> which starts Chrome/Edge with this origin treated as secure.`;
+    hint.classList.remove('hidden');
+  }
+
   function setMicDot(color) {
     const dot = $('mic-dot');
     dot.style.background = color;
@@ -525,11 +557,11 @@
     $('audio-sub').textContent = micOn
       ? (micStream?.getAudioTracks()[0]?.label || 'Default input')
       : 'Click Enable mic';
-    $('err-mic').textContent = micOn ? 'granted' : 'text';
-    $('err-mic').className = `pill ${micOn ? 'pill-green' : 'pill-gray'}`;
-    $('err-mic-sub').textContent = micOn
-      ? 'Live capture - levels on the meter'
-      : 'Text-only fallback stays available';
+    $('err-mic').textContent = !secureContext() ? 'https needed' : (micOn ? 'granted' : 'text');
+    $('err-mic').className = `pill ${!secureContext() ? 'pill-amber' : (micOn ? 'pill-green' : 'pill-gray')}`;
+    $('err-mic-sub').textContent = !secureContext()
+      ? 'Open the HTTPS address - browsers block the mic on plain HTTP'
+      : (micOn ? 'Live capture - levels on the meter' : 'Text-only fallback stays available');
     $('stt-toggle').textContent = `STT: ${sttAuto ? 'Auto' : 'Off'}`;
     $('stt-toggle').className = `btn btn-xs ${sttAuto ? 'btn-primary' : 'btn-outline'}`;
     $('record-btn').classList.toggle('hidden', !micOn);
@@ -539,10 +571,15 @@
 
   async function enableMic() {
     if (!navigator.mediaDevices?.getUserMedia) {
-      UI.toast('This browser does not expose microphone capture. Text mode remains available.', 'error');
-      $('err-mic').textContent = 'unsupported';
+      updateMicSecurityHint();
+      UI.toast(secureContext()
+        ? 'This browser does not expose microphone capture. Text mode remains available.'
+        : 'Microphone needs a secure context - open the HTTPS address.', 'error');
+      $('err-mic').textContent = secureContext() ? 'unsupported' : 'https needed';
       $('err-mic').className = 'pill pill-amber';
-      $('err-mic-sub').textContent = 'Browser exposes no microphone API - type instead';
+      $('err-mic-sub').textContent = secureContext()
+        ? 'Browser exposes no microphone API - type instead'
+        : 'Open the HTTPS address - browsers block the mic on plain HTTP';
       return;
     }
     try {
@@ -994,6 +1031,7 @@
 
   updateSoundButton();
   setMicUI();
+  updateMicSecurityHint();
   renderMetrics();
   try {
     const [healthData, providerList] = await Promise.all([API.health(), API.providers()]);

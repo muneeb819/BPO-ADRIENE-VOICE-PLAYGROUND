@@ -15,6 +15,7 @@
 #>
 param(
     [int]$Port = 8088,
+    [int]$HttpsPort = 443,
     [string]$BindAddress = "",
     [int]$BackendPort = 8010,
     [string]$SiteName = "AdrienneVoice",
@@ -46,7 +47,7 @@ function Test-Admin {
 if (-not (Test-Admin)) {
     Write-Host "Requesting administrator rights (approve the UAC prompt)..."
     $argList = @("-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "`"$PSCommandPath`"",
-                 "-Port", "$Port", "-BackendPort", "$BackendPort",
+                 "-Port", "$Port", "-HttpsPort", "$HttpsPort", "-BackendPort", "$BackendPort",
                  "-SiteName", $SiteName, "-AppPoolName", $AppPoolName,
                  "-WebRoot", "`"$WebRoot`"", "-ProjectRoot", "`"$ProjectRoot`"")
     if ($BindAddress) { $argList += @("-BindAddress", $BindAddress) }
@@ -215,17 +216,9 @@ try {
     $rewrite = @"
     <rewrite>
       <rules>
-        <rule name="Adriene API proxy" stopProcessing="true">
-          <match url="^api/(.*)" />
-          <action type="Rewrite" url="http://127.0.0.1:$BackendPort/api/{R:1}" />
-        </rule>
-        <rule name="Adriene page routes" stopProcessing="true">
-          <match url="^(agents|playground|lab|testing|analytics|security|telephony|docs)$" />
-          <action type="Rewrite" url="{R:1}.html" />
-        </rule>
-        <rule name="Adriene foundation route" stopProcessing="true">
-          <match url="^foundation$" />
-          <action type="Rewrite" url="index.html" />
+        <rule name="Adrienne app proxy" stopProcessing="true">
+          <match url="^(.*)$" />
+          <action type="Rewrite" url="http://127.0.0.1:$BackendPort/{R:1}" />
         </rule>
       </rules>
     </rewrite>
@@ -262,7 +255,80 @@ try {
     }
     & icacls $WebRoot /grant "IIS_IUSRS`:(OI)(CI)(RX)" /T | Out-Null
 
-    # --- 7. firewall --------------------------------------------------------
+    # --- 7. HTTPS binding (microphone capture needs a secure context) ------
+    $httpsUrl = $null
+    if ($HttpsPort -gt 0) {
+        try {
+            $cert = Get-ChildItem Cert:\LocalMachine\My |
+                    Where-Object { $_.Subject -eq "CN=$BindAddress" -and $_.HasPrivateKey -and $_.NotAfter -gt (Get-Date).AddDays(30) } |
+                    Select-Object -First 1
+            if (-not $cert) {
+                # Windows PowerShell 5.1 has no -IpAddress switch, so the
+                # subjectAltName extension is written explicitly (IP + DNS).
+                $san = "ipaddress=$BindAddress&dns=localhost&dns=$($env:COMPUTERNAME.ToLower()).local"
+                $cert = New-SelfSignedCertificate -Subject "CN=$BindAddress" `
+                    -TextExtension @("2.5.29.37={text}1.3.6.1.5.5.7.3.1", "2.5.29.17={text}$san") `
+                    -CertStoreLocation "Cert:\LocalMachine\My" `
+                    -NotAfter (Get-Date).AddYears(3) -KeyUsage DigitalSignature, KeyEncipherment `
+                    -FriendlyName "Adrienne Voice Playground"
+                Write-Log "Created self-signed certificate CN=$BindAddress ($($cert.Thumbprint))"
+            } else {
+                Write-Log "Reusing certificate $($cert.Thumbprint)"
+            }
+
+            # Trust it machine-wide so browsers accept it without a warning.
+            $rootStore = New-Object System.Security.Cryptography.X509Certificates.X509Store("Root", "LocalMachine")
+            $rootStore.Open("ReadWrite")
+            $alreadyTrusted = $rootStore.Certificates | Where-Object { $_.Thumbprint -eq $cert.Thumbprint }
+            if (-not $alreadyTrusted) {
+                $rootStore.Add((Get-Item "Cert:\LocalMachine\My\$($cert.Thumbprint)"))
+                Write-Log "Certificate trusted in LocalMachine\Root"
+            }
+            $rootStore.Close()
+
+            # The Windows client WebAdministration module cannot attach a
+            # certificate, so the binding is written through the
+            # Microsoft.Web.Administration API (CertificateHash is a byte[]).
+            $dll = "C:\Windows\System32\WindowsPowerShell\v1.0\Modules\IISAdministration\Microsoft.Web.Administration.dll"
+            $asm = [Reflection.Assembly]::LoadFrom($dll)
+            $mgr = [Activator]::CreateInstance($asm.GetType("Microsoft.Web.Administration.ServerManager", $true))
+            $site = $null
+            foreach ($s in $mgr.Sites) { if ($s.Name -eq $SiteName) { $site = $s } }
+            if (-not $site) { throw "IIS site '$SiteName' not found." }
+
+            $hex = $cert.Thumbprint -replace '[^0-9A-Fa-f]', ''
+            $hash = New-Object byte[] ($hex.Length / 2)
+            for ($i = 0; $i -lt $hash.Length; $i++) { $hash[$i] = [Convert]::ToByte($hex.Substring($i * 2, 2), 16) }
+
+            $httpsBindings = @($site.Bindings) | Where-Object { $_.protocol -eq "https" }
+            if ($httpsBindings) {
+                foreach ($b in $httpsBindings) {
+                    $b.CertificateHash = $hash
+                    $b.CertificateStoreName = "My"
+                    $b.SslFlags = 0
+                }
+                Write-Log "certificate attached to the existing https binding"
+            } else {
+                # Add the binding first, then attach the certificate hash to it
+                # (the collection overload that takes the hash byte[] is not
+                # reachable from PowerShell's binder).
+                $b = $site.Bindings.Add("https", "$BindAddress`:$HttpsPort`:*")
+                $b.CertificateHash = $hash
+                $b.CertificateStoreName = "My"
+                $b.SslFlags = 0
+                Write-Log "https binding created with the certificate"
+            }
+            $mgr.CommitChanges()
+            & cmd /c "`"$AppCmd`" restart site `"$SiteName`"" 2>&1 | Out-Null
+            Start-Sleep -Seconds 3
+            Write-Log "HTTPS binding added on $BindAddress`:$HttpsPort (thumbprint $($cert.Thumbprint))"
+            $httpsUrl = "https://$BindAddress`:$HttpsPort"
+        } catch {
+            Write-Log "HTTPS binding failed: $($_.Exception.Message)" "WARN"
+        }
+    }
+
+    # --- 8. firewall --------------------------------------------------------
     try {
         if (-not (Get-NetFirewallRule -DisplayName "Adriene IIS $Port" -ErrorAction SilentlyContinue)) {
             New-NetFirewallRule -DisplayName "Adriene IIS $Port" -Direction Inbound `
@@ -275,7 +341,7 @@ try {
         Write-Log "Firewall rule skipped: $($_.Exception.Message)" "WARN"
     }
 
-    # --- 8. optional startup task ------------------------------------------
+    # --- 9. optional startup task ------------------------------------------
     if ($RegisterStartup) {
         $python = (Get-Command python -ErrorAction SilentlyContinue).Source
         $action = New-ScheduledTaskAction -Execute $python `
@@ -285,7 +351,7 @@ try {
         Write-Log "Scheduled task 'AdrienneVoiceBackend' registered"
     }
 
-    # --- 9. find a working web.config, then verify every route -------------
+    # --- 10. find a working web.config, then verify every route ------------
     $lan = "http://$BindAddress`:$Port"
     $loop = "http://127.0.0.1`:$Port"
     $webConfigPath = Join-Path $WebRoot "web.config"
@@ -325,29 +391,38 @@ try {
     }
 
     $paths = @("/", "/agents", "/playground", "/lab", "/testing", "/analytics", "/security", "/telephony", "/docs", "/api/health")
+    $targets = @()
+    foreach ($p in $paths) { $targets += [pscustomobject]@{ label = "http $p"; url = "$lan$p" } }
+    if ($httpsUrl) {
+        foreach ($p in @("/", "/playground", "/lab", "/api/health")) {
+            $targets += [pscustomobject]@{ label = "https $p"; url = "$httpsUrl$p" }
+        }
+    }
     $results = @{}
     for ($attempt = 1; $attempt -le 12; $attempt++) {
-        foreach ($path in $paths) {
-            if ($results.ContainsKey($path)) { continue }
-            $r = Test-Http "$lan$path"
-            $results[$path] = $r
+        foreach ($target in $targets) {
+            if ($results.ContainsKey($target.label)) { continue }
+            $results[$target.label] = Test-Http $target.url
         }
         $ok = @($results.Values | Where-Object { $_.status -eq 200 }).Count
-        Write-Log "Attempt $attempt : $ok/$($paths.Count) routes answering on $lan"
-        if ($ok -eq $paths.Count) { break }
+        Write-Log "Attempt $attempt : $ok/$($targets.Count) routes answering"
+        if ($ok -eq $targets.Count) { break }
         Start-Sleep -Seconds 2
     }
-    foreach ($path in $paths) {
-        $r = $results[$path]
+    foreach ($target in $targets) {
+        $r = $results[$target.label]
         $level = if ($r.status -eq 200) { "INFO" } else { "ERROR" }
-        Write-Log "GET $path -> $($r.status) ($($r.bytes) bytes)" $level
+        Write-Log "GET $($target.label) -> $($r.status) ($($r.bytes) bytes)" $level
     }
     $ok = @($results.Values | Where-Object { $_.status -eq 200 }).Count
-    Write-Log "Verification: $ok/$($paths.Count) endpoints returned 200 on $lan (loopback alias $loop)"
+    Write-Log "Verification: $ok/$($targets.Count) endpoints returned 200"
 
     Write-Host ""
     Write-Host "  Adriene Voice Playground is published on IIS" -ForegroundColor Green
-    Write-Host "  URL:  $lan" -ForegroundColor Green
+    Write-Host "  HTTP :  $lan" -ForegroundColor Green
+    if ($httpsUrl) {
+        Write-Host "  HTTPS:  $httpsUrl   (microphone capture works here)" -ForegroundColor Green
+    }
     Write-Host "  Log:  $LogPath" -ForegroundColor DarkGray
     Write-Host ""
     exit 0

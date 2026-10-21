@@ -225,6 +225,20 @@ The backend keeps listening on loopback only, so the API is never exposed direct
 
 ---
 
+## Microphone (mic) capture
+
+Browsers only expose `navigator.mediaDevices.getUserMedia` in a **secure context** — HTTPS, or HTTP on `localhost`. Three ways to get a working mic:
+
+| Option | Command / URL | Notes |
+|---|---|---|
+| Local host | <http://localhost:8088/playground> | Browsers always treat `localhost` as secure — no setup, no admin rights |
+| LAN IP | `start-mic-browser.cmd` | Starts Chrome/Edge with `--unsafely-treat-insecure-origin-as-secure=http://192.168.18.29:8088` in a dedicated profile |
+| HTTPS | `publish-iis.cmd` (elevated) | Creates a self-signed certificate (IP + localhost SAN), trusts it in `LocalMachine\Root` and binds `https://192.168.18.29` (443) — the mic then works natively in any browser |
+
+The app detects the situation instead of failing silently: the Microphone panel shows an amber banner with the exact URLs, and the *Provider status & fallbacks* card reports `https needed` for the microphone row while the STT/TTS adapters stay `connected`.
+
+---
+
 ## Data, backup and reset
 
 Stop the server before copying the database.

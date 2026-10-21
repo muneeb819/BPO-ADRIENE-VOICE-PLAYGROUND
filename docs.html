@@ -53,6 +53,12 @@ python smoke_test.py --base-url http://127.0.0.1:8000
 # Publish on IIS and bind the LAN address (approve the UAC prompt)
 publish-iis.cmd
 # -> http://&lt;your-lan-ip&gt;:8088   (logs to publish-iis.log)
+# -> https://&lt;your-lan-ip&gt;        (mic capture works here)
+
+# Microphone: browsers need a secure context (https or localhost)
+start-mic-browser.cmd
+# -> opens Chrome/Edge with the LAN origin treated as secure
+#    http://localhost:8088 is always secure and needs no setup
 
 # Backup (stop the server first)
 Copy-Item data\adriene.db data\adriene-backup.db
