@@ -488,8 +488,7 @@ def check_livekit(c: Client):
         require(any(r.get("name") == room_name for r in listed),
                 "created room is not listed")
 
-        code, built = c.post("/api/livekit/build", body={
-            "name": "Smoke Agent", "greeting": "Hi there", "prompt": "You are a smoke test agent.",
+        code, built = c.post("/api/livekit/build", body={            "name": "Smoke Agent", "greeting": "Hi there", "prompt": "You are a smoke test agent.",
             "sttModel": "xai/stt-1", "llmModel": "google/gemma-4-31b-it",
             "ttsModel": "fishaudio/s2.1-pro", "ttsVoice": "flux-brittany-en"})
         require(code == 200, f"builder returned {code}")
@@ -498,7 +497,25 @@ def check_livekit(c: Client):
             require(name in files, f"generated bundle is missing {name}")
         require("AgentSession" in files["agent.py"], "generated worker has no AgentSession")
         require("LIVEKIT_API_SECRET" in files[".env.example"], "generated env has no LiveKit secret")
-        return (f"{status.get('host')} · {len(listed)} room(s) · "
+
+        # Cloud API (agents, versions, secrets) when a Cloud key is configured.
+        code, cloud = c.get("/api/livekit/cloud/agents")
+        require(code == 200, f"cloud agents returned {code}")
+        if cloud.get("authorized"):
+            agents = cloud.get("agents") or []
+            require(agents, "cloud API authorized but returned no agents")
+            first = agents[0]
+            require(first.get("id"), "cloud agent has no id")
+            code, versions = c.get(f"/api/livekit/cloud/agents/{first['id']}/versions")
+            require(code == 200, f"cloud versions returned {code}")
+            require(versions.get("versions") is not None, "cloud versions payload is wrong")
+            code, secrets = c.get(f"/api/livekit/cloud/agents/{first['id']}/secrets")
+            require(code == 200, f"cloud secrets returned {code}")
+            for secret in secrets.get("secrets") or []:
+                require("value" not in secret, "the secrets payload leaks a value")
+            return (f"{status.get('host')} - {len(listed)} room(s) - "
+                    f"cloud {len(agents)} agent(s) - bundle {len(files)} files")
+        return (f"{status.get('host')} - {len(listed)} room(s) - "
                 f"bundle {len(files)} files")
     finally:
         c.delete(f"/api/livekit/rooms/{room_name}")

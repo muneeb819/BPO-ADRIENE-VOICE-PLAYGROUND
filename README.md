@@ -117,7 +117,7 @@ LiveKit is bound to this project the same way Deepgram is: credentials in `.env`
 | **Control** | `GET/POST/DELETE /api/livekit/rooms` — list, create and delete rooms on the live project |
 | **Use** | `POST /api/livekit/dispatch` starts the deployed agent in a room; `POST /api/livekit/token` mints a browser join token |
 | **Build** | `POST /api/livekit/build` renders a deployable worker from the builder: `agent.py` (LiveKit `AgentSession` with STT → LLM → TTS, VAD, turn handling), `.env.example`, `Dockerfile`, `requirements.txt`. The TTS voice is picked from the connected **Deepgram** catalogue |
-| **Deploy** | `lk cloud api-key create` → `LIVEKIT_CLOUD_API_KEY` / `LIVEKIT_CLOUD_API_SECRET` in `.env` unlocks agents, versions, builds and secrets in the Cloud API. Without it the project key still controls rooms and dispatch |
+| **Deploy** | The Cloud API key (`LIVEKIT_CLOUD_API_KEY` / `LIVEKIT_CLOUD_API_SECRET`) unlocks the console agents, their **versions** and **secrets** (names only). The app talks to the Cloud API through the official `lk` CLI, so agents created in the LiveKit console are visible, versioned and auditable from here |
 
 The **LiveKit** side-panel section in the sidebar holds the console and the agent builder.
 

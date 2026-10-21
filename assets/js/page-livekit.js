@@ -82,21 +82,77 @@
       pill.className = 'pill pill-green no-dot';
       const agents = cloud.agents || [];
       body.innerHTML = agents.length
-        ? `<div class="space-y-1.5">${agents.map((a) => `<div class="rounded-lg border border-slate-200/60 bg-slate-50/40 px-2.5 py-1.5">
-            <div class="text-[9.5px] font-semibold text-slate-700">${UI.esc(a.name || a.id || 'agent')}</div>
-            <div class="mono mt-0.5 text-[8px] text-slate-400">${UI.esc(a.id || '')}</div>
-          </div>`).join('')}</div>`
+        ? `<div class="space-y-2">${agents.map((a) => `
+            <div class="rounded-xl border border-slate-200/70 bg-slate-50/40 p-2.5">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <span class="truncate text-[10.5px] font-extrabold text-slate-800">${UI.esc(a.name || a.id || 'agent')}</span>
+                <span class="chip chip-mono">v${UI.esc(a.version || '-')}</span>
+              </div>
+              <div class="mono mt-0.5 truncate text-[8px] text-slate-400">${UI.esc(a.id || '')}</div>
+              <div class="mt-1.5 flex flex-wrap gap-1.5 text-[8.5px] text-slate-500">
+                ${(a.deployments || []).map((d) => `<span class="chip">${UI.esc(d.region || '-')} \u00b7 ${UI.esc(d.status || '-')}</span>`).join('')}
+                ${a.deployedAt ? `<span class="chip">deployed ${UI.esc(String(a.deployedAt).slice(0, 10))}</span>` : ''}
+              </div>
+              <div class="mt-2 flex flex-wrap gap-1.5">
+                <button class="btn btn-xs btn-outline" data-versions="${UI.esc(a.id || '')}" type="button">Versions</button>
+                <button class="btn btn-xs btn-soft" data-secrets="${UI.esc(a.id || '')}" type="button">Secrets</button>
+              </div>
+              <div class="mt-2 hidden space-y-1" id="cloud-detail-${UI.esc(a.id || '')}"></div>
+            </div>`).join('')}</div>`
         : '<div class="text-[9.5px] text-slate-500">No agents returned by the Cloud API.</div>';
+      body.querySelectorAll('[data-versions]').forEach((btn) => {
+        btn.addEventListener('click', () => showCloudDetail(btn.dataset.versions, 'versions'));
+      });
+      body.querySelectorAll('[data-secrets]').forEach((btn) => {
+        btn.addEventListener('click', () => showCloudDetail(btn.dataset.secrets, 'secrets'));
+      });
       return;
     }
     pill.textContent = cloud.configured ? 'forbidden' : 'no cloud key';
     pill.className = 'pill pill-amber no-dot';
     body.innerHTML = `<div class="rounded-lg border border-amber-500/30 bg-amber-500/10 p-2.5 text-[9.5px] leading-relaxed text-amber-200">
         ${UI.esc(cloud.message || 'Cloud API key not configured.')}
-        <div class="mt-1.5 text-slate-300">The project key controls rooms and dispatch. Managing <span class="mono">agents, versions, builds</span> and <span class="mono">secrets</span> needs a Cloud API key:</div>
-        <div class="mono mt-1 rounded bg-black/30 px-2 py-1 text-[8.5px] text-slate-200">lk cloud api-key create</div>
-        <div class="mt-1">Then set <span class="mono">LIVEKIT_CLOUD_API_KEY</span> and <span class="mono">LIVEKIT_CLOUD_API_SECRET</span> in <span class="mono">.env</span>.</div>
+        <div class="mt-1.5 text-slate-300">Managing <span class="mono">agents, versions</span> and <span class="mono">secrets</span> needs a Cloud API key in <span class="mono">.env</span>:</div>
+        <div class="mono mt-1 rounded bg-black/30 px-2 py-1 text-[8.5px] text-slate-200">LIVEKIT_CLOUD_API_KEY=...<br/>LIVEKIT_CLOUD_API_SECRET=...</div>
       </div>`;
+  }
+
+  async function showCloudDetail(agentId, kind) {
+    const target = document.getElementById(`cloud-detail-${agentId}`);
+    if (!target) return;
+    if (!target.classList.contains('hidden')) {
+      target.classList.add('hidden');
+      return;
+    }
+    target.classList.remove('hidden');
+    target.innerHTML = '<div class="text-[9px] text-slate-400">Loading\u2026</div>';
+    try {
+      const res = await fetch(`/api/livekit/cloud/agents/${encodeURIComponent(agentId)}/${kind}`);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'request failed');
+      if (kind === 'versions') {
+        const versions = data.versions || [];
+        target.innerHTML = versions.length
+          ? versions.map((v) => `<div class="rounded-lg border border-slate-200/60 bg-white/40 px-2 py-1.5">
+              <div class="flex items-center justify-between gap-2">
+                <span class="mono text-[9px] font-semibold text-slate-700">${UI.esc(v.version)}</span>
+                ${v.current ? '<span class="pill pill-green no-dot">current</span>' : ''}
+              </div>
+              <div class="mt-0.5 text-[8px] text-slate-500">${UI.esc(v.status || '')}${v.active ? ' \u00b7 active' : ''} \u00b7 created ${UI.esc(String(v.createdAt).slice(0, 10))}</div>
+            </div>`).join('')
+          : '<div class="text-[9px] text-slate-400">No versions.</div>';
+      } else {
+        const secrets = data.secrets || [];
+        target.innerHTML = secrets.length
+          ? secrets.map((s) => `<div class="rounded-lg border border-slate-200/60 bg-white/40 px-2 py-1.5">
+              <div class="text-[9px] font-semibold text-slate-700">${UI.esc(s.name)}</div>
+              <div class="mt-0.5 text-[8px] text-slate-500">${UI.esc(s.kind || 'environment')} \u00b7 value hidden</div>
+            </div>`).join('')
+          : '<div class="text-[9px] text-slate-400">No secrets.</div>';
+      }
+    } catch (err) {
+      target.innerHTML = `<div class="text-[9px] text-red-400">${UI.esc(err.message)}</div>`;
+    }
   }
 
   function renderRooms() {

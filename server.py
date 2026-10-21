@@ -1894,24 +1894,16 @@ def livekit_status() -> dict:
     except Exception as exc:
         info["message"] = f"{exc.__class__.__name__}: {str(exc)[:160]}"
 
-    # Cloud management API (agents / versions / builds) needs a Cloud API key.
+    # Cloud management API (agents / versions / secrets) needs a Cloud API key.
     if LIVEKIT_CLOUD_API_KEY and LIVEKIT_CLOUD_API_SECRET:
         try:
-            import base64
-            pair = base64.b64encode(
-                f"{LIVEKIT_CLOUD_API_KEY}:{LIVEKIT_CLOUD_API_SECRET}".encode()).decode()
-            req = urllib.request.Request(
-                "https://cloud-api.livekit.io/api/v1/agents",
-                headers={"Authorization": f"Basic {pair}"})
-            with urllib.request.urlopen(req, timeout=12) as resp:
-                payload = json.loads(resp.read().decode("utf-8"))
+            agents = livekit_cloud_agents()
             info["cloudApi"]["authorized"] = True
-            info["cloudApi"]["agents"] = payload.get("agents") if isinstance(payload, dict) else []
-            info["cloudApi"]["message"] = "Cloud API authorized - agents, versions and builds are manageable."
-        except urllib.error.HTTPError as exc:
-            info["cloudApi"]["message"] = f"Cloud API returned {exc.code} - create a Cloud API key in LiveKit Cloud."
+            info["cloudApi"]["agents"] = agents
+            info["cloudApi"]["message"] = (
+                f"Cloud API authorized - {len(agents)} agent(s) visible in LiveKit Cloud.")
         except Exception as exc:
-            info["cloudApi"]["message"] = f"Cloud API error: {str(exc)[:120]}"
+            info["cloudApi"]["message"] = f"Cloud API error: {str(exc)[:140]}"
     return info
 
 
@@ -2156,6 +2148,124 @@ def livekit_build_worker(settings: dict) -> dict:
         ),
         "generatedAt": now_iso(),
     }
+
+
+def livekit_cloud_cli(args: list[str], timeout: int = 30) -> dict:
+    """Run the official LiveKit CLI (lk) against the Cloud API and parse JSON.
+
+    The Cloud agents API lives on an `agents.<project-host>` endpoint that the
+    CLI authenticates for us, so the app shells out to the supported client
+    instead of re-implementing the twirp/protobuf transport.
+    """
+    import shutil
+    import subprocess
+
+    if not (LIVEKIT_CLOUD_API_KEY and LIVEKIT_CLOUD_API_SECRET):
+        raise ApiError("LiveKit Cloud API key is not configured", 400)
+    lk = shutil.which("lk")
+    if not lk:
+        import glob
+        candidates = glob.glob(os.path.expandvars(
+            "%LOCALAPPDATA%\\Microsoft\\WinGet\\Packages\\LiveKit.LiveKitCLI_*\\lk.exe"))
+        if candidates:
+            lk = candidates[0]
+    if not lk:
+        raise ApiError("LiveKit CLI (lk) is not installed on this machine", 501)
+
+    env = dict(os.environ)
+    env["LIVEKIT_API_KEY"] = LIVEKIT_CLOUD_API_KEY
+    env["LIVEKIT_API_SECRET"] = LIVEKIT_CLOUD_API_SECRET
+    try:
+        proc = subprocess.run(
+            [lk, "--url", LIVEKIT_URL, *args, "--json"],
+            capture_output=True, text=True, env=env, timeout=timeout)
+    except subprocess.TimeoutExpired:
+        raise ApiError("LiveKit Cloud API timed out", 502)
+    out = (proc.stdout or "").strip()
+    start = out.find("{")
+    if start < 0:
+        detail = (proc.stderr or out or "").strip().splitlines()
+        raise ApiError(f"LiveKit Cloud API error: {detail[-1][:160] if detail else 'no output'}", 502)
+    try:
+        return json.loads(out[start:])
+    except ValueError:
+        raise ApiError("LiveKit Cloud API returned an unreadable payload", 502)
+
+
+def livekit_cloud_agents() -> list[dict]:
+    """Agents, deployments and secret names that live in the LiveKit Cloud console."""
+    if not (LIVEKIT_CLOUD_API_KEY and LIVEKIT_CLOUD_API_SECRET):
+        return []
+    try:
+        data = livekit_cloud_cli(["agent", "list"])
+    except ApiError:
+        return []
+    agents = []
+    for agent in data.get("agents") or []:
+        deployments = [{
+            "region": d.get("region"),
+            "status": d.get("status"),
+            "version": d.get("version"),
+            "minReplicas": d.get("minReplicas"),
+            "maxReplicas": d.get("maxReplicas"),
+            "memReq": d.get("memReq"),
+            "memLimit": d.get("memLimit"),
+            "cpuLimit": d.get("cpuLimit"),
+            "deploymentEnabled": d.get("deploymentEnabled"),
+            "lastScrapedAt": d.get("lastScrapedAt"),
+        } for d in agent.get("agentDeployments") or []]
+        agents.append({
+            "id": agent.get("agentId") or "",
+            "name": agent.get("agentName") or "",
+            "version": agent.get("version") or "",
+            "deployedAt": agent.get("deployedAt") or "",
+            "deployments": deployments,
+            "secrets": [],
+        })
+    return agents
+
+
+def livekit_cloud_versions(agent_id: str) -> list[dict]:
+    if not (LIVEKIT_CLOUD_API_KEY and LIVEKIT_CLOUD_API_SECRET):
+        return []
+    try:
+        data = livekit_cloud_cli(["agent", "versions", "--id", agent_id])
+    except ApiError:
+        return []
+    return [{
+        "version": v.get("version") or "",
+        "current": bool(v.get("current")),
+        "status": v.get("status") or "",
+        "active": bool(v.get("active")),
+        "createdAt": v.get("createdAt") or "",
+        "deployedAt": v.get("deployedAt") or "",
+        "attributes": v.get("attributes") or {},
+    } for v in data.get("versions") or []]
+
+
+def livekit_cloud_secrets(agent_id: str) -> list[dict]:
+    """Secret names and kinds only - values are never read or returned."""
+    if not (LIVEKIT_CLOUD_API_KEY and LIVEKIT_CLOUD_API_SECRET):
+        return []
+    try:
+        data = livekit_cloud_cli(["agent", "secrets", "--id", agent_id])
+    except ApiError:
+        return []
+    return [{
+        "name": s.get("name") or "",
+        "kind": (s.get("kind") or "").split("_")[-1],
+        "createdAt": s.get("createdAt") or "",
+        "updatedAt": s.get("updatedAt") or "",
+    } for s in data.get("secrets") or []]
+
+
+def livekit_cloud_status(agent_id: str) -> dict:
+    if not (LIVEKIT_CLOUD_API_KEY and LIVEKIT_CLOUD_API_SECRET):
+        return {}
+    try:
+        return livekit_cloud_cli(["agent", "status", "--id", agent_id])
+    except ApiError:
+        return {}
 
 
 def api_admin_overview():
@@ -3702,6 +3812,37 @@ class Handler(BaseHTTPRequestHandler):
                 payload = self.json_body()
                 return self.write_api_result(livekit_build_worker(payload))
 
+            if path == "/api/livekit/cloud/agents":
+                require("GET")
+                return self.write_api_result({
+                    "agents": livekit_cloud_agents(),
+                    "authorized": bool(LIVEKIT_CLOUD_API_KEY and LIVEKIT_CLOUD_API_SECRET),
+                })
+
+            m = re.fullmatch(r"/api/livekit/cloud/agents/([^/]+)/versions", path)
+            if m:
+                require("GET")
+                agent_id = urllib.parse.unquote(m.group(1))
+                return self.write_api_result({
+                    "agentId": agent_id,
+                    "versions": livekit_cloud_versions(agent_id),
+                })
+
+            m = re.fullmatch(r"/api/livekit/cloud/agents/([^/]+)/secrets", path)
+            if m:
+                require("GET")
+                agent_id = urllib.parse.unquote(m.group(1))
+                return self.write_api_result({
+                    "agentId": agent_id,
+                    "secrets": livekit_cloud_secrets(agent_id),
+                })
+
+            m = re.fullmatch(r"/api/livekit/cloud/agents/([^/]+)/status", path)
+            if m:
+                require("GET")
+                agent_id = urllib.parse.unquote(m.group(1))
+                return self.write_api_result(livekit_cloud_status(agent_id))
+
             if path == "/api/demo-requests":
                 # Placeholder booking endpoint for the marketing site. It
                 # validates the payload but deliberately stores nothing until a
@@ -3825,21 +3966,28 @@ class Server(ThreadingHTTPServer):
 def _code_watchdog(port: int) -> None:
     """Restart the process when server.py changes on disk.
 
-    The scheduled watchdog can only start a dead backend (it may not own the
-    running process), so the server restarts itself after a code update.
+    The replacement is started detached so it survives this process exiting.
     """
     import subprocess
     code = Path(__file__).resolve()
     started = time.time()
+    log_path = code.parent / "backend-restart.log"
     while True:
         time.sleep(20)
         try:
             if code.stat().st_mtime > started:
                 print("  [INFO] code changed - restarting the backend", flush=True)
+                flags = 0x00000008 | 0x00000200  # NEW_PROCESS_GROUP | DETACHED
+                handle = open(log_path, "a", encoding="utf-8")
                 subprocess.Popen(
                     [sys.executable, str(code), "--port", str(port), "--no-open"],
                     cwd=str(code.parent),
+                    stdout=handle, stderr=subprocess.STDOUT,
+                    stdin=subprocess.DEVNULL,
+                    creationflags=flags,
+                    close_fds=True,
                 )
+                time.sleep(2)
                 os._exit(0)
         except Exception:
             continue
