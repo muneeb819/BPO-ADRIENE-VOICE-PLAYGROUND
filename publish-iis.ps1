@@ -232,8 +232,10 @@ try {
     Invoke-AppCmd "delete site `"$SiteName`"" "delete old site" -AllowFailure | Out-Null
     Invoke-AppCmd "delete apppool `"$AppPoolName`"" "delete old pool" -AllowFailure | Out-Null
 
-    Invoke-AppCmd "add apppool /name:$AppPoolName /managedRuntimeVersion:`"`"`" /managedPipelineMode:Integrated" "add apppool" | Out-Null
-    Invoke-AppCmd "set config /section:applicationPools /[name='$AppPoolName'].processModel.idleTimeout /value:00:00:00" "pool idle timeout" -AllowFailure | Out-Null
+    # "No Managed Code" pools leave the worker unable to pre-load a CLR, so the
+    # pool is created with the standard v4.0 runtime (the site is static + proxy).
+    Invoke-AppCmd "add apppool /name:$AppPoolName /managedRuntimeVersion:v4.0 /managedPipelineMode:Integrated" "add apppool" | Out-Null
+    Invoke-AppCmd "set config -section:applicationPools /[name='$AppPoolName'].processModel.idleTimeout /value:00:00:00" "pool idle timeout" -AllowFailure | Out-Null
 
     # Wildcard host binding so the site answers on the LAN IP and on localhost.
     $binding = "http/*:$Port`:"
@@ -279,17 +281,21 @@ try {
     # --- 9. find a working web.config, then verify every route -------------
     $lan = "http://$BindAddress`:$Port"
     $loop = "http://127.0.0.1`:$Port"
+    $probePaths = @("/", "/agents", "/api/health")
     $chosenVariant = $null
     foreach ($variant in $variants) {
         Set-Content -Path (Join-Path $WebRoot "web.config") -Value $variant.body -Encoding UTF8
-        Start-Sleep -Milliseconds 1200
-        $probe = Test-Http $lan
-        Write-Log "config variant '$($variant.name)' -> GET / = $($probe.status)"
-        if ($probe.status -eq 200) { $chosenVariant = $variant; break }
-        if ($probe.body) { Write-Log "   body: $($probe.body.Substring(0, [Math]::Min(240, $probe.body.Length)))" }
+        Start-Sleep -Milliseconds 1500
+        $probeResults = @()
+        foreach ($p in $probePaths) { $probeResults += Test-Http "$lan$p" }
+        $codes = ($probeResults | ForEach-Object { $_.status }) -join ","
+        Write-Log "config variant '$($variant.name)' -> [$codes]"
+        $bad = @($probeResults | Where-Object { $_.status -ne 200 })
+        if ($bad.Count -eq 0) { $chosenVariant = $variant; break }
+        if ($bad[0].body) { Write-Log "   body: $($bad[0].body.Substring(0, [Math]::Min(240, $bad[0].body.Length)))" }
     }
     if (-not $chosenVariant) {
-        Write-Log "No web.config variant served the site - see the variant results above." "ERROR"
+        Write-Log "No web.config variant served every probe route - see the variant results above." "ERROR"
         throw "IIS site does not answer on $lan"
     }
     Write-Log "Using web.config variant '$($chosenVariant.name)'"
