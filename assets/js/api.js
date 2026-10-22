@@ -122,7 +122,8 @@ const API = (() => {
 
 const UI = (() => {
   const STATUS_COLORS = {
-    draft: 'gray', testing: 'amber', approved: 'green', archived: 'gray',
+    draft: 'gray', testing: 'amber', approved: 'green', deployed: 'green',
+    archived: 'gray', inactive: 'gray',
     active: 'violet', completed: 'green', interrupted: 'amber', error: 'red',
     connected: 'green', disconnected: 'gray', passed: 'green', failed: 'red',
     partial: 'amber', pass: 'green', fail: 'red',

@@ -123,7 +123,25 @@ AURA_VOICES = [
 VOICE_ALIASES = ["alloy", "nova", "onyx", "rachel", "adam"]
 ALLOWED_VOICES = set(FLUX_VOICES + AURA_VOICES + VOICE_ALIASES)
 ALLOWED_TONES = {"professional", "friendly", "empathetic", "authoritative", "cheerful"}
-ALLOWED_STATUSES = {"draft", "testing", "approved", "archived"}
+ALLOWED_STATUSES = {"draft", "testing", "approved", "deployed", "archived"}
+
+# The Nexus standard stack: every bot created in the platform carries these
+# capabilities. They are returned with every agent and shown in Agent Studio,
+# so a new bot never starts "empty".
+NEXUS_CAPABILITY_STACK = [
+    "Self-Learning",
+    "Info-Based",
+    "Knowledge-Based",
+    "Massive Training Data",
+    "Transformer Neural Architecture",
+    "Tokenizer",
+    "High-Performance Computing",
+    "Alignment & Fine-Tuning Data",
+    "Agentic Capabilities & Function Calling",
+    "Zero-Shot & Few-Shot Generalization",
+    "Multimodality",
+    "Next-Token Prediction",
+]
 ALLOWED_STT = {"browser", "whisper", "deepgram"}
 ALLOWED_STT_MODELS = {"nova-3", "nova-2", "nova-3-general", "flux"}
 ALLOWED_LLM = {"local", "openai", "anthropic", "gemini"}
@@ -336,6 +354,8 @@ def init_db() -> None:
         # Lightweight column migrations for databases created by older builds.
         for table, column, ddl in (
             ("agents", "greeting", "TEXT NOT NULL DEFAULT ''"),
+            ("agents", "owner", "TEXT NOT NULL DEFAULT 'Nexus'"),
+            ("agents", "call_name", "TEXT NOT NULL DEFAULT ''"),
         ):
             cols = {r["name"] for r in conn.execute(f"PRAGMA table_info({table})").fetchall()}
             if column not in cols:
@@ -601,10 +621,40 @@ def redact(value):
     return value
 
 
+def agent_display_name(agent: dict) -> str:
+    """Owner - Conversation name - Campaign (the front-end label)."""
+    owner = str(agent.get("owner") or "Nexus").strip() or "Nexus"
+    call_name = str(agent.get("callName") or agent.get("name") or "Agent").strip() or "Agent"
+    campaign = str(agent.get("campaign") or "General").strip() or "General"
+    return f"{owner} - {call_name} - {campaign}"
+
+
+def agent_display_status(agent: dict) -> str:
+    """Inactive | Active | Deployed, derived on every read.
+
+    Inactive: no instructions/parameters yet (or archived).
+    Active: configured and ready for testing sessions.
+    Deployed: marked as deployed after testing.
+    """
+    status = str(agent.get("status") or "draft").lower()
+    if status == "deployed":
+        return "Deployed"
+    if status == "archived":
+        return "Inactive"
+    instructions = str(agent.get("systemInstructions") or "").strip()
+    has_pipeline = all(str(agent.get(key) or "").strip() for key in
+                       ("sttProvider", "ttsProvider", "voice", "llmProvider"))
+    if len(instructions) < 20 or not has_pipeline:
+        return "Inactive"
+    return "Active"
+
+
 def agent_row(row) -> dict:
-    return {
+    data = {
         "id": row["id"],
         "name": row["name"],
+        "owner": row["owner"] if "owner" in row.keys() else "Nexus",
+        "callName": row["call_name"] if "call_name" in row.keys() else "",
         "description": row["description"],
         "purpose": row["purpose"],
         "campaign": row["campaign"],
@@ -630,6 +680,11 @@ def agent_row(row) -> dict:
         "createdAt": row["created_at"],
         "updatedAt": row["updated_at"],
     }
+    data["callName"] = str(data.get("callName") or "").strip() or data["name"]
+    data["displayName"] = agent_display_name(data)
+    data["displayStatus"] = agent_display_status(data)
+    data["capabilities"] = list(NEXUS_CAPABILITY_STACK)
+    return data
 
 
 def provider_row(row) -> dict:
@@ -726,6 +781,8 @@ def _clean_str(value, limit=4000, default=""):
 def validate_agent_payload(payload: dict, existing: dict | None = None) -> dict:
     base = dict(existing) if existing else {
         "name": "",
+        "owner": "Nexus",
+        "callName": "",
         "description": "",
         "purpose": "",
         "campaign": "",
@@ -748,7 +805,8 @@ def validate_agent_payload(payload: dict, existing: dict | None = None) -> dict:
         "status": "draft",
     }
     for key in [
-        "name", "description", "purpose", "campaign", "systemInstructions", "greeting",
+        "name", "owner", "callName", "description", "purpose", "campaign",
+        "systemInstructions", "greeting",
         "conversationRules", "language", "voice", "tone", "speakingRate",
         "sttProvider", "llmProvider", "ttsProvider", "transferPolicy",
         "enabledTools", "safetyRestrictions", "timeoutSettings", "status",
@@ -760,9 +818,11 @@ def validate_agent_payload(payload: dict, existing: dict | None = None) -> dict:
     base["name"] = _clean_str(base.get("name"), 120).strip()
     if len(base["name"]) < 2:
         raise ValueError("Name must be at least 2 characters")
+    base["owner"] = _clean_str(base.get("owner"), 60).strip() or "Nexus"
+    base["callName"] = _clean_str(base.get("callName"), 80).strip() or base["name"]
     base["systemInstructions"] = _clean_str(base.get("systemInstructions"), 8000).strip()
-    if len(base["systemInstructions"]) < 10:
-        raise ValueError("System instructions must be at least 10 characters")
+    if base.get("status") in {"testing", "approved", "deployed"} and len(base["systemInstructions"]) < 20:
+        raise ValueError("Add at least 20 characters of instructions before a bot can be tested or deployed")
     for field, limit in [
         ("description", 500), ("purpose", 500), ("campaign", 200),
         ("conversationRules", 4000), ("safetyRestrictions", 1000),
@@ -845,6 +905,8 @@ def validate_agent_payload(payload: dict, existing: dict | None = None) -> dict:
         "interimResults": bool(stt.get("interimResults", True)),
         "endpointing": int(stt.get("endpointing") or 300),
     }
+    # Every Nexus bot carries the standard capability stack.
+    base["capabilities"] = list(NEXUS_CAPABILITY_STACK)
     return base
 
 
@@ -2458,6 +2520,12 @@ def livekit_build_starter(settings: dict) -> dict:
         f"- TTS: `{tts_model}` (voice `{tts_voice}`), expressive mode `{expressive}`",
         "- Turn detector + adaptive interruption, ai-coustics background noise cancellation",
         "",
+        "## Nexus standard stack",
+        "",
+        "Every Nexus bot carries these capabilities by default:",
+        "",
+        *[f"- {cap}" for cap in NEXUS_CAPABILITY_STACK],
+        "",
         "## Run",
         "",
         "```console",
@@ -3228,6 +3296,7 @@ def api_agents(handler, query, method):
             agents = [a for a in agents if a["status"] == status]
         if search:
             agents = [a for a in agents if search in a["name"].lower()
+                      or search in a["displayName"].lower()
                       or search in a["campaign"].lower()]
         return 200, agents
 
@@ -3239,14 +3308,15 @@ def api_agents(handler, query, method):
         data.update({"id": agent_id, "version": 1, "createdAt": ts, "updatedAt": ts})
         with db() as conn:
             conn.execute(
-                """INSERT INTO agents (id, name, description, purpose, campaign,
+                """INSERT INTO agents (id, name, owner, call_name, description, purpose, campaign,
                    system_instructions, greeting, conversation_rules, language, voice, tone,
                    speaking_rate, stt_provider, stt_config, llm_provider, llm_config,
                    tts_provider, tts_config, transfer_policy, enabled_tools,
                    safety_restrictions, timeout_settings, status, version, created_at,
-                   updated_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+                   updated_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
                 (
-                    agent_id, data["name"], data["description"], data["purpose"],
+                    agent_id, data["name"], data["owner"], data["callName"],
+                    data["description"], data["purpose"],
                     data["campaign"], data["systemInstructions"], data.get("greeting", ""),
                     data["conversationRules"],
                     data["language"], data["voice"], data["tone"], data["speakingRate"],
@@ -3262,6 +3332,8 @@ def api_agents(handler, query, method):
                 "VALUES (?,?,?,?,?,?)",
                 (new_id(), agent_id, 1, json.dumps(data), "Initial version", ts),
             )
+        data["displayName"] = agent_display_name(data)
+        data["displayStatus"] = agent_display_status(data)
         return 201, data
     raise ApiError("Method not allowed", 405)
 
@@ -3284,14 +3356,15 @@ def api_agent_detail(handler, agent_id, query, method):
             data["version"] = new_version
             data["updatedAt"] = ts
             conn.execute(
-                """UPDATE agents SET name=?, description=?, purpose=?, campaign=?,
+                """UPDATE agents SET name=?, owner=?, call_name=?, description=?, purpose=?, campaign=?,
                    system_instructions=?, greeting=?, conversation_rules=?, language=?, voice=?,
                    tone=?, speaking_rate=?, stt_provider=?, stt_config=?, llm_provider=?,
                    llm_config=?, tts_provider=?, tts_config=?, transfer_policy=?,
                    enabled_tools=?, safety_restrictions=?, timeout_settings=?, status=?,
                    version=?, updated_at=? WHERE id=?""",
                 (
-                    data["name"], data["description"], data["purpose"], data["campaign"],
+                    data["name"], data["owner"], data["callName"],
+                    data["description"], data["purpose"], data["campaign"],
                     data["systemInstructions"], data.get("greeting", ""),
                     data["conversationRules"], data["language"],
                     data["voice"], data["tone"], data["speakingRate"], data["sttProvider"],
@@ -3311,6 +3384,8 @@ def api_agent_detail(handler, agent_id, query, method):
                 (new_id(), agent_id, new_version, json.dumps(data),
                  str(payload.get("changeNote") or "Configuration updated"), ts),
             )
+            data["displayName"] = agent_display_name(data)
+            data["displayStatus"] = agent_display_status(data)
             return 200, data
 
         if method == "DELETE":
@@ -3352,17 +3427,21 @@ def api_agent_duplicate(handler, agent_id, method):
         new_id_ = new_id()
         name = (original["name"] + " (Copy)")[:120]
         conn.execute(
-            """INSERT INTO agents (id, name, description, purpose, campaign,
+            """INSERT INTO agents (id, name, owner, call_name, description, purpose, campaign,
                system_instructions, greeting, conversation_rules, language, voice, tone,
                speaking_rate, stt_provider, stt_config, llm_provider, llm_config,
                tts_provider, tts_config, transfer_policy, enabled_tools,
                safety_restrictions, timeout_settings, status, version, created_at, updated_at)
-               SELECT ?, ?, description, purpose, campaign, system_instructions,
+               SELECT ?, ?, owner, call_name, description, purpose, campaign, system_instructions,
                greeting, conversation_rules, language, voice, tone, speaking_rate, stt_provider,
                stt_config, llm_provider, llm_config, tts_provider, tts_config,
                transfer_policy, enabled_tools, safety_restrictions, timeout_settings,
                'draft', 1, ?, ? FROM agents WHERE id = ?""",
             (new_id_, name, ts, ts, agent_id),
+        )
+        conn.execute(
+            "UPDATE agents SET call_name = ? WHERE id = ?",
+            ((original["callName"] + " Copy")[:80], new_id_),
         )
         copy_row = conn.execute("SELECT * FROM agents WHERE id = ?", (new_id_,)).fetchone()
         copy = agent_row(copy_row)
@@ -3396,8 +3475,9 @@ def api_agent_rollback(handler, agent_id, method):
         current = agent_row(agent)
         merged = dict(current)
         for key in [
-            "name", "description", "purpose", "campaign", "systemInstructions",
-            "conversationRules", "language", "voice", "tone", "speakingRate",
+            "name", "owner", "callName", "description", "purpose", "campaign",
+            "systemInstructions", "greeting", "conversationRules",
+            "language", "voice", "tone", "speakingRate",
             "sttProvider", "sttConfig", "llmProvider", "llmConfig", "ttsProvider",
             "ttsConfig", "transferPolicy", "enabledTools", "safetyRestrictions",
             "timeoutSettings", "status",
@@ -3407,15 +3487,17 @@ def api_agent_rollback(handler, agent_id, method):
         merged["version"] = current["version"] + 1
         ts = now_iso()
         conn.execute(
-            """UPDATE agents SET name=?, description=?, purpose=?, campaign=?,
-               system_instructions=?, conversation_rules=?, language=?, voice=?, tone=?,
+            """UPDATE agents SET name=?, owner=?, call_name=?, description=?, purpose=?, campaign=?,
+               system_instructions=?, greeting=?, conversation_rules=?, language=?, voice=?, tone=?,
                speaking_rate=?, stt_provider=?, stt_config=?, llm_provider=?, llm_config=?,
                tts_provider=?, tts_config=?, transfer_policy=?, enabled_tools=?,
                safety_restrictions=?, timeout_settings=?, status=?, version=?, updated_at=?
                WHERE id=?""",
             (
-                merged["name"], merged["description"], merged["purpose"], merged["campaign"],
-                merged["systemInstructions"], merged["conversationRules"], merged["language"],
+                merged["name"], merged.get("owner") or "Nexus", merged.get("callName") or merged["name"],
+                merged["description"], merged["purpose"], merged["campaign"],
+                merged["systemInstructions"], merged.get("greeting", ""),
+                merged["conversationRules"], merged["language"],
                 merged["voice"], merged["tone"], merged["speakingRate"], merged["sttProvider"],
                 json.dumps(merged["sttConfig"]), merged["llmProvider"],
                 json.dumps(merged["llmConfig"]), merged["ttsProvider"],

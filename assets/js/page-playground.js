@@ -181,7 +181,7 @@
       `<span class="chip ${policy.enabled === false ? 'text-amber-700' : ''}">transfer ${policy.enabled === false ? 'off' : (policy.requireConsent === false ? 'direct' : 'consent')}</span>`,
       `<span class="chip">max ${a.timeoutSettings?.maxTurns ?? 20} turns</span>`,
       `<span class="chip">silence ${a.timeoutSettings?.silenceTimeoutSec ?? 8}s</span>`,
-      UI.statusPill(a.status),
+      UI.statusPill(String(a.displayStatus || a.status).toLowerCase(), a.displayStatus || a.status),
     ].join('');
   }
 
@@ -211,7 +211,11 @@
       return;
     }
     select.disabled = false;
-    select.innerHTML = agents.map((a) => `<option value="${a.id}" ${a.status === 'archived' ? 'disabled' : ''}>${UI.esc(a.name)}${a.status === 'archived' ? ' (archived)' : ` • v${a.version}`}</option>`).join('');
+    select.innerHTML = agents.map((a) => {
+      const label = a.displayName || a.name;
+      const live = a.displayStatus ? ` (${a.displayStatus})` : '';
+      return `<option value="${a.id}" ${a.status === 'archived' ? 'disabled' : ''}>${UI.esc(label)}${UI.esc(live)}${a.status === 'archived' ? ' (archived)' : ` • v${a.version}`}</option>`;
+    }).join('');
     const wanted = UI.getParam('agentId');
     const chosen = agents.find((a) => a.id === wanted)
       || agents.find((a) => a.status !== 'archived')

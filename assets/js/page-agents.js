@@ -10,12 +10,14 @@
 
   const DEFAULTS = {
     name: '',
-    campaign: 'Q1 Lead Qualification',
+    owner: 'Nexus',
+    callName: '',
+    campaign: '',
     description: '',
     purpose: '',
-    instructions: 'You are Adriene, a professional BPO voice assistant. Be concise, empathetic, and follow deterministic rules before LLM generation. Never override transfer or eligibility policies. Ask required questions in order.',
+    instructions: '',
     greeting: '',
-    rules: 'Ask account-holder check, then ZIP, then prior coverage. Validate consent before transfer. Retry once on unclear input. Terminate gracefully.',
+    rules: '',
     language: 'en-US',
     voice: 'flux-brittany-en',
     tone: 'professional',
@@ -201,6 +203,19 @@
     $('rate-value').textContent = `${$('f-rate').value}%`;
   }
 
+  function updateNamePreview() {
+    const owner = ($('f-owner')?.value || '').trim() || 'Nexus';
+    const callName = ($('f-call-name')?.value || '').trim()
+      || ($('f-name')?.value || '').trim() || 'Agent';
+    const campaign = ($('f-campaign')?.value || '').trim() || 'General';
+    const status = $('f-status')?.value || 'draft';
+    const ready = ($('f-instructions')?.value || '').trim().length >= 20;
+    const live = status === 'deployed' ? 'Deployed'
+      : (status === 'archived' || !ready ? 'Inactive' : 'Active');
+    const el = $('name-preview');
+    if (el) el.textContent = `Front-end label: ${owner} - ${callName} - ${campaign} (${live})`;
+  }
+
   function showMessage(text, type = 'error') {
     const el = $('form-message');
     if (!text) {
@@ -216,6 +231,8 @@
 
   function fillForm(a) {
     $('f-name').value = a.name || '';
+    $('f-owner').value = a.owner || 'Nexus';
+    $('f-call-name').value = a.callName || a.call_name || a.name || '';
     $('f-campaign').value = a.campaign || '';
     $('f-description').value = a.description || '';
     $('f-purpose').value = a.purpose || '';
@@ -251,6 +268,7 @@
     updateGreetingCount();
     populateVoiceOptions();
     updateLlmNote();
+    updateNamePreview();
   }
 
   function resetForm() {
@@ -276,6 +294,8 @@
       : $('f-llm').value;
     return {
       name: $('f-name').value.trim(),
+      owner: $('f-owner').value.trim() || 'Nexus',
+      callName: $('f-call-name').value.trim(),
       campaign: $('f-campaign').value.trim(),
       description: $('f-description').value.trim(),
       purpose: $('f-purpose').value.trim(),
@@ -355,13 +375,15 @@
   function agentCard(a) {
     const expanded = expandedVersions.has(a.id);
     const archived = a.status === 'archived';
+    const label = a.displayName
+      || `${a.owner || 'Nexus'} - ${a.callName || a.name} - ${a.campaign || 'General'}`;
+    const liveStatus = a.displayStatus || 'Active';
     return `<div class="agent-card" data-agent="${a.id}">
       <div class="flex items-start justify-between gap-2">
         <div class="min-w-0">
-          <div class="truncate text-[12px] font-extrabold tracking-tight text-slate-900" title="${UI.attr(a.name)}">${UI.esc(a.name)}</div>
+          <div class="text-[12px] font-extrabold leading-snug tracking-tight text-slate-900" title="${UI.attr(label)}">${UI.esc(label)} <span class="whitespace-nowrap text-[9px] font-semibold text-slate-500">(${UI.esc(liveStatus)})</span></div>
           <div class="mt-1 flex flex-wrap items-center gap-1.5">
-            ${UI.statusPill(a.status)}
-            <span class="chip chip-mono">v${a.version}</span>
+            <span class="chip chip-mono" title="Profile state: ${UI.attr(a.status)}">v${a.version}</span>
           </div>
         </div>
         <a class="icon-btn" href="/playground?agentId=${encodeURIComponent(a.id)}" title="Open in Voice Playground" aria-label="Open in Voice Playground">${Shell.icon('play')}</a>
@@ -393,14 +415,14 @@
     const filtered = agents.filter((a) => {
       if (filterStatus !== 'all' && a.status !== filterStatus) return false;
       if (search) {
-        const hay = `${a.name} ${a.campaign} ${a.description}`.toLowerCase();
+        const hay = `${a.name} ${a.displayName || ''} ${a.owner || ''} ${a.callName || ''} ${a.campaign} ${a.description}`.toLowerCase();
         if (!hay.includes(search)) return false;
       }
       return true;
     });
-    const counts = ['draft', 'testing', 'approved', 'archived'].map((s) => agents.filter((a) => a.status === s).length);
+    const counts = ['draft', 'testing', 'approved', 'deployed', 'archived'].map((s) => agents.filter((a) => a.status === s).length);
     $('agent-count').textContent = `${agents.length} agent${agents.length === 1 ? '' : 's'} • SQLite persisted`;
-    $('agent-count').title = `Draft ${counts[0]} • Testing ${counts[1]} • Approved ${counts[2]} • Archived ${counts[3]}`;
+    $('agent-count').title = `Draft ${counts[0]} • Testing ${counts[1]} • Approved ${counts[2]} • Deployed ${counts[3]} • Archived ${counts[4]}`;
 
     if (!filtered.length) {
       listEl.innerHTML = agents.length
@@ -427,8 +449,9 @@
     editingId = a.id;
     fillForm(a);
     $('form-title').textContent = 'Edit Agent Profile';
-    $('form-badge').textContent = `${a.status} • v${a.version}`;
-    $('form-badge').className = `pill pill-${({ draft: 'gray', testing: 'amber', approved: 'green', archived: 'gray' }[a.status] || 'violet')}`;
+    const live = a.displayStatus || 'Active';
+    $('form-badge').textContent = `${live} • v${a.version}`;
+    $('form-badge').className = `pill pill-${({ Deployed: 'green', Active: 'violet', Inactive: 'gray' }[live] || 'violet')}`;
     $('submit-btn').textContent = 'Save changes';
     $('cancel-btn').classList.remove('hidden');
     showMessage('');
@@ -581,6 +604,8 @@
   });
 
   $('f-rate').addEventListener('input', setRateLabel);
+  ['f-owner', 'f-call-name', 'f-name', 'f-campaign', 'f-status', 'f-instructions']
+    .forEach((id) => $(id).addEventListener('input', updateNamePreview));
   $('status-filter').addEventListener('change', (event) => { filterStatus = event.target.value; renderAgents(); });
   $('search-agents').addEventListener('input', UI.debounce((event) => { search = event.target.value.trim().toLowerCase(); renderAgents(); }, 150));
 

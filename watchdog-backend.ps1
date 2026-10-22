@@ -14,6 +14,17 @@ param(
     [switch]$Restart
 )
 
+# Hide our own console immediately if the host started us with a visible one
+# (Task Scheduler / manual runs). Keeps the watchdog silent in the background.
+try {
+    Add-Type -Namespace Win32 -Name ConsoleHost -MemberDefinition @'
+[DllImport("kernel32.dll")] public static extern IntPtr GetConsoleWindow();
+[DllImport("user32.dll")] public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+'@ -ErrorAction Stop
+    $console = [Win32.ConsoleHost]::GetConsoleWindow()
+    if ($console -ne [IntPtr]::Zero) { [void][Win32.ConsoleHost]::ShowWindow($console, 0) }
+} catch { }
+
 $ErrorActionPreference = "Continue"
 $log = Join-Path $ProjectRoot "backend-watchdog.log"
 function Log($m) {
@@ -64,13 +75,18 @@ if (Test-Backend) {
     exit 0
 }
 
-$python = (Get-Command python -ErrorAction SilentlyContinue).Source
+# Prefer pythonw.exe: it has no console subsystem at all, so the backend can
+# never pop up a CMD window. Fall back to python.exe started hidden.
+$python = (Get-Command pythonw -ErrorAction SilentlyContinue).Source
+if (-not $python) {
+    $python = (Get-Command python -ErrorAction SilentlyContinue).Source
+}
 if (-not $python) {
     Log "python not found on PATH - cannot restart the backend"
     exit 1
 }
 
-Log "backend not answering on 127.0.0.1:$Port - starting it"
+Log "backend not answering on 127.0.0.1:$Port - starting it ($python)"
 Start-Process -FilePath $python `
     -ArgumentList "server.py", "--port", "$Port", "--no-open" `
     -WorkingDirectory $ProjectRoot -WindowStyle Hidden
