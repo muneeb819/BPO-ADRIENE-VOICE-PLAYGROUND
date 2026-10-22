@@ -2184,7 +2184,8 @@ def livekit_cloud_cli(args: list[str], timeout: int = 30, as_json: bool = True) 
         command.append("--json")
     try:
         proc = subprocess.run(
-            command, capture_output=True, text=True, env=env, timeout=timeout)
+            command, capture_output=True, text=True, env=env, timeout=timeout,
+            encoding="utf-8", errors="replace")
     except subprocess.TimeoutExpired:
         raise ApiError("LiveKit Cloud API timed out", 502)
     out = (proc.stdout or "").strip()
@@ -2390,11 +2391,20 @@ def livekit_dispatches(room_name: str) -> list[dict]:
 
 _LIVEKIT_CONSOLE_CACHE: dict = {"at": 0.0, "data": None}
 
+# Live state of the last judged simulation run (executed in the background).
+_SIMULATE_STATE: dict = {
+    "agentName": "", "status": "idle", "outcome": "",
+    "startedAt": "", "finishedAt": "",
+}
+
 
 def livekit_console() -> dict:
     """Everything the LiveKit Cloud console shows, aggregated for the UI."""
     cached = _LIVEKIT_CONSOLE_CACHE.get("data")
     if cached and (time.time() - _LIVEKIT_CONSOLE_CACHE["at"]) < 120:
+        # The simulation state changes in real time, so it is refreshed even
+        # when the rest of the console payload is served from cache.
+        cached["lastSimulation"] = dict(_SIMULATE_STATE)
         return cached
 
     from concurrent.futures import ThreadPoolExecutor
@@ -2458,6 +2468,7 @@ def livekit_console() -> dict:
         "agents": agents,
         "rooms": rooms,
         "simulations": results.get("simulations") or [],
+        "lastSimulation": dict(_SIMULATE_STATE),
         "telephony": results.get("telephony") or {},
         "media": results.get("media") or {},
         "projects": results.get("projects") or [],
@@ -4254,30 +4265,71 @@ class Handler(BaseHTTPRequestHandler):
                     ]
                 if not isinstance(scenarios, list):
                     raise ApiError("scenarios must be a list", 400)
-                # The CLI expects a YAML scenarios file.
+                # The CLI expects a YAML scenarios file. Every scenario needs an
+                # `instructions` (what the simulated caller does) and an
+                # `agent_expectations` (what the agent must do to pass the
+                # judge) - without them every job fails with
+                # "Missing required fields: instructions, agent_expectations".
                 lines = ["scenarios:"]
-                for item in scenarios[:count]:
+                for index, item in enumerate(scenarios[:count], start=1):
                     if isinstance(item, dict):
-                        lines.append(f"  - name: {json.dumps(str(item.get('name') or 'Scenario'))}")
-                        lines.append(f"    prompt: {json.dumps(str(item.get('prompt') or ''))}")
+                        instructions = str(item.get("instructions") or item.get("prompt") or "")
+                        expectations = str(item.get("agent_expectations") or item.get("expectations") or "")
+                        name = str(item.get("name") or f"Scenario {index}")
                     else:
-                        lines.append(f"  - name: {json.dumps(str(item))}")
-                        lines.append(f"    prompt: {json.dumps(str(item))}")
+                        text = str(item)
+                        instructions, _, expectations = text.partition("||")
+                        instructions = instructions.strip()
+                        expectations = expectations.strip()
+                        name = f"Scenario {index}"
+                    if not expectations:
+                        expectations = (
+                            "The agent responds to the caller helpfully, follows its "
+                            "configured policy and stays consistent with its instructions.")
+                    lines.append(f"  - name: {json.dumps(name)}")
+                    lines.append(f"    instructions: {json.dumps(instructions)}")
+                    lines.append(f"    agent_expectations: {json.dumps(expectations)}")
                 tmp = Path(DATA_DIR) / "livekit-scenarios.yaml"
                 tmp.parent.mkdir(parents=True, exist_ok=True)
                 tmp.write_text("\n".join(lines) + "\n", encoding="utf-8")
-                try:
-                    data = livekit_cloud_cli([
-                        "agent", "simulate", "--agent-name", agent_name,
-                        "--scenarios", str(tmp), "--num-simulations", str(count), "--yes",
-                        "text",
-                    ], timeout=240, as_json=False)
-                finally:
+                # A judged simulation run takes minutes on the cloud, so it is
+                # executed in the background and the UI polls the console.
+                _SIMULATE_STATE.update({
+                    "agentName": agent_name, "status": "running",
+                    "outcome": "", "startedAt": now_iso(), "finishedAt": "",
+                })
+
+                def _run_simulation():
+                    import threading
                     try:
-                        tmp.unlink()
-                    except OSError:
-                        pass
-                return 200, {"started": True, "agentName": agent_name, "result": data}
+                        data = livekit_cloud_cli([
+                            "agent", "simulate", "--agent-name", agent_name,
+                            "--scenarios", str(tmp), "--yes", "text",
+                        ], timeout=900, as_json=False)
+                        _SIMULATE_STATE.update({
+                            "status": "completed",
+                            "outcome": str(data.get("output") or "").strip()[-600:],
+                            "finishedAt": now_iso(),
+                        })
+                    except ApiError as err:
+                        # The run itself completes on the cloud; the CLI exits
+                        # non-zero when a scenario misses the judge criteria.
+                        message = str(err)
+                        completed = ("scenarios failed" in message or "scenarios passed" in message)
+                        _SIMULATE_STATE.update({
+                            "status": "completed" if completed else "failed",
+                            "outcome": message,
+                            "finishedAt": now_iso(),
+                        })
+                    finally:
+                        try:
+                            tmp.unlink()
+                        except OSError:
+                            pass
+
+                threading.Thread(target=_run_simulation, daemon=True).start()
+                return self.write_api_result(
+                    {"started": True, "agentName": agent_name, "status": "running"})
 
             if path == "/api/demo-requests":
                 # Placeholder booking endpoint for the marketing site. It

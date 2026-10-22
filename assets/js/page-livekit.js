@@ -22,6 +22,12 @@
   let builder = null;       // saved Agent Builder config
   let builderFiles = null;  // generated worker files
   let audio = null;         // preview player
+  const DEFAULT_SCENARIOS = [
+    'Introduce yourself and ask whether now is a good time to talk. || The agent identifies itself, states the campaign purpose and asks permission to continue.',
+    'Say you are between 45 and 85 years old. || The agent confirms the age range and asks the next screening question in order.',
+    'Say you are not interested. || The agent acknowledges politely, ends the call and does not push further.',
+  ];
+  let simScenarios = DEFAULT_SCENARIOS.join('\n');
 
   document.getElementById('page-header').innerHTML = Shell.header({
     eyebrow: '12 — LiveKit Cloud',
@@ -116,19 +122,42 @@
     }
   }
 
-  async function runSimulation(agentName) {
-    const body = $('lk-section-body');
-    body.innerHTML = '<div class="text-[10px] text-slate-400">Running judged simulations on LiveKit Cloud — this can take a minute…</div>';
+  let simPoll = null;
+
+  function pollSimulation() {
+    if (simPoll) clearInterval(simPoll);
+    let ticks = 0;
+    simPoll = setInterval(async () => {
+      ticks += 1;
+      await loadConsole();
+      if (section === 'simulations') renderSection();
+      const live = console_ && console_.lastSimulation;
+      if (!live || live.status !== 'running' || ticks > 60) {
+        clearInterval(simPoll);
+        simPoll = null;
+      }
+    }, 10000);
+  }
+
+  async function runSimulation(agentName) {    const body = $('lk-section-body');
+    const field = document.getElementById('lk-sim-scenarios');
+    const scenarios = (field ? field.value : '')
+      .split('\n')
+      .map((line) => line.trim())
+      .filter(Boolean)
+      .slice(0, 10);
+    body.innerHTML = '<div class="text-[10px] text-slate-400">Starting judged simulation on LiveKit Cloud — this can take a minute…</div>';
     try {
       const res = await fetch('/api/livekit/console/simulate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ agentName, scenarios: 2 }),
+        body: JSON.stringify({ agentName, scenarios: scenarios.length ? scenarios : 2 }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'simulation failed');
       await loadConsole();
       renderSection();
+      pollSimulation();
     } catch (err) {
       body.innerHTML = `<div class="rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-[9.5px] text-red-700">${UI.esc(err.message)}</div>`;
     }
@@ -203,10 +232,30 @@
       title: 'Simulations',
       sub: 'Judged simulations of the deployed agent, run on LiveKit Cloud.',
       render(c) {
+        const live = c.lastSimulation || {};
+        const liveBanner = live.status && live.status !== 'idle'
+          ? `<div class="mt-2 rounded-lg border px-3 py-2 text-[9.5px] ${
+              live.status === 'running'
+                ? 'border-sky-500/30 bg-sky-500/10 text-sky-700'
+                : live.status === 'completed'
+                  ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-700'
+                  : 'border-red-500/30 bg-red-500/10 text-red-700'}">
+              <span class="font-semibold">Last run: ${UI.esc(live.status)}</span>
+              ${live.agentName ? ` · ${UI.esc(live.agentName)}` : ''}
+              ${live.outcome ? `<div class="mt-1 whitespace-pre-wrap">${UI.esc(live.outcome)}</div>` : ''}
+              ${live.startedAt ? `<div class="mt-1 text-[8.5px] opacity-70">started ${UI.esc(String(live.startedAt).slice(0, 19))}</div>` : ''}
+            </div>`
+          : '';
         return `<div class="flex flex-wrap items-center gap-2">
             <button class="btn btn-outline btn-xs" id="lk-sim-run" type="button"><span data-icon="play"></span> Run text simulation</button>
             <span class="text-[9px] text-slate-500">Runs against the registered agent on LiveKit Cloud and reports pass/fail per scenario.</span>
           </div>
+          <div class="mt-2">
+            <label class="label" for="lk-sim-scenarios">Scenarios (one per line)</label>
+            <textarea class="textarea input-sm" id="lk-sim-scenarios" rows="4">${UI.esc(simScenarios)}</textarea>
+            <p class="mt-1 text-[8.5px] text-slate-500">One judged scenario per line: <span class="mono">what the caller says || what the agent must do to pass</span>. Leave the second part out to use the default expectation.</p>
+          </div>
+          ${liveBanner}
           <div class="mt-3 space-y-2">
             ${(c.simulations || []).map((s) => `<div class="rounded-xl border border-slate-200/70 bg-slate-50/40 p-3">
                 <div class="flex flex-wrap items-center justify-between gap-2">
@@ -811,6 +860,10 @@
     const target = root.querySelector('#lk-voice-target');
     if (target) {
       target.addEventListener('change', (event) => { voiceTargetAgent = event.target.value; });
+    }
+    const simField = root.querySelector('#lk-sim-scenarios');
+    if (simField) {
+      simField.addEventListener('input', () => { simScenarios = simField.value; });
     }
     const saveBtn = root.querySelector('#lk-voice-save');
     if (saveBtn) saveBtn.addEventListener('click', saveVoiceToAgent);
