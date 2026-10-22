@@ -467,7 +467,8 @@
     if (section === 'builder') renderBuilderFiles();
     const run = body.querySelector('#lk-sim-run');
     if (run) {
-      run.addEventListener('click', () => runSimulation(console_.project?.agentName || ''));
+      run.addEventListener('click', () => runSimulation(
+        (console_?.agents || [])[0]?.name || console_?.project?.agentName || ''));
     }
     $('lk-section-stamp').textContent = `updated ${UI.fmtDate(console_.generatedAt)}`;
   }

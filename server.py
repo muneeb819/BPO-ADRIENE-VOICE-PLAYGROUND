@@ -2150,12 +2150,16 @@ def livekit_build_worker(settings: dict) -> dict:
     }
 
 
-def livekit_cloud_cli(args: list[str], timeout: int = 30) -> dict:
+def livekit_cloud_cli(args: list[str], timeout: int = 30, as_json: bool = True) -> dict:
     """Run the official LiveKit CLI (lk) against the Cloud API and parse JSON.
 
     The Cloud agents API lives on an `agents.<project-host>` endpoint that the
     CLI authenticates for us, so the app shells out to the supported client
     instead of re-implementing the twirp/protobuf transport.
+
+    `as_json=False` is required for commands that do not define a --json flag
+    (`lk agent simulate text`), which would otherwise abort with
+    "flag provided but not defined: -json".
     """
     import shutil
     import subprocess
@@ -2175,17 +2179,25 @@ def livekit_cloud_cli(args: list[str], timeout: int = 30) -> dict:
     env = dict(os.environ)
     env["LIVEKIT_API_KEY"] = LIVEKIT_CLOUD_API_KEY
     env["LIVEKIT_API_SECRET"] = LIVEKIT_CLOUD_API_SECRET
+    command = [lk, "--url", LIVEKIT_URL, *args]
+    if as_json:
+        command.append("--json")
     try:
         proc = subprocess.run(
-            [lk, "--url", LIVEKIT_URL, *args, "--json"],
-            capture_output=True, text=True, env=env, timeout=timeout)
+            command, capture_output=True, text=True, env=env, timeout=timeout)
     except subprocess.TimeoutExpired:
         raise ApiError("LiveKit Cloud API timed out", 502)
     out = (proc.stdout or "").strip()
     starts = [i for i in (out.find("{"), out.find("[")) if i >= 0]
     if not starts:
         detail = (proc.stderr or out or "").strip().splitlines()
-        raise ApiError(f"LiveKit Cloud API error: {detail[-1][:160] if detail else 'no output'}", 502)
+        message = detail[-1][:160] if detail else "no output"
+        if "failed to create source archive" in message:
+            raise ApiError(
+                "The LiveKit CLI could not archive the agent source on this OS "
+                "(\"failed to create source archive\"). Run Simulations from a "
+                "Linux/macOS machine or the LiveKit Cloud console.", 502)
+        raise ApiError(f"LiveKit Cloud API error: {message}", 502)
     payload = None
     for start in sorted(starts):
         try:
@@ -2194,6 +2206,8 @@ def livekit_cloud_cli(args: list[str], timeout: int = 30) -> dict:
         except ValueError:
             continue
     if payload is None:
+        if not as_json:
+            return {"output": out}
         raise ApiError("LiveKit Cloud API returned an unreadable payload", 502)
     return payload
 
@@ -2422,13 +2436,21 @@ def livekit_console() -> dict:
     live_agents = sum(1 for a in agents if any(
         str(d.get("status") or "").lower() in ("running", "available", "active") for d in (a.get("deployments") or [])))
 
+    # The dispatch/simulation target must be an agent that actually exists in
+    # LiveKit Cloud, otherwise the dispatch is accepted but no worker joins.
+    default_agent = LIVEKIT_AGENT_NAME
+    for agent in (agents or []):
+        if agent.get("name"):
+            default_agent = agent["name"]
+            break
+
     payload = {
         "generatedAt": now_iso(),
         "authorized": bool(LIVEKIT_CLOUD_API_KEY and LIVEKIT_CLOUD_API_SECRET),
         "project": {
             "url": LIVEKIT_URL,
             "host": livekit_host(),
-            "agentName": LIVEKIT_AGENT_NAME,
+            "agentName": default_agent,
             "projects": results.get("projects") or [],
             "hasProjectKey": bool(LIVEKIT_API_KEY and LIVEKIT_API_SECRET),
             "hasCloudKey": bool(LIVEKIT_CLOUD_API_KEY and LIVEKIT_CLOUD_API_SECRET),
@@ -4210,14 +4232,26 @@ class Handler(BaseHTTPRequestHandler):
                 require("POST")
                 payload = self.json_body()
                 agent_name = str(payload.get("agentName") or LIVEKIT_AGENT_NAME).strip()
-                count = max(1, min(10, int(payload.get("scenarios") or 2)))
                 if not agent_name:
                     raise ApiError("agentName is required to run a simulation", 400)
-                scenarios = payload.get("scenarios") or [
-                    {"name": "Greeting", "prompt": "Say hello and ask how you can help."},
-                    {"name": "Pricing", "prompt": "Ask what the price is and how billing works."},
-                    {"name": "Transfer", "prompt": "Ask to be transferred to a human representative."},
-                ]
+                # `scenarios` may be a count (what the UI sends) or a list of
+                # scenario objects.
+                raw = payload.get("scenarios")
+                if isinstance(raw, list):
+                    scenarios = raw
+                    count = max(1, min(10, len(scenarios) or 2))
+                else:
+                    try:
+                        count = max(1, min(10, int(raw or 2)))
+                    except (TypeError, ValueError):
+                        raise ApiError("scenarios must be a count or a list", 400)
+                    scenarios = []
+                if not scenarios:
+                    scenarios = [
+                        {"name": "Greeting", "prompt": "Say hello and ask how you can help."},
+                        {"name": "Pricing", "prompt": "Ask what the price is and how billing works."},
+                        {"name": "Transfer", "prompt": "Ask to be transferred to a human representative."},
+                    ]
                 if not isinstance(scenarios, list):
                     raise ApiError("scenarios must be a list", 400)
                 # The CLI expects a YAML scenarios file.
@@ -4236,7 +4270,8 @@ class Handler(BaseHTTPRequestHandler):
                     data = livekit_cloud_cli([
                         "agent", "simulate", "--agent-name", agent_name,
                         "--scenarios", str(tmp), "--num-simulations", str(count), "--yes",
-                    ], timeout=240)
+                        "text",
+                    ], timeout=240, as_json=False)
                 finally:
                     try:
                         tmp.unlink()
