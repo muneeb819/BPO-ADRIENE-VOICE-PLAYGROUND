@@ -338,6 +338,10 @@
       render() {
         const b = builder || {};
         const catalogue = window.VOICE_CATALOG ? window.VOICE_CATALOG.all : [];
+        const catalogueIds = new Set(catalogue.map((v) => v.id));
+        // Workers generated from the LiveKit starter use inference voice ids
+        // (e.g. a Fish Audio uuid) that are not part of the Deepgram catalogue.
+        const customVoice = b.ttsVoice && !catalogueIds.has(b.ttsVoice) ? b.ttsVoice : '';
         const cloudAgents = (console_?.agents || []);
         return `<div class="grid gap-3 lg:grid-cols-2">
             <div class="space-y-2.5">
@@ -354,6 +358,17 @@
                   </select>
                 </div>
                 <div>
+                  <label class="label" for="lb-template">Base template</label>
+                  <select class="select input-sm" id="lb-template">
+                    <option value="starter" ${(b.template || 'starter') === 'starter' ? 'selected' : ''}>LiveKit starter (AgentServer)</option>
+                    <option value="minimal" ${b.template === 'minimal' ? 'selected' : ''}>Minimal pipeline (legacy)</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="label" for="lb-dispatch">Dispatch name</label>
+                  <input class="input input-sm" id="lb-dispatch" value="${UI.esc(b.dispatchName || '')}" placeholder="auto from agent name" />
+                </div>
+                <div>
                   <label class="label" for="lb-stt">STT model</label>
                   <input class="input input-sm" id="lb-stt" value="${UI.esc(b.sttModel || 'xai/stt-1')}" />
                 </div>
@@ -368,9 +383,14 @@
                 <div>
                   <label class="label" for="lb-voice">TTS voice</label>
                   <select class="select input-sm" id="lb-voice">
+                    ${customVoice ? `<option value="${UI.esc(customVoice)}" selected>${UI.esc(customVoice)} (inference voice)</option>` : ''}
                     ${catalogue.map((v) => `<option value="${UI.esc(v.id)}" ${b.ttsVoice === v.id ? 'selected' : ''}>${UI.esc(v.family)} - ${UI.esc(v.name)} (${UI.esc(v.accent)}, ${UI.esc(v.gender)})</option>`).join('')}
                   </select>
                 </div>
+              </div>
+              <div>
+                <label class="label" for="lb-keyterms">STT keyterms (comma separated)</label>
+                <input class="input input-sm" id="lb-keyterms" value="${UI.esc((b.keyterms || []).join(', '))}" placeholder="BPO Nexus, MMA Digital Labs" />
               </div>
               <div>
                 <label class="label" for="lb-greeting">Greeting (Optional)</label>
@@ -383,6 +403,7 @@
               <div class="flex flex-wrap items-center gap-3">
                 <label class="flex items-center gap-2 text-[10px] text-slate-600"><input type="checkbox" class="checkbox" id="lb-interrupt" ${b.interruption !== false ? 'checked' : ''} /> Interruption</label>
                 <label class="flex items-center gap-2 text-[10px] text-slate-600"><input type="checkbox" class="checkbox" id="lb-preemptive" ${b.preemptive !== false ? 'checked' : ''} /> Preemptive generation</label>
+                <label class="flex items-center gap-2 text-[10px] text-slate-600"><input type="checkbox" class="checkbox" id="lb-expressive" ${b.expressive !== false ? 'checked' : ''} /> Expressive TTS</label>
                 <select class="select input-sm w-auto" id="lb-turn">
                   ${['vad', 'stt', 'manual'].map((t) => `<option value="${t}" ${b.turnDetection === t ? 'selected' : ''}>turn detection: ${t}</option>`).join('')}
                 </select>
@@ -743,9 +764,14 @@
   function builderFromForm() {
     const get = (id) => document.getElementById(id);
     if (!get('lb-name')) return null;   // builder panel is not rendered
+    const keyterms = (get('lb-keyterms')?.value || '')
+      .split(',').map((term) => term.trim()).filter(Boolean);
     return {
+      template: get('lb-template')?.value || 'starter',
       name: get('lb-name')?.value.trim() || 'Agent',
+      dispatchName: get('lb-dispatch')?.value.trim() || '',
       agentId: get('lb-agent')?.value || '',
+      keyterms,
       sttModel: get('lb-stt')?.value.trim() || 'xai/stt-1',
       llmModel: get('lb-llm')?.value.trim() || 'google/gemma-4-31b-it',
       ttsModel: get('lb-tts')?.value.trim() || 'fishaudio/s2.1-pro',
@@ -754,6 +780,7 @@
       prompt: get('lb-prompt')?.value || '',
       interruption: get('lb-interrupt')?.checked !== false,
       preemptive: get('lb-preemptive')?.checked !== false,
+      expressive: get('lb-expressive')?.checked !== false,
       turnDetection: get('lb-turn')?.value || 'vad',
     };
   }
@@ -869,15 +896,15 @@
     if (saveBtn) saveBtn.addEventListener('click', saveVoiceToAgent);
 
     // Agent Builder
-    ['lb-name', 'lb-agent', 'lb-stt', 'lb-llm', 'lb-tts', 'lb-voice', 'lb-turn'].forEach((id) => {
+    ['lb-name', 'lb-agent', 'lb-template', 'lb-dispatch', 'lb-stt', 'lb-llm', 'lb-tts', 'lb-voice', 'lb-turn'].forEach((id) => {
       const field = root.querySelector('#' + id);
       if (field) field.addEventListener('change', () => saveBuilder(true));
     });
-    ['lb-greeting', 'lb-prompt'].forEach((id) => {
+    ['lb-greeting', 'lb-prompt', 'lb-keyterms'].forEach((id) => {
       const field = root.querySelector('#' + id);
       if (field) field.addEventListener('input', UI.debounce(() => saveBuilder(true), 500));
     });
-    ['lb-interrupt', 'lb-preemptive'].forEach((id) => {
+    ['lb-interrupt', 'lb-preemptive', 'lb-expressive'].forEach((id) => {
       const field = root.querySelector('#' + id);
       if (field) field.addEventListener('change', () => saveBuilder(true));
     });

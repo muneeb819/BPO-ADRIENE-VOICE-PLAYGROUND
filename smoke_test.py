@@ -488,15 +488,42 @@ def check_livekit(c: Client):
         require(any(r.get("name") == room_name for r in listed),
                 "created room is not listed")
 
-        code, built = c.post("/api/livekit/build", body={            "name": "Smoke Agent", "greeting": "Hi there", "prompt": "You are a smoke test agent.",
+        base_build = {
+            "name": "Smoke Agent", "greeting": "Hi there",
+            "prompt": "You are a smoke test agent.",
             "sttModel": "xai/stt-1", "llmModel": "google/gemma-4-31b-it",
-            "ttsModel": "fishaudio/s2.1-pro", "ttsVoice": "flux-brittany-en"})
+            "ttsModel": "fishaudio/s2.1-pro", "ttsVoice": "flux-brittany-en",
+        }
+
+        # Starter template (the LiveKit Agents starter: AgentServer + rtc_session).
+        code, built = c.post("/api/livekit/build", body={**base_build, "template": "starter"})
         require(code == 200, f"builder returned {code}")
         files = built.get("files") or {}
+        require(built.get("template") == "starter", "builder ignored the starter template")
+        for name in ("src/agent.py", ".env.example", "Dockerfile", "pyproject.toml",
+                     "scenarios.yaml", ".dockerignore", "livekit.toml"):
+            require(name in files, f"starter bundle is missing {name}")
+        starter_code = files["src/agent.py"]
+        require("AgentSession" in starter_code, "starter worker has no AgentSession")
+        require("AgentServer" in starter_code, "starter worker has no AgentServer")
+        require("rtc_session" in starter_code, "starter worker has no rtc_session handler")
+        require("inference.TurnDetector()" in starter_code, "starter worker has no turn detector")
+        require("ai_coustics" in starter_code, "starter worker has no noise cancellation")
+        require("LIVEKIT_API_SECRET" in files[".env.example"], "starter env has no LiveKit secret")
+        require("agent_expectations" in files["scenarios.yaml"], "scenarios are not judged")
+
+        # Legacy minimal template still renders its single-file pipeline.
+        code, minimal = c.post("/api/livekit/build", body={**base_build, "template": "minimal"})
+        require(code == 200, f"minimal builder returned {code}")
+        minimal_files = minimal.get("files") or {}
         for name in ("agent.py", ".env.example", "Dockerfile", "requirements.txt"):
-            require(name in files, f"generated bundle is missing {name}")
-        require("AgentSession" in files["agent.py"], "generated worker has no AgentSession")
-        require("LIVEKIT_API_SECRET" in files[".env.example"], "generated env has no LiveKit secret")
+            require(name in minimal_files, f"minimal bundle is missing {name}")
+        require("AgentSession" in minimal_files["agent.py"], "minimal worker has no AgentSession")
+
+        # Rendering must not overwrite the saved builder configuration.
+        code, saved = c.get("/api/livekit/builder")
+        require(code == 200, "builder config not readable")
+        require(saved.get("name") != "Smoke Agent", "build persisted the preview settings")
 
         # Cloud API (agents, versions, secrets) when a Cloud key is configured.
         code, cloud = c.get("/api/livekit/cloud/agents")

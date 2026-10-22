@@ -73,7 +73,7 @@ if (-not $python) {
 Log "backend not answering on 127.0.0.1:$Port - starting it"
 Start-Process -FilePath $python `
     -ArgumentList "server.py", "--port", "$Port", "--no-open" `
-    -WorkingDirectory $ProjectRoot -WindowStyle Minimized
+    -WorkingDirectory $ProjectRoot -WindowStyle Hidden
 
 for ($i = 0; $i -lt 15; $i++) {
     Start-Sleep -Seconds 1
