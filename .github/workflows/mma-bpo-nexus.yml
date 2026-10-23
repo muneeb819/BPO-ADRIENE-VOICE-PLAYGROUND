@@ -1,0 +1,50 @@
+name: MMA BPO NEXUS
+
+on:
+  push:
+    paths:
+      - "mma-bpo-nexus/**"
+      - ".github/workflows/mma-bpo-nexus.yml"
+  pull_request:
+    paths:
+      - "mma-bpo-nexus/**"
+      - ".github/workflows/mma-bpo-nexus.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: mma-bpo-nexus/backend/requirements*.txt
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install backend dependencies
+        working-directory: mma-bpo-nexus
+        run: python -m pip install -r backend/requirements-dev.txt
+      - name: Python compilation
+        working-directory: mma-bpo-nexus
+        run: python -m compileall -q backend/app backend/tests run.py
+      - name: Policy, API, auth, voice, streaming, LiveKit, and concurrency tests
+        working-directory: mma-bpo-nexus/backend
+        run: python -m pytest
+      - name: Frontend syntax
+        working-directory: mma-bpo-nexus
+        run: |
+          node --check frontend/app.js
+          node --check frontend/pcm-worklet.js
+      - name: Dependency audit
+        working-directory: mma-bpo-nexus
+        run: |
+          python -m pip install pip-audit
+          pip-audit -r backend/requirements.txt
+      - name: Patch whitespace check
+        run: git diff --check

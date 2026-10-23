@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080b14">
+  <meta name="description" content="MMA BPO NEXUS Stage 2 — deterministic intake with browser and Deepgram voice evidence.">
+  <title>MMA BPO NEXUS — Voice Foundation</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/vendor/livekit-client.umd.js" defer></script>
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <section class="auth-screen" id="auth-screen" aria-label="Operator authentication">
+    <div class="auth-card">
+      <div class="auth-brand">
+        <span class="brand-mark" aria-hidden="true">M</span>
+        <div><span class="brand-company">MMA</span><h1>BPO NEXUS</h1></div>
+      </div>
+      <p class="auth-intro">Secure operator access for conversation, voice, and retention controls.</p>
+      <p class="auth-loading" id="auth-loading">Checking secure access…</p>
+      <form id="setup-form" class="auth-form hidden">
+        <p class="eyebrow">FIRST-RUN SETUP</p>
+        <h2>Create the administrator</h2>
+        <p>No default password is shipped. Create the first admin account for this installation.</p>
+        <div class="field"><label for="setup-name">Your name</label><input id="setup-name" type="text" minlength="2" maxlength="80" required autocomplete="name"></div>
+        <div class="field"><label for="setup-username">Username</label><input id="setup-username" type="text" minlength="3" maxlength="32" pattern="[A-Za-z0-9_.-]+" required autocomplete="username"></div>
+        <div class="field"><label for="setup-password">Password</label><input id="setup-password" type="password" minlength="12" maxlength="128" required autocomplete="new-password"><span class="field-hint">At least 12 characters with letters and numbers.</span></div>
+        <div class="field"><label for="setup-confirm">Confirm password</label><input id="setup-confirm" type="password" minlength="12" maxlength="128" required autocomplete="new-password"></div>
+        <button class="button button-primary button-full" type="submit">Create admin &amp; continue</button>
+      </form>
+      <form id="login-form" class="auth-form hidden">
+        <p class="eyebrow">OPERATOR LOGIN</p>
+        <h2>Welcome back</h2>
+        <p>Sign in with your local MMA BPO NEXUS account.</p>
+        <div class="field"><label for="login-username">Username</label><input id="login-username" type="text" minlength="3" maxlength="32" required autocomplete="username"></div>
+        <div class="field"><label for="login-password">Password</label><input id="login-password" type="password" maxlength="128" required autocomplete="current-password"></div>
+        <button class="button button-primary button-full" type="submit">Sign in securely</button>
+      </form>
+      <p class="auth-error" id="auth-error" role="alert"></p>
+      <p class="auth-footnote">Passwords are PBKDF2-hashed. Sessions expire automatically. Credentials are never stored in browser storage.</p>
+    </div>
+  </section>
+
+  <div class="app-shell" inert>
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="MMA BPO NEXUS home">
+        <span class="brand-mark" aria-hidden="true">M</span>
+        <span class="brand-copy">
+          <span class="brand-company">MMA</span>
+          <span class="brand-name">BPO NEXUS</span>
+        </span>
+      </a>
+      <div class="topbar-meta">
+        <div class="user-controls">
+          <span class="user-name" id="user-name">—</span>
+          <span class="user-role" id="user-role">—</span>
+          <button class="text-button" id="logout-button" type="button">Log out</button>
+        </div>
+        <span class="stage-badge">STAGE 04 <span>/</span> SECURE CLOUD OPS</span>
+        <span class="connection" id="connection-status"><span class="status-dot"></span> Connecting</span>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <section class="hero" aria-labelledby="hero-title">
+        <div>
+          <p class="eyebrow">CONVERSATION FOUNDATION</p>
+          <h1 id="hero-title">Voice you can <span>verify.</span></h1>
+          <p class="hero-copy">Deterministic intake with real microphone and playback paths. Every policy decision and voice request is explicit, measured, and auditable.</p>
+        </div>
+        <div class="hero-assurance" aria-label="Stage 1 assurances">
+          <span>✓ No fabricated decisions</span>
+          <span>✓ Version-bound sessions</span>
+          <span>✓ Measured voice requests</span>
+        </div>
+      </section>
+
+      <section class="metric-strip" aria-label="Runtime facts">
+        <article class="metric-card">
+          <span class="metric-label">ACTIVE CONTRACT</span>
+          <strong id="metric-version">Version —</strong>
+          <span class="metric-note">Immutable per session</span>
+        </article>
+        <article class="metric-card">
+          <span class="metric-label">DECISION ENGINE</span>
+          <strong>100% deterministic</strong>
+          <span class="metric-note">No LLM guessing</span>
+        </article>
+        <article class="metric-card">
+          <span class="metric-label">VOICE PROVIDERS</span>
+          <strong id="metric-voice">Browser by default</strong>
+          <span class="metric-note" id="metric-voice-note">Checking Deepgram configuration</span>
+        </article>
+        <article class="metric-card">
+          <span class="metric-label">PERSISTENCE</span>
+          <strong>SQLite</strong>
+          <span class="metric-note">Text + voice metadata</span>
+        </article>
+      </section>
+
+      <div class="alert hidden" id="global-error" role="alert">
+        <span id="global-error-text"></span>
+        <button type="button" id="dismiss-error" aria-label="Dismiss error">×</button>
+      </div>
+
+      <div class="read-only-banner hidden" id="read-only-banner">Read-only access: you can inspect sessions and evidence, but configuration and conversation writes are disabled.</div>
+
+      <section class="workspace" aria-label="MMA BPO NEXUS workspace">
+        <aside class="panel agent-panel">
+          <div class="panel-heading">
+            <div>
+              <p class="panel-kicker">01 / AGENT CONTRACT</p>
+              <h2>Configuration</h2>
+            </div>
+            <span class="version-pill" id="agent-version">v—</span>
+          </div>
+          <p class="panel-description">Every save creates a new immutable version. Existing sessions keep the version they started with.</p>
+
+          <form id="agent-form">
+            <div class="field">
+              <label for="persona-preset">Persona preset</label>
+              <select id="persona-preset"></select>
+              <span class="field-hint">Preset changes update purpose, tone, and greeting. Policy rules stay unchanged.</span>
+            </div>
+            <div class="field">
+              <label for="agent-purpose">Role &amp; purpose</label>
+              <input id="agent-purpose" type="text" minlength="5" maxlength="160" required autocomplete="off">
+            </div>
+            <div class="field">
+              <label for="agent-tone">Response tone</label>
+              <select id="agent-tone">
+                <option value="professional">Professional</option>
+                <option value="friendly">Friendly</option>
+                <option value="empathetic">Empathetic</option>
+                <option value="authoritative">Authoritative</option>
+                <option value="cheerful">Cheerful</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="agent-name">Agent name</label>
+              <input id="agent-name" name="name" type="text" minlength="2" maxlength="80" required autocomplete="off">
+            </div>
+            <div class="field">
+              <label for="agent-campaign">Campaign</label>
+              <input id="agent-campaign" name="campaign" type="text" maxlength="100" required autocomplete="off">
+            </div>
+            <div class="field">
+              <label for="agent-greeting">Greeting</label>
+              <textarea id="agent-greeting" name="greeting" rows="5" minlength="10" maxlength="500" required></textarea>
+              <span class="field-hint">Used verbatim when a new session starts.</span>
+            </div>
+            <fieldset class="policy-fields">
+              <legend>Voice providers</legend>
+              <div class="field">
+                <label for="stt-provider">Speech to text</label>
+                <select id="stt-provider">
+                  <option value="browser">Browser speech recognition</option>
+                  <option value="deepgram">Deepgram Cloud · Nova buffered</option>
+                  <option value="deepgram-flux">Deepgram Flux · streaming turns</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="stt-model">STT model</label>
+                <select id="stt-model"></select>
+              </div>
+              <div class="field">
+                <label for="tts-provider">Text to speech</label>
+                <select id="tts-provider">
+                  <option value="browser">Browser speech synthesis</option>
+                  <option value="deepgram">Deepgram Cloud</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="tts-voice">Deepgram TTS voice</label>
+                <select id="tts-voice"></select>
+                <span class="field-hint">36 Flux + 5 Aura catalogue options. Account access is verified only by synthesis.</span>
+              </div>
+              <div class="voice-preview-row">
+                <button class="button button-secondary" id="preview-voice" type="button">Preview selected voice</button>
+                <button class="button button-quiet" id="stop-voice-preview" type="button" disabled>Stop</button>
+              </div>
+              <p class="field-hint" id="voice-preview-status">No audio plays until you explicitly request a preview.</p>
+              <div class="voice-config-status" id="deepgram-config-status">Checking Deepgram configuration…</div>
+            </fieldset>
+            <fieldset class="policy-fields">
+              <legend>Transfer policy</legend>
+              <label class="toggle-row" for="transfers-enabled">
+                <span>
+                  <strong>Allow requests</strong>
+                  <small>Only creates a pending record in Stage 1.</small>
+                </span>
+                <input id="transfers-enabled" type="checkbox" role="switch">
+              </label>
+              <label class="toggle-row" for="require-consent">
+                <span>
+                  <strong>Require consent</strong>
+                  <small>Explicit yes before any request.</small>
+                </span>
+                <input id="require-consent" type="checkbox" role="switch">
+              </label>
+            </fieldset>
+            <button class="button button-secondary button-full" id="save-agent" type="submit">Save as new version</button>
+            <p class="form-status" id="agent-form-status" aria-live="polite"></p>
+          </form>
+
+          <div class="history-block">
+            <div class="section-label-row">
+              <label for="session-history">Session history</label>
+              <button class="text-button" id="refresh-data" type="button">Refresh</button>
+            </div>
+            <select id="session-history" aria-label="Load a previous session">
+              <option value="">Select a session to inspect</option>
+            </select>
+            <p class="field-hint" id="history-hint">Sessions persist across server restarts.</p>
+            <div class="history-actions">
+              <button class="text-button" id="export-session" type="button" disabled>Export JSON</button>
+              <button class="text-button danger-text" id="delete-session" type="button" disabled>Delete</button>
+            </div>
+          </div>
+
+          <details class="admin-section" id="retention-section">
+            <summary>Retention &amp; privacy</summary>
+            <form id="retention-form" class="compact-form">
+              <div class="field"><label for="retention-days">Transcript retention (days)</label><input id="retention-days" type="number" min="1" max="365" required></div>
+              <label class="toggle-row" for="retention-auto"><span><strong>Auto-delete expired sessions</strong><small>Runs on startup, hourly, and manually.</small></span><input id="retention-auto" type="checkbox" role="switch"></label>
+              <div class="split-actions"><button class="button button-secondary" type="submit">Save policy</button><button class="button button-quiet" id="cleanup-retention" type="button">Run cleanup</button></div>
+            </form>
+          </details>
+
+          <details class="admin-section" id="team-section">
+            <summary>Team access</summary>
+            <div class="user-list" id="user-list"></div>
+            <form id="user-form" class="compact-form">
+              <div class="field"><label for="new-user-name">Display name</label><input id="new-user-name" type="text" minlength="2" maxlength="80" required></div>
+              <div class="field"><label for="new-user-username">Username</label><input id="new-user-username" type="text" minlength="3" maxlength="32" pattern="[A-Za-z0-9_.-]+" required></div>
+              <div class="field"><label for="new-user-password">Temporary password</label><input id="new-user-password" type="password" minlength="12" maxlength="128" required autocomplete="new-password"><span class="field-hint">Letters and numbers required; share it securely.</span></div>
+              <div class="field"><label for="new-user-role">Role</label><select id="new-user-role"><option value="viewer">Viewer · read only</option><option value="admin">Admin · full control</option></select></div>
+              <button class="button button-secondary button-full" type="submit">Create operator</button>
+            </form>
+          </details>
+
+          <details class="admin-section" id="audit-section">
+            <summary>Audit evidence</summary>
+            <div class="section-label-row"><span class="field-hint">Latest sensitive actions</span><button class="text-button" id="refresh-audit" type="button">Refresh</button></div>
+            <div class="audit-list" id="audit-list"></div>
+          </details>
+
+          <details class="admin-section" id="livekit-section">
+            <summary>LiveKit Cloud</summary>
+            <p class="field-hint">Optional real-time rooms. No deployment files or API secrets are downloaded.</p>
+            <div class="voice-config-status" id="livekit-status">Checking LiveKit configuration…</div>
+            <div class="field"><label for="livekit-room">Room name</label><input id="livekit-room" type="text" maxlength="64" pattern="[A-Za-z0-9_-]+" value="mma-nexus-room" autocomplete="off"></div>
+            <div class="livekit-actions">
+              <button class="button button-secondary" id="livekit-create" type="button">Create</button>
+              <button class="button button-primary" id="livekit-join" type="button">Join</button>
+              <button class="button button-quiet" id="livekit-dispatch" type="button">Dispatch agent</button>
+              <button class="button button-quiet" id="livekit-leave" type="button" disabled>Leave</button>
+              <button class="text-button" id="livekit-verify" type="button">Verify connectivity</button>
+            </div>
+            <div class="livekit-grid">
+              <div><span class="rule-label">PARTICIPANTS</span><div id="livekit-participants"><p class="muted-copy">Not connected.</p></div></div>
+              <div><span class="rule-label">ROOM TRANSCRIPT</span><div id="livekit-transcript" class="livekit-transcript"><p class="muted-copy">Room events will appear here.</p></div></div>
+            </div>
+            <div id="livekit-audio" hidden></div>
+          </details>
+        </aside>
+
+        <section class="panel conversation-panel" aria-labelledby="conversation-title">
+          <div class="panel-heading conversation-heading">
+            <div>
+              <p class="panel-kicker">02 / LIVE TEST</p>
+              <h2 id="conversation-title">Text conversation</h2>
+              <p class="session-meta" id="session-meta">No session selected</p>
+            </div>
+            <span class="session-status status-ready" id="session-status">Ready</span>
+          </div>
+
+          <div class="conversation-actions">
+            <button class="button button-primary" id="new-session" type="button" disabled>Start new session</button>
+            <button class="button button-secondary" id="mic-button" type="button" disabled>Enable mic</button>
+            <button class="button button-quiet" id="sound-button" type="button" disabled>Sound on</button>
+            <button class="button button-quiet" id="replay-button" type="button" disabled>Replay reply</button>
+            <button class="button button-quiet" id="end-session" type="button" disabled>End session</button>
+          </div>
+          <div class="capture-status" id="capture-status">
+            <span class="capture-dot" id="capture-dot"></span>
+            <span id="capture-status-text">Voice idle · text is always available</span>
+          </div>
+
+          <ol class="journey" id="journey" aria-label="Intake progress">
+            <li data-step="account"><span>1</span><small>Account</small></li>
+            <li data-step="zip"><span>2</span><small>ZIP</small></li>
+            <li data-step="coverage"><span>3</span><small>Coverage</small></li>
+            <li data-step="review"><span>4</span><small>Review</small></li>
+            <li data-step="transfer"><span>5</span><small>Transfer</small></li>
+          </ol>
+
+          <div class="transcript" id="transcript" role="log" aria-live="polite" aria-label="Conversation transcript">
+            <div class="empty-state" id="empty-transcript">
+              <span class="empty-icon" aria-hidden="true">↗</span>
+              <h3>Start with a clean session</h3>
+              <p>The agent will greet you, then verify the account holder before collecting any other information.</p>
+            </div>
+          </div>
+
+          <div class="quick-prompts" id="quick-prompts" aria-label="Quick prompts">
+            <span>Try:</span>
+            <button type="button" data-message="I am checking my eligibility" disabled>Eligibility</button>
+            <button type="button" data-message="What is the price?" disabled>Pricing guardrail</button>
+            <button type="button" data-message="I want to speak to a specialist" disabled>Specialist</button>
+          </div>
+
+          <form class="turn-form" id="turn-form">
+            <label class="sr-only" for="turn-input">Message to the agent</label>
+            <div class="input-row">
+              <input id="turn-input" type="text" maxlength="2000" placeholder="Start a session to enable text input…" autocomplete="off" disabled>
+              <button class="send-button" id="send-turn" type="submit" disabled aria-label="Send message">↑</button>
+            </div>
+            <div class="input-meta">
+              <span id="input-channel-label">Text + optional voice · deterministic policy</span>
+              <span id="character-count">0 / 2000</span>
+            </div>
+          </form>
+        </section>
+
+        <aside class="panel state-panel">
+          <div class="panel-heading">
+            <div>
+              <p class="panel-kicker">03 / POLICY EVIDENCE</p>
+              <h2>Decision state</h2>
+            </div>
+            <span class="evidence-badge">LIVE STATE</span>
+          </div>
+          <p class="panel-description">Values come directly from the session—not inferred by the interface.</p>
+
+          <dl class="state-list">
+            <div><dt>Account holder</dt><dd id="state-account">—</dd></div>
+            <div><dt>ZIP code</dt><dd id="state-zip">—</dd></div>
+            <div><dt>Prior coverage</dt><dd id="state-coverage">—</dd></div>
+            <div><dt>Eligibility</dt><dd id="state-eligibility">Undetermined</dd></div>
+            <div><dt>Consent</dt><dd id="state-consent">—</dd></div>
+            <div><dt>Transfer</dt><dd id="state-transfer">Not requested</dd></div>
+            <div><dt>Outcome</dt><dd id="state-outcome">In progress</dd></div>
+            <div><dt>Last STT</dt><dd id="voice-stt">—</dd></div>
+            <div><dt>Last TTS</dt><dd id="voice-tts">—</dd></div>
+          </dl>
+
+          <div class="rule-card">
+            <span class="rule-label">ACTIVE DEMO RULE</span>
+            <p>Preliminary review requires a confirmed account holder, valid ZIP, and prior coverage. It is never a final approval.</p>
+          </div>
+
+          <div class="privacy-card">
+            <span class="rule-label">AUDIO DISCLOSURE</span>
+            <p id="audio-disclosure">Audio is handled by the selected provider and is never written to SQLite. Browser speech services may process audio externally.</p>
+          </div>
+
+          <div class="events-section">
+            <div class="section-label-row">
+              <h3>Event evidence</h3>
+              <span id="event-count">0 events</span>
+            </div>
+            <div class="event-list" id="event-list">
+              <p class="muted-copy">Events will appear after a session starts.</p>
+            </div>
+          </div>
+        </aside>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-brand"><strong>MMA</strong> BPO NEXUS <span>/ Stage 04</span></div>
+      <p>Audio processed by the selected provider · never stored in SQLite · no real dialing</p>
+    </footer>
+  </div>
+
+  <div class="toast hidden" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

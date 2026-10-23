@@ -4989,7 +4989,7 @@ def _warm_livekit_console() -> None:
         pass
 
 
-def _code_watchdog(port: int) -> None:
+def _code_watchdog(port: int, host: str) -> None:
     """Restart the process when server.py changes on disk.
 
     The replacement is started detached so it survives this process exiting.
@@ -5006,7 +5006,7 @@ def _code_watchdog(port: int) -> None:
                 flags = 0x00000008 | 0x00000200  # NEW_PROCESS_GROUP | DETACHED
                 handle = open(log_path, "a", encoding="utf-8")
                 subprocess.Popen(
-                    [sys.executable, str(code), "--port", str(port), "--no-open"],
+                    [sys.executable, str(code), "--host", host, "--port", str(port), "--no-open"],
                     cwd=str(code.parent),
                     stdout=handle, stderr=subprocess.STDOUT,
                     stdin=subprocess.DEVNULL,
@@ -5021,6 +5021,8 @@ def _code_watchdog(port: int) -> None:
 
 def main():
     parser = argparse.ArgumentParser(description="BPO Adriene local playground")
+    parser.add_argument("--host", default=os.environ.get("HOST", "127.0.0.1"),
+                        help="Bind address (default: 127.0.0.1; use 0.0.0.0 for preview/LAN)")
     parser.add_argument("--port", type=int, default=int(os.environ.get("PORT", "8000")))
     parser.add_argument("--no-open", action="store_true")
     args = parser.parse_args()
@@ -5032,7 +5034,7 @@ def main():
     last_error = None
     for candidate in range(args.port, args.port + 12):
         try:
-            httpd = Server(("127.0.0.1", candidate), Handler)
+            httpd = Server((args.host, candidate), Handler)
             port = candidate
             break
         except OSError as exc:
@@ -5063,7 +5065,7 @@ def main():
         threading.Thread(target=_deepgram_account_refresh, daemon=True).start()
 
     # Reload automatically after a code change (no admin rights needed).
-    threading.Thread(target=_code_watchdog, args=(port,), daemon=True).start()
+    threading.Thread(target=_code_watchdog, args=(port, args.host), daemon=True).start()
 
     # Warm the LiveKit console cache so the page opens instantly.
     if LIVEKIT_CLOUD_API_KEY and LIVEKIT_CLOUD_API_SECRET:
