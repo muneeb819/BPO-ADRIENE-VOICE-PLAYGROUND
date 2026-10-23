@@ -421,8 +421,11 @@
       $('kb-answer').textContent = answer.answer || '';
       $('kb-confidence').textContent = answer.confidence || 'none';
       $('kb-confidence').className = `pill ${answer.grounded ? 'pill-green' : 'pill-amber'} no-dot`;
-      $('kb-sources').innerHTML = (answer.sources || []).map((s) => `
-        <span class="chip source-chip" title="${esc(s.section || '')}">${esc(s.source || '')}${s.slide ? ` · slide ${s.slide}` : ''} · ${esc(s.score)}</span>`).join('');
+      // Show only the primary source (top result) in the answer section
+      const primary = (answer.sources || [])[0];
+      $('kb-sources').innerHTML = primary ? `
+        <span class="chip source-chip" title="${esc(primary.section || '')}">Primary source: ${esc(primary.source || '')}${primary.slide ? ` · slide ${primary.slide}` : ''} · score ${esc(primary.score)}</span>
+        <span class="text-[9px] text-slate-400 ml-2">(Answer grounded in top result; all retrieved sources shown below)</span>` : '';
       const rows = results.results || [];
       $('kb-results').innerHTML = rows.length ? rows.map((r) => `
         <div class="kb-hit">

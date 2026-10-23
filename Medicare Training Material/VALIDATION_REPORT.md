@@ -1,7 +1,7 @@
 # Tressa USA Medicare — Validation Report
 
 - Knowledge version: **1.0.0**
-- Generated: 2026-10-23T15:58:51.876Z
+- Generated: 2026-10-23T19:55:00.650Z
 - Agent: Nexus - Tressa - USA Medicare
 - Derived status: **Active**
 - Tests: **88/88 passed** (100.0%), 0 failed

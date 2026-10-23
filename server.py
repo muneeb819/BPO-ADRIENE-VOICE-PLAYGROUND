@@ -5156,6 +5156,9 @@ def main():
     parser.add_argument("--no-open", action="store_true")
     args = parser.parse_args()
 
+    no_open = args.no_open or os.environ.get("ADRIENE_NO_OPEN", "false").lower() == "true"
+    bind_host = os.environ.get("BIND_HOST", "127.0.0.1")
+
     init_db()
 
     httpd = None
@@ -5163,7 +5166,7 @@ def main():
     last_error = None
     for candidate in range(args.port, args.port + 12):
         try:
-            httpd = Server(("127.0.0.1", candidate), Handler)
+            httpd = Server((bind_host, candidate), Handler)
             port = candidate
             break
         except OSError as exc:
@@ -5175,17 +5178,19 @@ def main():
     if port != args.port:
         print(f"\n  Port {args.port} is busy, using {port} instead.")
 
-    url = f"http://localhost:{port}/"
+    display_host = "localhost" if bind_host in ("127.0.0.1", "0.0.0.0") else bind_host
+    url = f"http://{display_host}:{port}/"
     print("\n  BPO ADRIENE — AI Agent Playground")
     print("  " + "-" * 46)
     print(f"  Folder  : {ROOT}")
     print(f"  Database: {DB_PATH}")
+    print(f"  Bind    : {bind_host}:{port}")
     print(f"  URL     : {url}")
     print(f"  Health  : {url}api/health")
     print(f"  TTS     : {'Deepgram Aura (server key)' if DEEPGRAM_API_KEY else 'Browser Speech Synthesis'}")
     print("  Stop    : Ctrl+C\n")
 
-    if not args.no_open:
+    if not no_open:
         threading.Timer(1.0, lambda: webbrowser.open(url)).start()
 
     # Warm the Deepgram account cache in the background so the admin panel
