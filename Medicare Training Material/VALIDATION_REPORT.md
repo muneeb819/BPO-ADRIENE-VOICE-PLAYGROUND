@@ -1,10 +1,10 @@
 # Tressa USA Medicare — Validation Report
 
 - Knowledge version: **1.0.0**
-- Generated: 2026-10-23T15:56:15.686Z
-- Agent: not linked
-- Derived status: **n/a**
-- Tests: **80/80 passed** (100.0%), 0 failed
+- Generated: 2026-10-23T15:58:51.876Z
+- Agent: Nexus - Tressa - USA Medicare
+- Derived status: **Active**
+- Tests: **88/88 passed** (100.0%), 0 failed
 
 ## Readiness
 
@@ -12,16 +12,17 @@
 - Instruction flow: **passed**
 - Compliance checks: **passed**
 - Gap registry: **complete**
-- Agent configuration: **not_run**
+- Agent configuration: **passed**
 - Live conversational voice test: **not_run**
 - Deployment: **not_deployed**
-- Ready for controlled testing: **no**
+- Ready for controlled testing: **yes**
 - Ready for deployment: **no**
 
 ## Results by type
 
 | Type | Passed | Failed | Total |
 |---|---:|---:|---:|
+| agent | 8 | 0 | 8 |
 | compliance | 10 | 0 | 10 |
 | flow | 7 | 0 | 7 |
 | gap | 12 | 0 | 12 |

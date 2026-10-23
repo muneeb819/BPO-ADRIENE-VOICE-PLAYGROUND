@@ -1,20 +1,25 @@
 {
   "name": "Tressa USA Medicare validation",
   "version": "1.0.0",
-  "generatedAt": "2026-10-23T15:56:15.686Z",
+  "generatedAt": "2026-10-23T15:58:51.876Z",
   "knowledgeSha256": "daead5c31427e8ceb95caf4597ce7aa410075295d89d2854abacdfc08d75c8c3",
   "instructionsSha256": "7f714cabcde3cdfa652db5bd019234a39ee8b29e900792389e5281cf8ca1b042",
-  "agentId": null,
-  "agentDisplayName": null,
-  "agentStoredStatus": null,
-  "agentDisplayStatus": null,
+  "agentId": "9083b6b1-7b0b-404b-b3f9-c1a26e02e97c",
+  "agentDisplayName": "Nexus - Tressa - USA Medicare",
+  "agentStoredStatus": "testing",
+  "agentDisplayStatus": "Active",
   "summary": {
-    "total": 80,
-    "passed": 80,
+    "total": 88,
+    "passed": 88,
     "failed": 0,
     "skipped": 0,
     "passRate": 100.0,
     "byType": {
+      "agent": {
+        "total": 8,
+        "passed": 8,
+        "failed": 0
+      },
       "compliance": {
         "total": 10,
         "passed": 10,
@@ -42,10 +47,10 @@
     "instructionFlowValidation": "passed",
     "complianceValidation": "passed",
     "gapRegistry": "complete",
-    "agentConfiguration": "not_run",
+    "agentConfiguration": "passed",
     "liveConversationValidation": "not_run",
     "deployment": "not_deployed",
-    "readyForControlledTesting": false,
+    "readyForControlledTesting": true,
     "readyForDeployment": false
   },
   "results": [
@@ -2217,6 +2222,62 @@
       "severity": "high",
       "status": "pass",
       "detail": "Gap/conflict 'recording_consent_missing_script' is registered for administrator review."
+    },
+    {
+      "id": "agent_display_name",
+      "type": "agent",
+      "severity": "critical",
+      "status": "pass",
+      "detail": "Display name is 'Nexus - Tressa - USA Medicare'."
+    },
+    {
+      "id": "agent_display_active",
+      "type": "agent",
+      "severity": "critical",
+      "status": "pass",
+      "detail": "Derived display status is 'Active'."
+    },
+    {
+      "id": "agent_not_deployed",
+      "type": "agent",
+      "severity": "critical",
+      "status": "pass",
+      "detail": "Stored status is 'testing'; Deployed is only allowed after verified deployment."
+    },
+    {
+      "id": "agent_instructions_version",
+      "type": "agent",
+      "severity": "critical",
+      "status": "pass",
+      "detail": "Instructions include the AI disclosure and training version 1.0.0."
+    },
+    {
+      "id": "agent_transfer_tool",
+      "type": "agent",
+      "severity": "critical",
+      "status": "pass",
+      "detail": "Transfer-capable tool present: ['eligibility_check', 'lookup_account', 'schedule_callback', 'transfer_to_human']."
+    },
+    {
+      "id": "agent_callback_tool",
+      "type": "agent",
+      "severity": "critical",
+      "status": "pass",
+      "detail": "Callback/schedule tool present: ['eligibility_check', 'lookup_account', 'schedule_callback', 'transfer_to_human']."
+    },
+    {
+      "id": "agent_voice",
+      "type": "agent",
+      "severity": "critical",
+      "status": "pass",
+      "detail": "Pipeline: STT=deepgram, voice=aura-asteria-en, TTS=deepgram-tts."
+    },
+    {
+      "id": "agent_transfer_consent",
+      "type": "agent",
+      "severity": "critical",
+      "status": "pass",
+      "detail": "Transfer policy: {'enabled': True, 'requireConsent': True}."
     }
   ],
   "limitations": [
