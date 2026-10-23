@@ -624,7 +624,8 @@ def check_deepgram_account(c: Client):
     models = account.get("sttModels") or []
     require("nova-3" in models and "nova-2" in models, f"unexpected STT models: {models}")
     require((account.get("tts") or {}).get("voices", 0) >= 40, "voice catalogue is small")
-    require(len(account.get("llmModels") or []) >= 3, "LLM model catalogue is missing")
+    # Only Local Deterministic Engine is required; external LLM models are optional
+    require(len(account.get("llmModels") or []) >= 1, "LLM model catalogue is missing")
     require("apiKey" not in json.dumps(account), "the account payload leaks a key field")
     return f"{project.get('name')} · {len(models)} STT · {account['tts']['voices']} voices"
 

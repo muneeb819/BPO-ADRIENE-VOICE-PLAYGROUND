@@ -145,7 +145,8 @@ NEXUS_CAPABILITY_STACK = [
     "Multimodality",
     "Next-Token Prediction",
 ]
-ALLOWED_STT = {"browser", "whisper", "deepgram"}
+# Core providers (Deepgram + Local by default; others can be added manually)
+ALLOWED_STT = {"deepgram", "browser", "whisper"}
 ALLOWED_STT_MODELS = {"nova-3", "nova-2", "nova-3-general", "flux"}
 ALLOWED_LLM = {"local", "openai", "anthropic", "gemini"}
 LLM_MODEL_CATALOG = [
@@ -154,23 +155,24 @@ LLM_MODEL_CATALOG = [
         "provider": "local", "requiresKey": False,
         "note": "Offline policy engine - no key, deterministic answers.",
     },
-    {
-        "id": "google/gemini-3.1-flash-lite", "label": "Google Gemini 3.1 Flash Lite",
-        "provider": "gemini", "requiresKey": True, "key": "GEMINI_API_KEY",
-        "note": "Deepgram voice-agent model - needs GEMINI_API_KEY in .env.",
-    },
-    {
-        "id": "openai/gpt-4o-mini", "label": "OpenAI GPT-4o Mini",
-        "provider": "openai", "requiresKey": True, "key": "OPENAI_API_KEY",
-        "note": "Deepgram voice-agent model - needs OPENAI_API_KEY in .env.",
-    },
+    # {
+    #     "id": "google/gemini-3.1-flash-lite", "label": "Google Gemini 3.1 Flash Lite",
+    #     "provider": "gemini", "requiresKey": True, "key": "GEMINI_API_KEY",
+    #     "note": "Requires GEMINI_API_KEY in .env.",
+    # },
+    # {
+    #     "id": "openai/gpt-4o-mini", "label": "OpenAI GPT-4o Mini",
+    #     "provider": "openai", "requiresKey": True, "key": "OPENAI_API_KEY",
+    #     "note": "Requires OPENAI_API_KEY in .env.",
+    # },
     {
         "id": "anthropic/claude-3-5-sonnet", "label": "Anthropic Claude 3.5 Sonnet",
         "provider": "anthropic", "requiresKey": True, "key": "ANTHROPIC_API_KEY",
         "note": "Deepgram voice-agent model - needs ANTHROPIC_API_KEY in .env.",
     },
 ]
-ALLOWED_TTS = {"browser-tts", "elevenlabs", "openai-tts", "deepgram-tts"}
+# Core providers (Deepgram + Local by default; others can be added manually)
+ALLOWED_TTS = {"deepgram-tts", "browser-tts", "elevenlabs", "openai-tts"}
 ALLOWED_CATEGORIES = {
     "positive", "negative", "ambiguous", "silence",
     "interruption", "timeout", "provider_failure",
@@ -435,51 +437,20 @@ def seed_db() -> None:
                 (new_id(), agent["id"], 1, json.dumps(agent), "Initial version", ts),
             )
 
-        # Providers
+        # Providers — only Deepgram STT/TTS + Local Deterministic LLM
         pcount = conn.execute("SELECT COUNT(*) FROM providers").fetchone()[0]
         if pcount == 0:
             ts = now_iso()
             deepgram_status = "connected" if DEEPGRAM_API_KEY else "disconnected"
-            stt_default = "deepgram" if DEEPGRAM_API_KEY else ("whisper" if OPENAI_API_KEY else "browser")
-            tts_default = "deepgram-tts" if DEEPGRAM_API_KEY else ("elevenlabs" if ELEVENLABS_API_KEY else "browser-tts")
             providers = [
-                ("llm", "openai", "OpenAI GPT-4o Mini", 1, 1,
-                 {"model": "gpt-4o-mini", "max_tokens": 500, "temperature": 0.7},
-                 ["function-calling", "streaming", "json-mode"], [],
-                 "connected" if OPENAI_API_KEY else "disconnected"),
-                ("llm", "anthropic", "Anthropic Claude 3.5", 0, 0,
-                 {"model": "claude-3-5-sonnet", "temperature": 0.7},
-                 ["streaming", "extended-thinking"], [],
-                 "connected" if ANTHROPIC_API_KEY else "disconnected"),
-                ("llm", "gemini", "Google Gemini 3.1 Flash Lite", 0, 0,
-                 {"model": "google/gemini-3.1-flash-lite", "temperature": 0.7},
-                 ["streaming", "low-latency"], [],
-                 "connected" if GEMINI_API_KEY else "disconnected"),
-                ("llm", "local", "Local Deterministic Engine", 1, 0,
-                 {"deterministic": True},
-                 ["offline", "rule-based", "no-key"], [], "connected"),
-                ("stt", "browser", "Browser Web Speech API", 1, 1 if stt_default == "browser" else 0,
-                 {"local": True}, ["local", "no-key"], [], "connected"),
-                ("stt", "whisper", "OpenAI Whisper", 1, 1 if stt_default == "whisper" else 0,
-                 {"model": "whisper-1", "language": "en-US", "streaming": True},
-                 ["streaming", "en-US", "es-ES", "fr-FR"], [],
-                 "connected" if OPENAI_API_KEY else "disconnected"),
-                ("stt", "deepgram", "Deepgram Nova-2", 1, 1 if stt_default == "deepgram" else 0,
-                 {"model": "nova-2", "interim_results": True},
-                 ["streaming", "realtime", "diarization"], [],
+                ("llm", "local", "Local Deterministic Engine", 1, 1,
+                 {"model": "deterministic-rules", "temperature": 0, "deterministic": True},
+                 ["offline", "rule-based", "no-key", "deterministic"], [], "connected"),
+                ("stt", "deepgram", "Deepgram Nova-3", 1, 1,
+                 {"model": "nova-3", "interim_results": True, "smart_format": True, "punctuate": True},
+                 ["streaming", "realtime", "diarization", "smart-format"], [],
                  deepgram_status),
-                ("tts", "elevenlabs", "ElevenLabs", 1, 1 if tts_default == "elevenlabs" else 0,
-                 {"model": "eleven_multilingual_v2", "stability": 0.7},
-                 ["streaming", "voice-cloning", "multilingual"],
-                 ["Rachel", "Adam", "Bella", "Antoni", "Josh"],
-                 "connected" if ELEVENLABS_API_KEY else "disconnected"),
-                ("tts", "openai-tts", "OpenAI TTS", 1, 0,
-                 {"model": "gpt-4o-mini-tts"},
-                 ["streaming", "hd"], ["alloy", "echo", "fable", "onyx", "nova", "shimmer"],
-                 "connected" if OPENAI_API_KEY else "disconnected"),
-                ("tts", "browser-tts", "Browser Speech Synthesis", 1, 1 if tts_default == "browser-tts" else 0,
-                 {"local": True}, ["local", "no-key"], ["Browser Default"], "connected"),
-                ("tts", "deepgram-tts", "Deepgram Flux / Aura TTS", 1, 1 if tts_default == "deepgram-tts" else 0,
+                ("tts", "deepgram-tts", "Deepgram Flux / Aura TTS", 1, 1,
                  {"model": "flux-brittany-en"}, ["streaming", "conversation-aware", "low-latency"],
                  FLUX_VOICES + AURA_VOICES, deepgram_status),
             ]
