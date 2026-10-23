@@ -1,0 +1,3299 @@
+{
+  "type": "pptx",
+  "slides": [
+    {
+      "path": "ppt/slides/slide1.xml",
+      "blocks": [
+        {
+          "shape": "Text 1",
+          "paragraphs": [
+            "MEDICARE ADVANTAGE"
+          ]
+        },
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "MA Plan Quiz"
+          ]
+        },
+        {
+          "shape": "Text 3",
+          "paragraphs": [
+            "35 Multiple-Choice Questions  •  Test Your Knowledge"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "Based on current CMS guidelines and Medicare rules"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "1",
+      "imageAssetsInDeck": 0,
+      "number": 1
+    },
+    {
+      "path": "ppt/slides/slide2.xml",
+      "blocks": [
+        {
+          "shape": "Text 1",
+          "paragraphs": [
+            "How to Use This Quiz"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "01"
+          ]
+        },
+        {
+          "shape": "Text 5",
+          "paragraphs": [
+            "Read carefully"
+          ]
+        },
+        {
+          "shape": "Text 6",
+          "paragraphs": [
+            "Each question has one best answer based on Medicare Advantage rules."
+          ]
+        },
+        {
+          "shape": "Text 9",
+          "paragraphs": [
+            "02"
+          ]
+        },
+        {
+          "shape": "Text 10",
+          "paragraphs": [
+            "Choose A, B, C, or D"
+          ]
+        },
+        {
+          "shape": "Text 11",
+          "paragraphs": [
+            "Select the option that most accurately answers the question."
+          ]
+        },
+        {
+          "shape": "Text 14",
+          "paragraphs": [
+            "03"
+          ]
+        },
+        {
+          "shape": "Text 15",
+          "paragraphs": [
+            "Track your answers"
+          ]
+        },
+        {
+          "shape": "Text 16",
+          "paragraphs": [
+            "Note your responses; the full Answer Key appears at the end."
+          ]
+        },
+        {
+          "shape": "Text 19",
+          "paragraphs": [
+            "04"
+          ]
+        },
+        {
+          "shape": "Text 20",
+          "paragraphs": [
+            "Review & learn"
+          ]
+        },
+        {
+          "shape": "Text 21",
+          "paragraphs": [
+            "Use the answer key with brief explanations to reinforce knowledge."
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "2",
+      "imageAssetsInDeck": 0,
+      "number": 2
+    },
+    {
+      "path": "ppt/slides/slide3.xml",
+      "blocks": [
+        {
+          "shape": "Text 1",
+          "paragraphs": [
+            "Question 1 of 35"
+          ]
+        },
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "Medicare Advantage Quiz"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "What is Medicare Advantage (MA) also known as?"
+          ]
+        },
+        {
+          "shape": "Text 7",
+          "paragraphs": [
+            "A"
+          ]
+        },
+        {
+          "shape": "Text 8",
+          "paragraphs": [
+            "Part A"
+          ]
+        },
+        {
+          "shape": "Text 11",
+          "paragraphs": [
+            "B"
+          ]
+        },
+        {
+          "shape": "Text 12",
+          "paragraphs": [
+            "Part B"
+          ]
+        },
+        {
+          "shape": "Text 15",
+          "paragraphs": [
+            "C"
+          ]
+        },
+        {
+          "shape": "Text 16",
+          "paragraphs": [
+            "Part C"
+          ]
+        },
+        {
+          "shape": "Text 19",
+          "paragraphs": [
+            "D"
+          ]
+        },
+        {
+          "shape": "Text 20",
+          "paragraphs": [
+            "Part D"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "3",
+      "imageAssetsInDeck": 0,
+      "number": 3
+    },
+    {
+      "path": "ppt/slides/slide4.xml",
+      "blocks": [
+        {
+          "shape": "Text 1",
+          "paragraphs": [
+            "Question 2 of 35"
+          ]
+        },
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "Medicare Advantage Quiz"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "To enroll in a Medicare Advantage plan, a person must have:"
+          ]
+        },
+        {
+          "shape": "Text 7",
+          "paragraphs": [
+            "A"
+          ]
+        },
+        {
+          "shape": "Text 8",
+          "paragraphs": [
+            "Only Part A"
+          ]
+        },
+        {
+          "shape": "Text 11",
+          "paragraphs": [
+            "B"
+          ]
+        },
+        {
+          "shape": "Text 12",
+          "paragraphs": [
+            "Only Part B"
+          ]
+        },
+        {
+          "shape": "Text 15",
+          "paragraphs": [
+            "C"
+          ]
+        },
+        {
+          "shape": "Text 16",
+          "paragraphs": [
+            "Both Part A and Part B"
+          ]
+        },
+        {
+          "shape": "Text 19",
+          "paragraphs": [
+            "D"
+          ]
+        },
+        {
+          "shape": "Text 20",
+          "paragraphs": [
+            "Part D only"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "4",
+      "imageAssetsInDeck": 0,
+      "number": 4
+    },
+    {
+      "path": "ppt/slides/slide5.xml",
+      "blocks": [
+        {
+          "shape": "Text 1",
+          "paragraphs": [
+            "Question 3 of 35"
+          ]
+        },
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "Medicare Advantage Quiz"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "Who offers Medicare Advantage plans?"
+          ]
+        },
+        {
+          "shape": "Text 7",
+          "paragraphs": [
+            "A"
+          ]
+        },
+        {
+          "shape": "Text 8",
+          "paragraphs": [
+            "Only the federal government"
+          ]
+        },
+        {
+          "shape": "Text 11",
+          "paragraphs": [
+            "B"
+          ]
+        },
+        {
+          "shape": "Text 12",
+          "paragraphs": [
+            "Private insurance companies that contract with Medicare"
+          ]
+        },
+        {
+          "shape": "Text 15",
+          "paragraphs": [
+            "C"
+          ]
+        },
+        {
+          "shape": "Text 16",
+          "paragraphs": [
+            "State Medicaid offices only"
+          ]
+        },
+        {
+          "shape": "Text 19",
+          "paragraphs": [
+            "D"
+          ]
+        },
+        {
+          "shape": "Text 20",
+          "paragraphs": [
+            "Hospitals directly"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "5",
+      "imageAssetsInDeck": 0,
+      "number": 5
+    },
+    {
+      "path": "ppt/slides/slide6.xml",
+      "blocks": [
+        {
+          "shape": "Text 1",
+          "paragraphs": [
+            "Question 4 of 35"
+          ]
+        },
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "Medicare Advantage Quiz"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "Most Medicare Advantage plans include which additional coverage?"
+          ]
+        },
+        {
+          "shape": "Text 7",
+          "paragraphs": [
+            "A"
+          ]
+        },
+        {
+          "shape": "Text 8",
+          "paragraphs": [
+            "Only hospital care"
+          ]
+        },
+        {
+          "shape": "Text 11",
+          "paragraphs": [
+            "B"
+          ]
+        },
+        {
+          "shape": "Text 12",
+          "paragraphs": [
+            "Prescription drug coverage (Part D)"
+          ]
+        },
+        {
+          "shape": "Text 15",
+          "paragraphs": [
+            "C"
+          ]
+        },
+        {
+          "shape": "Text 16",
+          "paragraphs": [
+            "Long-term nursing home care"
+          ]
+        },
+        {
+          "shape": "Text 19",
+          "paragraphs": [
+            "D"
+          ]
+        },
+        {
+          "shape": "Text 20",
+          "paragraphs": [
+            "Medigap supplements"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "6",
+      "imageAssetsInDeck": 0,
+      "number": 6
+    },
+    {
+      "path": "ppt/slides/slide7.xml",
+      "blocks": [
+        {
+          "shape": "Text 1",
+          "paragraphs": [
+            "Question 5 of 35"
+          ]
+        },
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "Medicare Advantage Quiz"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "What is a key difference between Original Medicare and Medicare Advantage regarding out-of-pocket costs?"
+          ]
+        },
+        {
+          "shape": "Text 7",
+          "paragraphs": [
+            "A"
+          ]
+        },
+        {
+          "shape": "Text 8",
+          "paragraphs": [
+            "Original Medicare has a yearly out-of-pocket maximum"
+          ]
+        },
+        {
+          "shape": "Text 11",
+          "paragraphs": [
+            "B"
+          ]
+        },
+        {
+          "shape": "Text 12",
+          "paragraphs": [
+            "Medicare Advantage plans must have an annual out-of-pocket maximum"
+          ]
+        },
+        {
+          "shape": "Text 15",
+          "paragraphs": [
+            "C"
+          ]
+        },
+        {
+          "shape": "Text 16",
+          "paragraphs": [
+            "Neither has an out-of-pocket limit"
+          ]
+        },
+        {
+          "shape": "Text 19",
+          "paragraphs": [
+            "D"
+          ]
+        },
+        {
+          "shape": "Text 20",
+          "paragraphs": [
+            "Only Part D has an out-of-pocket limit"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "7",
+      "imageAssetsInDeck": 0,
+      "number": 7
+    },
+    {
+      "path": "ppt/slides/slide8.xml",
+      "blocks": [
+        {
+          "shape": "Text 1",
+          "paragraphs": [
+            "Question 6 of 35"
+          ]
+        },
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "Medicare Advantage Quiz"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "In 2025, the federal maximum out-of-pocket limit (MOOP) for in-network services in MA plans was set at approximately:"
+          ]
+        },
+        {
+          "shape": "Text 7",
+          "paragraphs": [
+            "A"
+          ]
+        },
+        {
+          "shape": "Text 8",
+          "paragraphs": [
+            "$3,500"
+          ]
+        },
+        {
+          "shape": "Text 11",
+          "paragraphs": [
+            "B"
+          ]
+        },
+        {
+          "shape": "Text 12",
+          "paragraphs": [
+            "$6,000"
+          ]
+        },
+        {
+          "shape": "Text 15",
+          "paragraphs": [
+            "C"
+          ]
+        },
+        {
+          "shape": "Text 16",
+          "paragraphs": [
+            "$9,350"
+          ]
+        },
+        {
+          "shape": "Text 19",
+          "paragraphs": [
+            "D"
+          ]
+        },
+        {
+          "shape": "Text 20",
+          "paragraphs": [
+            "$15,000"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "8",
+      "imageAssetsInDeck": 0,
+      "number": 8
+    },
+    {
+      "path": "ppt/slides/slide9.xml",
+      "blocks": [
+        {
+          "shape": "Text 1",
+          "paragraphs": [
+            "Question 7 of 35"
+          ]
+        },
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "Medicare Advantage Quiz"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "Which type of Medicare Advantage plan typically requires members to use in-network providers and often needs referrals for specialists?"
+          ]
+        },
+        {
+          "shape": "Text 7",
+          "paragraphs": [
+            "A"
+          ]
+        },
+        {
+          "shape": "Text 8",
+          "paragraphs": [
+            "PPO"
+          ]
+        },
+        {
+          "shape": "Text 11",
+          "paragraphs": [
+            "B"
+          ]
+        },
+        {
+          "shape": "Text 12",
+          "paragraphs": [
+            "HMO"
+          ]
+        },
+        {
+          "shape": "Text 15",
+          "paragraphs": [
+            "C"
+          ]
+        },
+        {
+          "shape": "Text 16",
+          "paragraphs": [
+            "PFFS"
+          ]
+        },
+        {
+          "shape": "Text 19",
+          "paragraphs": [
+            "D"
+          ]
+        },
+        {
+          "shape": "Text 20",
+          "paragraphs": [
+            "MSA"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "9",
+      "imageAssetsInDeck": 0,
+      "number": 9
+    },
+    {
+      "path": "ppt/slides/slide10.xml",
+      "blocks": [
+        {
+          "shape": "Text 1",
+          "paragraphs": [
+            "Question 8 of 35"
+          ]
+        },
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "Medicare Advantage Quiz"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "Can a person with Medicare Advantage also purchase a Medigap (Medicare Supplement) policy?"
+          ]
+        },
+        {
+          "shape": "Text 7",
+          "paragraphs": [
+            "A"
+          ]
+        },
+        {
+          "shape": "Text 8",
+          "paragraphs": [
+            "Yes, always"
+          ]
+        },
+        {
+          "shape": "Text 11",
+          "paragraphs": [
+            "B"
+          ]
+        },
+        {
+          "shape": "Text 12",
+          "paragraphs": [
+            "Yes, during Open Enrollment only"
+          ]
+        },
+        {
+          "shape": "Text 15",
+          "paragraphs": [
+            "C"
+          ]
+        },
+        {
+          "shape": "Text 16",
+          "paragraphs": [
+            "No, Medigap cannot be used with Medicare Advantage"
+          ]
+        },
+        {
+          "shape": "Text 19",
+          "paragraphs": [
+            "D"
+          ]
+        },
+        {
+          "shape": "Text 20",
+          "paragraphs": [
+            "Only if the MA plan is an HMO"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "10",
+      "imageAssetsInDeck": 0,
+      "number": 10
+    },
+    {
+      "path": "ppt/slides/slide11.xml",
+      "blocks": [
+        {
+          "shape": "Text 1",
+          "paragraphs": [
+            "Question 9 of 35"
+          ]
+        },
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "Medicare Advantage Quiz"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "What is the Annual Coordinated Election Period (AEP) for Medicare Advantage?"
+          ]
+        },
+        {
+          "shape": "Text 7",
+          "paragraphs": [
+            "A"
+          ]
+        },
+        {
+          "shape": "Text 8",
+          "paragraphs": [
+            "January 1 – March 31"
+          ]
+        },
+        {
+          "shape": "Text 11",
+          "paragraphs": [
+            "B"
+          ]
+        },
+        {
+          "shape": "Text 12",
+          "paragraphs": [
+            "October 15 – December 7"
+          ]
+        },
+        {
+          "shape": "Text 15",
+          "paragraphs": [
+            "C"
+          ]
+        },
+        {
+          "shape": "Text 16",
+          "paragraphs": [
+            "April 1 – June 30"
+          ]
+        },
+        {
+          "shape": "Text 19",
+          "paragraphs": [
+            "D"
+          ]
+        },
+        {
+          "shape": "Text 20",
+          "paragraphs": [
+            "July 1 – September 30"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "11",
+      "imageAssetsInDeck": 0,
+      "number": 11
+    },
+    {
+      "path": "ppt/slides/slide12.xml",
+      "blocks": [
+        {
+          "shape": "Text 1",
+          "paragraphs": [
+            "Question 10 of 35"
+          ]
+        },
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "Medicare Advantage Quiz"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "During the Medicare Advantage Open Enrollment Period (MA OEP), what can beneficiaries do?"
+          ]
+        },
+        {
+          "shape": "Text 7",
+          "paragraphs": [
+            "A"
+          ]
+        },
+        {
+          "shape": "Text 8",
+          "paragraphs": [
+            "Only switch from Original Medicare to MA"
+          ]
+        },
+        {
+          "shape": "Text 11",
+          "paragraphs": [
+            "B"
+          ]
+        },
+        {
+          "shape": "Text 12",
+          "paragraphs": [
+            "Switch MA plans or return to Original Medicare (Jan 1 – March 31)"
+          ]
+        },
+        {
+          "shape": "Text 15",
+          "paragraphs": [
+            "C"
+          ]
+        },
+        {
+          "shape": "Text 16",
+          "paragraphs": [
+            "Enroll in any Medigap plan without underwriting"
+          ]
+        },
+        {
+          "shape": "Text 19",
+          "paragraphs": [
+            "D"
+          ]
+        },
+        {
+          "shape": "Text 20",
+          "paragraphs": [
+            "Change their Part B premium"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "12",
+      "imageAssetsInDeck": 0,
+      "number": 12
+    },
+    {
+      "path": "ppt/slides/slide13.xml",
+      "blocks": [
+        {
+          "shape": "Text 1",
+          "paragraphs": [
+            "Question 11 of 35"
+          ]
+        },
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "Medicare Advantage Quiz"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "Approximately what percentage of eligible Medicare beneficiaries were enrolled in Medicare Advantage in recent years (2025–2026)?"
+          ]
+        },
+        {
+          "shape": "Text 7",
+          "paragraphs": [
+            "A"
+          ]
+        },
+        {
+          "shape": "Text 8",
+          "paragraphs": [
+            "About 25%"
+          ]
+        },
+        {
+          "shape": "Text 11",
+          "paragraphs": [
+            "B"
+          ]
+        },
+        {
+          "shape": "Text 12",
+          "paragraphs": [
+            "About 40%"
+          ]
+        },
+        {
+          "shape": "Text 15",
+          "paragraphs": [
+            "C"
+          ]
+        },
+        {
+          "shape": "Text 16",
+          "paragraphs": [
+            "More than 50%"
+          ]
+        },
+        {
+          "shape": "Text 19",
+          "paragraphs": [
+            "D"
+          ]
+        },
+        {
+          "shape": "Text 20",
+          "paragraphs": [
+            "About 80%"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "13",
+      "imageAssetsInDeck": 0,
+      "number": 13
+    },
+    {
+      "path": "ppt/slides/slide14.xml",
+      "blocks": [
+        {
+          "shape": "Text 1",
+          "paragraphs": [
+            "Question 12 of 35"
+          ]
+        },
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "Medicare Advantage Quiz"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "Many Medicare Advantage plans offer supplemental benefits not covered by Original Medicare. Which of the following is commonly offered?"
+          ]
+        },
+        {
+          "shape": "Text 7",
+          "paragraphs": [
+            "A"
+          ]
+        },
+        {
+          "shape": "Text 8",
+          "paragraphs": [
+            "Routine dental, vision, and hearing"
+          ]
+        },
+        {
+          "shape": "Text 11",
+          "paragraphs": [
+            "B"
+          ]
+        },
+        {
+          "shape": "Text 12",
+          "paragraphs": [
+            "Unlimited long-term care"
+          ]
+        },
+        {
+          "shape": "Text 15",
+          "paragraphs": [
+            "C"
+          ]
+        },
+        {
+          "shape": "Text 16",
+          "paragraphs": [
+            "Cosmetic surgery"
+          ]
+        },
+        {
+          "shape": "Text 19",
+          "paragraphs": [
+            "D"
+          ]
+        },
+        {
+          "shape": "Text 20",
+          "paragraphs": [
+            "International travel insurance only"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "14",
+      "imageAssetsInDeck": 0,
+      "number": 14
+    },
+    {
+      "path": "ppt/slides/slide15.xml",
+      "blocks": [
+        {
+          "shape": "Text 1",
+          "paragraphs": [
+            "Question 13 of 35"
+          ]
+        },
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "Medicare Advantage Quiz"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "How are Medicare Advantage plans primarily paid by Medicare?"
+          ]
+        },
+        {
+          "shape": "Text 7",
+          "paragraphs": [
+            "A"
+          ]
+        },
+        {
+          "shape": "Text 8",
+          "paragraphs": [
+            "Fee-for-service for each service"
+          ]
+        },
+        {
+          "shape": "Text 11",
+          "paragraphs": [
+            "B"
+          ]
+        },
+        {
+          "shape": "Text 12",
+          "paragraphs": [
+            "Capitated (per-member-per-month) payments"
+          ]
+        },
+        {
+          "shape": "Text 15",
+          "paragraphs": [
+            "C"
+          ]
+        },
+        {
+          "shape": "Text 16",
+          "paragraphs": [
+            "Only when claims are submitted by the member"
+          ]
+        },
+        {
+          "shape": "Text 19",
+          "paragraphs": [
+            "D"
+          ]
+        },
+        {
+          "shape": "Text 20",
+          "paragraphs": [
+            "Through state budgets"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "15",
+      "imageAssetsInDeck": 0,
+      "number": 15
+    },
+    {
+      "path": "ppt/slides/slide16.xml",
+      "blocks": [
+        {
+          "shape": "Text 1",
+          "paragraphs": [
+            "Question 14 of 35"
+          ]
+        },
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "Medicare Advantage Quiz"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "What is a Special Needs Plan (SNP)?"
+          ]
+        },
+        {
+          "shape": "Text 7",
+          "paragraphs": [
+            "A"
+          ]
+        },
+        {
+          "shape": "Text 8",
+          "paragraphs": [
+            "A plan only for people under 65"
+          ]
+        },
+        {
+          "shape": "Text 11",
+          "paragraphs": [
+            "B"
+          ]
+        },
+        {
+          "shape": "Text 12",
+          "paragraphs": [
+            "An MA plan designed for people with specific conditions or dual eligibility"
+          ]
+        },
+        {
+          "shape": "Text 15",
+          "paragraphs": [
+            "C"
+          ]
+        },
+        {
+          "shape": "Text 16",
+          "paragraphs": [
+            "A plan that covers only Part D"
+          ]
+        },
+        {
+          "shape": "Text 19",
+          "paragraphs": [
+            "D"
+          ]
+        },
+        {
+          "shape": "Text 20",
+          "paragraphs": [
+            "A temporary emergency plan"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "16",
+      "imageAssetsInDeck": 0,
+      "number": 16
+    },
+    {
+      "path": "ppt/slides/slide17.xml",
+      "blocks": [
+        {
+          "shape": "Text 1",
+          "paragraphs": [
+            "Question 15 of 35"
+          ]
+        },
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "Medicare Advantage Quiz"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "Which of the following is true about provider networks in Medicare Advantage?"
+          ]
+        },
+        {
+          "shape": "Text 7",
+          "paragraphs": [
+            "A"
+          ]
+        },
+        {
+          "shape": "Text 8",
+          "paragraphs": [
+            "All MA plans allow any Medicare provider nationwide"
+          ]
+        },
+        {
+          "shape": "Text 11",
+          "paragraphs": [
+            "B"
+          ]
+        },
+        {
+          "shape": "Text 12",
+          "paragraphs": [
+            "HMO plans usually limit care to in-network providers"
+          ]
+        },
+        {
+          "shape": "Text 15",
+          "paragraphs": [
+            "C"
+          ]
+        },
+        {
+          "shape": "Text 16",
+          "paragraphs": [
+            "PPO plans never cover out-of-network care"
+          ]
+        },
+        {
+          "shape": "Text 19",
+          "paragraphs": [
+            "D"
+          ]
+        },
+        {
+          "shape": "Text 20",
+          "paragraphs": [
+            "Networks are the same as Original Medicare"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "17",
+      "imageAssetsInDeck": 0,
+      "number": 17
+    },
+    {
+      "path": "ppt/slides/slide18.xml",
+      "blocks": [
+        {
+          "shape": "Text 1",
+          "paragraphs": [
+            "Question 16 of 35"
+          ]
+        },
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "Medicare Advantage Quiz"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "If a Medicare Advantage member needs emergency care while traveling outside the plan’s service area, what typically happens?"
+          ]
+        },
+        {
+          "shape": "Text 7",
+          "paragraphs": [
+            "A"
+          ]
+        },
+        {
+          "shape": "Text 8",
+          "paragraphs": [
+            "No coverage is provided"
+          ]
+        },
+        {
+          "shape": "Text 11",
+          "paragraphs": [
+            "B"
+          ]
+        },
+        {
+          "shape": "Text 12",
+          "paragraphs": [
+            "Emergency and urgently needed care is covered"
+          ]
+        },
+        {
+          "shape": "Text 15",
+          "paragraphs": [
+            "C"
+          ]
+        },
+        {
+          "shape": "Text 16",
+          "paragraphs": [
+            "Only Part A is covered"
+          ]
+        },
+        {
+          "shape": "Text 19",
+          "paragraphs": [
+            "D"
+          ]
+        },
+        {
+          "shape": "Text 20",
+          "paragraphs": [
+            "The member must pay 100% and seek reimbursement later"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "18",
+      "imageAssetsInDeck": 0,
+      "number": 18
+    },
+    {
+      "path": "ppt/slides/slide19.xml",
+      "blocks": [
+        {
+          "shape": "Text 1",
+          "paragraphs": [
+            "Question 17 of 35"
+          ]
+        },
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "Medicare Advantage Quiz"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "What is the main purpose of the Medicare Advantage rebate?"
+          ]
+        },
+        {
+          "shape": "Text 7",
+          "paragraphs": [
+            "A"
+          ]
+        },
+        {
+          "shape": "Text 8",
+          "paragraphs": [
+            "To increase Part B premiums"
+          ]
+        },
+        {
+          "shape": "Text 11",
+          "paragraphs": [
+            "B"
+          ]
+        },
+        {
+          "shape": "Text 12",
+          "paragraphs": [
+            "Funds that plans can use to lower premiums, reduce cost-sharing, or offer supplemental benefits"
+          ]
+        },
+        {
+          "shape": "Text 15",
+          "paragraphs": [
+            "C"
+          ]
+        },
+        {
+          "shape": "Text 16",
+          "paragraphs": [
+            "A penalty for high utilization"
+          ]
+        },
+        {
+          "shape": "Text 19",
+          "paragraphs": [
+            "D"
+          ]
+        },
+        {
+          "shape": "Text 20",
+          "paragraphs": [
+            "A tax paid by enrollees"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "19",
+      "imageAssetsInDeck": 0,
+      "number": 19
+    },
+    {
+      "path": "ppt/slides/slide20.xml",
+      "blocks": [
+        {
+          "shape": "Text 1",
+          "paragraphs": [
+            "Question 18 of 35"
+          ]
+        },
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "Medicare Advantage Quiz"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "Can a person who has End-Stage Renal Disease (ESRD) enroll in a Medicare Advantage plan?"
+          ]
+        },
+        {
+          "shape": "Text 7",
+          "paragraphs": [
+            "A"
+          ]
+        },
+        {
+          "shape": "Text 8",
+          "paragraphs": [
+            "No, never"
+          ]
+        },
+        {
+          "shape": "Text 11",
+          "paragraphs": [
+            "B"
+          ]
+        },
+        {
+          "shape": "Text 12",
+          "paragraphs": [
+            "Yes, under current rules (restrictions largely lifted)"
+          ]
+        },
+        {
+          "shape": "Text 15",
+          "paragraphs": [
+            "C"
+          ]
+        },
+        {
+          "shape": "Text 16",
+          "paragraphs": [
+            "Only through a special SNP"
+          ]
+        },
+        {
+          "shape": "Text 19",
+          "paragraphs": [
+            "D"
+          ]
+        },
+        {
+          "shape": "Text 20",
+          "paragraphs": [
+            "Only if under age 55"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "20",
+      "imageAssetsInDeck": 0,
+      "number": 20
+    },
+    {
+      "path": "ppt/slides/slide21.xml",
+      "blocks": [
+        {
+          "shape": "Text 1",
+          "paragraphs": [
+            "Question 19 of 35"
+          ]
+        },
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "Medicare Advantage Quiz"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "What does “zero-premium” Medicare Advantage plan usually mean?"
+          ]
+        },
+        {
+          "shape": "Text 7",
+          "paragraphs": [
+            "A"
+          ]
+        },
+        {
+          "shape": "Text 8",
+          "paragraphs": [
+            "The plan covers the Part B premium completely and charges $0"
+          ]
+        },
+        {
+          "shape": "Text 11",
+          "paragraphs": [
+            "B"
+          ]
+        },
+        {
+          "shape": "Text 12",
+          "paragraphs": [
+            "The enrollee pays $0 for the MA plan premium (still pays Part B premium)"
+          ]
+        },
+        {
+          "shape": "Text 15",
+          "paragraphs": [
+            "C"
+          ]
+        },
+        {
+          "shape": "Text 16",
+          "paragraphs": [
+            "No cost-sharing for any services"
+          ]
+        },
+        {
+          "shape": "Text 19",
+          "paragraphs": [
+            "D"
+          ]
+        },
+        {
+          "shape": "Text 20",
+          "paragraphs": [
+            "Free Medigap coverage"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "21",
+      "imageAssetsInDeck": 0,
+      "number": 21
+    },
+    {
+      "path": "ppt/slides/slide22.xml",
+      "blocks": [
+        {
+          "shape": "Text 1",
+          "paragraphs": [
+            "Question 20 of 35"
+          ]
+        },
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "Medicare Advantage Quiz"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "Which statement about prior authorization in Medicare Advantage is generally true?"
+          ]
+        },
+        {
+          "shape": "Text 7",
+          "paragraphs": [
+            "A"
+          ]
+        },
+        {
+          "shape": "Text 8",
+          "paragraphs": [
+            "Prior authorization is never used"
+          ]
+        },
+        {
+          "shape": "Text 11",
+          "paragraphs": [
+            "B"
+          ]
+        },
+        {
+          "shape": "Text 12",
+          "paragraphs": [
+            "Many MA plans use prior authorization for certain services"
+          ]
+        },
+        {
+          "shape": "Text 15",
+          "paragraphs": [
+            "C"
+          ]
+        },
+        {
+          "shape": "Text 16",
+          "paragraphs": [
+            "Only Original Medicare uses prior authorization"
+          ]
+        },
+        {
+          "shape": "Text 19",
+          "paragraphs": [
+            "D"
+          ]
+        },
+        {
+          "shape": "Text 20",
+          "paragraphs": [
+            "Prior authorization is illegal under CMS rules"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "22",
+      "imageAssetsInDeck": 0,
+      "number": 22
+    },
+    {
+      "path": "ppt/slides/slide23.xml",
+      "blocks": [
+        {
+          "shape": "Text 1",
+          "paragraphs": [
+            "Question 21 of 35"
+          ]
+        },
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "Medicare Advantage Quiz"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "If a beneficiary is enrolled in a Medicare Advantage plan and needs hospice care, who primarily covers the hospice services?"
+          ]
+        },
+        {
+          "shape": "Text 7",
+          "paragraphs": [
+            "A"
+          ]
+        },
+        {
+          "shape": "Text 8",
+          "paragraphs": [
+            "The MA plan only"
+          ]
+        },
+        {
+          "shape": "Text 11",
+          "paragraphs": [
+            "B"
+          ]
+        },
+        {
+          "shape": "Text 12",
+          "paragraphs": [
+            "Original Medicare (hospice is covered by Original Medicare)"
+          ]
+        },
+        {
+          "shape": "Text 15",
+          "paragraphs": [
+            "C"
+          ]
+        },
+        {
+          "shape": "Text 16",
+          "paragraphs": [
+            "The state Medicaid program"
+          ]
+        },
+        {
+          "shape": "Text 19",
+          "paragraphs": [
+            "D"
+          ]
+        },
+        {
+          "shape": "Text 20",
+          "paragraphs": [
+            "The beneficiary pays 100%"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "23",
+      "imageAssetsInDeck": 0,
+      "number": 23
+    },
+    {
+      "path": "ppt/slides/slide24.xml",
+      "blocks": [
+        {
+          "shape": "Text 1",
+          "paragraphs": [
+            "Question 22 of 35"
+          ]
+        },
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "Medicare Advantage Quiz"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "What is the typical structure of cost-sharing in many Medicare Advantage HMO plans?"
+          ]
+        },
+        {
+          "shape": "Text 7",
+          "paragraphs": [
+            "A"
+          ]
+        },
+        {
+          "shape": "Text 8",
+          "paragraphs": [
+            "Always 20% coinsurance like Original Medicare"
+          ]
+        },
+        {
+          "shape": "Text 11",
+          "paragraphs": [
+            "B"
+          ]
+        },
+        {
+          "shape": "Text 12",
+          "paragraphs": [
+            "Fixed copayments for office visits and services"
+          ]
+        },
+        {
+          "shape": "Text 15",
+          "paragraphs": [
+            "C"
+          ]
+        },
+        {
+          "shape": "Text 16",
+          "paragraphs": [
+            "No cost-sharing at all"
+          ]
+        },
+        {
+          "shape": "Text 19",
+          "paragraphs": [
+            "D"
+          ]
+        },
+        {
+          "shape": "Text 20",
+          "paragraphs": [
+            "Only deductibles with no copays"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "24",
+      "imageAssetsInDeck": 0,
+      "number": 24
+    },
+    {
+      "path": "ppt/slides/slide25.xml",
+      "blocks": [
+        {
+          "shape": "Text 1",
+          "paragraphs": [
+            "Question 23 of 35"
+          ]
+        },
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "Medicare Advantage Quiz"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "During which period can a newly eligible Medicare beneficiary first enroll in a Medicare Advantage plan?"
+          ]
+        },
+        {
+          "shape": "Text 7",
+          "paragraphs": [
+            "A"
+          ]
+        },
+        {
+          "shape": "Text 8",
+          "paragraphs": [
+            "Only during AEP"
+          ]
+        },
+        {
+          "shape": "Text 11",
+          "paragraphs": [
+            "B"
+          ]
+        },
+        {
+          "shape": "Text 12",
+          "paragraphs": [
+            "During their Initial Coverage Election Period (ICEP)"
+          ]
+        },
+        {
+          "shape": "Text 15",
+          "paragraphs": [
+            "C"
+          ]
+        },
+        {
+          "shape": "Text 16",
+          "paragraphs": [
+            "Only after age 70"
+          ]
+        },
+        {
+          "shape": "Text 19",
+          "paragraphs": [
+            "D"
+          ]
+        },
+        {
+          "shape": "Text 20",
+          "paragraphs": [
+            "Never in the first year"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "25",
+      "imageAssetsInDeck": 0,
+      "number": 25
+    },
+    {
+      "path": "ppt/slides/slide26.xml",
+      "blocks": [
+        {
+          "shape": "Text 1",
+          "paragraphs": [
+            "Question 24 of 35"
+          ]
+        },
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "Medicare Advantage Quiz"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "Which of the following is a common reason someone might prefer Original Medicare over Medicare Advantage?"
+          ]
+        },
+        {
+          "shape": "Text 7",
+          "paragraphs": [
+            "A"
+          ]
+        },
+        {
+          "shape": "Text 8",
+          "paragraphs": [
+            "Desire for a broad nationwide provider choice without network restrictions"
+          ]
+        },
+        {
+          "shape": "Text 11",
+          "paragraphs": [
+            "B"
+          ]
+        },
+        {
+          "shape": "Text 12",
+          "paragraphs": [
+            "Wanting extra dental and vision benefits"
+          ]
+        },
+        {
+          "shape": "Text 15",
+          "paragraphs": [
+            "C"
+          ]
+        },
+        {
+          "shape": "Text 16",
+          "paragraphs": [
+            "Preferring a single all-in-one plan"
+          ]
+        },
+        {
+          "shape": "Text 19",
+          "paragraphs": [
+            "D"
+          ]
+        },
+        {
+          "shape": "Text 20",
+          "paragraphs": [
+            "Wanting an out-of-pocket maximum"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "26",
+      "imageAssetsInDeck": 0,
+      "number": 26
+    },
+    {
+      "path": "ppt/slides/slide27.xml",
+      "blocks": [
+        {
+          "shape": "Text 1",
+          "paragraphs": [
+            "Question 25 of 35"
+          ]
+        },
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "Medicare Advantage Quiz"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "What happens if a Medicare Advantage plan leaves the market or the enrollee moves out of the service area?"
+          ]
+        },
+        {
+          "shape": "Text 7",
+          "paragraphs": [
+            "A"
+          ]
+        },
+        {
+          "shape": "Text 8",
+          "paragraphs": [
+            "The person is locked into the plan forever"
+          ]
+        },
+        {
+          "shape": "Text 11",
+          "paragraphs": [
+            "B"
+          ]
+        },
+        {
+          "shape": "Text 12",
+          "paragraphs": [
+            "A Special Enrollment Period (SEP) is typically available"
+          ]
+        },
+        {
+          "shape": "Text 15",
+          "paragraphs": [
+            "C"
+          ]
+        },
+        {
+          "shape": "Text 16",
+          "paragraphs": [
+            "Coverage ends immediately with no options"
+          ]
+        },
+        {
+          "shape": "Text 19",
+          "paragraphs": [
+            "D"
+          ]
+        },
+        {
+          "shape": "Text 20",
+          "paragraphs": [
+            "They must wait until the next AEP only"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "27",
+      "imageAssetsInDeck": 0,
+      "number": 27
+    },
+    {
+      "path": "ppt/slides/slide28.xml",
+      "blocks": [
+        {
+          "shape": "Text 1",
+          "paragraphs": [
+            "Question 26 of 35"
+          ]
+        },
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "Medicare Advantage Quiz"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "Which organization sets the rules and oversees Medicare Advantage plans?"
+          ]
+        },
+        {
+          "shape": "Text 7",
+          "paragraphs": [
+            "A"
+          ]
+        },
+        {
+          "shape": "Text 8",
+          "paragraphs": [
+            "The IRS"
+          ]
+        },
+        {
+          "shape": "Text 11",
+          "paragraphs": [
+            "B"
+          ]
+        },
+        {
+          "shape": "Text 12",
+          "paragraphs": [
+            "Centers for Medicare & Medicaid Services (CMS)"
+          ]
+        },
+        {
+          "shape": "Text 15",
+          "paragraphs": [
+            "C"
+          ]
+        },
+        {
+          "shape": "Text 16",
+          "paragraphs": [
+            "State insurance departments only"
+          ]
+        },
+        {
+          "shape": "Text 19",
+          "paragraphs": [
+            "D"
+          ]
+        },
+        {
+          "shape": "Text 20",
+          "paragraphs": [
+            "The FDA"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "28",
+      "imageAssetsInDeck": 0,
+      "number": 28
+    },
+    {
+      "path": "ppt/slides/slide29.xml",
+      "blocks": [
+        {
+          "shape": "Text 1",
+          "paragraphs": [
+            "Question 27 of 35"
+          ]
+        },
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "Medicare Advantage Quiz"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "In a Medicare Advantage PPO plan, what is generally true about out-of-network care?"
+          ]
+        },
+        {
+          "shape": "Text 7",
+          "paragraphs": [
+            "A"
+          ]
+        },
+        {
+          "shape": "Text 8",
+          "paragraphs": [
+            "It is never covered"
+          ]
+        },
+        {
+          "shape": "Text 11",
+          "paragraphs": [
+            "B"
+          ]
+        },
+        {
+          "shape": "Text 12",
+          "paragraphs": [
+            "It is usually covered but often at higher cost-sharing"
+          ]
+        },
+        {
+          "shape": "Text 15",
+          "paragraphs": [
+            "C"
+          ]
+        },
+        {
+          "shape": "Text 16",
+          "paragraphs": [
+            "It requires a referral from the primary care doctor"
+          ]
+        },
+        {
+          "shape": "Text 19",
+          "paragraphs": [
+            "D"
+          ]
+        },
+        {
+          "shape": "Text 20",
+          "paragraphs": [
+            "It is free of charge"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "29",
+      "imageAssetsInDeck": 0,
+      "number": 29
+    },
+    {
+      "path": "ppt/slides/slide30.xml",
+      "blocks": [
+        {
+          "shape": "Text 1",
+          "paragraphs": [
+            "Question 28 of 35"
+          ]
+        },
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "Medicare Advantage Quiz"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "What is a D-SNP?"
+          ]
+        },
+        {
+          "shape": "Text 7",
+          "paragraphs": [
+            "A"
+          ]
+        },
+        {
+          "shape": "Text 8",
+          "paragraphs": [
+            "A plan for people with diabetes only"
+          ]
+        },
+        {
+          "shape": "Text 11",
+          "paragraphs": [
+            "B"
+          ]
+        },
+        {
+          "shape": "Text 12",
+          "paragraphs": [
+            "A Dual Eligible Special Needs Plan for those with both Medicare and Medicaid"
+          ]
+        },
+        {
+          "shape": "Text 15",
+          "paragraphs": [
+            "C"
+          ]
+        },
+        {
+          "shape": "Text 16",
+          "paragraphs": [
+            "A plan that only covers drugs"
+          ]
+        },
+        {
+          "shape": "Text 19",
+          "paragraphs": [
+            "D"
+          ]
+        },
+        {
+          "shape": "Text 20",
+          "paragraphs": [
+            "A dental-only special needs plan"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "30",
+      "imageAssetsInDeck": 0,
+      "number": 30
+    },
+    {
+      "path": "ppt/slides/slide31.xml",
+      "blocks": [
+        {
+          "shape": "Text 1",
+          "paragraphs": [
+            "Question 29 of 35"
+          ]
+        },
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "Medicare Advantage Quiz"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "Approximately what share of individual Medicare Advantage plans with drug coverage charged $0 premium (beyond Part B) in recent years?"
+          ]
+        },
+        {
+          "shape": "Text 7",
+          "paragraphs": [
+            "A"
+          ]
+        },
+        {
+          "shape": "Text 8",
+          "paragraphs": [
+            "Less than 20%"
+          ]
+        },
+        {
+          "shape": "Text 11",
+          "paragraphs": [
+            "B"
+          ]
+        },
+        {
+          "shape": "Text 12",
+          "paragraphs": [
+            "About 40%"
+          ]
+        },
+        {
+          "shape": "Text 15",
+          "paragraphs": [
+            "C"
+          ]
+        },
+        {
+          "shape": "Text 16",
+          "paragraphs": [
+            "Around 75% or more of enrollees are in $0 premium plans"
+          ]
+        },
+        {
+          "shape": "Text 19",
+          "paragraphs": [
+            "D"
+          ]
+        },
+        {
+          "shape": "Text 20",
+          "paragraphs": [
+            "100% of all plans"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "31",
+      "imageAssetsInDeck": 0,
+      "number": 31
+    },
+    {
+      "path": "ppt/slides/slide32.xml",
+      "blocks": [
+        {
+          "shape": "Text 1",
+          "paragraphs": [
+            "Question 30 of 35"
+          ]
+        },
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "Medicare Advantage Quiz"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "Can Medicare Advantage plans charge higher cost-sharing than Original Medicare for the same service?"
+          ]
+        },
+        {
+          "shape": "Text 7",
+          "paragraphs": [
+            "A"
+          ]
+        },
+        {
+          "shape": "Text 8",
+          "paragraphs": [
+            "Yes, without any limits"
+          ]
+        },
+        {
+          "shape": "Text 11",
+          "paragraphs": [
+            "B"
+          ]
+        },
+        {
+          "shape": "Text 12",
+          "paragraphs": [
+            "No, never"
+          ]
+        },
+        {
+          "shape": "Text 15",
+          "paragraphs": [
+            "C"
+          ]
+        },
+        {
+          "shape": "Text 16",
+          "paragraphs": [
+            "They must follow CMS rules and cannot exceed certain limits; overall value must be actuarially equivalent or better"
+          ]
+        },
+        {
+          "shape": "Text 19",
+          "paragraphs": [
+            "D"
+          ]
+        },
+        {
+          "shape": "Text 20",
+          "paragraphs": [
+            "Only for Part D drugs"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "32",
+      "imageAssetsInDeck": 0,
+      "number": 32
+    },
+    {
+      "path": "ppt/slides/slide33.xml",
+      "blocks": [
+        {
+          "shape": "Text 1",
+          "paragraphs": [
+            "Question 31 of 35"
+          ]
+        },
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "Medicare Advantage Quiz"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "What is the Medicare Advantage Maximum Out-of-Pocket (MOOP) designed to do?"
+          ]
+        },
+        {
+          "shape": "Text 7",
+          "paragraphs": [
+            "A"
+          ]
+        },
+        {
+          "shape": "Text 8",
+          "paragraphs": [
+            "Limit the plan’s payments to providers"
+          ]
+        },
+        {
+          "shape": "Text 11",
+          "paragraphs": [
+            "B"
+          ]
+        },
+        {
+          "shape": "Text 12",
+          "paragraphs": [
+            "Protect enrollees by capping their annual spending on covered Part A and B services"
+          ]
+        },
+        {
+          "shape": "Text 15",
+          "paragraphs": [
+            "C"
+          ]
+        },
+        {
+          "shape": "Text 16",
+          "paragraphs": [
+            "Replace the Part B deductible"
+          ]
+        },
+        {
+          "shape": "Text 19",
+          "paragraphs": [
+            "D"
+          ]
+        },
+        {
+          "shape": "Text 20",
+          "paragraphs": [
+            "Apply only to prescription drugs"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "33",
+      "imageAssetsInDeck": 0,
+      "number": 33
+    },
+    {
+      "path": "ppt/slides/slide34.xml",
+      "blocks": [
+        {
+          "shape": "Text 1",
+          "paragraphs": [
+            "Question 32 of 35"
+          ]
+        },
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "Medicare Advantage Quiz"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "If someone joins a Medicare Advantage plan for the first time and is unhappy, what option do they have in the first 3 months of the year?"
+          ]
+        },
+        {
+          "shape": "Text 7",
+          "paragraphs": [
+            "A"
+          ]
+        },
+        {
+          "shape": "Text 8",
+          "paragraphs": [
+            "Nothing until next October"
+          ]
+        },
+        {
+          "shape": "Text 11",
+          "paragraphs": [
+            "B"
+          ]
+        },
+        {
+          "shape": "Text 12",
+          "paragraphs": [
+            "Use the MA Open Enrollment Period to switch plans or return to Original Medicare"
+          ]
+        },
+        {
+          "shape": "Text 15",
+          "paragraphs": [
+            "C"
+          ]
+        },
+        {
+          "shape": "Text 16",
+          "paragraphs": [
+            "Only appeal to CMS"
+          ]
+        },
+        {
+          "shape": "Text 19",
+          "paragraphs": [
+            "D"
+          ]
+        },
+        {
+          "shape": "Text 20",
+          "paragraphs": [
+            "Automatically get Medigap"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "34",
+      "imageAssetsInDeck": 0,
+      "number": 34
+    },
+    {
+      "path": "ppt/slides/slide35.xml",
+      "blocks": [
+        {
+          "shape": "Text 1",
+          "paragraphs": [
+            "Question 33 of 35"
+          ]
+        },
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "Medicare Advantage Quiz"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "Which statement best describes Star Ratings for Medicare Advantage plans?"
+          ]
+        },
+        {
+          "shape": "Text 7",
+          "paragraphs": [
+            "A"
+          ]
+        },
+        {
+          "shape": "Text 8",
+          "paragraphs": [
+            "They are purely marketing and have no impact"
+          ]
+        },
+        {
+          "shape": "Text 11",
+          "paragraphs": [
+            "B"
+          ]
+        },
+        {
+          "shape": "Text 12",
+          "paragraphs": [
+            "CMS rates plans 1–5 stars based on quality and performance; higher stars can affect payments and enrollment"
+          ]
+        },
+        {
+          "shape": "Text 15",
+          "paragraphs": [
+            "C"
+          ]
+        },
+        {
+          "shape": "Text 16",
+          "paragraphs": [
+            "Only Part D plans receive Star Ratings"
+          ]
+        },
+        {
+          "shape": "Text 19",
+          "paragraphs": [
+            "D"
+          ]
+        },
+        {
+          "shape": "Text 20",
+          "paragraphs": [
+            "Stars are assigned by the plans themselves"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "35",
+      "imageAssetsInDeck": 0,
+      "number": 35
+    },
+    {
+      "path": "ppt/slides/slide36.xml",
+      "blocks": [
+        {
+          "shape": "Text 1",
+          "paragraphs": [
+            "Question 34 of 35"
+          ]
+        },
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "Medicare Advantage Quiz"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "True or False: All Medicare Advantage plans must cover the same core benefits as Original Medicare (Parts A and B)."
+          ]
+        },
+        {
+          "shape": "Text 7",
+          "paragraphs": [
+            "A"
+          ]
+        },
+        {
+          "shape": "Text 8",
+          "paragraphs": [
+            "True"
+          ]
+        },
+        {
+          "shape": "Text 11",
+          "paragraphs": [
+            "B"
+          ]
+        },
+        {
+          "shape": "Text 12",
+          "paragraphs": [
+            "False – they can exclude hospital care"
+          ]
+        },
+        {
+          "shape": "Text 15",
+          "paragraphs": [
+            "C"
+          ]
+        },
+        {
+          "shape": "Text 16",
+          "paragraphs": [
+            "False – they only cover Part B"
+          ]
+        },
+        {
+          "shape": "Text 19",
+          "paragraphs": [
+            "D"
+          ]
+        },
+        {
+          "shape": "Text 20",
+          "paragraphs": [
+            "True, but only if the member pays extra"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "36",
+      "imageAssetsInDeck": 0,
+      "number": 36
+    },
+    {
+      "path": "ppt/slides/slide37.xml",
+      "blocks": [
+        {
+          "shape": "Text 1",
+          "paragraphs": [
+            "Question 35 of 35"
+          ]
+        },
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "Medicare Advantage Quiz"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "What should a beneficiary primarily consider when choosing between Original Medicare and a Medicare Advantage plan?"
+          ]
+        },
+        {
+          "shape": "Text 7",
+          "paragraphs": [
+            "A"
+          ]
+        },
+        {
+          "shape": "Text 8",
+          "paragraphs": [
+            "Only the monthly premium amount"
+          ]
+        },
+        {
+          "shape": "Text 11",
+          "paragraphs": [
+            "B"
+          ]
+        },
+        {
+          "shape": "Text 12",
+          "paragraphs": [
+            "Provider network, total costs (premiums + cost-sharing), extra benefits, and personal health needs"
+          ]
+        },
+        {
+          "shape": "Text 15",
+          "paragraphs": [
+            "C"
+          ]
+        },
+        {
+          "shape": "Text 16",
+          "paragraphs": [
+            "Only whether dental is included"
+          ]
+        },
+        {
+          "shape": "Text 19",
+          "paragraphs": [
+            "D"
+          ]
+        },
+        {
+          "shape": "Text 20",
+          "paragraphs": [
+            "The color of the plan brochure"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "37",
+      "imageAssetsInDeck": 0,
+      "number": 37
+    },
+    {
+      "path": "ppt/slides/slide38.xml",
+      "blocks": [
+        {
+          "shape": "Text 1",
+          "paragraphs": [
+            "ANSWER KEY"
+          ]
+        },
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "Review the correct answers and short explanations"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "38",
+      "imageAssetsInDeck": 0,
+      "number": 38
+    },
+    {
+      "path": "ppt/slides/slide39.xml",
+      "blocks": [
+        {
+          "shape": "Text 1",
+          "paragraphs": [
+            "Answer Key — Questions 1–7"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "Q1: C"
+          ]
+        },
+        {
+          "shape": "Text 5",
+          "paragraphs": [
+            "Medicare Advantage is also called Medicare Part C."
+          ]
+        },
+        {
+          "shape": "Text 8",
+          "paragraphs": [
+            "Q2: C"
+          ]
+        },
+        {
+          "shape": "Text 9",
+          "paragraphs": [
+            "Eligibility requires both Medicare Part A and Part B."
+          ]
+        },
+        {
+          "shape": "Text 12",
+          "paragraphs": [
+            "Q3: B"
+          ]
+        },
+        {
+          "shape": "Text 13",
+          "paragraphs": [
+            "Private insurers contract with Medicare to offer MA plans."
+          ]
+        },
+        {
+          "shape": "Text 16",
+          "paragraphs": [
+            "Q4: B"
+          ]
+        },
+        {
+          "shape": "Text 17",
+          "paragraphs": [
+            "Most MA plans are MA-PDs and include Part D drug coverage."
+          ]
+        },
+        {
+          "shape": "Text 20",
+          "paragraphs": [
+            "Q5: B"
+          ]
+        },
+        {
+          "shape": "Text 21",
+          "paragraphs": [
+            "MA plans are required to cap annual out-of-pocket spending for Part A and B services."
+          ]
+        },
+        {
+          "shape": "Text 24",
+          "paragraphs": [
+            "Q6: C"
+          ]
+        },
+        {
+          "shape": "Text 25",
+          "paragraphs": [
+            "CMS set the 2025 in-network MOOP maximum at $9,350."
+          ]
+        },
+        {
+          "shape": "Text 28",
+          "paragraphs": [
+            "Q7: B"
+          ]
+        },
+        {
+          "shape": "Text 29",
+          "paragraphs": [
+            "HMOs generally require in-network care and referrals for specialists."
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "39",
+      "imageAssetsInDeck": 0,
+      "number": 39
+    },
+    {
+      "path": "ppt/slides/slide40.xml",
+      "blocks": [
+        {
+          "shape": "Text 1",
+          "paragraphs": [
+            "Answer Key — Questions 8–14"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "Q8: C"
+          ]
+        },
+        {
+          "shape": "Text 5",
+          "paragraphs": [
+            "You cannot have Medigap while enrolled in a Medicare Advantage plan."
+          ]
+        },
+        {
+          "shape": "Text 8",
+          "paragraphs": [
+            "Q9: B"
+          ]
+        },
+        {
+          "shape": "Text 9",
+          "paragraphs": [
+            "AEP runs October 15 through December 7 each year."
+          ]
+        },
+        {
+          "shape": "Text 12",
+          "paragraphs": [
+            "Q10: B"
+          ]
+        },
+        {
+          "shape": "Text 13",
+          "paragraphs": [
+            "MA OEP (Jan 1–Mar 31) allows one change: switch MA plans or return to Original Medicare."
+          ]
+        },
+        {
+          "shape": "Text 16",
+          "paragraphs": [
+            "Q11: C"
+          ]
+        },
+        {
+          "shape": "Text 17",
+          "paragraphs": [
+            "Over half (around 54–55%) of eligible beneficiaries are enrolled in MA plans."
+          ]
+        },
+        {
+          "shape": "Text 20",
+          "paragraphs": [
+            "Q12: A"
+          ]
+        },
+        {
+          "shape": "Text 21",
+          "paragraphs": [
+            "Dental, vision, and hearing benefits are very common supplemental benefits in MA plans."
+          ]
+        },
+        {
+          "shape": "Text 24",
+          "paragraphs": [
+            "Q13: B"
+          ]
+        },
+        {
+          "shape": "Text 25",
+          "paragraphs": [
+            "Medicare pays MA plans a fixed monthly amount (capitation) per enrollee."
+          ]
+        },
+        {
+          "shape": "Text 28",
+          "paragraphs": [
+            "Q14: B"
+          ]
+        },
+        {
+          "shape": "Text 29",
+          "paragraphs": [
+            "SNPs serve dual-eligible individuals, those with chronic conditions, or institutionalized beneficiaries."
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "40",
+      "imageAssetsInDeck": 0,
+      "number": 40
+    },
+    {
+      "path": "ppt/slides/slide41.xml",
+      "blocks": [
+        {
+          "shape": "Text 1",
+          "paragraphs": [
+            "Answer Key — Questions 15–21"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "Q15: B"
+          ]
+        },
+        {
+          "shape": "Text 5",
+          "paragraphs": [
+            "HMOs generally restrict coverage to their network (with exceptions for emergencies)."
+          ]
+        },
+        {
+          "shape": "Text 8",
+          "paragraphs": [
+            "Q16: B"
+          ]
+        },
+        {
+          "shape": "Text 9",
+          "paragraphs": [
+            "MA plans must cover emergency and urgently needed services even out of network/area."
+          ]
+        },
+        {
+          "shape": "Text 12",
+          "paragraphs": [
+            "Q17: B"
+          ]
+        },
+        {
+          "shape": "Text 13",
+          "paragraphs": [
+            "Rebates result when a plan’s bid is below the benchmark; they fund extra benefits or lower costs."
+          ]
+        },
+        {
+          "shape": "Text 16",
+          "paragraphs": [
+            "Q18: B"
+          ]
+        },
+        {
+          "shape": "Text 17",
+          "paragraphs": [
+            "The previous ESRD enrollment restriction was removed; people with ESRD can generally join MA plans."
+          ]
+        },
+        {
+          "shape": "Text 20",
+          "paragraphs": [
+            "Q19: B"
+          ]
+        },
+        {
+          "shape": "Text 21",
+          "paragraphs": [
+            "Zero-premium means $0 additional MA plan premium; the standard Part B premium still applies."
+          ]
+        },
+        {
+          "shape": "Text 24",
+          "paragraphs": [
+            "Q20: B"
+          ]
+        },
+        {
+          "shape": "Text 25",
+          "paragraphs": [
+            "Prior authorization is commonly used by MA plans for certain procedures, DME, and therapies."
+          ]
+        },
+        {
+          "shape": "Text 28",
+          "paragraphs": [
+            "Q21: B"
+          ]
+        },
+        {
+          "shape": "Text 29",
+          "paragraphs": [
+            "Hospice care is covered under Original Medicare even if the person remains in an MA plan."
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "41",
+      "imageAssetsInDeck": 0,
+      "number": 41
+    },
+    {
+      "path": "ppt/slides/slide42.xml",
+      "blocks": [
+        {
+          "shape": "Text 1",
+          "paragraphs": [
+            "Answer Key — Questions 22–28"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "Q22: B"
+          ]
+        },
+        {
+          "shape": "Text 5",
+          "paragraphs": [
+            "Many MA plans use set copays (e.g., $20 primary care) rather than 20% coinsurance."
+          ]
+        },
+        {
+          "shape": "Text 8",
+          "paragraphs": [
+            "Q23: B"
+          ]
+        },
+        {
+          "shape": "Text 9",
+          "paragraphs": [
+            "The Initial Coverage Election Period allows first-time enrollment in an MA plan."
+          ]
+        },
+        {
+          "shape": "Text 12",
+          "paragraphs": [
+            "Q24: A"
+          ]
+        },
+        {
+          "shape": "Text 13",
+          "paragraphs": [
+            "Original Medicare allows any provider that accepts Medicare, anywhere in the U.S."
+          ]
+        },
+        {
+          "shape": "Text 16",
+          "paragraphs": [
+            "Q25: B"
+          ]
+        },
+        {
+          "shape": "Text 17",
+          "paragraphs": [
+            "Loss of plan or moving out of area triggers a Special Enrollment Period."
+          ]
+        },
+        {
+          "shape": "Text 20",
+          "paragraphs": [
+            "Q26: B"
+          ]
+        },
+        {
+          "shape": "Text 21",
+          "paragraphs": [
+            "CMS contracts with and regulates Medicare Advantage organizations."
+          ]
+        },
+        {
+          "shape": "Text 24",
+          "paragraphs": [
+            "Q27: B"
+          ]
+        },
+        {
+          "shape": "Text 25",
+          "paragraphs": [
+            "PPOs typically cover out-of-network services at higher cost-sharing levels."
+          ]
+        },
+        {
+          "shape": "Text 28",
+          "paragraphs": [
+            "Q28: B"
+          ]
+        },
+        {
+          "shape": "Text 29",
+          "paragraphs": [
+            "D-SNPs are designed for dual-eligible beneficiaries (Medicare + Medicaid)."
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "42",
+      "imageAssetsInDeck": 0,
+      "number": 42
+    },
+    {
+      "path": "ppt/slides/slide43.xml",
+      "blocks": [
+        {
+          "shape": "Text 1",
+          "paragraphs": [
+            "Answer Key — Questions 29–35"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "Q29: C"
+          ]
+        },
+        {
+          "shape": "Text 5",
+          "paragraphs": [
+            "A large majority of MA-PD enrollees are in plans with $0 additional premium."
+          ]
+        },
+        {
+          "shape": "Text 8",
+          "paragraphs": [
+            "Q30: C"
+          ]
+        },
+        {
+          "shape": "Text 9",
+          "paragraphs": [
+            "Plans must provide at least the same overall value; individual services have cost-sharing limits set by CMS."
+          ]
+        },
+        {
+          "shape": "Text 12",
+          "paragraphs": [
+            "Q31: B"
+          ]
+        },
+        {
+          "shape": "Text 13",
+          "paragraphs": [
+            "MOOP protects beneficiaries by limiting their annual out-of-pocket costs for covered services."
+          ]
+        },
+        {
+          "shape": "Text 16",
+          "paragraphs": [
+            "Q32: B"
+          ]
+        },
+        {
+          "shape": "Text 17",
+          "paragraphs": [
+            "The MA OEP (January–March) allows one change for those already in MA."
+          ]
+        },
+        {
+          "shape": "Text 20",
+          "paragraphs": [
+            "Q33: B"
+          ]
+        },
+        {
+          "shape": "Text 21",
+          "paragraphs": [
+            "CMS Star Ratings measure quality; higher-rated plans may receive bonus payments and attract more members."
+          ]
+        },
+        {
+          "shape": "Text 24",
+          "paragraphs": [
+            "Q34: A"
+          ]
+        },
+        {
+          "shape": "Text 25",
+          "paragraphs": [
+            "MA plans must cover all medically necessary Part A and Part B services (with limited exceptions such as hospice)."
+          ]
+        },
+        {
+          "shape": "Text 28",
+          "paragraphs": [
+            "Q35: B"
+          ]
+        },
+        {
+          "shape": "Text 29",
+          "paragraphs": [
+            "The best choice depends on doctors/hospitals used, expected care needs, travel, and total cost exposure."
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "43",
+      "imageAssetsInDeck": 0,
+      "number": 43
+    },
+    {
+      "path": "ppt/slides/slide44.xml",
+      "blocks": [
+        {
+          "shape": "Text 1",
+          "paragraphs": [
+            "Great work!"
+          ]
+        },
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "You’ve completed the 35-question Medicare Advantage quiz."
+          ]
+        },
+        {
+          "shape": "Text 3",
+          "paragraphs": [
+            "Review any missed questions using the Answer Key and stay current with annual CMS updates, as plan rules and benefits can change each year."
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "For official information: Medicare.gov  •  CMS.gov"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "44",
+      "imageAssetsInDeck": 0,
+      "number": 44
+    }
+  ]
+}

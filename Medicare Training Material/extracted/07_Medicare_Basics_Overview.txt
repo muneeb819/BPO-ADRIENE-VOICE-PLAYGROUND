@@ -1,0 +1,268 @@
+# 07_Medicare_Basics_Overview.pptx
+Source: Medicare_Basics_Overview 1 (1).pptx
+
+## Slide 1
+MEDICARE BASICS
+A Detailed Overview of the
+U.S. Federal Health Insurance Program
+Eligibility  ·  Parts A, B, C & D  ·  Costs  ·  Coverage Options  ·  2026 Updates
+Educational Overview  ·  Current as of 2026
+MEDICARE BASICS  ·  DETAILED OVERVIEW  ·  2026
+SPEAKER NOTES: 1
+
+## Slide 2
+MEDICARE BASICS  ·  DETAILED OVERVIEW  ·  2026
+INTRODUCTION
+What is Medicare?
+Federal health insurance established in 1965 under Title XVIII of the Social Security Act.
+65+
+Who It Serves
+People age 65 and older
+Certain younger people with
+disabilities
+People with End-Stage Renal
+Disease (ESRD) or ALS
+A–D
+How It Works
+Covers hospital care,
+doctor visits, preventive
+services, and prescription
+drugs through four parts
+CMS
+Administration
+Run by the Centers for
+Medicare & Medicaid
+Services (CMS)
+Funded by taxes, premiums
+and federal budget
+70M
+Scale
+Serves more than 70 million
+Americans (2026)
+Nearly all people 65+
+have coverage
+SPEAKER NOTES: 2
+
+## Slide 3
+MEDICARE BASICS  ·  DETAILED OVERVIEW  ·  2026
+ELIGIBILITY
+Who Qualifies for Medicare?
+You must generally be a U.S. citizen or lawful permanent resident who has lived in the U.S. for at least 5 years.
+Primary Pathways
+01
+Age 65 or Older
+Most common path. Automatic enrollment if already receiving Social Security benefits.
+02
+Disability
+Under 65 and entitled to Social Security disability benefits for 24 months (waiting period may be waived).
+03
+ESRD
+Any age with permanent kidney failure requiring dialysis or a kidney transplant.
+04
+ALS (Lou Gehrig's)
+Any age diagnosed with amyotrophic lateral sclerosis — no waiting period.
+Premium-Free Part A
+Most people get Part A at no monthly cost if they (or a spouse) paid Medicare taxes for at least 10 years (40 quarters) while working.
+Key Notes
+• Part B is optional but most people enroll
+• You can buy Part A if you do not qualify for free coverage
+• Enrollment is not always automatic — check your situation
+• Spousal work history can help you qualify
+SPEAKER NOTES: 3
+
+## Slide 4
+MEDICARE BASICS  ·  DETAILED OVERVIEW  ·  2026
+STRUCTURE
+The Four Parts of Medicare
+Medicare is organized into four distinct parts that cover different types of services.
+A
+Hospital Insurance
+•  Inpatient hospital stays
+•  Skilled nursing facility care
+•  Hospice care
+•  Some home health care
+B
+Medical Insurance
+•  Doctor & provider services
+•  Outpatient care
+•  Durable medical equipment
+•  Preventive services & screenings
+C
+Medicare Advantage
+•  Private plan alternative
+•  Bundles A + B (often D)
+•  May include extra benefits
+•  Network-based coverage
+D
+Prescription Drugs
+•  Outpatient prescription drugs
+•  Many recommended vaccines
+•  Run by private plans
+•  Available with Original or MA
+SPEAKER NOTES: 4
+
+## Slide 5
+MEDICARE BASICS  ·  DETAILED OVERVIEW  ·  2026
+PART A
+Hospital Insurance — What It Covers & Costs (2026)
+Most people receive premium-free Part A after paying Medicare taxes for at least 10 years.
+What Part A Helps Cover
+Inpatient Hospital Care
+Semi-private room, meals, general nursing, drugs as part of inpatient treatment, and other hospital services.
+Skilled Nursing Facility (SNF)
+Care after a qualifying 3-day hospital stay. Days 1–20 fully covered after deductible; coinsurance applies days 21–100.
+Hospice Care
+For terminally ill patients. Includes pain relief, support services, and counseling. Minimal cost sharing.
+Home Health Care
+Part-time skilled nursing, physical/occupational therapy, and home health aide services when medically necessary.
+2026 Part A Costs
+Premium (most people)
+$0
+Premium (30–39 quarters)
+$311/mo
+Premium (<30 quarters)
+$565/mo
+Hospital deductible (per benefit period)
+$1,736
+Days 61–90 coinsurance
+$434/day
+Lifetime reserve days
+$868/day
+SNF days 21–100 coinsurance
+$217/day
+SPEAKER NOTES: 5
+
+## Slide 6
+MEDICARE BASICS  ·  DETAILED OVERVIEW  ·  2026
+PART B
+Medical Insurance — What It Covers & Costs (2026)
+Part B is optional but strongly recommended. Most people pay a monthly premium.
+What Part B Helps Cover
+•  Services from doctors and other health care providers
+•  Outpatient hospital care and emergency room visits
+•  Durable medical equipment (wheelchairs, walkers, oxygen)
+•  Many preventive services (screenings, vaccines, wellness visits)
+•  Clinical laboratory tests and diagnostic imaging
+•  Mental health services (outpatient)
+•  Ambulance services and some home health care
+•  Limited prescription drugs administered by a provider
+2026 Part B Costs
+Standard Monthly Premium
+$202.90
+(Higher for higher incomes — IRMAA applies)
+Annual Deductible
+$283
+Coinsurance
+Usually 20% of Medicare-approved amount after deductible
+No annual out-of-pocket maximum under Original Medicare
+SPEAKER NOTES: 6
+
+## Slide 7
+MEDICARE BASICS  ·  DETAILED OVERVIEW  ·  2026
+COVERAGE CHOICES
+Original Medicare vs. Medicare Advantage (Part C)
+You choose one path when you first enroll and can switch during certain periods each year.
+Original Medicare
+Parts Included
+Part A + Part B (add Part D separately)
+Provider Choice
+Any doctor or hospital that accepts Medicare nationwide
+Referrals
+Generally not required for specialists
+Extra Benefits
+Limited — vision, dental, hearing usually not covered
+Out-of-Pocket
+No annual maximum; Medigap can help fill gaps
+Drug Coverage
+Optional separate Part D plan
+Medicare Advantage (Part C)
+Parts Included
+Bundled A + B, usually includes Part D
+Provider Choice
+Must use plan network (HMO/PPO rules apply)
+Referrals
+Often required for specialists (especially HMOs)
+Extra Benefits
+Many plans offer dental, vision, hearing, gym, OTC
+Out-of-Pocket
+Annual maximum (varies by plan); more predictable costs
+Drug Coverage
+Usually included; check formulary carefully
+SPEAKER NOTES: 7
+
+## Slide 8
+MEDICARE BASICS  ·  DETAILED OVERVIEW  ·  2026
+PART D
+Prescription Drug Coverage
+Optional coverage for outpatient prescription drugs. Available as a standalone plan or through most Medicare Advantage plans.
+How It Works
+Private insurance companies offer plans that follow Medicare rules. You pay a monthly premium and share costs for drugs.
+Formulary
+Each plan has a list of covered drugs (formulary). Check that your medications are covered before enrolling.
+2026 OOP Cap
+Thanks to the Inflation Reduction Act, out-of-pocket drug spending is capped at $2,100 in 2026.
+Extra Help (LIS)
+People with limited income and resources may qualify for the Low-Income Subsidy, which lowers premiums and costs.
+SPEAKER NOTES: 8
+
+## Slide 9
+MEDICARE BASICS  ·  DETAILED OVERVIEW  ·  2026
+FILLING THE GAPS
+Medigap, Medicaid & Extra Help
+Original Medicare leaves cost-sharing gaps. Several programs can reduce what you pay.
+Medigap (Medicare Supplement)
+Private policies that help pay deductibles, coinsurance, and copayments under Original Medicare. Standardized plans (A–N). Best bought during the 6-month Medigap Open Enrollment Period starting when Part B begins.
+Medicaid / Dual Eligibility
+State-federal program for people with limited income and resources. Dual eligibles can get help with Medicare premiums and cost-sharing, plus extra benefits such as long-term care and transportation.
+Medicare Savings Programs
+State programs that help pay Part A and/or Part B premiums and sometimes deductibles and coinsurance for people with modest income and resources.
+Extra Help (Low-Income Subsidy)
+Federal program that helps pay Part D premiums, deductibles, and copayments. Expanded eligibility under recent legislation. Apply through Social Security.
+SPEAKER NOTES: 9
+
+## Slide 10
+MEDICARE BASICS  ·  DETAILED OVERVIEW  ·  2026
+GETTING STARTED
+Enrollment Periods & Key Decisions
+Timing matters. Missing your initial enrollment window can result in lifelong late-enrollment penalties.
+Initial Enrollment Period
+•  7-month window around 65th birthday
+•  3 months before + month of + 3 after
+•  Best time to avoid penalties
+•  Sign up for A and/or B
+Annual Election Period
+•  Oct 15 – Dec 7 every year
+•  Switch between Original & Advantage
+•  Change or join Part D plans
+•  Changes take effect Jan 1
+Special Enrollment
+•  Still working past 65 with employer coverage
+•  Moving, losing other coverage
+•  Qualifying life events
+•  Avoids late-enrollment penalties
+SPEAKER NOTES: 10
+
+## Slide 11
+MEDICARE BASICS  ·  DETAILED OVERVIEW  ·  2026
+SUMMARY
+Key Takeaways
+Remember these essentials when navigating Medicare.
+1
+Four Parts
+A (Hospital), B (Medical), C (Advantage), D (Drugs). Understand what each covers before choosing.
+2
+Two Main Paths
+Original Medicare + optional Medigap/Part D, or a Medicare Advantage plan that bundles coverage.
+3
+Costs Are Shared
+Premiums, deductibles, and coinsurance apply. 2026 standard Part B premium is $202.90; Part A is free for most.
+4
+Help Is Available
+Extra Help, Medicare Savings Programs, Medicaid, and Medigap can significantly lower your out-of-pocket costs.
+5
+Timing Matters
+Enroll during your Initial Enrollment Period to avoid permanent late penalties. Review coverage every year.
+6
+Official Sources
+Always verify details at Medicare.gov or 1-800-MEDICARE. Plans and costs change annually.
+SPEAKER NOTES: 11

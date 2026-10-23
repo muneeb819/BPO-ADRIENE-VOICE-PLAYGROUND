@@ -1,0 +1,916 @@
+{
+  "version": "1.0.0",
+  "knowledgeVersion": "1.0.0",
+  "generatedAt": "2026-10-23T15:54:46.699895Z",
+  "tests": [
+    {
+      "id": "ma_alias",
+      "type": "retrieval",
+      "query": "What is Medicare Advantage also known as?",
+      "expectedSource": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "expectedSlide": 39,
+      "expectedKeywords": [
+        "Part C"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "ma_requires_ab",
+      "type": "retrieval",
+      "query": "To enroll in Medicare Advantage, what must a person have?",
+      "expectedSource": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "expectedSlide": 39,
+      "expectedKeywords": [
+        "Part A",
+        "Part B"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "ma_insurers",
+      "type": "retrieval",
+      "query": "Who offers Medicare Advantage plans?",
+      "expectedSource": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "expectedSlide": 39,
+      "expectedKeywords": [
+        "private insurers",
+        "Medicare"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "ma_drugs",
+      "type": "retrieval",
+      "query": "Do most Medicare Advantage plans include prescription drug coverage?",
+      "expectedSource": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "expectedSlide": 39,
+      "expectedKeywords": [
+        "Part D",
+        "MA-PD"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "ma_moop",
+      "type": "retrieval",
+      "query": "What does the Medicare Advantage maximum out-of-pocket limit protect?",
+      "expectedSource": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "expectedSlide": 43,
+      "expectedKeywords": [
+        "out-of-pocket",
+        "annual"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "ma_moop_amount",
+      "type": "retrieval",
+      "query": "What was the 2025 in-network MOOP maximum in the quiz?",
+      "expectedSource": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "expectedSlide": 39,
+      "expectedKeywords": [
+        "9,350"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "hmo",
+      "type": "retrieval",
+      "query": "Which Medicare Advantage plan type usually requires in-network care and referrals?",
+      "expectedSource": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "expectedSlide": 39,
+      "expectedKeywords": [
+        "HMO",
+        "network",
+        "referral"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "medigap_ma",
+      "type": "retrieval",
+      "query": "Can a person have Medigap while enrolled in Medicare Advantage?",
+      "expectedSource": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "expectedSlide": 40,
+      "expectedKeywords": [
+        "cannot",
+        "Medigap"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "aep",
+      "type": "retrieval",
+      "query": "When is the Annual Election Period for Medicare Advantage?",
+      "expectedSource": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "expectedSlide": 40,
+      "expectedKeywords": [
+        "October 15",
+        "December 7"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "ma_oep",
+      "type": "retrieval",
+      "query": "What can a beneficiary do during the Medicare Advantage Open Enrollment Period?",
+      "expectedSource": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "expectedSlide": 40,
+      "expectedKeywords": [
+        "switch",
+        "Original Medicare",
+        "Jan 1",
+        "March 31"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "esrd",
+      "type": "retrieval",
+      "query": "Can someone with End-Stage Renal Disease enroll in Medicare Advantage?",
+      "expectedSource": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "expectedSlide": 41,
+      "expectedKeywords": [
+        "ESRD",
+        "restrictions"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "zero_premium",
+      "type": "retrieval",
+      "query": "What does a zero-premium Medicare Advantage plan mean?",
+      "expectedSource": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "expectedSlide": 41,
+      "expectedKeywords": [
+        "$0",
+        "Part B premium"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "prior_auth",
+      "type": "retrieval",
+      "query": "Is prior authorization used in Medicare Advantage?",
+      "expectedSource": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "expectedSlide": 41,
+      "expectedKeywords": [
+        "prior authorization",
+        "services"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "hospice",
+      "type": "retrieval",
+      "query": "Who covers hospice care when a person is in a Medicare Advantage plan?",
+      "expectedSource": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "expectedSlide": 41,
+      "expectedKeywords": [
+        "Original Medicare",
+        "hospice"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "dsnp",
+      "type": "retrieval",
+      "query": "What is a D-SNP?",
+      "expectedSource": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "expectedSlide": 42,
+      "expectedKeywords": [
+        "Dual Eligible",
+        "Medicaid"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "ppo",
+      "type": "retrieval",
+      "query": "How does a Medicare Advantage PPO usually cover out-of-network care?",
+      "expectedSource": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "expectedSlide": 42,
+      "expectedKeywords": [
+        "out-of-network",
+        "higher"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "star",
+      "type": "retrieval",
+      "query": "What are Medicare Advantage Star Ratings?",
+      "expectedSource": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "expectedSlide": 43,
+      "expectedKeywords": [
+        "CMS",
+        "quality",
+        "stars"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "part_b_premium",
+      "type": "retrieval",
+      "query": "What is the 2026 standard Part B premium?",
+      "expectedSource": "07_Medicare_Basics_Overview.pptx",
+      "expectedSlide": 6,
+      "expectedKeywords": [
+        "202.90"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "part_b_deductible",
+      "type": "retrieval",
+      "query": "What is the 2026 Part B annual deductible?",
+      "expectedSource": "07_Medicare_Basics_Overview.pptx",
+      "expectedSlide": 6,
+      "expectedKeywords": [
+        "283"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "part_a_deductible",
+      "type": "retrieval",
+      "query": "What is the 2026 Part A hospital deductible?",
+      "expectedSource": "07_Medicare_Basics_Overview.pptx",
+      "expectedSlide": 5,
+      "expectedKeywords": [
+        "1,736"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "part_d_cap",
+      "type": "retrieval",
+      "query": "What is the 2026 Part D out-of-pocket cap?",
+      "expectedSource": "07_Medicare_Basics_Overview.pptx",
+      "expectedSlide": 8,
+      "expectedKeywords": [
+        "2,100"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "part_a",
+      "type": "retrieval",
+      "query": "What does Medicare Part A cover?",
+      "expectedSource": "07_Medicare_Basics_Overview.pptx",
+      "expectedSlide": 4,
+      "expectedKeywords": [
+        "Hospital",
+        "skilled nursing",
+        "hospice"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "part_b",
+      "type": "retrieval",
+      "query": "What does Medicare Part B cover?",
+      "expectedSource": "07_Medicare_Basics_Overview.pptx",
+      "expectedSlide": 4,
+      "expectedKeywords": [
+        "Doctor",
+        "outpatient",
+        "durable medical equipment"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "part_c",
+      "type": "retrieval",
+      "query": "What is Medicare Part C?",
+      "expectedSource": "07_Medicare_Basics_Overview.pptx",
+      "expectedSlide": 4,
+      "expectedKeywords": [
+        "Medicare Advantage",
+        "private plan"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "part_d",
+      "type": "retrieval",
+      "query": "What is Medicare Part D?",
+      "expectedSource": "07_Medicare_Basics_Overview.pptx",
+      "expectedSlide": 4,
+      "expectedKeywords": [
+        "prescription drug",
+        "private plans"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "eligibility",
+      "type": "retrieval",
+      "query": "Who qualifies for Medicare?",
+      "expectedSource": "07_Medicare_Basics_Overview.pptx",
+      "expectedSlide": 3,
+      "expectedKeywords": [
+        "65",
+        "disability",
+        "ESRD",
+        "ALS"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "medigap_oep",
+      "type": "retrieval",
+      "query": "When is the Medigap Open Enrollment Period?",
+      "expectedSource": "07_Medicare_Basics_Overview.pptx",
+      "expectedSlide": 9,
+      "expectedKeywords": [
+        "6-month",
+        "Part B"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "extra_help",
+      "type": "retrieval",
+      "query": "What is Extra Help?",
+      "expectedSource": "07_Medicare_Basics_Overview.pptx",
+      "expectedSlide": 9,
+      "expectedKeywords": [
+        "Low-Income Subsidy",
+        "Part D"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "compare",
+      "type": "retrieval",
+      "query": "What is the difference between Medicare Supplement and Medicare Advantage?",
+      "expectedSource": "05_Medicare_Supplement_vs_Advantage.pptx",
+      "expectedSlide": 1,
+      "expectedKeywords": [
+        "Original Medicare",
+        "network",
+        "premium"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "call_flow",
+      "type": "retrieval",
+      "query": "What is the seven-step Medicare call flow?",
+      "expectedSource": "02_Medicare_Agent_Call_Center_Training.pptx",
+      "expectedSlide": 5,
+      "expectedKeywords": [
+        "Opening",
+        "SOA",
+        "Qualification",
+        "Needs Discovery",
+        "Recap",
+        "Presentation",
+        "Close"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "disclosures",
+      "type": "retrieval",
+      "query": "What disclosures are required at the start of a Medicare call?",
+      "expectedSource": "02_Medicare_Agent_Call_Center_Training.pptx",
+      "expectedSlide": 4,
+      "expectedKeywords": [
+        "recording",
+        "not affiliated",
+        "TPMO"
+      ],
+      "severity": "high",
+      "expectedSlides": [
+        4,
+        6
+      ]
+    },
+    {
+      "id": "soa",
+      "type": "retrieval",
+      "query": "When must the Scope of Appointment be completed?",
+      "expectedSource": "02_Medicare_Agent_Call_Center_Training.pptx",
+      "expectedSlide": 7,
+      "expectedKeywords": [
+        "before",
+        "plan-specific"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "qualification",
+      "type": "retrieval",
+      "query": "What qualification questions should be asked?",
+      "expectedSource": "02_Medicare_Agent_Call_Center_Training.pptx",
+      "expectedSlide": 8,
+      "expectedKeywords": [
+        "Part A",
+        "Part B",
+        "ZIP",
+        "decision"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "needs",
+      "type": "retrieval",
+      "query": "What should be covered in needs discovery?",
+      "expectedSource": "02_Medicare_Agent_Call_Center_Training.pptx",
+      "expectedSlide": 9,
+      "expectedKeywords": [
+        "doctors",
+        "medications",
+        "priorities"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "recap",
+      "type": "retrieval",
+      "query": "What should happen before presenting plan options?",
+      "expectedSource": "02_Medicare_Agent_Call_Center_Training.pptx",
+      "expectedSlide": 10,
+      "expectedKeywords": [
+        "recap",
+        "Did I get that right"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "prohibited",
+      "type": "retrieval",
+      "query": "Which marketing phrases are prohibited?",
+      "expectedSource": "02_Medicare_Agent_Call_Center_Training.pptx",
+      "expectedSlide": 11,
+      "expectedKeywords": [
+        "best",
+        "free",
+        "urgency"
+      ],
+      "severity": "high",
+      "expectedSlides": [
+        4,
+        11
+      ]
+    },
+    {
+      "id": "periods",
+      "type": "retrieval",
+      "query": "What are the main Medicare enrollment periods?",
+      "expectedSource": "02_Medicare_Agent_Call_Center_Training.pptx",
+      "expectedSlide": 12,
+      "expectedKeywords": [
+        "IEP",
+        "AEP",
+        "OEP",
+        "SEP"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "script_greeting",
+      "type": "retrieval",
+      "query": "What is the exact greeting in the Med Script?",
+      "expectedSource": "03_Medicare_Script.docx",
+      "expectedSlide": null,
+      "expectedKeywords": [
+        "Brain",
+        "US health care"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "script_benefits",
+      "type": "retrieval",
+      "query": "What benefits does the Med Script mention?",
+      "expectedSource": "03_Medicare_Script.docx",
+      "expectedSlide": null,
+      "expectedKeywords": [
+        "foods-stamp",
+        "Flex-card",
+        "dental",
+        "vision",
+        "cashback"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "script_age",
+      "type": "retrieval",
+      "query": "Which qualification questions follow the benefits pitch in the script?",
+      "expectedSource": "03_Medicare_Script.docx",
+      "expectedSlide": null,
+      "expectedKeywords": [
+        "how old are you",
+        "make your own decision"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "script_va",
+      "type": "retrieval",
+      "query": "What does the script ask about VA, TRICARE, and retirement plans?",
+      "expectedSource": "03_Medicare_Script.docx",
+      "expectedSlide": null,
+      "expectedKeywords": [
+        "VA",
+        "Tricare",
+        "Retirement"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "script_zip",
+      "type": "retrieval",
+      "query": "What does the script say when asking for the ZIP code?",
+      "expectedSource": "03_Medicare_Script.docx",
+      "expectedSlide": null,
+      "expectedKeywords": [
+        "zip code",
+        "5 Digits"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "script_disclaimer",
+      "type": "retrieval",
+      "query": "What does the script disclaimer say about calls and email?",
+      "expectedSource": "03_Medicare_Script.docx",
+      "expectedSlide": null,
+      "expectedKeywords": [
+        "auto dial",
+        "pre-record",
+        "partner companies"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "script_transfer",
+      "type": "retrieval",
+      "query": "What does the script say about transferring to a licensed agent?",
+      "expectedSource": "03_Medicare_Script.docx",
+      "expectedSlide": null,
+      "expectedKeywords": [
+        "licensed agent",
+        "area"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "objection_not_interested",
+      "type": "retrieval",
+      "query": "How does the script handle 'I'm not interested'?",
+      "expectedSource": "03_Medicare_Script.docx",
+      "expectedSlide": null,
+      "expectedKeywords": [
+        "not asking you to buy",
+        "additional benefits"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "objection_already",
+      "type": "retrieval",
+      "query": "How does the script handle 'I already have a plan'?",
+      "expectedSource": "03_Medicare_Script.docx",
+      "expectedSlide": null,
+      "expectedKeywords": [
+        "already have a plan",
+        "more benefits"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "objection_info",
+      "type": "retrieval",
+      "query": "How does the script handle 'why do you need my information'?",
+      "expectedSource": "03_Medicare_Script.docx",
+      "expectedSlide": null,
+      "expectedKeywords": [
+        "basic information",
+        "recorded line"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "new_hire_rules",
+      "type": "retrieval",
+      "query": "What are the critical rules for new Medicare Advantage agents?",
+      "expectedSource": "01_Medicare_Advantage_New_Hire_Orientation.pptx",
+      "expectedSlide": 5,
+      "expectedKeywords": [
+        "SOA",
+        "Cherry-Picking",
+        "CMS-approved",
+        "Enrollment Periods",
+        "Needs Assessment",
+        "Record Retention"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "extra_benefits",
+      "type": "retrieval",
+      "query": "What extra benefits do Medicare Advantage plans often include?",
+      "expectedSource": "01_Medicare_Advantage_New_Hire_Orientation.pptx",
+      "expectedSlide": 4,
+      "expectedKeywords": [
+        "Dental",
+        "Vision",
+        "Hearing",
+        "Fitness",
+        "OTC",
+        "Transportation",
+        "Care Coordination"
+      ],
+      "severity": "high",
+      "expectedSlides": [
+        2,
+        4
+      ]
+    },
+    {
+      "id": "roleplay_parent",
+      "type": "retrieval",
+      "query": "What should an agent do when an adult child calls for a parent?",
+      "expectedSource": "02_Medicare_Agent_Call_Center_Training.pptx",
+      "expectedSlide": 13,
+      "expectedKeywords": [
+        "legal decision-maker"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "tpmo",
+      "type": "retrieval",
+      "query": "What is the TPMO disclaimer?",
+      "expectedSource": "02_Medicare_Agent_Call_Center_Training.pptx",
+      "expectedSlide": 10,
+      "expectedKeywords": [
+        "do not offer every plan",
+        "organizations"
+      ],
+      "severity": "high",
+      "expectedSlides": [
+        4,
+        10
+      ]
+    },
+    {
+      "id": "flow_order",
+      "type": "flow",
+      "order": [
+        "recorded",
+        "Scope of Appointment",
+        "Part A and Part B",
+        "Needs discovery",
+        "Recap",
+        "Presentation",
+        "Close/transfer"
+      ],
+      "severity": "critical",
+      "description": "Disclosures and SOA precede qualification, needs discovery, recap, presentation and close."
+    },
+    {
+      "id": "flow_ai_disclosure",
+      "type": "flow",
+      "allOf": [
+        "AI assistant",
+        "not a licensed insurance agent",
+        "not a human"
+      ],
+      "severity": "critical"
+    },
+    {
+      "id": "flow_opening",
+      "type": "flow",
+      "allOf": [
+        "recorded for quality",
+        "permission",
+        "not connected with or endorsed",
+        "I do not offer every plan"
+      ],
+      "severity": "critical"
+    },
+    {
+      "id": "flow_qualification",
+      "type": "flow",
+      "allOf": [
+        "Part A and Part B",
+        "ZIP code",
+        "makes decisions",
+        "date of birth only if needed"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "flow_needs",
+      "type": "flow",
+      "allOf": [
+        "doctors",
+        "prescriptions",
+        "premiums",
+        "upcoming procedures"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "flow_transfer",
+      "type": "flow",
+      "allOf": [
+        "explicit consent",
+        "backend confirms",
+        "Never claim a transfer"
+      ],
+      "severity": "critical"
+    },
+    {
+      "id": "flow_close",
+      "type": "flow",
+      "allOf": [
+        "Medicare.gov",
+        "1-800-MEDICARE",
+        "SHIP"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "comp_no_foodstamps",
+      "type": "compliance",
+      "forbiddenPhrases": [
+        "food stamps",
+        "food-stamps",
+        "cash back",
+        "cashback",
+        "Social Security check"
+      ],
+      "severity": "critical",
+      "description": "Unsupported script claims must only appear in a prohibition/flag context."
+    },
+    {
+      "id": "comp_no_best_free",
+      "type": "compliance",
+      "forbiddenPhrases": [
+        "best plan",
+        "free plan",
+        "guaranteed eligibility",
+        "guaranteed savings"
+      ],
+      "severity": "critical"
+    },
+    {
+      "id": "comp_no_gov_affiliation",
+      "type": "compliance",
+      "forbiddenPhrases": [
+        "from Medicare",
+        "government employee",
+        "Medicare representative"
+      ],
+      "severity": "critical"
+    },
+    {
+      "id": "comp_privacy",
+      "type": "compliance",
+      "allOf": [
+        "Social Security number",
+        "bank details",
+        "minimum necessary"
+      ],
+      "severity": "critical"
+    },
+    {
+      "id": "comp_no_pressure",
+      "type": "compliance",
+      "allOf": [
+        "Never pressure",
+        "no obligation",
+        "do-not-call"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "comp_soa",
+      "type": "compliance",
+      "allOf": [
+        "Scope of Appointment",
+        "stay within",
+        "authorized"
+      ],
+      "severity": "critical"
+    },
+    {
+      "id": "comp_plan_specific",
+      "type": "compliance",
+      "allOf": [
+        "plan-specific",
+        "licensed agent",
+        "verified"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "comp_annual_figures",
+      "type": "compliance",
+      "allOf": [
+        "2026",
+        "verify",
+        "Medicare.gov"
+      ],
+      "severity": "medium"
+    },
+    {
+      "id": "comp_hospice",
+      "type": "compliance",
+      "allOf": [
+        "Medigap cannot be used with Medicare Advantage",
+        "Part A and Part B"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "comp_ai_honesty",
+      "type": "compliance",
+      "allOf": [
+        "If asked, say so plainly",
+        "NOT a licensed insurance agent",
+        "NOT a human"
+      ],
+      "severity": "critical"
+    },
+    {
+      "id": "gap_food_stamps_cashback",
+      "type": "gap",
+      "gapId": "food_stamps_cashback",
+      "severity": "high"
+    },
+    {
+      "id": "gap_script_missing_disclosures",
+      "type": "gap",
+      "gapId": "script_missing_disclosures",
+      "severity": "high"
+    },
+    {
+      "id": "gap_script_soa_order",
+      "type": "gap",
+      "gapId": "script_soa_order",
+      "severity": "high"
+    },
+    {
+      "id": "gap_dob_privacy",
+      "type": "gap",
+      "gapId": "dob_privacy",
+      "severity": "high"
+    },
+    {
+      "id": "gap_ai_vs_licensed_agent",
+      "type": "gap",
+      "gapId": "ai_vs_licensed_agent",
+      "severity": "high"
+    },
+    {
+      "id": "gap_tpmo_carrier_list_missing",
+      "type": "gap",
+      "gapId": "tpmo_carrier_list_missing",
+      "severity": "high"
+    },
+    {
+      "id": "gap_plan_specific_data_missing",
+      "type": "gap",
+      "gapId": "plan_specific_data_missing",
+      "severity": "high"
+    },
+    {
+      "id": "gap_2025_vs_2026_moop",
+      "type": "gap",
+      "gapId": "2025_vs_2026_moop",
+      "severity": "high"
+    },
+    {
+      "id": "gap_age_eligibility_nuance",
+      "type": "gap",
+      "gapId": "age_eligibility_nuance",
+      "severity": "high"
+    },
+    {
+      "id": "gap_outbound_permission",
+      "type": "gap",
+      "gapId": "outbound_permission",
+      "severity": "high"
+    },
+    {
+      "id": "gap_script_name_typo",
+      "type": "gap",
+      "gapId": "script_name_typo",
+      "severity": "low"
+    },
+    {
+      "id": "gap_recording_consent_missing_script",
+      "type": "gap",
+      "gapId": "recording_consent_missing_script",
+      "severity": "high"
+    }
+  ]
+}

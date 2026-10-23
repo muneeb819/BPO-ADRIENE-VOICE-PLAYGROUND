@@ -1,0 +1,2228 @@
+{
+  "name": "Tressa USA Medicare validation",
+  "version": "1.0.0",
+  "generatedAt": "2026-10-23T15:56:15.686Z",
+  "knowledgeSha256": "daead5c31427e8ceb95caf4597ce7aa410075295d89d2854abacdfc08d75c8c3",
+  "instructionsSha256": "7f714cabcde3cdfa652db5bd019234a39ee8b29e900792389e5281cf8ca1b042",
+  "agentId": null,
+  "agentDisplayName": null,
+  "agentStoredStatus": null,
+  "agentDisplayStatus": null,
+  "summary": {
+    "total": 80,
+    "passed": 80,
+    "failed": 0,
+    "skipped": 0,
+    "passRate": 100.0,
+    "byType": {
+      "compliance": {
+        "total": 10,
+        "passed": 10,
+        "failed": 0
+      },
+      "flow": {
+        "total": 7,
+        "passed": 7,
+        "failed": 0
+      },
+      "gap": {
+        "total": 12,
+        "passed": 12,
+        "failed": 0
+      },
+      "retrieval": {
+        "total": 51,
+        "passed": 51,
+        "failed": 0
+      }
+    }
+  },
+  "readiness": {
+    "knowledgeRetrievalValidation": "passed",
+    "instructionFlowValidation": "passed",
+    "complianceValidation": "passed",
+    "gapRegistry": "complete",
+    "agentConfiguration": "not_run",
+    "liveConversationValidation": "not_run",
+    "deployment": "not_deployed",
+    "readyForControlledTesting": false,
+    "readyForDeployment": false
+  },
+  "results": [
+    {
+      "id": "ma_alias",
+      "type": "retrieval",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Retrieved 04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx slide(s) 39; all expected keywords present in top results.",
+      "expected": {
+        "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+        "slide": 39,
+        "keywords": [
+          "Part C"
+        ]
+      },
+      "top": [
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 3,
+          "answerSlide": 39,
+          "score": 14.194,
+          "section": "Quiz Q1: What is Medicare Advantage (MA) also known as?"
+        },
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 3,
+          "answerSlide": null,
+          "score": 7.615,
+          "section": "Question 1 of 35"
+        },
+        {
+          "source": "07_Medicare_Basics_Overview.pptx",
+          "slide": 4,
+          "answerSlide": null,
+          "score": 7.186,
+          "section": "STRUCTURE"
+        }
+      ]
+    },
+    {
+      "id": "ma_requires_ab",
+      "type": "retrieval",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Retrieved 04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx slide(s) 39; all expected keywords present in top results.",
+      "expected": {
+        "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+        "slide": 39,
+        "keywords": [
+          "Part A",
+          "Part B"
+        ]
+      },
+      "top": [
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 4,
+          "answerSlide": 39,
+          "score": 18.256,
+          "section": "Quiz Q2: To enroll in a Medicare Advantage plan, a person must have:"
+        },
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 20,
+          "answerSlide": 41,
+          "score": 13.353,
+          "section": "Quiz Q18: Can a person who has End-Stage Renal Disease (ESRD) enroll in a Medicare Advanta"
+        },
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 27,
+          "answerSlide": 42,
+          "score": 10.992,
+          "section": "Quiz Q25: What happens if a Medicare Advantage plan leaves the market or the enrollee move"
+        }
+      ]
+    },
+    {
+      "id": "ma_insurers",
+      "type": "retrieval",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Retrieved 04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx slide(s) 39; all expected keywords present in top results.",
+      "expected": {
+        "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+        "slide": 39,
+        "keywords": [
+          "private insurers",
+          "Medicare"
+        ]
+      },
+      "top": [
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 5,
+          "answerSlide": 39,
+          "score": 15.669,
+          "section": "Quiz Q3: Who offers Medicare Advantage plans?"
+        },
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 14,
+          "answerSlide": 40,
+          "score": 10.656,
+          "section": "Quiz Q12: Many Medicare Advantage plans offer supplemental benefits not covered by Origina"
+        },
+        {
+          "source": "02_Medicare_Agent_Call_Center_Training.pptx",
+          "slide": 10,
+          "answerSlide": null,
+          "score": 10.11,
+          "section": "Steps 5–7 — Recap, Present, Close"
+        }
+      ]
+    },
+    {
+      "id": "ma_drugs",
+      "type": "retrieval",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Retrieved 04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx slide(s) 39; all expected keywords present in top results.",
+      "expected": {
+        "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+        "slide": 39,
+        "keywords": [
+          "Part D",
+          "MA-PD"
+        ]
+      },
+      "top": [
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 6,
+          "answerSlide": 39,
+          "score": 25.641,
+          "section": "Quiz Q4: Most Medicare Advantage plans include which additional coverage?"
+        },
+        {
+          "source": "07_Medicare_Basics_Overview.pptx",
+          "slide": 4,
+          "answerSlide": null,
+          "score": 17.376,
+          "section": "STRUCTURE"
+        },
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 6,
+          "answerSlide": null,
+          "score": 16.164,
+          "section": "Question 4 of 35"
+        }
+      ]
+    },
+    {
+      "id": "ma_moop",
+      "type": "retrieval",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Retrieved 04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx slide(s) 43; all expected keywords present in top results.",
+      "expected": {
+        "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+        "slide": 43,
+        "keywords": [
+          "out-of-pocket",
+          "annual"
+        ]
+      },
+      "top": [
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 33,
+          "answerSlide": 43,
+          "score": 24.223,
+          "section": "Quiz Q31: What is the Medicare Advantage Maximum Out-of-Pocket (MOOP) designed to do?"
+        },
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 7,
+          "answerSlide": 39,
+          "score": 20.816,
+          "section": "Quiz Q5: What is a key difference between Original Medicare and Medicare Advantage regard"
+        },
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 8,
+          "answerSlide": 39,
+          "score": 19.79,
+          "section": "Quiz Q6: In 2025, the federal maximum out-of-pocket limit (MOOP) for in-network services "
+        }
+      ]
+    },
+    {
+      "id": "ma_moop_amount",
+      "type": "retrieval",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Retrieved 04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx slide(s) 39; all expected keywords present in top results.",
+      "expected": {
+        "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+        "slide": 39,
+        "keywords": [
+          "9,350"
+        ]
+      },
+      "top": [
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 8,
+          "answerSlide": 39,
+          "score": 26.202,
+          "section": "Quiz Q6: In 2025, the federal maximum out-of-pocket limit (MOOP) for in-network services "
+        },
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 33,
+          "answerSlide": 43,
+          "score": 15.787,
+          "section": "Quiz Q31: What is the Medicare Advantage Maximum Out-of-Pocket (MOOP) designed to do?"
+        },
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 8,
+          "answerSlide": null,
+          "score": 13.976,
+          "section": "Question 6 of 35"
+        }
+      ]
+    },
+    {
+      "id": "hmo",
+      "type": "retrieval",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Retrieved 04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx slide(s) 39; all expected keywords present in top results.",
+      "expected": {
+        "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+        "slide": 39,
+        "keywords": [
+          "HMO",
+          "network",
+          "referral"
+        ]
+      },
+      "top": [
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 9,
+          "answerSlide": 39,
+          "score": 22.334,
+          "section": "Quiz Q7: Which type of Medicare Advantage plan typically requires members to use in-netwo"
+        },
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 29,
+          "answerSlide": 42,
+          "score": 21.61,
+          "section": "Quiz Q27: In a Medicare Advantage PPO plan, what is generally true about out-of-network ca"
+        },
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 29,
+          "answerSlide": null,
+          "score": 16.327,
+          "section": "Question 27 of 35"
+        }
+      ]
+    },
+    {
+      "id": "medigap_ma",
+      "type": "retrieval",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Retrieved 04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx slide(s) 40; all expected keywords present in top results.",
+      "expected": {
+        "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+        "slide": 40,
+        "keywords": [
+          "cannot",
+          "Medigap"
+        ]
+      },
+      "top": [
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 10,
+          "answerSlide": 40,
+          "score": 21.444,
+          "section": "Quiz Q8: Can a person with Medicare Advantage also purchase a Medigap (Medicare Supplemen"
+        },
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 23,
+          "answerSlide": 41,
+          "score": 13.588,
+          "section": "Quiz Q21: If a beneficiary is enrolled in a Medicare Advantage plan and needs hospice care"
+        },
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 13,
+          "answerSlide": 40,
+          "score": 11.485,
+          "section": "Quiz Q11: Approximately what percentage of eligible Medicare beneficiaries were enrolled i"
+        }
+      ]
+    },
+    {
+      "id": "aep",
+      "type": "retrieval",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Retrieved 04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx slide(s) 40; all expected keywords present in top results.",
+      "expected": {
+        "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+        "slide": 40,
+        "keywords": [
+          "October 15",
+          "December 7"
+        ]
+      },
+      "top": [
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 11,
+          "answerSlide": 40,
+          "score": 18.652,
+          "section": "Quiz Q9: What is the Annual Coordinated Election Period (AEP) for Medicare Advantage?"
+        },
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 25,
+          "answerSlide": 42,
+          "score": 14.313,
+          "section": "Quiz Q23: During which period can a newly eligible Medicare beneficiary first enroll in a "
+        },
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 11,
+          "answerSlide": null,
+          "score": 10.751,
+          "section": "Question 9 of 35"
+        }
+      ]
+    },
+    {
+      "id": "ma_oep",
+      "type": "retrieval",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Retrieved 04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx slide(s) 40; all expected keywords present in top results.",
+      "expected": {
+        "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+        "slide": 40,
+        "keywords": [
+          "switch",
+          "Original Medicare",
+          "Jan 1",
+          "March 31"
+        ]
+      },
+      "top": [
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 12,
+          "answerSlide": 40,
+          "score": 21.927,
+          "section": "Quiz Q10: During the Medicare Advantage Open Enrollment Period (MA OEP), what can benefici"
+        },
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 25,
+          "answerSlide": 42,
+          "score": 20.252,
+          "section": "Quiz Q23: During which period can a newly eligible Medicare beneficiary first enroll in a "
+        },
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 10,
+          "answerSlide": 40,
+          "score": 13.961,
+          "section": "Quiz Q8: Can a person with Medicare Advantage also purchase a Medigap (Medicare Supplemen"
+        }
+      ]
+    },
+    {
+      "id": "esrd",
+      "type": "retrieval",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Retrieved 04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx slide(s) 41; all expected keywords present in top results.",
+      "expected": {
+        "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+        "slide": 41,
+        "keywords": [
+          "ESRD",
+          "restrictions"
+        ]
+      },
+      "top": [
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 20,
+          "answerSlide": 41,
+          "score": 31.051,
+          "section": "Quiz Q18: Can a person who has End-Stage Renal Disease (ESRD) enroll in a Medicare Advanta"
+        },
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 20,
+          "answerSlide": null,
+          "score": 20.634,
+          "section": "Question 18 of 35"
+        },
+        {
+          "source": "07_Medicare_Basics_Overview.pptx",
+          "slide": 2,
+          "answerSlide": null,
+          "score": 13.527,
+          "section": "INTRODUCTION"
+        }
+      ]
+    },
+    {
+      "id": "zero_premium",
+      "type": "retrieval",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Retrieved 04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx slide(s) 41; all expected keywords present in top results.",
+      "expected": {
+        "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+        "slide": 41,
+        "keywords": [
+          "$0",
+          "Part B premium"
+        ]
+      },
+      "top": [
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 21,
+          "answerSlide": 41,
+          "score": 23.608,
+          "section": "Quiz Q19: What does “zero-premium” Medicare Advantage plan usually mean?"
+        },
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 21,
+          "answerSlide": null,
+          "score": 13.238,
+          "section": "Question 19 of 35"
+        },
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 31,
+          "answerSlide": 43,
+          "score": 10.229,
+          "section": "Quiz Q29: Approximately what share of individual Medicare Advantage plans with drug covera"
+        }
+      ]
+    },
+    {
+      "id": "prior_auth",
+      "type": "retrieval",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Retrieved 04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx slide(s) 41; all expected keywords present in top results.",
+      "expected": {
+        "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+        "slide": 41,
+        "keywords": [
+          "prior authorization",
+          "services"
+        ]
+      },
+      "top": [
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 22,
+          "answerSlide": 41,
+          "score": 24.589,
+          "section": "Quiz Q20: Which statement about prior authorization in Medicare Advantage is generally tru"
+        },
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 22,
+          "answerSlide": null,
+          "score": 17.919,
+          "section": "Question 20 of 35"
+        },
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 10,
+          "answerSlide": 40,
+          "score": 9.524,
+          "section": "Quiz Q8: Can a person with Medicare Advantage also purchase a Medigap (Medicare Supplemen"
+        }
+      ]
+    },
+    {
+      "id": "hospice",
+      "type": "retrieval",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Retrieved 04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx slide(s) 41; all expected keywords present in top results.",
+      "expected": {
+        "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+        "slide": 41,
+        "keywords": [
+          "Original Medicare",
+          "hospice"
+        ]
+      },
+      "top": [
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 23,
+          "answerSlide": 41,
+          "score": 20.704,
+          "section": "Quiz Q21: If a beneficiary is enrolled in a Medicare Advantage plan and needs hospice care"
+        },
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 36,
+          "answerSlide": 43,
+          "score": 15.457,
+          "section": "Quiz Q34: True or False: All Medicare Advantage plans must cover the same core benefits as"
+        },
+        {
+          "source": "07_Medicare_Basics_Overview.pptx",
+          "slide": 4,
+          "answerSlide": null,
+          "score": 14.975,
+          "section": "STRUCTURE"
+        }
+      ]
+    },
+    {
+      "id": "dsnp",
+      "type": "retrieval",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Retrieved 04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx slide(s) 42; all expected keywords present in top results.",
+      "expected": {
+        "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+        "slide": 42,
+        "keywords": [
+          "Dual Eligible",
+          "Medicaid"
+        ]
+      },
+      "top": [
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 30,
+          "answerSlide": 42,
+          "score": 13.866,
+          "section": "Quiz Q28: What is a D-SNP?"
+        },
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 16,
+          "answerSlide": 40,
+          "score": 13.725,
+          "section": "Quiz Q14: What is a Special Needs Plan (SNP)?"
+        },
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 20,
+          "answerSlide": 41,
+          "score": 11.807,
+          "section": "Quiz Q18: Can a person who has End-Stage Renal Disease (ESRD) enroll in a Medicare Advanta"
+        }
+      ]
+    },
+    {
+      "id": "ppo",
+      "type": "retrieval",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Retrieved 04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx slide(s) 42; all expected keywords present in top results.",
+      "expected": {
+        "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+        "slide": 42,
+        "keywords": [
+          "out-of-network",
+          "higher"
+        ]
+      },
+      "top": [
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 29,
+          "answerSlide": 42,
+          "score": 24.243,
+          "section": "Quiz Q27: In a Medicare Advantage PPO plan, what is generally true about out-of-network ca"
+        },
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 17,
+          "answerSlide": 41,
+          "score": 22.135,
+          "section": "Quiz Q15: Which of the following is true about provider networks in Medicare Advantage?"
+        },
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 17,
+          "answerSlide": null,
+          "score": 16.992,
+          "section": "Question 15 of 35"
+        }
+      ]
+    },
+    {
+      "id": "star",
+      "type": "retrieval",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Retrieved 04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx slide(s) 43; all expected keywords present in top results.",
+      "expected": {
+        "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+        "slide": 43,
+        "keywords": [
+          "CMS",
+          "quality",
+          "stars"
+        ]
+      },
+      "top": [
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 35,
+          "answerSlide": 43,
+          "score": 21.348,
+          "section": "Quiz Q33: Which statement best describes Star Ratings for Medicare Advantage plans?"
+        },
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 35,
+          "answerSlide": null,
+          "score": 14.684,
+          "section": "Question 33 of 35"
+        },
+        {
+          "source": "07_Medicare_Basics_Overview.pptx",
+          "slide": 4,
+          "answerSlide": null,
+          "score": 7.186,
+          "section": "STRUCTURE"
+        }
+      ]
+    },
+    {
+      "id": "part_b_premium",
+      "type": "retrieval",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Retrieved 07_Medicare_Basics_Overview.pptx slide(s) 6; all expected keywords present in top results.",
+      "expected": {
+        "source": "07_Medicare_Basics_Overview.pptx",
+        "slide": 6,
+        "keywords": [
+          "202.90"
+        ]
+      },
+      "top": [
+        {
+          "source": "07_Medicare_Basics_Overview.pptx",
+          "slide": 6,
+          "answerSlide": null,
+          "score": 15.612,
+          "section": "PART B"
+        },
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 21,
+          "answerSlide": 41,
+          "score": 13.419,
+          "section": "Quiz Q19: What does “zero-premium” Medicare Advantage plan usually mean?"
+        },
+        {
+          "source": "07_Medicare_Basics_Overview.pptx",
+          "slide": 11,
+          "answerSlide": null,
+          "score": 13.279,
+          "section": "SUMMARY"
+        }
+      ]
+    },
+    {
+      "id": "part_b_deductible",
+      "type": "retrieval",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Retrieved 07_Medicare_Basics_Overview.pptx slide(s) 6; all expected keywords present in top results.",
+      "expected": {
+        "source": "07_Medicare_Basics_Overview.pptx",
+        "slide": 6,
+        "keywords": [
+          "283"
+        ]
+      },
+      "top": [
+        {
+          "source": "07_Medicare_Basics_Overview.pptx",
+          "slide": 6,
+          "answerSlide": null,
+          "score": 16.965,
+          "section": "PART B"
+        },
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 33,
+          "answerSlide": 43,
+          "score": 11.78,
+          "section": "Quiz Q31: What is the Medicare Advantage Maximum Out-of-Pocket (MOOP) designed to do?"
+        },
+        {
+          "source": "07_Medicare_Basics_Overview.pptx",
+          "slide": 5,
+          "answerSlide": null,
+          "score": 11.74,
+          "section": "PART A"
+        }
+      ]
+    },
+    {
+      "id": "part_a_deductible",
+      "type": "retrieval",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Retrieved 07_Medicare_Basics_Overview.pptx slide(s) 5; all expected keywords present in top results.",
+      "expected": {
+        "source": "07_Medicare_Basics_Overview.pptx",
+        "slide": 5,
+        "keywords": [
+          "1,736"
+        ]
+      },
+      "top": [
+        {
+          "source": "07_Medicare_Basics_Overview.pptx",
+          "slide": 6,
+          "answerSlide": null,
+          "score": 15.768,
+          "section": "PART B"
+        },
+        {
+          "source": "07_Medicare_Basics_Overview.pptx",
+          "slide": 5,
+          "answerSlide": null,
+          "score": 14.632,
+          "section": "PART A"
+        },
+        {
+          "source": "Curated from the attached training material",
+          "slide": null,
+          "answerSlide": null,
+          "score": 10.83,
+          "section": "2026 reference figures (verify before quoting)"
+        }
+      ]
+    },
+    {
+      "id": "part_d_cap",
+      "type": "retrieval",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Retrieved 07_Medicare_Basics_Overview.pptx slide(s) 8; all expected keywords present in top results.",
+      "expected": {
+        "source": "07_Medicare_Basics_Overview.pptx",
+        "slide": 8,
+        "keywords": [
+          "2,100"
+        ]
+      },
+      "top": [
+        {
+          "source": "07_Medicare_Basics_Overview.pptx",
+          "slide": 8,
+          "answerSlide": null,
+          "score": 18.696,
+          "section": "PART D"
+        },
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 7,
+          "answerSlide": 39,
+          "score": 16.577,
+          "section": "Quiz Q5: What is a key difference between Original Medicare and Medicare Advantage regard"
+        },
+        {
+          "source": "07_Medicare_Basics_Overview.pptx",
+          "slide": 6,
+          "answerSlide": null,
+          "score": 13.487,
+          "section": "PART B"
+        }
+      ]
+    },
+    {
+      "id": "part_a",
+      "type": "retrieval",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Retrieved 07_Medicare_Basics_Overview.pptx slide(s) 4; all expected keywords present in top results.",
+      "expected": {
+        "source": "07_Medicare_Basics_Overview.pptx",
+        "slide": 4,
+        "keywords": [
+          "Hospital",
+          "skilled nursing",
+          "hospice"
+        ]
+      },
+      "top": [
+        {
+          "source": "07_Medicare_Basics_Overview.pptx",
+          "slide": 4,
+          "answerSlide": null,
+          "score": 10.932,
+          "section": "STRUCTURE"
+        },
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 36,
+          "answerSlide": 43,
+          "score": 10.652,
+          "section": "Quiz Q34: True or False: All Medicare Advantage plans must cover the same core benefits as"
+        },
+        {
+          "source": "07_Medicare_Basics_Overview.pptx",
+          "slide": 6,
+          "answerSlide": null,
+          "score": 9.452,
+          "section": "PART B"
+        }
+      ]
+    },
+    {
+      "id": "part_b",
+      "type": "retrieval",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Retrieved 07_Medicare_Basics_Overview.pptx slide(s) 4; all expected keywords present in top results.",
+      "expected": {
+        "source": "07_Medicare_Basics_Overview.pptx",
+        "slide": 4,
+        "keywords": [
+          "Doctor",
+          "outpatient",
+          "durable medical equipment"
+        ]
+      },
+      "top": [
+        {
+          "source": "07_Medicare_Basics_Overview.pptx",
+          "slide": 4,
+          "answerSlide": null,
+          "score": 10.932,
+          "section": "STRUCTURE"
+        },
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 36,
+          "answerSlide": 43,
+          "score": 10.652,
+          "section": "Quiz Q34: True or False: All Medicare Advantage plans must cover the same core benefits as"
+        },
+        {
+          "source": "07_Medicare_Basics_Overview.pptx",
+          "slide": 6,
+          "answerSlide": null,
+          "score": 9.452,
+          "section": "PART B"
+        }
+      ]
+    },
+    {
+      "id": "part_c",
+      "type": "retrieval",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Retrieved 07_Medicare_Basics_Overview.pptx slide(s) 4; all expected keywords present in top results.",
+      "expected": {
+        "source": "07_Medicare_Basics_Overview.pptx",
+        "slide": 4,
+        "keywords": [
+          "Medicare Advantage",
+          "private plan"
+        ]
+      },
+      "top": [
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 3,
+          "answerSlide": 39,
+          "score": 11.463,
+          "section": "Quiz Q1: What is Medicare Advantage (MA) also known as?"
+        },
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 4,
+          "answerSlide": 39,
+          "score": 11.448,
+          "section": "Quiz Q2: To enroll in a Medicare Advantage plan, a person must have:"
+        },
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 36,
+          "answerSlide": 43,
+          "score": 11.048,
+          "section": "Quiz Q34: True or False: All Medicare Advantage plans must cover the same core benefits as"
+        }
+      ]
+    },
+    {
+      "id": "part_d",
+      "type": "retrieval",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Retrieved 07_Medicare_Basics_Overview.pptx slide(s) 4; all expected keywords present in top results.",
+      "expected": {
+        "source": "07_Medicare_Basics_Overview.pptx",
+        "slide": 4,
+        "keywords": [
+          "prescription drug",
+          "private plans"
+        ]
+      },
+      "top": [
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 3,
+          "answerSlide": 39,
+          "score": 11.463,
+          "section": "Quiz Q1: What is Medicare Advantage (MA) also known as?"
+        },
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 4,
+          "answerSlide": 39,
+          "score": 11.448,
+          "section": "Quiz Q2: To enroll in a Medicare Advantage plan, a person must have:"
+        },
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 36,
+          "answerSlide": 43,
+          "score": 11.048,
+          "section": "Quiz Q34: True or False: All Medicare Advantage plans must cover the same core benefits as"
+        }
+      ]
+    },
+    {
+      "id": "eligibility",
+      "type": "retrieval",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Retrieved 07_Medicare_Basics_Overview.pptx slide(s) 3; all expected keywords present in top results.",
+      "expected": {
+        "source": "07_Medicare_Basics_Overview.pptx",
+        "slide": 3,
+        "keywords": [
+          "65",
+          "disability",
+          "ESRD",
+          "ALS"
+        ]
+      },
+      "top": [
+        {
+          "source": "07_Medicare_Basics_Overview.pptx",
+          "slide": 3,
+          "answerSlide": null,
+          "score": 9.099,
+          "section": "ELIGIBILITY"
+        },
+        {
+          "source": "02_Medicare_Agent_Call_Center_Training.pptx",
+          "slide": 10,
+          "answerSlide": null,
+          "score": 6.739,
+          "section": "Steps 5–7 — Recap, Present, Close"
+        },
+        {
+          "source": "03_Medicare_Script.docx",
+          "slide": null,
+          "answerSlide": null,
+          "score": 6.646,
+          "section": "Campaign script: Age"
+        }
+      ]
+    },
+    {
+      "id": "medigap_oep",
+      "type": "retrieval",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Retrieved 07_Medicare_Basics_Overview.pptx slide(s) 9; all expected keywords present in top results.",
+      "expected": {
+        "source": "07_Medicare_Basics_Overview.pptx",
+        "slide": 9,
+        "keywords": [
+          "6-month",
+          "Part B"
+        ]
+      },
+      "top": [
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 12,
+          "answerSlide": 40,
+          "score": 16.23,
+          "section": "Quiz Q10: During the Medicare Advantage Open Enrollment Period (MA OEP), what can benefici"
+        },
+        {
+          "source": "07_Medicare_Basics_Overview.pptx",
+          "slide": 9,
+          "answerSlide": null,
+          "score": 14.668,
+          "section": "FILLING THE GAPS"
+        },
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 10,
+          "answerSlide": 40,
+          "score": 13.207,
+          "section": "Quiz Q8: Can a person with Medicare Advantage also purchase a Medigap (Medicare Supplemen"
+        }
+      ]
+    },
+    {
+      "id": "extra_help",
+      "type": "retrieval",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Retrieved 07_Medicare_Basics_Overview.pptx slide(s) 9; all expected keywords present in top results.",
+      "expected": {
+        "source": "07_Medicare_Basics_Overview.pptx",
+        "slide": 9,
+        "keywords": [
+          "Low-Income Subsidy",
+          "Part D"
+        ]
+      },
+      "top": [
+        {
+          "source": "07_Medicare_Basics_Overview.pptx",
+          "slide": 9,
+          "answerSlide": null,
+          "score": 14.472,
+          "section": "FILLING THE GAPS"
+        },
+        {
+          "source": "07_Medicare_Basics_Overview.pptx",
+          "slide": 8,
+          "answerSlide": null,
+          "score": 11.913,
+          "section": "PART D"
+        },
+        {
+          "source": "07_Medicare_Basics_Overview.pptx",
+          "slide": 11,
+          "answerSlide": null,
+          "score": 9.812,
+          "section": "SUMMARY"
+        }
+      ]
+    },
+    {
+      "id": "compare",
+      "type": "retrieval",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Retrieved 05_Medicare_Supplement_vs_Advantage.pptx slide(s) 1; all expected keywords present in top results.",
+      "expected": {
+        "source": "05_Medicare_Supplement_vs_Advantage.pptx",
+        "slide": 1,
+        "keywords": [
+          "Original Medicare",
+          "network",
+          "premium"
+        ]
+      },
+      "top": [
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 7,
+          "answerSlide": 39,
+          "score": 17.207,
+          "section": "Quiz Q5: What is a key difference between Original Medicare and Medicare Advantage regard"
+        },
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 37,
+          "answerSlide": 43,
+          "score": 10.346,
+          "section": "Quiz Q35: What should a beneficiary primarily consider when choosing between Original Medi"
+        },
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 7,
+          "answerSlide": null,
+          "score": 9.862,
+          "section": "Question 5 of 35"
+        }
+      ]
+    },
+    {
+      "id": "call_flow",
+      "type": "retrieval",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Retrieved 02_Medicare_Agent_Call_Center_Training.pptx slide(s) 5; all expected keywords present in top results.",
+      "expected": {
+        "source": "02_Medicare_Agent_Call_Center_Training.pptx",
+        "slide": 5,
+        "keywords": [
+          "Opening",
+          "SOA",
+          "Qualification",
+          "Needs Discovery",
+          "Recap",
+          "Presentation",
+          "Close"
+        ]
+      },
+      "top": [
+        {
+          "source": "02_Medicare_Agent_Call_Center_Training.pptx",
+          "slide": 5,
+          "answerSlide": null,
+          "score": 21.294,
+          "section": "7-Step Call Flow"
+        },
+        {
+          "source": "02_Medicare_Agent_Call_Center_Training.pptx",
+          "slide": 10,
+          "answerSlide": null,
+          "score": 12.451,
+          "section": "Steps 5–7 — Recap, Present, Close"
+        },
+        {
+          "source": "02_Medicare_Agent_Call_Center_Training.pptx",
+          "slide": 2,
+          "answerSlide": null,
+          "score": 11.686,
+          "section": "Training Agenda"
+        }
+      ]
+    },
+    {
+      "id": "disclosures",
+      "type": "retrieval",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Retrieved 02_Medicare_Agent_Call_Center_Training.pptx slide(s) 4, 6; all expected keywords present in top results.",
+      "expected": {
+        "source": "02_Medicare_Agent_Call_Center_Training.pptx",
+        "slide": 4,
+        "keywords": [
+          "recording",
+          "not affiliated",
+          "TPMO"
+        ]
+      },
+      "top": [
+        {
+          "source": "02_Medicare_Agent_Call_Center_Training.pptx",
+          "slide": 6,
+          "answerSlide": null,
+          "score": 12.395,
+          "section": "Step 1 — Opening & Required Disclosures"
+        },
+        {
+          "source": "02_Medicare_Agent_Call_Center_Training.pptx",
+          "slide": 11,
+          "answerSlide": null,
+          "score": 11.044,
+          "section": "Do’s and Don’ts Quick Reference"
+        },
+        {
+          "source": "Curated from the attached training material",
+          "slide": null,
+          "answerSlide": null,
+          "score": 9.947,
+          "section": "Required opening and disclosures"
+        }
+      ]
+    },
+    {
+      "id": "soa",
+      "type": "retrieval",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Retrieved 02_Medicare_Agent_Call_Center_Training.pptx slide(s) 7; all expected keywords present in top results.",
+      "expected": {
+        "source": "02_Medicare_Agent_Call_Center_Training.pptx",
+        "slide": 7,
+        "keywords": [
+          "before",
+          "plan-specific"
+        ]
+      },
+      "top": [
+        {
+          "source": "02_Medicare_Agent_Call_Center_Training.pptx",
+          "slide": 7,
+          "answerSlide": null,
+          "score": 17.378,
+          "section": "Step 2 — Scope of Appointment (SOA)"
+        },
+        {
+          "source": "Curated from the attached training material",
+          "slide": null,
+          "answerSlide": null,
+          "score": 10.052,
+          "section": "Scope of Appointment (SOA)"
+        },
+        {
+          "source": "02_Medicare_Agent_Call_Center_Training.pptx",
+          "slide": 4,
+          "answerSlide": null,
+          "score": 8.796,
+          "section": "Core Compliance Rules"
+        }
+      ]
+    },
+    {
+      "id": "qualification",
+      "type": "retrieval",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Retrieved 02_Medicare_Agent_Call_Center_Training.pptx slide(s) 8; all expected keywords present in top results.",
+      "expected": {
+        "source": "02_Medicare_Agent_Call_Center_Training.pptx",
+        "slide": 8,
+        "keywords": [
+          "Part A",
+          "Part B",
+          "ZIP",
+          "decision"
+        ]
+      },
+      "top": [
+        {
+          "source": "02_Medicare_Agent_Call_Center_Training.pptx",
+          "slide": 8,
+          "answerSlide": null,
+          "score": 8.23,
+          "section": "Step 3 — Qualification & Privacy Check"
+        },
+        {
+          "source": "06_Medicare_Script_Quiz.pptx",
+          "slide": 5,
+          "answerSlide": null,
+          "score": 6.783,
+          "section": "Script Quiz Q4: Which two qualification questions appear consecutively in the script right after"
+        },
+        {
+          "source": "02_Medicare_Agent_Call_Center_Training.pptx",
+          "slide": 5,
+          "answerSlide": null,
+          "score": 6.556,
+          "section": "7-Step Call Flow"
+        }
+      ]
+    },
+    {
+      "id": "needs",
+      "type": "retrieval",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Retrieved 02_Medicare_Agent_Call_Center_Training.pptx slide(s) 9; all expected keywords present in top results.",
+      "expected": {
+        "source": "02_Medicare_Agent_Call_Center_Training.pptx",
+        "slide": 9,
+        "keywords": [
+          "doctors",
+          "medications",
+          "priorities"
+        ]
+      },
+      "top": [
+        {
+          "source": "02_Medicare_Agent_Call_Center_Training.pptx",
+          "slide": 9,
+          "answerSlide": null,
+          "score": 9.794,
+          "section": "Step 4 — Needs Discovery"
+        },
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 23,
+          "answerSlide": 41,
+          "score": 9.667,
+          "section": "Quiz Q21: If a beneficiary is enrolled in a Medicare Advantage plan and needs hospice care"
+        },
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 18,
+          "answerSlide": 41,
+          "score": 9.663,
+          "section": "Quiz Q16: If a Medicare Advantage member needs emergency care while traveling outside the "
+        }
+      ]
+    },
+    {
+      "id": "recap",
+      "type": "retrieval",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Retrieved 02_Medicare_Agent_Call_Center_Training.pptx slide(s) 10; all expected keywords present in top results.",
+      "expected": {
+        "source": "02_Medicare_Agent_Call_Center_Training.pptx",
+        "slide": 10,
+        "keywords": [
+          "recap",
+          "Did I get that right"
+        ]
+      },
+      "top": [
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 27,
+          "answerSlide": 42,
+          "score": 12.148,
+          "section": "Quiz Q25: What happens if a Medicare Advantage plan leaves the market or the enrollee move"
+        },
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 18,
+          "answerSlide": 41,
+          "score": 9.274,
+          "section": "Quiz Q16: If a Medicare Advantage member needs emergency care while traveling outside the "
+        },
+        {
+          "source": "02_Medicare_Agent_Call_Center_Training.pptx",
+          "slide": 10,
+          "answerSlide": null,
+          "score": 8.142,
+          "section": "Steps 5–7 — Recap, Present, Close"
+        }
+      ]
+    },
+    {
+      "id": "prohibited",
+      "type": "retrieval",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Retrieved 02_Medicare_Agent_Call_Center_Training.pptx slide(s) 4, 11; all expected keywords present in top results.",
+      "expected": {
+        "source": "02_Medicare_Agent_Call_Center_Training.pptx",
+        "slide": 11,
+        "keywords": [
+          "best",
+          "free",
+          "urgency"
+        ]
+      },
+      "top": [
+        {
+          "source": "02_Medicare_Agent_Call_Center_Training.pptx",
+          "slide": 11,
+          "answerSlide": null,
+          "score": 12.492,
+          "section": "Do’s and Don’ts Quick Reference"
+        },
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 35,
+          "answerSlide": 43,
+          "score": 7.71,
+          "section": "Quiz Q33: Which statement best describes Star Ratings for Medicare Advantage plans?"
+        },
+        {
+          "source": "02_Medicare_Agent_Call_Center_Training.pptx",
+          "slide": 4,
+          "answerSlide": null,
+          "score": 4.796,
+          "section": "Core Compliance Rules"
+        }
+      ]
+    },
+    {
+      "id": "periods",
+      "type": "retrieval",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Retrieved 02_Medicare_Agent_Call_Center_Training.pptx slide(s) 12; all expected keywords present in top results.",
+      "expected": {
+        "source": "02_Medicare_Agent_Call_Center_Training.pptx",
+        "slide": 12,
+        "keywords": [
+          "IEP",
+          "AEP",
+          "OEP",
+          "SEP"
+        ]
+      },
+      "top": [
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 25,
+          "answerSlide": 42,
+          "score": 11.445,
+          "section": "Quiz Q23: During which period can a newly eligible Medicare beneficiary first enroll in a "
+        },
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 12,
+          "answerSlide": 40,
+          "score": 11.14,
+          "section": "Quiz Q10: During the Medicare Advantage Open Enrollment Period (MA OEP), what can benefici"
+        },
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 27,
+          "answerSlide": 42,
+          "score": 10.477,
+          "section": "Quiz Q25: What happens if a Medicare Advantage plan leaves the market or the enrollee move"
+        }
+      ]
+    },
+    {
+      "id": "script_greeting",
+      "type": "retrieval",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Retrieved 03_Medicare_Script.docx; all expected keywords present in top results.",
+      "expected": {
+        "source": "03_Medicare_Script.docx",
+        "slide": null,
+        "keywords": [
+          "Brain",
+          "US health care"
+        ]
+      },
+      "top": [
+        {
+          "source": "03_Medicare_Script.docx",
+          "slide": null,
+          "answerSlide": null,
+          "score": 12.375,
+          "section": "Campaign script: Greeting"
+        },
+        {
+          "source": "06_Medicare_Script_Quiz.pptx",
+          "slide": 6,
+          "answerSlide": null,
+          "score": 8.363,
+          "section": "Script Quiz Q5: What exact question does the script instruct the agent to ask about other covera"
+        },
+        {
+          "source": "03_Medicare_Script.docx",
+          "slide": null,
+          "answerSlide": null,
+          "score": 8.057,
+          "section": "Campaign script: Transfer"
+        }
+      ]
+    },
+    {
+      "id": "script_benefits",
+      "type": "retrieval",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Retrieved 03_Medicare_Script.docx; all expected keywords present in top results.",
+      "expected": {
+        "source": "03_Medicare_Script.docx",
+        "slide": null,
+        "keywords": [
+          "foods-stamp",
+          "Flex-card",
+          "dental",
+          "vision",
+          "cashback"
+        ]
+      },
+      "top": [
+        {
+          "source": "03_Medicare_Script.docx",
+          "slide": null,
+          "answerSlide": null,
+          "score": 9.221,
+          "section": "Campaign script: Transfer"
+        },
+        {
+          "source": "07_Medicare_Basics_Overview.pptx",
+          "slide": 4,
+          "answerSlide": null,
+          "score": 8.132,
+          "section": "STRUCTURE"
+        },
+        {
+          "source": "03_Medicare_Script.docx",
+          "slide": null,
+          "answerSlide": null,
+          "score": 7.723,
+          "section": "Campaign script: full main pitch"
+        }
+      ]
+    },
+    {
+      "id": "script_age",
+      "type": "retrieval",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Retrieved 03_Medicare_Script.docx; all expected keywords present in top results.",
+      "expected": {
+        "source": "03_Medicare_Script.docx",
+        "slide": null,
+        "keywords": [
+          "how old are you",
+          "make your own decision"
+        ]
+      },
+      "top": [
+        {
+          "source": "06_Medicare_Script_Quiz.pptx",
+          "slide": 5,
+          "answerSlide": null,
+          "score": 13.926,
+          "section": "Script Quiz Q4: Which two qualification questions appear consecutively in the script right after"
+        },
+        {
+          "source": "06_Medicare_Script_Quiz.pptx",
+          "slide": 5,
+          "answerSlide": null,
+          "score": 13.091,
+          "section": "QUESTION 4"
+        },
+        {
+          "source": "02_Medicare_Agent_Call_Center_Training.pptx",
+          "slide": 5,
+          "answerSlide": null,
+          "score": 10.058,
+          "section": "7-Step Call Flow"
+        }
+      ]
+    },
+    {
+      "id": "script_va",
+      "type": "retrieval",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Retrieved 03_Medicare_Script.docx; all expected keywords present in top results.",
+      "expected": {
+        "source": "03_Medicare_Script.docx",
+        "slide": null,
+        "keywords": [
+          "VA",
+          "Tricare",
+          "Retirement"
+        ]
+      },
+      "top": [
+        {
+          "source": "06_Medicare_Script_Quiz.pptx",
+          "slide": 6,
+          "answerSlide": null,
+          "score": 21.683,
+          "section": "Script Quiz Q5: What exact question does the script instruct the agent to ask about other covera"
+        },
+        {
+          "source": "06_Medicare_Script_Quiz.pptx",
+          "slide": 6,
+          "answerSlide": null,
+          "score": 20.236,
+          "section": "QUESTION 5"
+        },
+        {
+          "source": "03_Medicare_Script.docx",
+          "slide": null,
+          "answerSlide": null,
+          "score": 19.821,
+          "section": "Campaign script: Other Coverage"
+        }
+      ]
+    },
+    {
+      "id": "script_zip",
+      "type": "retrieval",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Retrieved 03_Medicare_Script.docx; all expected keywords present in top results.",
+      "expected": {
+        "source": "03_Medicare_Script.docx",
+        "slide": null,
+        "keywords": [
+          "zip code",
+          "5 Digits"
+        ]
+      },
+      "top": [
+        {
+          "source": "06_Medicare_Script_Quiz.pptx",
+          "slide": 8,
+          "answerSlide": null,
+          "score": 24.663,
+          "section": "Script Quiz Q7: What does the script say when asking for the customer’s zip code?"
+        },
+        {
+          "source": "06_Medicare_Script_Quiz.pptx",
+          "slide": 8,
+          "answerSlide": null,
+          "score": 19.839,
+          "section": "QUESTION 7"
+        },
+        {
+          "source": "03_Medicare_Script.docx",
+          "slide": null,
+          "answerSlide": null,
+          "score": 15.639,
+          "section": "Campaign script: Zip"
+        }
+      ]
+    },
+    {
+      "id": "script_disclaimer",
+      "type": "retrieval",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Retrieved 03_Medicare_Script.docx; all expected keywords present in top results.",
+      "expected": {
+        "source": "03_Medicare_Script.docx",
+        "slide": null,
+        "keywords": [
+          "auto dial",
+          "pre-record",
+          "partner companies"
+        ]
+      },
+      "top": [
+        {
+          "source": "06_Medicare_Script_Quiz.pptx",
+          "slide": 10,
+          "answerSlide": null,
+          "score": 16.419,
+          "section": "Script Quiz Q9: According to the script disclaimer, by submitting information the customer agree"
+        },
+        {
+          "source": "06_Medicare_Script_Quiz.pptx",
+          "slide": 10,
+          "answerSlide": null,
+          "score": 14.65,
+          "section": "QUESTION 9"
+        },
+        {
+          "source": "03_Medicare_Script.docx",
+          "slide": null,
+          "answerSlide": null,
+          "score": 13.818,
+          "section": "Campaign script: Disclaimer"
+        }
+      ]
+    },
+    {
+      "id": "script_transfer",
+      "type": "retrieval",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Retrieved 03_Medicare_Script.docx; all expected keywords present in top results.",
+      "expected": {
+        "source": "03_Medicare_Script.docx",
+        "slide": null,
+        "keywords": [
+          "licensed agent",
+          "area"
+        ]
+      },
+      "top": [
+        {
+          "source": "03_Medicare_Script.docx",
+          "slide": null,
+          "answerSlide": null,
+          "score": 13.083,
+          "section": "Campaign script: Transfer"
+        },
+        {
+          "source": "06_Medicare_Script_Quiz.pptx",
+          "slide": 11,
+          "answerSlide": null,
+          "score": 10.649,
+          "section": "Script Quiz Q10: At the end of the main script, what does the agent say they are going to do?"
+        },
+        {
+          "source": "02_Medicare_Agent_Call_Center_Training.pptx",
+          "slide": 1,
+          "answerSlide": null,
+          "score": 10.001,
+          "section": "MEDICARE AGENT"
+        }
+      ]
+    },
+    {
+      "id": "objection_not_interested",
+      "type": "retrieval",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Retrieved 03_Medicare_Script.docx; all expected keywords present in top results.",
+      "expected": {
+        "source": "03_Medicare_Script.docx",
+        "slide": null,
+        "keywords": [
+          "not asking you to buy",
+          "additional benefits"
+        ]
+      },
+      "top": [
+        {
+          "source": "03_Medicare_Script.docx",
+          "slide": null,
+          "answerSlide": null,
+          "score": 15.506,
+          "section": "Campaign script objection: Not Interested"
+        },
+        {
+          "source": "Curated from the attached training material",
+          "slide": null,
+          "answerSlide": null,
+          "score": 12.147,
+          "section": "Approved objection handling"
+        },
+        {
+          "source": "02_Medicare_Agent_Call_Center_Training.pptx",
+          "slide": 10,
+          "answerSlide": null,
+          "score": 9.043,
+          "section": "Steps 5–7 — Recap, Present, Close"
+        }
+      ]
+    },
+    {
+      "id": "objection_already",
+      "type": "retrieval",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Retrieved 03_Medicare_Script.docx; all expected keywords present in top results.",
+      "expected": {
+        "source": "03_Medicare_Script.docx",
+        "slide": null,
+        "keywords": [
+          "already have a plan",
+          "more benefits"
+        ]
+      },
+      "top": [
+        {
+          "source": "03_Medicare_Script.docx",
+          "slide": null,
+          "answerSlide": null,
+          "score": 11.526,
+          "section": "Campaign script objection: Already Have Plan"
+        },
+        {
+          "source": "03_Medicare_Script.docx",
+          "slide": null,
+          "answerSlide": null,
+          "score": 8.466,
+          "section": "Campaign script objection: Not Interested"
+        },
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 34,
+          "answerSlide": 43,
+          "score": 8.403,
+          "section": "Quiz Q32: If someone joins a Medicare Advantage plan for the first time and is unhappy, wh"
+        }
+      ]
+    },
+    {
+      "id": "objection_info",
+      "type": "retrieval",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Retrieved 03_Medicare_Script.docx; all expected keywords present in top results.",
+      "expected": {
+        "source": "03_Medicare_Script.docx",
+        "slide": null,
+        "keywords": [
+          "basic information",
+          "recorded line"
+        ]
+      },
+      "top": [
+        {
+          "source": "03_Medicare_Script.docx",
+          "slide": null,
+          "answerSlide": null,
+          "score": 11.735,
+          "section": "Campaign script objection: Why Information"
+        },
+        {
+          "source": "03_Medicare_Script.docx",
+          "slide": null,
+          "answerSlide": null,
+          "score": 9.589,
+          "section": "Campaign script: Disclaimer"
+        },
+        {
+          "source": "02_Medicare_Agent_Call_Center_Training.pptx",
+          "slide": 3,
+          "answerSlide": null,
+          "score": 8.21,
+          "section": "Learning Objectives"
+        }
+      ]
+    },
+    {
+      "id": "new_hire_rules",
+      "type": "retrieval",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Retrieved 01_Medicare_Advantage_New_Hire_Orientation.pptx slide(s) 5; all expected keywords present in top results.",
+      "expected": {
+        "source": "01_Medicare_Advantage_New_Hire_Orientation.pptx",
+        "slide": 5,
+        "keywords": [
+          "SOA",
+          "Cherry-Picking",
+          "CMS-approved",
+          "Enrollment Periods",
+          "Needs Assessment",
+          "Record Retention"
+        ]
+      },
+      "top": [
+        {
+          "source": "01_Medicare_Advantage_New_Hire_Orientation.pptx",
+          "slide": 5,
+          "answerSlide": null,
+          "score": 19.488,
+          "section": "Critical Rules for New Agents"
+        },
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 28,
+          "answerSlide": 42,
+          "score": 9.647,
+          "section": "Quiz Q26: Which organization sets the rules and oversees Medicare Advantage plans?"
+        },
+        {
+          "source": "01_Medicare_Advantage_New_Hire_Orientation.pptx",
+          "slide": 1,
+          "answerSlide": null,
+          "score": 9.008,
+          "section": "WELCOME ABOARD"
+        }
+      ]
+    },
+    {
+      "id": "extra_benefits",
+      "type": "retrieval",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Retrieved 01_Medicare_Advantage_New_Hire_Orientation.pptx slide(s) 2, 4; all expected keywords present in top results.",
+      "expected": {
+        "source": "01_Medicare_Advantage_New_Hire_Orientation.pptx",
+        "slide": 4,
+        "keywords": [
+          "Dental",
+          "Vision",
+          "Hearing",
+          "Fitness",
+          "OTC",
+          "Transportation",
+          "Care Coordination"
+        ]
+      },
+      "top": [
+        {
+          "source": "07_Medicare_Basics_Overview.pptx",
+          "slide": 4,
+          "answerSlide": null,
+          "score": 14.753,
+          "section": "STRUCTURE"
+        },
+        {
+          "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+          "slide": 6,
+          "answerSlide": 39,
+          "score": 12.866,
+          "section": "Quiz Q4: Most Medicare Advantage plans include which additional coverage?"
+        },
+        {
+          "source": "01_Medicare_Advantage_New_Hire_Orientation.pptx",
+          "slide": 4,
+          "answerSlide": null,
+          "score": 11.827,
+          "section": "Key Benefits Agents Should Highlight"
+        }
+      ]
+    },
+    {
+      "id": "roleplay_parent",
+      "type": "retrieval",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Retrieved 02_Medicare_Agent_Call_Center_Training.pptx slide(s) 13; all expected keywords present in top results.",
+      "expected": {
+        "source": "02_Medicare_Agent_Call_Center_Training.pptx",
+        "slide": 13,
+        "keywords": [
+          "legal decision-maker"
+        ]
+      },
+      "top": [
+        {
+          "source": "02_Medicare_Agent_Call_Center_Training.pptx",
+          "slide": 13,
+          "answerSlide": null,
+          "score": 14.359,
+          "section": "Role-Play Practice Scenarios"
+        },
+        {
+          "source": "03_Medicare_Script.docx",
+          "slide": null,
+          "answerSlide": null,
+          "score": 11.199,
+          "section": "Campaign script: Transfer"
+        },
+        {
+          "source": "02_Medicare_Agent_Call_Center_Training.pptx",
+          "slide": 1,
+          "answerSlide": null,
+          "score": 8.759,
+          "section": "MEDICARE AGENT"
+        }
+      ]
+    },
+    {
+      "id": "tpmo",
+      "type": "retrieval",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Retrieved 02_Medicare_Agent_Call_Center_Training.pptx slide(s) 4, 10; all expected keywords present in top results.",
+      "expected": {
+        "source": "02_Medicare_Agent_Call_Center_Training.pptx",
+        "slide": 10,
+        "keywords": [
+          "do not offer every plan",
+          "organizations"
+        ]
+      },
+      "top": [
+        {
+          "source": "02_Medicare_Agent_Call_Center_Training.pptx",
+          "slide": 10,
+          "answerSlide": null,
+          "score": 15.491,
+          "section": "Steps 5–7 — Recap, Present, Close"
+        },
+        {
+          "source": "02_Medicare_Agent_Call_Center_Training.pptx",
+          "slide": 4,
+          "answerSlide": null,
+          "score": 13.66,
+          "section": "Core Compliance Rules"
+        },
+        {
+          "source": "03_Medicare_Script.docx",
+          "slide": null,
+          "answerSlide": null,
+          "score": 9.028,
+          "section": "Campaign script: Disclaimer"
+        }
+      ]
+    },
+    {
+      "id": "flow_order",
+      "type": "flow",
+      "severity": "critical",
+      "status": "pass",
+      "detail": "Required flow phrases are present in the documented order."
+    },
+    {
+      "id": "flow_ai_disclosure",
+      "type": "flow",
+      "severity": "critical",
+      "status": "pass",
+      "detail": "All required flow phrases are present in the instructions."
+    },
+    {
+      "id": "flow_opening",
+      "type": "flow",
+      "severity": "critical",
+      "status": "pass",
+      "detail": "All required flow phrases are present in the instructions."
+    },
+    {
+      "id": "flow_qualification",
+      "type": "flow",
+      "severity": "high",
+      "status": "pass",
+      "detail": "All required flow phrases are present in the instructions."
+    },
+    {
+      "id": "flow_needs",
+      "type": "flow",
+      "severity": "high",
+      "status": "pass",
+      "detail": "All required flow phrases are present in the instructions."
+    },
+    {
+      "id": "flow_transfer",
+      "type": "flow",
+      "severity": "critical",
+      "status": "pass",
+      "detail": "All required flow phrases are present in the instructions."
+    },
+    {
+      "id": "flow_close",
+      "type": "flow",
+      "severity": "high",
+      "status": "pass",
+      "detail": "All required flow phrases are present in the instructions."
+    },
+    {
+      "id": "comp_no_foodstamps",
+      "type": "compliance",
+      "severity": "critical",
+      "status": "pass",
+      "detail": "Required safeguards present; prohibited claims are only in prohibition context."
+    },
+    {
+      "id": "comp_no_best_free",
+      "type": "compliance",
+      "severity": "critical",
+      "status": "pass",
+      "detail": "Required safeguards present; prohibited claims are only in prohibition context."
+    },
+    {
+      "id": "comp_no_gov_affiliation",
+      "type": "compliance",
+      "severity": "critical",
+      "status": "pass",
+      "detail": "Required safeguards present; prohibited claims are only in prohibition context."
+    },
+    {
+      "id": "comp_privacy",
+      "type": "compliance",
+      "severity": "critical",
+      "status": "pass",
+      "detail": "Required safeguards present; prohibited claims are only in prohibition context."
+    },
+    {
+      "id": "comp_no_pressure",
+      "type": "compliance",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Required safeguards present; prohibited claims are only in prohibition context."
+    },
+    {
+      "id": "comp_soa",
+      "type": "compliance",
+      "severity": "critical",
+      "status": "pass",
+      "detail": "Required safeguards present; prohibited claims are only in prohibition context."
+    },
+    {
+      "id": "comp_plan_specific",
+      "type": "compliance",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Required safeguards present; prohibited claims are only in prohibition context."
+    },
+    {
+      "id": "comp_annual_figures",
+      "type": "compliance",
+      "severity": "medium",
+      "status": "pass",
+      "detail": "Required safeguards present; prohibited claims are only in prohibition context."
+    },
+    {
+      "id": "comp_hospice",
+      "type": "compliance",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Required safeguards present; prohibited claims are only in prohibition context."
+    },
+    {
+      "id": "comp_ai_honesty",
+      "type": "compliance",
+      "severity": "critical",
+      "status": "pass",
+      "detail": "Required safeguards present; prohibited claims are only in prohibition context."
+    },
+    {
+      "id": "gap_food_stamps_cashback",
+      "type": "gap",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Gap/conflict 'food_stamps_cashback' is registered for administrator review."
+    },
+    {
+      "id": "gap_script_missing_disclosures",
+      "type": "gap",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Gap/conflict 'script_missing_disclosures' is registered for administrator review."
+    },
+    {
+      "id": "gap_script_soa_order",
+      "type": "gap",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Gap/conflict 'script_soa_order' is registered for administrator review."
+    },
+    {
+      "id": "gap_dob_privacy",
+      "type": "gap",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Gap/conflict 'dob_privacy' is registered for administrator review."
+    },
+    {
+      "id": "gap_ai_vs_licensed_agent",
+      "type": "gap",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Gap/conflict 'ai_vs_licensed_agent' is registered for administrator review."
+    },
+    {
+      "id": "gap_tpmo_carrier_list_missing",
+      "type": "gap",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Gap/conflict 'tpmo_carrier_list_missing' is registered for administrator review."
+    },
+    {
+      "id": "gap_plan_specific_data_missing",
+      "type": "gap",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Gap/conflict 'plan_specific_data_missing' is registered for administrator review."
+    },
+    {
+      "id": "gap_2025_vs_2026_moop",
+      "type": "gap",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Gap/conflict '2025_vs_2026_moop' is registered for administrator review."
+    },
+    {
+      "id": "gap_age_eligibility_nuance",
+      "type": "gap",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Gap/conflict 'age_eligibility_nuance' is registered for administrator review."
+    },
+    {
+      "id": "gap_outbound_permission",
+      "type": "gap",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Gap/conflict 'outbound_permission' is registered for administrator review."
+    },
+    {
+      "id": "gap_script_name_typo",
+      "type": "gap",
+      "severity": "low",
+      "status": "pass",
+      "detail": "Gap/conflict 'script_name_typo' is registered for administrator review."
+    },
+    {
+      "id": "gap_recording_consent_missing_script",
+      "type": "gap",
+      "severity": "high",
+      "status": "pass",
+      "detail": "Gap/conflict 'recording_consent_missing_script' is registered for administrator review."
+    }
+  ],
+  "limitations": [
+    "Retrieval, instruction-flow, compliance, gap, and agent-configuration checks were executed.",
+    "A live generative voice conversation was NOT executed: no external LLM key is configured and no LiveKit Cloud agent deployment has been verified.",
+    "Plan-specific premiums, networks, formularies, the TPMO carrier list/count, and documented outbound consent are not present; these remain administrator/compliance blockers.",
+    "Passing this suite supports controlled testing (Active), not production deployment (Deployed)."
+  ]
+}

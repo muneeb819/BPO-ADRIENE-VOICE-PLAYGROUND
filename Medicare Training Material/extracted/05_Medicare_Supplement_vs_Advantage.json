@@ -1,0 +1,198 @@
+{
+  "type": "pptx",
+  "slides": [
+    {
+      "path": "ppt/slides/slide1.xml",
+      "blocks": [
+        {
+          "shape": "Text 1",
+          "paragraphs": [
+            "Medicare Supplement vs. Medicare Advantage"
+          ]
+        },
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "Key differences at a glance  |  2026"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "Medicare Supplement (Medigap)"
+          ]
+        },
+        {
+          "shape": "Text 6",
+          "paragraphs": [
+            "Medicare Advantage (Part C)"
+          ]
+        },
+        {
+          "shape": "Text 8",
+          "paragraphs": [
+            "How it works"
+          ]
+        },
+        {
+          "shape": "Text 9",
+          "paragraphs": [
+            "Works with Original Medicare",
+            "Fills the cost gaps"
+          ]
+        },
+        {
+          "shape": "Text 10",
+          "paragraphs": [
+            "Replaces Original Medicare",
+            "All-in-one private plan"
+          ]
+        },
+        {
+          "shape": "Text 12",
+          "paragraphs": [
+            "Monthly premium",
+            "(beyond Part B)"
+          ]
+        },
+        {
+          "shape": "Text 13",
+          "paragraphs": [
+            "Typically $100–$300+"
+          ]
+        },
+        {
+          "shape": "Text 14",
+          "paragraphs": [
+            "Often $0  (avg ~$14)"
+          ]
+        },
+        {
+          "shape": "Text 16",
+          "paragraphs": [
+            "Out-of-pocket costs"
+          ]
+        },
+        {
+          "shape": "Text 17",
+          "paragraphs": [
+            "Very low & predictable",
+            "(Plan G: mainly Part B deductible ~$283)"
+          ]
+        },
+        {
+          "shape": "Text 18",
+          "paragraphs": [
+            "Copays + coinsurance",
+            "Max up to $9,350 in-network"
+          ]
+        },
+        {
+          "shape": "Text 20",
+          "paragraphs": [
+            "Doctor choice"
+          ]
+        },
+        {
+          "shape": "Text 21",
+          "paragraphs": [
+            "Any Medicare-accepting",
+            "provider nationwide"
+          ]
+        },
+        {
+          "shape": "Text 22",
+          "paragraphs": [
+            "Usually network-based",
+            "(HMO or PPO)"
+          ]
+        },
+        {
+          "shape": "Text 24",
+          "paragraphs": [
+            "Referrals needed"
+          ]
+        },
+        {
+          "shape": "Text 25",
+          "paragraphs": [
+            "Rarely"
+          ]
+        },
+        {
+          "shape": "Text 26",
+          "paragraphs": [
+            "Often (especially HMOs)"
+          ]
+        },
+        {
+          "shape": "Text 28",
+          "paragraphs": [
+            "Prescription drugs"
+          ]
+        },
+        {
+          "shape": "Text 29",
+          "paragraphs": [
+            "Separate Part D plan required"
+          ]
+        },
+        {
+          "shape": "Text 30",
+          "paragraphs": [
+            "Usually included"
+          ]
+        },
+        {
+          "shape": "Text 32",
+          "paragraphs": [
+            "Extra benefits"
+          ]
+        },
+        {
+          "shape": "Text 33",
+          "paragraphs": [
+            "Not included",
+            "(dental, vision, hearing)"
+          ]
+        },
+        {
+          "shape": "Text 34",
+          "paragraphs": [
+            "Often included"
+          ]
+        },
+        {
+          "shape": "Text 36",
+          "paragraphs": [
+            "Best for"
+          ]
+        },
+        {
+          "shape": "Text 37",
+          "paragraphs": [
+            "Higher care needs, travel,",
+            "provider freedom, predictability"
+          ]
+        },
+        {
+          "shape": "Text 38",
+          "paragraphs": [
+            "Healthy, low premiums,",
+            "bundled extras, local network"
+          ]
+        },
+        {
+          "shape": "Text 39",
+          "paragraphs": [
+            "You cannot have both at the same time.  |  Everyone pays the Part B premium (~$202.90/mo in 2026).  |  Source: Medicare.gov"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "1",
+      "imageAssetsInDeck": 0,
+      "number": 1
+    }
+  ]
+}

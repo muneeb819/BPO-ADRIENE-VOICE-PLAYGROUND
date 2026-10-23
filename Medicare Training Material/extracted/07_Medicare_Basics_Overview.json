@@ -1,0 +1,1412 @@
+{
+  "type": "pptx",
+  "slides": [
+    {
+      "path": "ppt/slides/slide1.xml",
+      "blocks": [
+        {
+          "shape": "Text 1",
+          "paragraphs": [
+            "MEDICARE BASICS"
+          ]
+        },
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "A Detailed Overview of the",
+            "U.S. Federal Health Insurance Program"
+          ]
+        },
+        {
+          "shape": "Text 3",
+          "paragraphs": [
+            "Eligibility  ·  Parts A, B, C & D  ·  Costs  ·  Coverage Options  ·  2026 Updates"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "Educational Overview  ·  Current as of 2026"
+          ]
+        },
+        {
+          "shape": "Text 6",
+          "paragraphs": [
+            "MEDICARE BASICS  ·  DETAILED OVERVIEW  ·  2026"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "1",
+      "imageAssetsInDeck": 0,
+      "number": 1
+    },
+    {
+      "path": "ppt/slides/slide2.xml",
+      "blocks": [
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "MEDICARE BASICS  ·  DETAILED OVERVIEW  ·  2026"
+          ]
+        },
+        {
+          "shape": "Text 3",
+          "paragraphs": [
+            "INTRODUCTION"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "What is Medicare?"
+          ]
+        },
+        {
+          "shape": "Text 6",
+          "paragraphs": [
+            "Federal health insurance established in 1965 under Title XVIII of the Social Security Act."
+          ]
+        },
+        {
+          "shape": "Text 9",
+          "paragraphs": [
+            "65+"
+          ]
+        },
+        {
+          "shape": "Text 10",
+          "paragraphs": [
+            "Who It Serves"
+          ]
+        },
+        {
+          "shape": "Text 11",
+          "paragraphs": [
+            "People age 65 and older",
+            "Certain younger people with",
+            "disabilities",
+            "People with End-Stage Renal",
+            "Disease (ESRD) or ALS"
+          ]
+        },
+        {
+          "shape": "Text 14",
+          "paragraphs": [
+            "A–D"
+          ]
+        },
+        {
+          "shape": "Text 15",
+          "paragraphs": [
+            "How It Works"
+          ]
+        },
+        {
+          "shape": "Text 16",
+          "paragraphs": [
+            "Covers hospital care,",
+            "doctor visits, preventive",
+            "services, and prescription",
+            "drugs through four parts"
+          ]
+        },
+        {
+          "shape": "Text 19",
+          "paragraphs": [
+            "CMS"
+          ]
+        },
+        {
+          "shape": "Text 20",
+          "paragraphs": [
+            "Administration"
+          ]
+        },
+        {
+          "shape": "Text 21",
+          "paragraphs": [
+            "Run by the Centers for",
+            "Medicare & Medicaid",
+            "Services (CMS)",
+            "Funded by taxes, premiums",
+            "and federal budget"
+          ]
+        },
+        {
+          "shape": "Text 24",
+          "paragraphs": [
+            "70M"
+          ]
+        },
+        {
+          "shape": "Text 25",
+          "paragraphs": [
+            "Scale"
+          ]
+        },
+        {
+          "shape": "Text 26",
+          "paragraphs": [
+            "Serves more than 70 million",
+            "Americans (2026)",
+            "Nearly all people 65+",
+            "have coverage"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "2",
+      "imageAssetsInDeck": 0,
+      "number": 2
+    },
+    {
+      "path": "ppt/slides/slide3.xml",
+      "blocks": [
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "MEDICARE BASICS  ·  DETAILED OVERVIEW  ·  2026"
+          ]
+        },
+        {
+          "shape": "Text 3",
+          "paragraphs": [
+            "ELIGIBILITY"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "Who Qualifies for Medicare?"
+          ]
+        },
+        {
+          "shape": "Text 6",
+          "paragraphs": [
+            "You must generally be a U.S. citizen or lawful permanent resident who has lived in the U.S. for at least 5 years."
+          ]
+        },
+        {
+          "shape": "Text 8",
+          "paragraphs": [
+            "Primary Pathways"
+          ]
+        },
+        {
+          "shape": "Text 9",
+          "paragraphs": [
+            "01"
+          ]
+        },
+        {
+          "shape": "Text 10",
+          "paragraphs": [
+            "Age 65 or Older"
+          ]
+        },
+        {
+          "shape": "Text 11",
+          "paragraphs": [
+            "Most common path. Automatic enrollment if already receiving Social Security benefits."
+          ]
+        },
+        {
+          "shape": "Text 12",
+          "paragraphs": [
+            "02"
+          ]
+        },
+        {
+          "shape": "Text 13",
+          "paragraphs": [
+            "Disability"
+          ]
+        },
+        {
+          "shape": "Text 14",
+          "paragraphs": [
+            "Under 65 and entitled to Social Security disability benefits for 24 months (waiting period may be waived)."
+          ]
+        },
+        {
+          "shape": "Text 15",
+          "paragraphs": [
+            "03"
+          ]
+        },
+        {
+          "shape": "Text 16",
+          "paragraphs": [
+            "ESRD"
+          ]
+        },
+        {
+          "shape": "Text 17",
+          "paragraphs": [
+            "Any age with permanent kidney failure requiring dialysis or a kidney transplant."
+          ]
+        },
+        {
+          "shape": "Text 18",
+          "paragraphs": [
+            "04"
+          ]
+        },
+        {
+          "shape": "Text 19",
+          "paragraphs": [
+            "ALS (Lou Gehrig's)"
+          ]
+        },
+        {
+          "shape": "Text 20",
+          "paragraphs": [
+            "Any age diagnosed with amyotrophic lateral sclerosis — no waiting period."
+          ]
+        },
+        {
+          "shape": "Text 22",
+          "paragraphs": [
+            "Premium-Free Part A"
+          ]
+        },
+        {
+          "shape": "Text 23",
+          "paragraphs": [
+            "Most people get Part A at no monthly cost if they (or a spouse) paid Medicare taxes for at least 10 years (40 quarters) while working."
+          ]
+        },
+        {
+          "shape": "Text 25",
+          "paragraphs": [
+            "Key Notes"
+          ]
+        },
+        {
+          "shape": "Text 26",
+          "paragraphs": [
+            "• Part B is optional but most people enroll",
+            "• You can buy Part A if you do not qualify for free coverage",
+            "• Enrollment is not always automatic — check your situation",
+            "• Spousal work history can help you qualify"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "3",
+      "imageAssetsInDeck": 0,
+      "number": 3
+    },
+    {
+      "path": "ppt/slides/slide4.xml",
+      "blocks": [
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "MEDICARE BASICS  ·  DETAILED OVERVIEW  ·  2026"
+          ]
+        },
+        {
+          "shape": "Text 3",
+          "paragraphs": [
+            "STRUCTURE"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "The Four Parts of Medicare"
+          ]
+        },
+        {
+          "shape": "Text 6",
+          "paragraphs": [
+            "Medicare is organized into four distinct parts that cover different types of services."
+          ]
+        },
+        {
+          "shape": "Text 9",
+          "paragraphs": [
+            "A"
+          ]
+        },
+        {
+          "shape": "Text 10",
+          "paragraphs": [
+            "Hospital Insurance"
+          ]
+        },
+        {
+          "shape": "Text 11",
+          "paragraphs": [
+            "•  Inpatient hospital stays"
+          ]
+        },
+        {
+          "shape": "Text 12",
+          "paragraphs": [
+            "•  Skilled nursing facility care"
+          ]
+        },
+        {
+          "shape": "Text 13",
+          "paragraphs": [
+            "•  Hospice care"
+          ]
+        },
+        {
+          "shape": "Text 14",
+          "paragraphs": [
+            "•  Some home health care"
+          ]
+        },
+        {
+          "shape": "Text 17",
+          "paragraphs": [
+            "B"
+          ]
+        },
+        {
+          "shape": "Text 18",
+          "paragraphs": [
+            "Medical Insurance"
+          ]
+        },
+        {
+          "shape": "Text 19",
+          "paragraphs": [
+            "•  Doctor & provider services"
+          ]
+        },
+        {
+          "shape": "Text 20",
+          "paragraphs": [
+            "•  Outpatient care"
+          ]
+        },
+        {
+          "shape": "Text 21",
+          "paragraphs": [
+            "•  Durable medical equipment"
+          ]
+        },
+        {
+          "shape": "Text 22",
+          "paragraphs": [
+            "•  Preventive services & screenings"
+          ]
+        },
+        {
+          "shape": "Text 25",
+          "paragraphs": [
+            "C"
+          ]
+        },
+        {
+          "shape": "Text 26",
+          "paragraphs": [
+            "Medicare Advantage"
+          ]
+        },
+        {
+          "shape": "Text 27",
+          "paragraphs": [
+            "•  Private plan alternative"
+          ]
+        },
+        {
+          "shape": "Text 28",
+          "paragraphs": [
+            "•  Bundles A + B (often D)"
+          ]
+        },
+        {
+          "shape": "Text 29",
+          "paragraphs": [
+            "•  May include extra benefits"
+          ]
+        },
+        {
+          "shape": "Text 30",
+          "paragraphs": [
+            "•  Network-based coverage"
+          ]
+        },
+        {
+          "shape": "Text 33",
+          "paragraphs": [
+            "D"
+          ]
+        },
+        {
+          "shape": "Text 34",
+          "paragraphs": [
+            "Prescription Drugs"
+          ]
+        },
+        {
+          "shape": "Text 35",
+          "paragraphs": [
+            "•  Outpatient prescription drugs"
+          ]
+        },
+        {
+          "shape": "Text 36",
+          "paragraphs": [
+            "•  Many recommended vaccines"
+          ]
+        },
+        {
+          "shape": "Text 37",
+          "paragraphs": [
+            "•  Run by private plans"
+          ]
+        },
+        {
+          "shape": "Text 38",
+          "paragraphs": [
+            "•  Available with Original or MA"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "4",
+      "imageAssetsInDeck": 0,
+      "number": 4
+    },
+    {
+      "path": "ppt/slides/slide5.xml",
+      "blocks": [
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "MEDICARE BASICS  ·  DETAILED OVERVIEW  ·  2026"
+          ]
+        },
+        {
+          "shape": "Text 3",
+          "paragraphs": [
+            "PART A"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "Hospital Insurance — What It Covers & Costs (2026)"
+          ]
+        },
+        {
+          "shape": "Text 6",
+          "paragraphs": [
+            "Most people receive premium-free Part A after paying Medicare taxes for at least 10 years."
+          ]
+        },
+        {
+          "shape": "Text 8",
+          "paragraphs": [
+            "What Part A Helps Cover"
+          ]
+        },
+        {
+          "shape": "Text 9",
+          "paragraphs": [
+            "Inpatient Hospital Care"
+          ]
+        },
+        {
+          "shape": "Text 10",
+          "paragraphs": [
+            "Semi-private room, meals, general nursing, drugs as part of inpatient treatment, and other hospital services."
+          ]
+        },
+        {
+          "shape": "Text 11",
+          "paragraphs": [
+            "Skilled Nursing Facility (SNF)"
+          ]
+        },
+        {
+          "shape": "Text 12",
+          "paragraphs": [
+            "Care after a qualifying 3-day hospital stay. Days 1–20 fully covered after deductible; coinsurance applies days 21–100."
+          ]
+        },
+        {
+          "shape": "Text 13",
+          "paragraphs": [
+            "Hospice Care"
+          ]
+        },
+        {
+          "shape": "Text 14",
+          "paragraphs": [
+            "For terminally ill patients. Includes pain relief, support services, and counseling. Minimal cost sharing."
+          ]
+        },
+        {
+          "shape": "Text 15",
+          "paragraphs": [
+            "Home Health Care"
+          ]
+        },
+        {
+          "shape": "Text 16",
+          "paragraphs": [
+            "Part-time skilled nursing, physical/occupational therapy, and home health aide services when medically necessary."
+          ]
+        },
+        {
+          "shape": "Text 18",
+          "paragraphs": [
+            "2026 Part A Costs"
+          ]
+        },
+        {
+          "shape": "Text 19",
+          "paragraphs": [
+            "Premium (most people)"
+          ]
+        },
+        {
+          "shape": "Text 20",
+          "paragraphs": [
+            "$0"
+          ]
+        },
+        {
+          "shape": "Text 21",
+          "paragraphs": [
+            "Premium (30–39 quarters)"
+          ]
+        },
+        {
+          "shape": "Text 22",
+          "paragraphs": [
+            "$311/mo"
+          ]
+        },
+        {
+          "shape": "Text 23",
+          "paragraphs": [
+            "Premium (<30 quarters)"
+          ]
+        },
+        {
+          "shape": "Text 24",
+          "paragraphs": [
+            "$565/mo"
+          ]
+        },
+        {
+          "shape": "Text 25",
+          "paragraphs": [
+            "Hospital deductible (per benefit period)"
+          ]
+        },
+        {
+          "shape": "Text 26",
+          "paragraphs": [
+            "$1,736"
+          ]
+        },
+        {
+          "shape": "Text 27",
+          "paragraphs": [
+            "Days 61–90 coinsurance"
+          ]
+        },
+        {
+          "shape": "Text 28",
+          "paragraphs": [
+            "$434/day"
+          ]
+        },
+        {
+          "shape": "Text 29",
+          "paragraphs": [
+            "Lifetime reserve days"
+          ]
+        },
+        {
+          "shape": "Text 30",
+          "paragraphs": [
+            "$868/day"
+          ]
+        },
+        {
+          "shape": "Text 31",
+          "paragraphs": [
+            "SNF days 21–100 coinsurance"
+          ]
+        },
+        {
+          "shape": "Text 32",
+          "paragraphs": [
+            "$217/day"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "5",
+      "imageAssetsInDeck": 0,
+      "number": 5
+    },
+    {
+      "path": "ppt/slides/slide6.xml",
+      "blocks": [
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "MEDICARE BASICS  ·  DETAILED OVERVIEW  ·  2026"
+          ]
+        },
+        {
+          "shape": "Text 3",
+          "paragraphs": [
+            "PART B"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "Medical Insurance — What It Covers & Costs (2026)"
+          ]
+        },
+        {
+          "shape": "Text 6",
+          "paragraphs": [
+            "Part B is optional but strongly recommended. Most people pay a monthly premium."
+          ]
+        },
+        {
+          "shape": "Text 8",
+          "paragraphs": [
+            "What Part B Helps Cover"
+          ]
+        },
+        {
+          "shape": "Text 9",
+          "paragraphs": [
+            "•  Services from doctors and other health care providers"
+          ]
+        },
+        {
+          "shape": "Text 10",
+          "paragraphs": [
+            "•  Outpatient hospital care and emergency room visits"
+          ]
+        },
+        {
+          "shape": "Text 11",
+          "paragraphs": [
+            "•  Durable medical equipment (wheelchairs, walkers, oxygen)"
+          ]
+        },
+        {
+          "shape": "Text 12",
+          "paragraphs": [
+            "•  Many preventive services (screenings, vaccines, wellness visits)"
+          ]
+        },
+        {
+          "shape": "Text 13",
+          "paragraphs": [
+            "•  Clinical laboratory tests and diagnostic imaging"
+          ]
+        },
+        {
+          "shape": "Text 14",
+          "paragraphs": [
+            "•  Mental health services (outpatient)"
+          ]
+        },
+        {
+          "shape": "Text 15",
+          "paragraphs": [
+            "•  Ambulance services and some home health care"
+          ]
+        },
+        {
+          "shape": "Text 16",
+          "paragraphs": [
+            "•  Limited prescription drugs administered by a provider"
+          ]
+        },
+        {
+          "shape": "Text 18",
+          "paragraphs": [
+            "2026 Part B Costs"
+          ]
+        },
+        {
+          "shape": "Text 19",
+          "paragraphs": [
+            "Standard Monthly Premium"
+          ]
+        },
+        {
+          "shape": "Text 20",
+          "paragraphs": [
+            "$202.90"
+          ]
+        },
+        {
+          "shape": "Text 21",
+          "paragraphs": [
+            "(Higher for higher incomes — IRMAA applies)"
+          ]
+        },
+        {
+          "shape": "Text 22",
+          "paragraphs": [
+            "Annual Deductible"
+          ]
+        },
+        {
+          "shape": "Text 23",
+          "paragraphs": [
+            "$283"
+          ]
+        },
+        {
+          "shape": "Text 24",
+          "paragraphs": [
+            "Coinsurance"
+          ]
+        },
+        {
+          "shape": "Text 25",
+          "paragraphs": [
+            "Usually 20% of Medicare-approved amount after deductible"
+          ]
+        },
+        {
+          "shape": "Text 26",
+          "paragraphs": [
+            "No annual out-of-pocket maximum under Original Medicare"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "6",
+      "imageAssetsInDeck": 0,
+      "number": 6
+    },
+    {
+      "path": "ppt/slides/slide7.xml",
+      "blocks": [
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "MEDICARE BASICS  ·  DETAILED OVERVIEW  ·  2026"
+          ]
+        },
+        {
+          "shape": "Text 3",
+          "paragraphs": [
+            "COVERAGE CHOICES"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "Original Medicare vs. Medicare Advantage (Part C)"
+          ]
+        },
+        {
+          "shape": "Text 6",
+          "paragraphs": [
+            "You choose one path when you first enroll and can switch during certain periods each year."
+          ]
+        },
+        {
+          "shape": "Text 9",
+          "paragraphs": [
+            "Original Medicare"
+          ]
+        },
+        {
+          "shape": "Text 10",
+          "paragraphs": [
+            "Parts Included"
+          ]
+        },
+        {
+          "shape": "Text 11",
+          "paragraphs": [
+            "Part A + Part B (add Part D separately)"
+          ]
+        },
+        {
+          "shape": "Text 12",
+          "paragraphs": [
+            "Provider Choice"
+          ]
+        },
+        {
+          "shape": "Text 13",
+          "paragraphs": [
+            "Any doctor or hospital that accepts Medicare nationwide"
+          ]
+        },
+        {
+          "shape": "Text 14",
+          "paragraphs": [
+            "Referrals"
+          ]
+        },
+        {
+          "shape": "Text 15",
+          "paragraphs": [
+            "Generally not required for specialists"
+          ]
+        },
+        {
+          "shape": "Text 16",
+          "paragraphs": [
+            "Extra Benefits"
+          ]
+        },
+        {
+          "shape": "Text 17",
+          "paragraphs": [
+            "Limited — vision, dental, hearing usually not covered"
+          ]
+        },
+        {
+          "shape": "Text 18",
+          "paragraphs": [
+            "Out-of-Pocket"
+          ]
+        },
+        {
+          "shape": "Text 19",
+          "paragraphs": [
+            "No annual maximum; Medigap can help fill gaps"
+          ]
+        },
+        {
+          "shape": "Text 20",
+          "paragraphs": [
+            "Drug Coverage"
+          ]
+        },
+        {
+          "shape": "Text 21",
+          "paragraphs": [
+            "Optional separate Part D plan"
+          ]
+        },
+        {
+          "shape": "Text 24",
+          "paragraphs": [
+            "Medicare Advantage (Part C)"
+          ]
+        },
+        {
+          "shape": "Text 25",
+          "paragraphs": [
+            "Parts Included"
+          ]
+        },
+        {
+          "shape": "Text 26",
+          "paragraphs": [
+            "Bundled A + B, usually includes Part D"
+          ]
+        },
+        {
+          "shape": "Text 27",
+          "paragraphs": [
+            "Provider Choice"
+          ]
+        },
+        {
+          "shape": "Text 28",
+          "paragraphs": [
+            "Must use plan network (HMO/PPO rules apply)"
+          ]
+        },
+        {
+          "shape": "Text 29",
+          "paragraphs": [
+            "Referrals"
+          ]
+        },
+        {
+          "shape": "Text 30",
+          "paragraphs": [
+            "Often required for specialists (especially HMOs)"
+          ]
+        },
+        {
+          "shape": "Text 31",
+          "paragraphs": [
+            "Extra Benefits"
+          ]
+        },
+        {
+          "shape": "Text 32",
+          "paragraphs": [
+            "Many plans offer dental, vision, hearing, gym, OTC"
+          ]
+        },
+        {
+          "shape": "Text 33",
+          "paragraphs": [
+            "Out-of-Pocket"
+          ]
+        },
+        {
+          "shape": "Text 34",
+          "paragraphs": [
+            "Annual maximum (varies by plan); more predictable costs"
+          ]
+        },
+        {
+          "shape": "Text 35",
+          "paragraphs": [
+            "Drug Coverage"
+          ]
+        },
+        {
+          "shape": "Text 36",
+          "paragraphs": [
+            "Usually included; check formulary carefully"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "7",
+      "imageAssetsInDeck": 0,
+      "number": 7
+    },
+    {
+      "path": "ppt/slides/slide8.xml",
+      "blocks": [
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "MEDICARE BASICS  ·  DETAILED OVERVIEW  ·  2026"
+          ]
+        },
+        {
+          "shape": "Text 3",
+          "paragraphs": [
+            "PART D"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "Prescription Drug Coverage"
+          ]
+        },
+        {
+          "shape": "Text 6",
+          "paragraphs": [
+            "Optional coverage for outpatient prescription drugs. Available as a standalone plan or through most Medicare Advantage plans."
+          ]
+        },
+        {
+          "shape": "Text 9",
+          "paragraphs": [
+            "How It Works"
+          ]
+        },
+        {
+          "shape": "Text 10",
+          "paragraphs": [
+            "Private insurance companies offer plans that follow Medicare rules. You pay a monthly premium and share costs for drugs."
+          ]
+        },
+        {
+          "shape": "Text 13",
+          "paragraphs": [
+            "Formulary"
+          ]
+        },
+        {
+          "shape": "Text 14",
+          "paragraphs": [
+            "Each plan has a list of covered drugs (formulary). Check that your medications are covered before enrolling."
+          ]
+        },
+        {
+          "shape": "Text 17",
+          "paragraphs": [
+            "2026 OOP Cap"
+          ]
+        },
+        {
+          "shape": "Text 18",
+          "paragraphs": [
+            "Thanks to the Inflation Reduction Act, out-of-pocket drug spending is capped at $2,100 in 2026."
+          ]
+        },
+        {
+          "shape": "Text 21",
+          "paragraphs": [
+            "Extra Help (LIS)"
+          ]
+        },
+        {
+          "shape": "Text 22",
+          "paragraphs": [
+            "People with limited income and resources may qualify for the Low-Income Subsidy, which lowers premiums and costs."
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "8",
+      "imageAssetsInDeck": 0,
+      "number": 8
+    },
+    {
+      "path": "ppt/slides/slide9.xml",
+      "blocks": [
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "MEDICARE BASICS  ·  DETAILED OVERVIEW  ·  2026"
+          ]
+        },
+        {
+          "shape": "Text 3",
+          "paragraphs": [
+            "FILLING THE GAPS"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "Medigap, Medicaid & Extra Help"
+          ]
+        },
+        {
+          "shape": "Text 6",
+          "paragraphs": [
+            "Original Medicare leaves cost-sharing gaps. Several programs can reduce what you pay."
+          ]
+        },
+        {
+          "shape": "Text 9",
+          "paragraphs": [
+            "Medigap (Medicare Supplement)"
+          ]
+        },
+        {
+          "shape": "Text 10",
+          "paragraphs": [
+            "Private policies that help pay deductibles, coinsurance, and copayments under Original Medicare. Standardized plans (A–N). Best bought during the 6-month Medigap Open Enrollment Period starting when Part B begins."
+          ]
+        },
+        {
+          "shape": "Text 13",
+          "paragraphs": [
+            "Medicaid / Dual Eligibility"
+          ]
+        },
+        {
+          "shape": "Text 14",
+          "paragraphs": [
+            "State-federal program for people with limited income and resources. Dual eligibles can get help with Medicare premiums and cost-sharing, plus extra benefits such as long-term care and transportation."
+          ]
+        },
+        {
+          "shape": "Text 17",
+          "paragraphs": [
+            "Medicare Savings Programs"
+          ]
+        },
+        {
+          "shape": "Text 18",
+          "paragraphs": [
+            "State programs that help pay Part A and/or Part B premiums and sometimes deductibles and coinsurance for people with modest income and resources."
+          ]
+        },
+        {
+          "shape": "Text 21",
+          "paragraphs": [
+            "Extra Help (Low-Income Subsidy)"
+          ]
+        },
+        {
+          "shape": "Text 22",
+          "paragraphs": [
+            "Federal program that helps pay Part D premiums, deductibles, and copayments. Expanded eligibility under recent legislation. Apply through Social Security."
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "9",
+      "imageAssetsInDeck": 0,
+      "number": 9
+    },
+    {
+      "path": "ppt/slides/slide10.xml",
+      "blocks": [
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "MEDICARE BASICS  ·  DETAILED OVERVIEW  ·  2026"
+          ]
+        },
+        {
+          "shape": "Text 3",
+          "paragraphs": [
+            "GETTING STARTED"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "Enrollment Periods & Key Decisions"
+          ]
+        },
+        {
+          "shape": "Text 6",
+          "paragraphs": [
+            "Timing matters. Missing your initial enrollment window can result in lifelong late-enrollment penalties."
+          ]
+        },
+        {
+          "shape": "Text 9",
+          "paragraphs": [
+            "Initial Enrollment Period"
+          ]
+        },
+        {
+          "shape": "Text 10",
+          "paragraphs": [
+            "•  7-month window around 65th birthday"
+          ]
+        },
+        {
+          "shape": "Text 11",
+          "paragraphs": [
+            "•  3 months before + month of + 3 after"
+          ]
+        },
+        {
+          "shape": "Text 12",
+          "paragraphs": [
+            "•  Best time to avoid penalties"
+          ]
+        },
+        {
+          "shape": "Text 13",
+          "paragraphs": [
+            "•  Sign up for A and/or B"
+          ]
+        },
+        {
+          "shape": "Text 16",
+          "paragraphs": [
+            "Annual Election Period"
+          ]
+        },
+        {
+          "shape": "Text 17",
+          "paragraphs": [
+            "•  Oct 15 – Dec 7 every year"
+          ]
+        },
+        {
+          "shape": "Text 18",
+          "paragraphs": [
+            "•  Switch between Original & Advantage"
+          ]
+        },
+        {
+          "shape": "Text 19",
+          "paragraphs": [
+            "•  Change or join Part D plans"
+          ]
+        },
+        {
+          "shape": "Text 20",
+          "paragraphs": [
+            "•  Changes take effect Jan 1"
+          ]
+        },
+        {
+          "shape": "Text 23",
+          "paragraphs": [
+            "Special Enrollment"
+          ]
+        },
+        {
+          "shape": "Text 24",
+          "paragraphs": [
+            "•  Still working past 65 with employer coverage"
+          ]
+        },
+        {
+          "shape": "Text 25",
+          "paragraphs": [
+            "•  Moving, losing other coverage"
+          ]
+        },
+        {
+          "shape": "Text 26",
+          "paragraphs": [
+            "•  Qualifying life events"
+          ]
+        },
+        {
+          "shape": "Text 27",
+          "paragraphs": [
+            "•  Avoids late-enrollment penalties"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "10",
+      "imageAssetsInDeck": 0,
+      "number": 10
+    },
+    {
+      "path": "ppt/slides/slide11.xml",
+      "blocks": [
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "MEDICARE BASICS  ·  DETAILED OVERVIEW  ·  2026"
+          ]
+        },
+        {
+          "shape": "Text 3",
+          "paragraphs": [
+            "SUMMARY"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "Key Takeaways"
+          ]
+        },
+        {
+          "shape": "Text 6",
+          "paragraphs": [
+            "Remember these essentials when navigating Medicare."
+          ]
+        },
+        {
+          "shape": "Text 9",
+          "paragraphs": [
+            "1"
+          ]
+        },
+        {
+          "shape": "Text 10",
+          "paragraphs": [
+            "Four Parts"
+          ]
+        },
+        {
+          "shape": "Text 11",
+          "paragraphs": [
+            "A (Hospital), B (Medical), C (Advantage), D (Drugs). Understand what each covers before choosing."
+          ]
+        },
+        {
+          "shape": "Text 14",
+          "paragraphs": [
+            "2"
+          ]
+        },
+        {
+          "shape": "Text 15",
+          "paragraphs": [
+            "Two Main Paths"
+          ]
+        },
+        {
+          "shape": "Text 16",
+          "paragraphs": [
+            "Original Medicare + optional Medigap/Part D, or a Medicare Advantage plan that bundles coverage."
+          ]
+        },
+        {
+          "shape": "Text 19",
+          "paragraphs": [
+            "3"
+          ]
+        },
+        {
+          "shape": "Text 20",
+          "paragraphs": [
+            "Costs Are Shared"
+          ]
+        },
+        {
+          "shape": "Text 21",
+          "paragraphs": [
+            "Premiums, deductibles, and coinsurance apply. 2026 standard Part B premium is $202.90; Part A is free for most."
+          ]
+        },
+        {
+          "shape": "Text 24",
+          "paragraphs": [
+            "4"
+          ]
+        },
+        {
+          "shape": "Text 25",
+          "paragraphs": [
+            "Help Is Available"
+          ]
+        },
+        {
+          "shape": "Text 26",
+          "paragraphs": [
+            "Extra Help, Medicare Savings Programs, Medicaid, and Medigap can significantly lower your out-of-pocket costs."
+          ]
+        },
+        {
+          "shape": "Text 29",
+          "paragraphs": [
+            "5"
+          ]
+        },
+        {
+          "shape": "Text 30",
+          "paragraphs": [
+            "Timing Matters"
+          ]
+        },
+        {
+          "shape": "Text 31",
+          "paragraphs": [
+            "Enroll during your Initial Enrollment Period to avoid permanent late penalties. Review coverage every year."
+          ]
+        },
+        {
+          "shape": "Text 34",
+          "paragraphs": [
+            "6"
+          ]
+        },
+        {
+          "shape": "Text 35",
+          "paragraphs": [
+            "Official Sources"
+          ]
+        },
+        {
+          "shape": "Text 36",
+          "paragraphs": [
+            "Always verify details at Medicare.gov or 1-800-MEDICARE. Plans and costs change annually."
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "11",
+      "imageAssetsInDeck": 0,
+      "number": 11
+    }
+  ]
+}

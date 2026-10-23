@@ -1,0 +1,544 @@
+{
+  "type": "pptx",
+  "slides": [
+    {
+      "path": "ppt/slides/slide1.xml",
+      "blocks": [
+        {
+          "shape": "Text 1",
+          "paragraphs": [
+            "WELCOME ABOARD"
+          ]
+        },
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "Medicare Advantage"
+          ]
+        },
+        {
+          "shape": "Text 3",
+          "paragraphs": [
+            "New Hire Agent Orientation"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "Your guide to starting strong as a Medicare Advantage agent.",
+            "Compliance • Product Knowledge • Client Success"
+          ]
+        },
+        {
+          "shape": "Text 5",
+          "paragraphs": [
+            "1 / 6"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "1",
+      "imageAssetsInDeck": 0,
+      "number": 1
+    },
+    {
+      "path": "ppt/slides/slide2.xml",
+      "blocks": [
+        {
+          "shape": "Text 0",
+          "paragraphs": [
+            "What is Medicare Advantage?"
+          ]
+        },
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "Medicare Advantage (Part C) is a private health plan alternative to Original Medicare (Parts A & B). These plans are offered by private insurance companies approved by Medicare and must cover everything Original Medicare covers — often with extra benefits."
+          ]
+        },
+        {
+          "shape": "Text 5",
+          "paragraphs": [
+            "Private Plans"
+          ]
+        },
+        {
+          "shape": "Text 6",
+          "paragraphs": [
+            "Offered by Medicare-approved private insurers"
+          ]
+        },
+        {
+          "shape": "Text 9",
+          "paragraphs": [
+            "All-in-One"
+          ]
+        },
+        {
+          "shape": "Text 10",
+          "paragraphs": [
+            "Combines Part A, Part B, and usually Part D"
+          ]
+        },
+        {
+          "shape": "Text 13",
+          "paragraphs": [
+            "Extra Benefits"
+          ]
+        },
+        {
+          "shape": "Text 14",
+          "paragraphs": [
+            "Dental, vision, hearing, fitness & more"
+          ]
+        },
+        {
+          "shape": "Text 15",
+          "paragraphs": [
+            "Medicare Advantage · New Hire Orientation"
+          ]
+        },
+        {
+          "shape": "Text 16",
+          "paragraphs": [
+            "2 / 6"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "2",
+      "imageAssetsInDeck": 0,
+      "number": 2
+    },
+    {
+      "path": "ppt/slides/slide3.xml",
+      "blocks": [
+        {
+          "shape": "Text 0",
+          "paragraphs": [
+            "Original Medicare vs. Medicare Advantage"
+          ]
+        },
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "Original Medicare"
+          ]
+        },
+        {
+          "shape": "Text 3",
+          "paragraphs": [
+            "Part A (Hospital) + Part B (Medical)",
+            "No referral needed for specialists",
+            "Nationwide provider access",
+            "No out-of-pocket maximum",
+            "Optional Medigap + Part D",
+            "Higher flexibility, potentially higher costs"
+          ]
+        },
+        {
+          "shape": "Text 5",
+          "paragraphs": [
+            "Medicare Advantage"
+          ]
+        },
+        {
+          "shape": "Text 6",
+          "paragraphs": [
+            "All-in-one private plan (A + B + usually D)",
+            "Often requires network / referrals",
+            "Network-based (with some exceptions)",
+            "Annual out-of-pocket maximum",
+            "Extra benefits included",
+            "Lower predictability, more benefits"
+          ]
+        },
+        {
+          "shape": "Text 7",
+          "paragraphs": [
+            "Medicare Advantage · New Hire Orientation"
+          ]
+        },
+        {
+          "shape": "Text 8",
+          "paragraphs": [
+            "3 / 6"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "3",
+      "imageAssetsInDeck": 0,
+      "number": 3
+    },
+    {
+      "path": "ppt/slides/slide4.xml",
+      "blocks": [
+        {
+          "shape": "Text 0",
+          "paragraphs": [
+            "Key Benefits Agents Should Highlight"
+          ]
+        },
+        {
+          "shape": "Text 3",
+          "paragraphs": [
+            "1"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "Dental & Vision"
+          ]
+        },
+        {
+          "shape": "Text 5",
+          "paragraphs": [
+            "Preventive and comprehensive coverage often included"
+          ]
+        },
+        {
+          "shape": "Text 8",
+          "paragraphs": [
+            "2"
+          ]
+        },
+        {
+          "shape": "Text 9",
+          "paragraphs": [
+            "Hearing Aids"
+          ]
+        },
+        {
+          "shape": "Text 10",
+          "paragraphs": [
+            "Coverage for hearing exams and devices"
+          ]
+        },
+        {
+          "shape": "Text 13",
+          "paragraphs": [
+            "3"
+          ]
+        },
+        {
+          "shape": "Text 14",
+          "paragraphs": [
+            "Fitness Programs"
+          ]
+        },
+        {
+          "shape": "Text 15",
+          "paragraphs": [
+            "Gym memberships (e.g., SilverSneakers)"
+          ]
+        },
+        {
+          "shape": "Text 18",
+          "paragraphs": [
+            "4"
+          ]
+        },
+        {
+          "shape": "Text 19",
+          "paragraphs": [
+            "OTC Allowance"
+          ]
+        },
+        {
+          "shape": "Text 20",
+          "paragraphs": [
+            "Monthly or quarterly over-the-counter benefits"
+          ]
+        },
+        {
+          "shape": "Text 23",
+          "paragraphs": [
+            "5"
+          ]
+        },
+        {
+          "shape": "Text 24",
+          "paragraphs": [
+            "Transportation"
+          ]
+        },
+        {
+          "shape": "Text 25",
+          "paragraphs": [
+            "Rides to medical appointments"
+          ]
+        },
+        {
+          "shape": "Text 28",
+          "paragraphs": [
+            "6"
+          ]
+        },
+        {
+          "shape": "Text 29",
+          "paragraphs": [
+            "Care Coordination"
+          ]
+        },
+        {
+          "shape": "Text 30",
+          "paragraphs": [
+            "Case management and wellness programs"
+          ]
+        },
+        {
+          "shape": "Text 31",
+          "paragraphs": [
+            "Medicare Advantage · New Hire Orientation"
+          ]
+        },
+        {
+          "shape": "Text 32",
+          "paragraphs": [
+            "4 / 6"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "4",
+      "imageAssetsInDeck": 0,
+      "number": 4
+    },
+    {
+      "path": "ppt/slides/slide5.xml",
+      "blocks": [
+        {
+          "shape": "Text 0",
+          "paragraphs": [
+            "Critical Rules for New Agents"
+          ]
+        },
+        {
+          "shape": "Text 1",
+          "paragraphs": [
+            "01"
+          ]
+        },
+        {
+          "shape": "Text 2",
+          "paragraphs": [
+            "Always Scope of Appointment"
+          ]
+        },
+        {
+          "shape": "Text 3",
+          "paragraphs": [
+            "Document SOA before discussing MA or Part D plans."
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "02"
+          ]
+        },
+        {
+          "shape": "Text 5",
+          "paragraphs": [
+            "No Cherry-Picking"
+          ]
+        },
+        {
+          "shape": "Text 6",
+          "paragraphs": [
+            "Never steer or discourage based on health status."
+          ]
+        },
+        {
+          "shape": "Text 7",
+          "paragraphs": [
+            "03"
+          ]
+        },
+        {
+          "shape": "Text 8",
+          "paragraphs": [
+            "Marketing Materials"
+          ]
+        },
+        {
+          "shape": "Text 9",
+          "paragraphs": [
+            "Only use CMS-approved materials. No unapproved claims."
+          ]
+        },
+        {
+          "shape": "Text 10",
+          "paragraphs": [
+            "04"
+          ]
+        },
+        {
+          "shape": "Text 11",
+          "paragraphs": [
+            "Enrollment Periods"
+          ]
+        },
+        {
+          "shape": "Text 12",
+          "paragraphs": [
+            "Know AEP, OEP, SEP, IEP rules cold — timing is critical."
+          ]
+        },
+        {
+          "shape": "Text 13",
+          "paragraphs": [
+            "05"
+          ]
+        },
+        {
+          "shape": "Text 14",
+          "paragraphs": [
+            "Needs Assessment"
+          ]
+        },
+        {
+          "shape": "Text 15",
+          "paragraphs": [
+            "Conduct a thorough needs analysis before recommending."
+          ]
+        },
+        {
+          "shape": "Text 16",
+          "paragraphs": [
+            "06"
+          ]
+        },
+        {
+          "shape": "Text 17",
+          "paragraphs": [
+            "Record Retention"
+          ]
+        },
+        {
+          "shape": "Text 18",
+          "paragraphs": [
+            "Keep all required documentation for the required period."
+          ]
+        },
+        {
+          "shape": "Text 19",
+          "paragraphs": [
+            "Medicare Advantage · New Hire Orientation"
+          ]
+        },
+        {
+          "shape": "Text 20",
+          "paragraphs": [
+            "5 / 6"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "5",
+      "imageAssetsInDeck": 0,
+      "number": 5
+    },
+    {
+      "path": "ppt/slides/slide6.xml",
+      "blocks": [
+        {
+          "shape": "Text 1",
+          "paragraphs": [
+            "Your Next Steps"
+          ]
+        },
+        {
+          "shape": "Text 3",
+          "paragraphs": [
+            "1"
+          ]
+        },
+        {
+          "shape": "Text 4",
+          "paragraphs": [
+            "Complete Required Training"
+          ]
+        },
+        {
+          "shape": "Text 5",
+          "paragraphs": [
+            "AHIP certification + carrier product training"
+          ]
+        },
+        {
+          "shape": "Text 7",
+          "paragraphs": [
+            "2"
+          ]
+        },
+        {
+          "shape": "Text 8",
+          "paragraphs": [
+            "Shadow Experienced Agents"
+          ]
+        },
+        {
+          "shape": "Text 9",
+          "paragraphs": [
+            "Observe live appointments and enrollments"
+          ]
+        },
+        {
+          "shape": "Text 11",
+          "paragraphs": [
+            "3"
+          ]
+        },
+        {
+          "shape": "Text 12",
+          "paragraphs": [
+            "Master the Tools"
+          ]
+        },
+        {
+          "shape": "Text 13",
+          "paragraphs": [
+            "CRM, plan comparison software, enrollment portals"
+          ]
+        },
+        {
+          "shape": "Text 15",
+          "paragraphs": [
+            "4"
+          ]
+        },
+        {
+          "shape": "Text 16",
+          "paragraphs": [
+            "Stay Compliant"
+          ]
+        },
+        {
+          "shape": "Text 17",
+          "paragraphs": [
+            "Review CMS guidelines and carrier policies regularly"
+          ]
+        },
+        {
+          "shape": "Text 18",
+          "paragraphs": [
+            "Medicare Advantage · New Hire Orientation"
+          ]
+        },
+        {
+          "shape": "Text 19",
+          "paragraphs": [
+            "6 / 6"
+          ]
+        }
+      ],
+      "tables": [],
+      "notes": "6",
+      "imageAssetsInDeck": 0,
+      "number": 6
+    }
+  ]
+}

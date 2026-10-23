@@ -1,0 +1,2 @@
+﻿OK - watchdog task repointed to the silent launcher
+RUN: wscript.exe //B "C:\Users\Wave\Downloads\AdrieneVoiceStudio\watchdog-backend.vbs"

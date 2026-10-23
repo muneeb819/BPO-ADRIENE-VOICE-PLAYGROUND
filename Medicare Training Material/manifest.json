@@ -1,0 +1,104 @@
+{
+  "name": "Medicare Training Material",
+  "version": "1.0.0",
+  "createdAt": "2026-10-22T18:54:15.783274Z",
+  "sourceCount": 8,
+  "documents": [
+    {
+      "file": "01_Medicare_Advantage_New_Hire_Orientation.pptx",
+      "originalFile": "Medicare_Advantage_New_Hire_Orientation (1).pptx",
+      "kind": "pptx",
+      "sha256": "3389516ffbd470bf362c04cd5fdcd1115a1d7018ccdcef49e0d375f64ace0181",
+      "bytes": 147714,
+      "slides": 6,
+      "emptySlides": [],
+      "characters": 2625,
+      "imageAssetsInDeck": 0
+    },
+    {
+      "file": "02_Medicare_Agent_Call_Center_Training.pptx",
+      "originalFile": "Medicare_Agent_Call_Center_Training.pptx",
+      "kind": "pptx",
+      "sha256": "0431b852238aa58b8b5d6d33b56274821ead711bdeb66b4bac102a5472b0042b",
+      "bytes": 325960,
+      "slides": 14,
+      "emptySlides": [],
+      "characters": 8334,
+      "imageAssetsInDeck": 0
+    },
+    {
+      "file": "02b_Medicare_Agent_Call_Center_Training_duplicate.pptx",
+      "originalFile": "Medicare_Agent_Call_Center_Training (1) (1).pptx",
+      "kind": "duplicate",
+      "sha256": "0431b852238aa58b8b5d6d33b56274821ead711bdeb66b4bac102a5472b0042b",
+      "bytes": 325960,
+      "slides": 0,
+      "characters": 0
+    },
+    {
+      "file": "03_Medicare_Script.docx",
+      "originalFile": "Med Script 1 (1).docx",
+      "kind": "docx",
+      "sha256": "9d3f5d60115d8f1c15ec0369d86e966cfdd71b2973f2b4e1481db7b6001325e3",
+      "bytes": 13689,
+      "paragraphs": 38,
+      "tables": 0,
+      "characters": 2616
+    },
+    {
+      "file": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "originalFile": "Medicare_Advantage_MA_Plan_Quiz_35Q (1).pptx",
+      "kind": "pptx",
+      "sha256": "fa83f5afa50596137fd73a6f9d474c5ccc40642a32ae6528c26ef955111fb29d",
+      "bytes": 824461,
+      "slides": 44,
+      "emptySlides": [],
+      "characters": 14417,
+      "imageAssetsInDeck": 0
+    },
+    {
+      "file": "05_Medicare_Supplement_vs_Advantage.pptx",
+      "originalFile": "Medicare_Supplement_vs_Advantage (2).pptx",
+      "kind": "pptx",
+      "sha256": "e26ebb8f130748873c26ef96b0549e70194b2fc88c1e3575f995677a0af982a2",
+      "bytes": 76343,
+      "slides": 1,
+      "emptySlides": [],
+      "characters": 995,
+      "imageAssetsInDeck": 0
+    },
+    {
+      "file": "06_Medicare_Script_Quiz.pptx",
+      "originalFile": "Med_Script_Quiz (1).pptx",
+      "kind": "pptx",
+      "sha256": "dd4b649b278560c72687215793ecd568b1bac9b7d702998a8f9321ef6b109d0a",
+      "bytes": 53360,
+      "slides": 12,
+      "emptySlides": [],
+      "characters": 5751,
+      "imageAssetsInDeck": 0
+    },
+    {
+      "file": "07_Medicare_Basics_Overview.pptx",
+      "originalFile": "Medicare_Basics_Overview 1 (1).pptx",
+      "kind": "pptx",
+      "sha256": "c4c1554147cacf51f05d89efc2945b57b8ca77f18538bf9e43b634531c1de7c5",
+      "bytes": 53219,
+      "slides": 11,
+      "emptySlides": [],
+      "characters": 8864,
+      "imageAssetsInDeck": 0
+    }
+  ],
+  "duplicates": [
+    {
+      "file": "02b_Medicare_Agent_Call_Center_Training_duplicate.pptx",
+      "duplicateOf": "02_Medicare_Agent_Call_Center_Training.pptx",
+      "sha256": "0431b852238aa58b8b5d6d33b56274821ead711bdeb66b4bac102a5472b0042b",
+      "note": "Byte-identical duplicate; retained for provenance but excluded from knowledge indexing."
+    }
+  ],
+  "warnings": [],
+  "totalCharacters": 43602,
+  "totalSlides": 88
+}

@@ -6,6 +6,7 @@
 const Shell = (() => {
   const NAV = [
     { href: '/', key: 'admin', label: 'Admin Panel', sub: 'Combined Dashboard', icon: 'grid' },
+    { href: '/tressa', key: 'tressa', label: 'Tressa', sub: 'USA Medicare Training', icon: 'book' },
     { href: '/foundation', key: 'foundation', label: 'Foundation', sub: 'Health & Status', icon: 'home' },
     { href: '/playground', key: 'playground', label: 'Voice Playground', sub: 'Mic → Response Loop', icon: 'mic' },
     { href: '/analytics', key: 'analytics', label: 'Analytics', sub: 'Latency & Usage', icon: 'chart' },

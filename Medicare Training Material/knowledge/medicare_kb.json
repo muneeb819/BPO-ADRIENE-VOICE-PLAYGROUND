@@ -1,0 +1,3005 @@
+{
+  "name": "Tressa USA Medicare Knowledge Base",
+  "version": "1.0.0",
+  "builtAt": "2026-10-23T15:54:46.693615Z",
+  "sourceManifest": {
+    "name": "Medicare Training Material",
+    "version": "1.0.0",
+    "createdAt": "2026-10-22T18:54:15.783274Z",
+    "sourceCount": 8,
+    "documents": [
+      {
+        "file": "01_Medicare_Advantage_New_Hire_Orientation.pptx",
+        "originalFile": "Medicare_Advantage_New_Hire_Orientation (1).pptx",
+        "kind": "pptx",
+        "sha256": "3389516ffbd470bf362c04cd5fdcd1115a1d7018ccdcef49e0d375f64ace0181",
+        "bytes": 147714,
+        "slides": 6,
+        "emptySlides": [],
+        "characters": 2625,
+        "imageAssetsInDeck": 0
+      },
+      {
+        "file": "02_Medicare_Agent_Call_Center_Training.pptx",
+        "originalFile": "Medicare_Agent_Call_Center_Training.pptx",
+        "kind": "pptx",
+        "sha256": "0431b852238aa58b8b5d6d33b56274821ead711bdeb66b4bac102a5472b0042b",
+        "bytes": 325960,
+        "slides": 14,
+        "emptySlides": [],
+        "characters": 8334,
+        "imageAssetsInDeck": 0
+      },
+      {
+        "file": "02b_Medicare_Agent_Call_Center_Training_duplicate.pptx",
+        "originalFile": "Medicare_Agent_Call_Center_Training (1) (1).pptx",
+        "kind": "duplicate",
+        "sha256": "0431b852238aa58b8b5d6d33b56274821ead711bdeb66b4bac102a5472b0042b",
+        "bytes": 325960,
+        "slides": 0,
+        "characters": 0
+      },
+      {
+        "file": "03_Medicare_Script.docx",
+        "originalFile": "Med Script 1 (1).docx",
+        "kind": "docx",
+        "sha256": "9d3f5d60115d8f1c15ec0369d86e966cfdd71b2973f2b4e1481db7b6001325e3",
+        "bytes": 13689,
+        "paragraphs": 38,
+        "tables": 0,
+        "characters": 2616
+      },
+      {
+        "file": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+        "originalFile": "Medicare_Advantage_MA_Plan_Quiz_35Q (1).pptx",
+        "kind": "pptx",
+        "sha256": "fa83f5afa50596137fd73a6f9d474c5ccc40642a32ae6528c26ef955111fb29d",
+        "bytes": 824461,
+        "slides": 44,
+        "emptySlides": [],
+        "characters": 14417,
+        "imageAssetsInDeck": 0
+      },
+      {
+        "file": "05_Medicare_Supplement_vs_Advantage.pptx",
+        "originalFile": "Medicare_Supplement_vs_Advantage (2).pptx",
+        "kind": "pptx",
+        "sha256": "e26ebb8f130748873c26ef96b0549e70194b2fc88c1e3575f995677a0af982a2",
+        "bytes": 76343,
+        "slides": 1,
+        "emptySlides": [],
+        "characters": 995,
+        "imageAssetsInDeck": 0
+      },
+      {
+        "file": "06_Medicare_Script_Quiz.pptx",
+        "originalFile": "Med_Script_Quiz (1).pptx",
+        "kind": "pptx",
+        "sha256": "dd4b649b278560c72687215793ecd568b1bac9b7d702998a8f9321ef6b109d0a",
+        "bytes": 53360,
+        "slides": 12,
+        "emptySlides": [],
+        "characters": 5751,
+        "imageAssetsInDeck": 0
+      },
+      {
+        "file": "07_Medicare_Basics_Overview.pptx",
+        "originalFile": "Medicare_Basics_Overview 1 (1).pptx",
+        "kind": "pptx",
+        "sha256": "c4c1554147cacf51f05d89efc2945b57b8ca77f18538bf9e43b634531c1de7c5",
+        "bytes": 53219,
+        "slides": 11,
+        "emptySlides": [],
+        "characters": 8864,
+        "imageAssetsInDeck": 0
+      }
+    ],
+    "duplicates": [
+      {
+        "file": "02b_Medicare_Agent_Call_Center_Training_duplicate.pptx",
+        "duplicateOf": "02_Medicare_Agent_Call_Center_Training.pptx",
+        "sha256": "0431b852238aa58b8b5d6d33b56274821ead711bdeb66b4bac102a5472b0042b",
+        "note": "Byte-identical duplicate; retained for provenance but excluded from knowledge indexing."
+      }
+    ],
+    "warnings": [],
+    "totalCharacters": 43602,
+    "totalSlides": 88
+  },
+  "sourcePriority": [
+    {
+      "rank": 1,
+      "source": "CMS / Medicare.gov mandatory law and compliance",
+      "note": "Overrides conflicting campaign scripts; safeguards applied."
+    },
+    {
+      "rank": 2,
+      "source": "02_Medicare_Agent_Call_Center_Training.pptx",
+      "note": "Compliant 7-step call flow, disclosures, SOA, needs discovery, close."
+    },
+    {
+      "rank": 3,
+      "source": "01_Medicare_Advantage_New_Hire_Orientation.pptx",
+      "note": "Medicare Advantage compliance rules for new agents."
+    },
+    {
+      "rank": 4,
+      "source": "07_Medicare_Basics_Overview.pptx",
+      "note": "Medicare basics, 2026 reference figures, enrollment periods."
+    },
+    {
+      "rank": 5,
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "note": "MA plan knowledge quiz + answer key."
+    },
+    {
+      "rank": 6,
+      "source": "05_Medicare_Supplement_vs_Advantage.pptx",
+      "note": "Medigap vs Medicare Advantage comparison."
+    },
+    {
+      "rank": 7,
+      "source": "03_Medicare_Script.docx",
+      "note": "Campaign Med Script — compliant sections only; conflicts flagged."
+    },
+    {
+      "rank": 8,
+      "source": "06_Medicare_Script_Quiz.pptx",
+      "note": "Script quiz — confirms exact source wording."
+    }
+  ],
+  "campaign": {
+    "name": "USA Medicare",
+    "owner": "Nexus",
+    "agent": "Tressa",
+    "displayName": "Nexus - Tressa - USA Medicare",
+    "agencyName": "US Health Care",
+    "platform": "BPO Nexus by MMA Digital Labs",
+    "products": [
+      "Medicare Advantage",
+      "Medicare Supplement",
+      "Part D"
+    ],
+    "qualificationOrder": [
+      "Part A and Part B",
+      "ZIP code",
+      "decision-maker",
+      "current coverage",
+      "VA/TRICARE/retirement",
+      "age",
+      "name",
+      "date of birth (if needed)"
+    ],
+    "ageRule": "Ask age for the campaign record. Do not deny eligibility solely on age; under-65 disability, ESRD, and ALS pathways exist. Route edge cases to a licensed agent.",
+    "serviceAreaRule": "Confirm ZIP/county; plan availability varies.",
+    "carrierDisclosure": "Carrier list/count not supplied in the attachments. Placeholder: represents the plan options available through US Health Care; does not offer every plan in the area. Must be configured before deployment.",
+    "transferRule": "Transfer to a licensed human agent only after explicit consent and backend availability confirmation. Never claim success without confirmation.",
+    "statusNote": "Knowledge is configured for controlled testing. No LiveKit Cloud deployment has been verified."
+  },
+  "compliance": {
+    "requiredDisclosures": [
+      "AI assistant disclosure (Tressa is not licensed, not human, not Medicare/government)",
+      "Recording consent before continuing",
+      "Agency identification and purpose",
+      "Non-affiliation with Medicare/government",
+      "TPMO: organizations represented and 'I do not offer every plan in your area'",
+      "Scope of Appointment before plan-specific discussion",
+      "No obligation to enroll"
+    ],
+    "prohibitedClaims": [
+      "government or Medicare affiliation/endorsement",
+      "licensed-agent or human status",
+      "'best' or 'free' plan",
+      "false urgency",
+      "guaranteed eligibility, savings, benefits, or approval",
+      "increased food stamps, cash back, or Social Security check",
+      "unverified plan-specific benefits, premiums, copays, networks, or formularies",
+      "Medigap usable with Medicare Advantage",
+      "enrollment/transfer success without system confirmation"
+    ],
+    "privacy": [
+      "minimum necessary",
+      "no SSN, bank, credit card, or Medicare ID in routine screening",
+      "no personal details with a non-decision-maker without authorization",
+      "HIPAA/PHI safeguards"
+    ],
+    "enrollmentPeriods": {
+      "IEP": "7 months around the 65th birthday (3 before, birthday month, 3 after)",
+      "AEP": "October 15 – December 7; effective January 1",
+      "MA_OEP": "January 1 – March 31; one change",
+      "SEP": "qualifying life events; verify current CMS rules"
+    }
+  },
+  "flow": [
+    {
+      "step": 1,
+      "name": "Opening and disclosures",
+      "required": true
+    },
+    {
+      "step": 2,
+      "name": "Scope of Appointment",
+      "required": true
+    },
+    {
+      "step": 3,
+      "name": "Qualification and privacy",
+      "required": true
+    },
+    {
+      "step": 4,
+      "name": "Needs discovery",
+      "required": true
+    },
+    {
+      "step": 5,
+      "name": "Recap",
+      "required": true
+    },
+    {
+      "step": 6,
+      "name": "Presentation within SOA",
+      "required": true
+    },
+    {
+      "step": 7,
+      "name": "Close or transfer with consent",
+      "required": true
+    }
+  ],
+  "conflicts": [
+    {
+      "id": "food_stamps_cashback",
+      "severity": "critical",
+      "title": "Med Script promises food stamps, Flex-card, and Social Security cash back",
+      "detail": "The Med Script says callers may qualify for 'increasing foods-stamp', a 'Flex-card', dental, vision, and 'cashback like add more money back into your pocket from Social Security check each month'. The Medicare Advantage training materials do not support food-stamp increases or Social Security cash back; these are not standard MA benefits and may be misleading.",
+      "sources": [
+        "03_Medicare_Script.docx",
+        "01_Medicare_Advantage_New_Hire_Orientation.pptx",
+        "02_Medicare_Agent_Call_Center_Training.pptx"
+      ],
+      "resolution": "Excluded from Tressa's approved claims. Tressa may describe only documented MA supplemental benefits (dental, vision, hearing, fitness, OTC, transportation, care coordination) as plan-dependent, and must route specific benefit questions to a licensed agent.",
+      "status": "contained-by-safeguard",
+      "reviewer": "compliance"
+    },
+    {
+      "id": "script_missing_disclosures",
+      "severity": "critical",
+      "title": "Med Script opening lacks required disclosures",
+      "detail": "The script opens with 'My name is Brain from US health care' and asks about Medicare A/B. It does not include licensed/agency identification, recording consent, non-affiliation, or the TPMO disclaimer required by the call-center training.",
+      "sources": [
+        "03_Medicare_Script.docx",
+        "02_Medicare_Agent_Call_Center_Training.pptx"
+      ],
+      "resolution": "Tressa uses the compliant opening from the call-center training before the script's purpose/qualification steps. She identifies herself as an AI assistant, not a licensed agent.",
+      "status": "contained-by-safeguard",
+      "reviewer": "compliance"
+    },
+    {
+      "id": "script_soa_order",
+      "severity": "high",
+      "title": "Med Script discusses benefits before documenting the SOA",
+      "detail": "The script moves from A/B confirmation into a benefits pitch without a Scope of Appointment. The training requires the SOA before any plan-specific discussion.",
+      "sources": [
+        "03_Medicare_Script.docx",
+        "02_Medicare_Agent_Call_Center_Training.pptx"
+      ],
+      "resolution": "Tressa inserts a documented SOA step immediately after the opening/purpose and before benefits or plan discussion.",
+      "status": "contained-by-safeguard",
+      "reviewer": "compliance"
+    },
+    {
+      "id": "dob_privacy",
+      "severity": "high",
+      "title": "Med Script asks for date of birth early",
+      "detail": "The script asks for date of birth before the name/ZIP and before any privacy explanation. The training says to protect privacy and verify identity only later, as needed.",
+      "sources": [
+        "03_Medicare_Script.docx",
+        "02_Medicare_Agent_Call_Center_Training.pptx"
+      ],
+      "resolution": "Tressa asks DOB only when needed for qualification, explains why, minimizes collection, and never requests SSN/bank/Medicare ID. Callers may decline.",
+      "status": "contained-by-safeguard",
+      "reviewer": "compliance"
+    },
+    {
+      "id": "ai_vs_licensed_agent",
+      "severity": "critical",
+      "title": "Script assumes a licensed human agent; Tressa is an AI",
+      "detail": "The training opening says 'licensed insurance agent' and the script transfers to a licensed agent. Tressa is an AI voice assistant and must not claim to be licensed or to be a human.",
+      "sources": [
+        "02_Medicare_Agent_Call_Center_Training.pptx",
+        "03_Medicare_Script.docx"
+      ],
+      "resolution": "Tressa discloses that she is an AI assistant and transfers plan-specific/enrollment questions to a licensed human agent after consent.",
+      "status": "contained-by-safeguard",
+      "reviewer": "compliance"
+    },
+    {
+      "id": "tpmo_carrier_list_missing",
+      "severity": "critical",
+      "title": "TPMO carrier list and count are not provided",
+      "detail": "The training requires the TPMO disclaimer to state the number/list of organizations represented and that not every plan in the area is offered. The attachments do not specify the carrier list or count, and the script does not include a TPMO disclosure.",
+      "sources": [
+        "02_Medicare_Agent_Call_Center_Training.pptx",
+        "03_Medicare_Script.docx"
+      ],
+      "resolution": "Tressa uses a compliant placeholder that states she represents the plan options available through US Health Care and does not offer every plan in the area. The exact carrier list/count must be configured by an administrator before deployment.",
+      "status": "open-admin-action",
+      "reviewer": "admin/compliance"
+    },
+    {
+      "id": "plan_specific_data_missing",
+      "severity": "high",
+      "title": "No plan-specific premiums, copays, networks, or formularies",
+      "detail": "The attachments are training material, not a carrier plan catalog. They contain general 2026 figures and typical benefits, but no plan-specific data for a ZIP code.",
+      "sources": [
+        "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+        "07_Medicare_Basics_Overview.pptx"
+      ],
+      "resolution": "Tressa never quotes plan-specific numbers. She explains general trade-offs and transfers to a licensed agent with verified plan data.",
+      "status": "open-admin-action",
+      "reviewer": "admin"
+    },
+    {
+      "id": "2025_vs_2026_moop",
+      "severity": "medium",
+      "title": "MOOP figure is labeled 2025 in the quiz and 2026 in the comparison slide",
+      "detail": "The MA quiz says the 2025 in-network MOOP maximum was approximately $9,350. The Supplement vs Advantage slide (2026) also says 'Max up to $9,350 in-network'. The figure is training-era and may be outdated or plan-specific.",
+      "sources": [
+        "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+        "05_Medicare_Supplement_vs_Advantage.pptx"
+      ],
+      "resolution": "Tressa does not quote the MOOP as a current fact. She says plans have an annual out-of-pocket maximum and a licensed agent can confirm the current plan-specific amount.",
+      "status": "contained-by-safeguard",
+      "reviewer": "compliance"
+    },
+    {
+      "id": "age_eligibility_nuance",
+      "severity": "medium",
+      "title": "Script asks age, but Medicare eligibility is not only age 65+",
+      "detail": "The script asks 'how old are you?' after the benefits pitch. Medicare also covers some people under 65 with disability, ESRD, or ALS. The attachments do not define a campaign age cutoff beyond general Medicare eligibility.",
+      "sources": [
+        "03_Medicare_Script.docx",
+        "07_Medicare_Basics_Overview.pptx"
+      ],
+      "resolution": "Tressa asks age for campaign records but does not deny eligibility solely on age; she confirms Part A/B and plan rules and routes uncertain cases to a licensed agent.",
+      "status": "contained-by-safeguard",
+      "reviewer": "compliance"
+    },
+    {
+      "id": "outbound_permission",
+      "severity": "critical",
+      "title": "Lead source and prior express permission are not documented",
+      "detail": "The Med Script is an outbound-style call, but the attachments do not show documented prior permission or the lead source. The training prohibits cold calling and unpermitted lists.",
+      "sources": [
+        "03_Medicare_Script.docx",
+        "02_Medicare_Agent_Call_Center_Training.pptx"
+      ],
+      "resolution": "Tressa confirms permission at the opening and honors refusals/do-not-call requests. The campaign must supply documented consent before any outbound dialing; this is an open admin/compliance action.",
+      "status": "open-admin-action",
+      "reviewer": "compliance"
+    },
+    {
+      "id": "script_name_typo",
+      "severity": "low",
+      "title": "Script says 'Brain' (likely 'Brian') and 'US health care'",
+      "detail": "The greeting literally reads 'My name is Brain from US health care'. The script quiz treats that exact wording as the correct answer. 'Brain' is almost certainly a typo for 'Brian', and the agency name is inconsistently capitalized.",
+      "sources": [
+        "03_Medicare_Script.docx",
+        "06_Medicare_Script_Quiz.pptx"
+      ],
+      "resolution": "Tressa uses her configured name (Tressa) and the approved agency name. Flagged for the script owner to correct the source; do not reproduce the typo.",
+      "status": "open-admin-action",
+      "reviewer": "campaign owner"
+    },
+    {
+      "id": "recording_consent_missing_script",
+      "severity": "high",
+      "title": "Script disclaimer is not a recording consent or TPMO disclosure",
+      "detail": "The script's 'short disclaimer' is a broad contact consent/hold-harmless paragraph, not the training-required recording consent, non-affiliation, or TPMO disclosure.",
+      "sources": [
+        "03_Medicare_Script.docx",
+        "02_Medicare_Agent_Call_Center_Training.pptx"
+      ],
+      "resolution": "Tressa delivers the required recording, non-affiliation, and TPMO disclosures at the opening, and keeps any contact consent accurate and separate. Legal review is required before using the script's hold-harmless language.",
+      "status": "contained-by-safeguard",
+      "reviewer": "legal/compliance"
+    }
+  ],
+  "gaps": [
+    {
+      "id": "food_stamps_cashback",
+      "severity": "critical",
+      "title": "Med Script promises food stamps, Flex-card, and Social Security cash back",
+      "status": "contained-by-safeguard",
+      "reviewer": "compliance"
+    },
+    {
+      "id": "script_missing_disclosures",
+      "severity": "critical",
+      "title": "Med Script opening lacks required disclosures",
+      "status": "contained-by-safeguard",
+      "reviewer": "compliance"
+    },
+    {
+      "id": "script_soa_order",
+      "severity": "high",
+      "title": "Med Script discusses benefits before documenting the SOA",
+      "status": "contained-by-safeguard",
+      "reviewer": "compliance"
+    },
+    {
+      "id": "dob_privacy",
+      "severity": "high",
+      "title": "Med Script asks for date of birth early",
+      "status": "contained-by-safeguard",
+      "reviewer": "compliance"
+    },
+    {
+      "id": "ai_vs_licensed_agent",
+      "severity": "critical",
+      "title": "Script assumes a licensed human agent; Tressa is an AI",
+      "status": "contained-by-safeguard",
+      "reviewer": "compliance"
+    },
+    {
+      "id": "tpmo_carrier_list_missing",
+      "severity": "critical",
+      "title": "TPMO carrier list and count are not provided",
+      "status": "open-admin-action",
+      "reviewer": "admin/compliance"
+    },
+    {
+      "id": "plan_specific_data_missing",
+      "severity": "high",
+      "title": "No plan-specific premiums, copays, networks, or formularies",
+      "status": "open-admin-action",
+      "reviewer": "admin"
+    },
+    {
+      "id": "2025_vs_2026_moop",
+      "severity": "medium",
+      "title": "MOOP figure is labeled 2025 in the quiz and 2026 in the comparison slide",
+      "status": "contained-by-safeguard",
+      "reviewer": "compliance"
+    },
+    {
+      "id": "age_eligibility_nuance",
+      "severity": "medium",
+      "title": "Script asks age, but Medicare eligibility is not only age 65+",
+      "status": "contained-by-safeguard",
+      "reviewer": "compliance"
+    },
+    {
+      "id": "outbound_permission",
+      "severity": "critical",
+      "title": "Lead source and prior express permission are not documented",
+      "status": "open-admin-action",
+      "reviewer": "compliance"
+    },
+    {
+      "id": "script_name_typo",
+      "severity": "low",
+      "title": "Script says 'Brain' (likely 'Brian') and 'US health care'",
+      "status": "open-admin-action",
+      "reviewer": "campaign owner"
+    },
+    {
+      "id": "recording_consent_missing_script",
+      "severity": "high",
+      "title": "Script disclaimer is not a recording consent or TPMO disclosure",
+      "status": "contained-by-safeguard",
+      "reviewer": "legal/compliance"
+    }
+  ],
+  "chunks": [
+    {
+      "id": "01-s01",
+      "source": "01_Medicare_Advantage_New_Hire_Orientation.pptx",
+      "slide": 1,
+      "section": "WELCOME ABOARD",
+      "kind": "slide",
+      "sourcePriority": 3,
+      "text": "WELCOME ABOARD\nMedicare Advantage\nNew Hire Agent Orientation\nYour guide to starting strong as a Medicare Advantage agent.\nCompliance • Product Knowledge • Client Success\nSpeaker notes: 1",
+      "topics": [
+        "plan-types"
+      ],
+      "ordinal": 1
+    },
+    {
+      "id": "01-s02",
+      "source": "01_Medicare_Advantage_New_Hire_Orientation.pptx",
+      "slide": 2,
+      "section": "What is Medicare Advantage?",
+      "kind": "slide",
+      "sourcePriority": 3,
+      "text": "What is Medicare Advantage?\nMedicare Advantage (Part C) is a private health plan alternative to Original Medicare (Parts A & B). These plans are offered by private insurance companies approved by Medicare and must cover everything Original Medicare covers — often with extra benefits.\nPrivate Plans\nOffered by Medicare-approved private insurers\nAll-in-One\nCombines Part A, Part B, and usually Part D\nExtra Benefits\nDental, vision, hearing, fitness & more\nSpeaker notes: 2",
+      "topics": [
+        "eligibility",
+        "plan-types",
+        "benefits"
+      ],
+      "ordinal": 2
+    },
+    {
+      "id": "01-s03",
+      "source": "01_Medicare_Advantage_New_Hire_Orientation.pptx",
+      "slide": 3,
+      "section": "Original Medicare vs. Medicare Advantage",
+      "kind": "slide",
+      "sourcePriority": 3,
+      "text": "Original Medicare vs. Medicare Advantage\nOriginal Medicare\nPart A (Hospital) + Part B (Medical)\nNo referral needed for specialists\nNationwide provider access\nNo out-of-pocket maximum\nOptional Medigap + Part D\nHigher flexibility, potentially higher costs\nMedicare Advantage\nAll-in-one private plan (A + B + usually D)\nOften requires network / referrals\nNetwork-based (with some exceptions)\nAnnual out-of-pocket maximum\nExtra benefits included\nLower predictability, more benefits\nSpeaker notes: 3",
+      "topics": [
+        "eligibility",
+        "needs",
+        "costs",
+        "plan-types",
+        "benefits"
+      ],
+      "ordinal": 3
+    },
+    {
+      "id": "01-s04",
+      "source": "01_Medicare_Advantage_New_Hire_Orientation.pptx",
+      "slide": 4,
+      "section": "Key Benefits Agents Should Highlight",
+      "kind": "slide",
+      "sourcePriority": 3,
+      "text": "Key Benefits Agents Should Highlight\nDental & Vision\nPreventive and comprehensive coverage often included\nHearing Aids\nCoverage for hearing exams and devices\nFitness Programs\nGym memberships (e.g., SilverSneakers)\nOTC Allowance\nMonthly or quarterly over-the-counter benefits\nTransportation\nRides to medical appointments\nCare Coordination\nCase management and wellness programs\nSpeaker notes: 4",
+      "topics": [
+        "plan-types",
+        "benefits"
+      ],
+      "searchTerms": "key benefits agents should highlight extra benefits dental vision hearing fitness OTC transportation care coordination",
+      "retrievalBoost": 4.0,
+      "ordinal": 4
+    },
+    {
+      "id": "01-s05",
+      "source": "01_Medicare_Advantage_New_Hire_Orientation.pptx",
+      "slide": 5,
+      "section": "Critical Rules for New Agents",
+      "kind": "slide",
+      "sourcePriority": 3,
+      "text": "Critical Rules for New Agents\nAlways Scope of Appointment\nDocument SOA before discussing MA or Part D plans.\nNo Cherry-Picking\nNever steer or discourage based on health status.\nMarketing Materials\nOnly use CMS-approved materials. No unapproved claims.\nEnrollment Periods\nKnow AEP, OEP, SEP, IEP rules cold — timing is critical.\nNeeds Assessment\nConduct a thorough needs analysis before recommending.\nRecord Retention\nKeep all required documentation for the required period.\nSpeaker notes: 5",
+      "topics": [
+        "eligibility",
+        "enrollment",
+        "compliance",
+        "plan-types"
+      ],
+      "searchTerms": "critical rules new agents SOA cherry-picking CMS-approved materials enrollment periods needs assessment record retention",
+      "ordinal": 5
+    },
+    {
+      "id": "01-s06",
+      "source": "01_Medicare_Advantage_New_Hire_Orientation.pptx",
+      "slide": 6,
+      "section": "Your Next Steps",
+      "kind": "slide",
+      "sourcePriority": 3,
+      "text": "Your Next Steps\nComplete Required Training\nAHIP certification + carrier product training\nShadow Experienced Agents\nObserve live appointments and enrollments\nMaster the Tools\nCRM, plan comparison software, enrollment portals\nStay Compliant\nReview CMS guidelines and carrier policies regularly\nSpeaker notes: 6",
+      "topics": [
+        "eligibility",
+        "compliance",
+        "plan-types"
+      ],
+      "ordinal": 6
+    },
+    {
+      "id": "02-s01",
+      "source": "02_Medicare_Agent_Call_Center_Training.pptx",
+      "slide": 1,
+      "section": "MEDICARE AGENT",
+      "kind": "slide",
+      "sourcePriority": 2,
+      "text": "MEDICARE AGENT\nCall Center Training Script\nCompliant Sales & Enrollment Call Framework\nCMS-Aligned • Needs-Based • Professional\nFor licensed agents handling Medicare Advantage, Part D & related products\nSpeaker notes: 1",
+      "topics": [
+        "compliance",
+        "script",
+        "plan-types",
+        "transfer"
+      ],
+      "ordinal": 7
+    },
+    {
+      "id": "02-s02",
+      "source": "02_Medicare_Agent_Call_Center_Training.pptx",
+      "slide": 2,
+      "section": "Training Agenda",
+      "kind": "slide",
+      "sourcePriority": 2,
+      "text": "Training Agenda\nTraining Objectives\nWhat agents will master\nCore Compliance Rules\nCMS requirements that protect you and the beneficiary\nCall Flow Overview\n7-step structure from greeting to close\nOpening & Disclosures\nRequired identification & TPMO language\nScope of Appointment\nHow and when to complete the SOA\nNeeds Discovery\nQuestions that uncover real priorities\nPresentation & Close\nFact-based options and compliant next steps\nDo’s & Don’ts + Practice\nQuick reference and role-play scenarios\nSpeaker notes: 2",
+      "topics": [
+        "compliance",
+        "script",
+        "plan-types"
+      ],
+      "ordinal": 8
+    },
+    {
+      "id": "02-s03",
+      "source": "02_Medicare_Agent_Call_Center_Training.pptx",
+      "slide": 3,
+      "section": "Learning Objectives",
+      "kind": "slide",
+      "sourcePriority": 2,
+      "text": "Learning Objectives\nBy the end of this training, agents will be able to:\nDeliver all required CMS disclosures accurately and early in the call\nComplete a valid Scope of Appointment before discussing any specific plans\nVerify eligibility and identity while protecting privacy (HIPAA)\nConduct effective needs discovery focused on doctors, meds, and priorities\nPresent plan options factually without steering or high-pressure tactics\nHandle common objections professionally and close or schedule appropriately\nSpeaker notes: 3",
+      "topics": [
+        "eligibility",
+        "compliance",
+        "needs",
+        "objection",
+        "plan-types"
+      ],
+      "ordinal": 9
+    },
+    {
+      "id": "02-s04",
+      "source": "02_Medicare_Agent_Call_Center_Training.pptx",
+      "slide": 4,
+      "section": "Core Compliance Rules",
+      "kind": "slide",
+      "sourcePriority": 2,
+      "text": "Core Compliance Rules\nNon-negotiable requirements for every marketing / sales / enrollment call\nIdentify Fully\nState full name, licensed agent status, agency name. Disclose you are not affiliated with Medicare or the government.\nRecording Consent\nAdvise the call is being recorded and obtain clear verbal permission before continuing.\nTPMO Disclaimer\nDeliver the required disclaimer about the number of organizations / plans you represent before discussing benefits.\nScope of Appointment\nDocument product types the beneficiary wants to discuss before any plan-specific conversation.\nNo Cold Calling\nOnly contact beneficiaries with documented prior permission. Never use purchased lists without consent.\nNo Pressure Language\nAvoid “best,” “free,” false urgency, or any implication of government endorsement.\nSpeaker notes: 4",
+      "topics": [
+        "eligibility",
+        "compliance",
+        "script",
+        "plan-types",
+        "transfer"
+      ],
+      "searchTerms": "required disclosures recording consent TPMO scope of appointment no cold calling no pressure",
+      "ordinal": 10
+    },
+    {
+      "id": "02-s05",
+      "source": "02_Medicare_Agent_Call_Center_Training.pptx",
+      "slide": 5,
+      "section": "7-Step Call Flow",
+      "kind": "slide",
+      "sourcePriority": 2,
+      "text": "7-Step Call Flow\nOpening & ID\nName, license, agency, recording, non-affiliation\nSOA\nDocument product types authorized for discussion\nQualification\nParts A/B, ZIP, decision-maker status\nNeeds Discovery\nDoctors, meds, priorities, current plan gaps\nRecap\nConfirm understanding before presenting options\nPresentation\nFact-based options within SOA + TPMO reminder\nClose / Next Steps\nEnrollment if ready, or summary + follow-up\nSpeaker notes: 5",
+      "topics": [
+        "compliance",
+        "script",
+        "needs"
+      ],
+      "searchTerms": "seven step 7-step call flow opening SOA qualification needs discovery recap presentation close",
+      "ordinal": 11
+    },
+    {
+      "id": "02-s06",
+      "source": "02_Medicare_Agent_Call_Center_Training.pptx",
+      "slide": 6,
+      "section": "Step 1 — Opening & Required Disclosures",
+      "kind": "slide",
+      "sourcePriority": 2,
+      "text": "Step 1 — Opening & Required Disclosures\nSAMPLE SCRIPT\n“Hello, may I speak with [Prospect Name]?\nHi [Name], this is [Your Full Name], a licensed insurance agent with [Agency Name]. This call may be recorded for quality assurance and compliance purposes. Do I have your permission to continue and record this conversation?\n[Wait for clear yes.]\nThank you. I am calling regarding Medicare plan options. I represent [list carriers / number of organizations]. I am not connected with or endorsed by the federal government or the Medicare program. Is it okay to proceed?”\nSpeaker notes: 6",
+      "topics": [
+        "compliance",
+        "script"
+      ],
+      "ordinal": 12
+    },
+    {
+      "id": "02-s07",
+      "source": "02_Medicare_Agent_Call_Center_Training.pptx",
+      "slide": 7,
+      "section": "Step 2 — Scope of Appointment (SOA)",
+      "kind": "slide",
+      "sourcePriority": 2,
+      "text": "Step 2 — Scope of Appointment (SOA)\nMust be completed and documented before any plan-specific discussion.\nSAMPLE SOA LANGUAGE\n“Before we discuss any specific plans, I need to document the types of products you would like to review today. This is called a Scope of Appointment.\nWould you like to discuss Medicare Advantage plans, Medicare Supplement plans, Part D Prescription Drug plans, or a combination?\nPlease note that the products we discuss today will be limited to what you authorize right now. You are under no obligation to enroll in anything.”\nLimit Scope\nStay strictly within the product types authorized.\nDocument It\nVerbal or electronic record is required.\nNo Obligation\nAlways remind the beneficiary there is no pressure to enroll.\nSpeaker notes: 7",
+      "topics": [
+        "compliance",
+        "script",
+        "needs",
+        "plan-types"
+      ],
+      "searchTerms": "scope of appointment SOA before plan-specific discussion products authorized no obligation",
+      "ordinal": 13
+    },
+    {
+      "id": "02-s08",
+      "source": "02_Medicare_Agent_Call_Center_Training.pptx",
+      "slide": 8,
+      "section": "Step 3 — Qualification & Privacy Check",
+      "kind": "slide",
+      "sourcePriority": 2,
+      "text": "Step 3 — Qualification & Privacy Check\nMedicare Status\nDo you currently have Medicare Part A and Part B?\nService Area\nWhat is your ZIP code / county? (confirm plans available)\nDecision Maker\nAre you the person who makes decisions about your Medicare coverage?\nIdentity (later)\nFor privacy, may I confirm a couple of details from your Medicare information?\nSpeaker notes: 8",
+      "topics": [
+        "eligibility"
+      ],
+      "searchTerms": "qualification Parts A and B ZIP county decision maker privacy identity",
+      "ordinal": 14
+    },
+    {
+      "id": "02-s09",
+      "source": "02_Medicare_Agent_Call_Center_Training.pptx",
+      "slide": 9,
+      "section": "Step 4 — Needs Discovery",
+      "kind": "slide",
+      "sourcePriority": 2,
+      "text": "Step 4 — Needs Discovery\nListen more than you talk. These questions uncover what truly matters.\nCurrent Coverage\nWhat type of coverage do you have now? (Original + Supplement, MA, Part D, etc.)\nSatisfaction\nHow happy are you with your current plan? Any costs, coverage gaps, or access issues?\nProviders\nWhich doctors, specialists, or hospitals are most important for you to keep?\nMedications\nWhat prescription medications do you take regularly?\nPriorities\nWhat matters most — lower premiums, predictable costs, dental/vision, broader network?\nUpcoming Needs\nAny upcoming procedures or expected changes in health needs?\nSpeaker notes: 9",
+      "topics": [
+        "eligibility",
+        "script",
+        "needs",
+        "costs",
+        "plan-types",
+        "benefits"
+      ],
+      "searchTerms": "needs discovery current coverage satisfaction doctors medications priorities upcoming needs",
+      "ordinal": 15
+    },
+    {
+      "id": "02-s10",
+      "source": "02_Medicare_Agent_Call_Center_Training.pptx",
+      "slide": 10,
+      "section": "Steps 5–7 — Recap, Present, Close",
+      "kind": "slide",
+      "sourcePriority": 2,
+      "text": "Steps 5–7 — Recap, Present, Close\n5. Recap\n• Summarize doctors, meds, priorities, and budget concerns\n• Ask: “Did I get that right? Anything missing?”\n• Builds trust and prevents mis-matches\n6. Present Options\n• Stay within the SOA products only\n• Present 1–3 relevant options factually\n• State trade-offs clearly (network, prior auth, costs)\n• Remind: “I do not offer every plan in your area”\n7. Close / Next Steps\n• If ready: confirm understanding, complete enrollment\n• If not: offer summary + schedule follow-up\n• Never pressure same-call enrollment\n• End with contact info + Medicare.gov / 1-800-MEDICARE\nSpeaker notes: 10",
+      "topics": [
+        "compliance",
+        "needs"
+      ],
+      "searchTerms": "TPMO disclaimer recap present options close transfer I do not offer every plan in your area",
+      "retrievalBoost": 4.0,
+      "ordinal": 16
+    },
+    {
+      "id": "02-s11",
+      "source": "02_Medicare_Agent_Call_Center_Training.pptx",
+      "slide": 11,
+      "section": "Do’s and Don’ts Quick Reference",
+      "kind": "slide",
+      "sourcePriority": 2,
+      "text": "Do’s and Don’ts Quick Reference\nDO\n✓ Sound helpful and educational\n✓ Document every required step\n✓ Verify network & formulary fit first\n✓ Offer Medicare.gov / SHIP as alternatives\n✓ Recap needs before presenting options\n✓ Stay within the agreed SOA\n✓ End every call professionally\nDON’T\n✗ Cold call or use unpermitted lists\n✗ Discuss products outside the SOA\n✗ Claim affiliation with Medicare/gov\n✗ Use “best,” “free,” or false urgency\n✗ Pressure same-call enrollment\n✗ Skip required disclosures\n✗ Misrepresent benefits or networks\nSpeaker notes: 11",
+      "topics": [
+        "eligibility",
+        "compliance",
+        "needs"
+      ],
+      "searchTerms": "prohibited marketing phrases best free false urgency do not cold call",
+      "ordinal": 17
+    },
+    {
+      "id": "02-s12",
+      "source": "02_Medicare_Agent_Call_Center_Training.pptx",
+      "slide": 12,
+      "section": "Key Knowledge Agents Must Master",
+      "kind": "slide",
+      "sourcePriority": 2,
+      "text": "Key Knowledge Agents Must Master\nParts of Medicare\n• A – Hospital Insurance\n• B – Medical Insurance\n• C – Medicare Advantage\n• D – Prescription Drugs\n• Medigap – Supplements Original\nMain Enrollment Periods\n• IEP – around 65th birthday\n• AEP – Oct 15 to Dec 7\n• MA OEP – Jan 1 to Mar 31\n• SEPs – qualifying life events\nOriginal vs Advantage\n• Original: any provider accepting Medicare\n• Advantage: network, often extra benefits\n• Advantage has annual OOP max\n• Trade-offs must be stated clearly\nAlways Offer Alternatives\n• Medicare.gov\n• 1-800-MEDICARE\n• Local SHIP counselor\n• Independent comparison tools\nSpeaker notes: 12",
+      "topics": [
+        "eligibility",
+        "enrollment",
+        "script",
+        "needs",
+        "plan-types",
+        "benefits"
+      ],
+      "searchTerms": "key knowledge parts of Medicare enrollment periods IEP AEP OEP SEP Medicare.gov SHIP",
+      "ordinal": 18
+    },
+    {
+      "id": "02-s13",
+      "source": "02_Medicare_Agent_Call_Center_Training.pptx",
+      "slide": 13,
+      "section": "Role-Play Practice Scenarios",
+      "kind": "slide",
+      "sourcePriority": 2,
+      "text": "Role-Play Practice Scenarios\nPractice these live with a partner or supervisor. Score for compliance + discovery quality.\nAEP Inbound – Original Medicare\nCaller wants lower drug costs and is open to comparing Advantage plans.\nCurrent MA Member – Network Issue\nMember is unhappy with specialist access and considering a switch.\nAdult Child Calling for Parent\nDaughter is helping but is not the legal decision-maker.\n“I’m Happy With My Plan”\nObjection handling – offer a quick annual review without pressure.\nOutside Scope Request\nCaller asks about a product type not authorized in the SOA.\nSpeaker notes: 13",
+      "topics": [
+        "enrollment",
+        "compliance",
+        "needs",
+        "objection"
+      ],
+      "ordinal": 19
+    },
+    {
+      "id": "02-s14",
+      "source": "02_Medicare_Agent_Call_Center_Training.pptx",
+      "slide": 14,
+      "section": "Remember",
+      "kind": "slide",
+      "sourcePriority": 2,
+      "text": "Remember\nCompliance protects everyone.\nYour job is to educate, listen, and help the beneficiary make an informed choice — never to push a plan.\nAlways use current carrier materials and have your compliance team review scripts before use.\nQuestions? Practice with your supervisor today.\nSpeaker notes: 14",
+      "topics": [
+        "eligibility",
+        "script"
+      ],
+      "ordinal": 20
+    },
+    {
+      "id": "04-s01",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 1,
+      "section": "MEDICARE ADVANTAGE",
+      "kind": "slide",
+      "sourcePriority": 5,
+      "text": "MEDICARE ADVANTAGE\nMA Plan Quiz\n35 Multiple-Choice Questions • Test Your Knowledge\nBased on current CMS guidelines and Medicare rules\nSpeaker notes: 1",
+      "topics": [
+        "compliance",
+        "plan-types"
+      ],
+      "ordinal": 21
+    },
+    {
+      "id": "04-s02",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 2,
+      "section": "How to Use This Quiz",
+      "kind": "slide",
+      "sourcePriority": 5,
+      "text": "How to Use This Quiz\nRead carefully\nEach question has one best answer based on Medicare Advantage rules.\nChoose A, B, C, or D\nSelect the option that most accurately answers the question.\nTrack your answers\nNote your responses; the full Answer Key appears at the end.\nReview & learn\nUse the answer key with brief explanations to reinforce knowledge.\nSpeaker notes: 2",
+      "topics": [
+        "plan-types"
+      ],
+      "ordinal": 22
+    },
+    {
+      "id": "04-s03",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 3,
+      "section": "Question 1 of 35",
+      "kind": "slide",
+      "sourcePriority": 5,
+      "text": "Question 1 of 35\nWhat is Medicare Advantage (MA) also known as?\nA\nPart A\nB\nPart B\nC\nPart C\nD\nPart D\nSpeaker notes: 3",
+      "topics": [
+        "eligibility",
+        "plan-types"
+      ],
+      "ordinal": 23
+    },
+    {
+      "id": "04-s04",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 4,
+      "section": "Question 2 of 35",
+      "kind": "slide",
+      "sourcePriority": 5,
+      "text": "Question 2 of 35\nTo enroll in a Medicare Advantage plan, a person must have:\nA\nOnly Part A\nB\nOnly Part B\nC\nBoth Part A and Part B\nD\nPart D only\nSpeaker notes: 4",
+      "topics": [
+        "eligibility",
+        "plan-types"
+      ],
+      "ordinal": 24
+    },
+    {
+      "id": "04-s05",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 5,
+      "section": "Question 3 of 35",
+      "kind": "slide",
+      "sourcePriority": 5,
+      "text": "Question 3 of 35\nWho offers Medicare Advantage plans?\nA\nOnly the federal government\nB\nPrivate insurance companies that contract with Medicare\nC\nState Medicaid offices only\nD\nHospitals directly\nSpeaker notes: 5",
+      "topics": [
+        "eligibility",
+        "plan-types"
+      ],
+      "ordinal": 25
+    },
+    {
+      "id": "04-s06",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 6,
+      "section": "Question 4 of 35",
+      "kind": "slide",
+      "sourcePriority": 5,
+      "text": "Question 4 of 35\nMost Medicare Advantage plans include which additional coverage?\nA\nOnly hospital care\nB\nPrescription drug coverage (Part D)\nC\nLong-term nursing home care\nD\nMedigap supplements\nSpeaker notes: 6",
+      "topics": [
+        "script",
+        "needs",
+        "plan-types"
+      ],
+      "ordinal": 26
+    },
+    {
+      "id": "04-s07",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 7,
+      "section": "Question 5 of 35",
+      "kind": "slide",
+      "sourcePriority": 5,
+      "text": "Question 5 of 35\nWhat is a key difference between Original Medicare and Medicare Advantage regarding out-of-pocket costs?\nA\nOriginal Medicare has a yearly out-of-pocket maximum\nB\nMedicare Advantage plans must have an annual out-of-pocket maximum\nC\nNeither has an out-of-pocket limit\nD\nOnly Part D has an out-of-pocket limit\nSpeaker notes: 7",
+      "topics": [
+        "costs",
+        "plan-types"
+      ],
+      "ordinal": 27
+    },
+    {
+      "id": "04-s08",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 8,
+      "section": "Question 6 of 35",
+      "kind": "slide",
+      "sourcePriority": 5,
+      "text": "Question 6 of 35\nIn 2025, the federal maximum out-of-pocket limit (MOOP) for in-network services in MA plans was set at approximately:\nA\n$3,500\nB\n$6,000\nC\n$9,350\nD\n$15,000\nSpeaker notes: 8",
+      "topics": [
+        "needs",
+        "costs"
+      ],
+      "ordinal": 28
+    },
+    {
+      "id": "04-s09",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 9,
+      "section": "Question 7 of 35",
+      "kind": "slide",
+      "sourcePriority": 5,
+      "text": "Question 7 of 35\nWhich type of Medicare Advantage plan typically requires members to use in-network providers and often needs referrals for specialists?\nA\nPPO\nB\nHMO\nC\nPFFS\nD\nMSA\nSpeaker notes: 9",
+      "topics": [
+        "eligibility",
+        "needs",
+        "plan-types"
+      ],
+      "ordinal": 29
+    },
+    {
+      "id": "04-s10",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 10,
+      "section": "Question 8 of 35",
+      "kind": "slide",
+      "sourcePriority": 5,
+      "text": "Question 8 of 35\nCan a person with Medicare Advantage also purchase a Medigap (Medicare Supplement) policy?\nA\nYes, always\nB\nYes, during Open Enrollment only\nC\nNo, Medigap cannot be used with Medicare Advantage\nD\nOnly if the MA plan is an HMO\nSpeaker notes: 10",
+      "topics": [
+        "eligibility",
+        "plan-types"
+      ],
+      "ordinal": 30
+    },
+    {
+      "id": "04-s11",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 11,
+      "section": "Question 9 of 35",
+      "kind": "slide",
+      "sourcePriority": 5,
+      "text": "Question 9 of 35\nWhat is the Annual Coordinated Election Period (AEP) for Medicare Advantage?\nA\nJanuary 1 – March 31\nB\nOctober 15 – December 7\nC\nApril 1 – June 30\nD\nJuly 1 – September 30\nSpeaker notes: 11",
+      "topics": [
+        "enrollment",
+        "plan-types"
+      ],
+      "ordinal": 31
+    },
+    {
+      "id": "04-s12",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 12,
+      "section": "Question 10 of 35",
+      "kind": "slide",
+      "sourcePriority": 5,
+      "text": "Question 10 of 35\nDuring the Medicare Advantage Open Enrollment Period (MA OEP), what can beneficiaries do?\nA\nOnly switch from Original Medicare to MA\nB\nSwitch MA plans or return to Original Medicare (Jan 1 – March 31)\nC\nEnroll in any Medigap plan without underwriting\nD\nChange their Part B premium\nSpeaker notes: 12",
+      "topics": [
+        "eligibility",
+        "enrollment",
+        "costs",
+        "plan-types"
+      ],
+      "ordinal": 32
+    },
+    {
+      "id": "04-s13",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 13,
+      "section": "Question 11 of 35",
+      "kind": "slide",
+      "sourcePriority": 5,
+      "text": "Question 11 of 35\nApproximately what percentage of eligible Medicare beneficiaries were enrolled in Medicare Advantage in recent years (2025–2026)?\nA\nAbout 25%\nB\nAbout 40%\nC\nMore than 50%\nD\nAbout 80%\nSpeaker notes: 13",
+      "topics": [
+        "eligibility",
+        "costs",
+        "plan-types"
+      ],
+      "ordinal": 33
+    },
+    {
+      "id": "04-s14",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 14,
+      "section": "Question 12 of 35",
+      "kind": "slide",
+      "sourcePriority": 5,
+      "text": "Question 12 of 35\nMany Medicare Advantage plans offer supplemental benefits not covered by Original Medicare. Which of the following is commonly offered?\nA\nRoutine dental, vision, and hearing\nB\nUnlimited long-term care\nC\nCosmetic surgery\nD\nInternational travel insurance only\nSpeaker notes: 14",
+      "topics": [
+        "plan-types",
+        "benefits"
+      ],
+      "ordinal": 34
+    },
+    {
+      "id": "04-s15",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 15,
+      "section": "Question 13 of 35",
+      "kind": "slide",
+      "sourcePriority": 5,
+      "text": "Question 13 of 35\nHow are Medicare Advantage plans primarily paid by Medicare?\nA\nFee-for-service for each service\nB\nCapitated (per-member-per-month) payments\nC\nOnly when claims are submitted by the member\nD\nThrough state budgets\nSpeaker notes: 15",
+      "topics": [
+        "plan-types"
+      ],
+      "ordinal": 35
+    },
+    {
+      "id": "04-s16",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 16,
+      "section": "Question 14 of 35",
+      "kind": "slide",
+      "sourcePriority": 5,
+      "text": "Question 14 of 35\nWhat is a Special Needs Plan (SNP)?\nA\nA plan only for people under 65\nB\nAn MA plan designed for people with specific conditions or dual eligibility\nC\nA plan that covers only Part D\nD\nA temporary emergency plan\nSpeaker notes: 16",
+      "topics": [
+        "eligibility",
+        "plan-types"
+      ],
+      "ordinal": 36
+    },
+    {
+      "id": "04-s17",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 17,
+      "section": "Question 15 of 35",
+      "kind": "slide",
+      "sourcePriority": 5,
+      "text": "Question 15 of 35\nWhich of the following is true about provider networks in Medicare Advantage?\nA\nAll MA plans allow any Medicare provider nationwide\nB\nHMO plans usually limit care to in-network providers\nC\nPPO plans never cover out-of-network care\nD\nNetworks are the same as Original Medicare\nSpeaker notes: 17",
+      "topics": [
+        "needs",
+        "plan-types"
+      ],
+      "ordinal": 37
+    },
+    {
+      "id": "04-s18",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 18,
+      "section": "Question 16 of 35",
+      "kind": "slide",
+      "sourcePriority": 5,
+      "text": "Question 16 of 35\nIf a Medicare Advantage member needs emergency care while traveling outside the plan’s service area, what typically happens?\nA\nNo coverage is provided\nB\nEmergency and urgently needed care is covered\nC\nOnly Part A is covered\nD\nThe member must pay 100% and seek reimbursement later\nSpeaker notes: 18",
+      "topics": [
+        "eligibility",
+        "plan-types"
+      ],
+      "ordinal": 38
+    },
+    {
+      "id": "04-s19",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 19,
+      "section": "Question 17 of 35",
+      "kind": "slide",
+      "sourcePriority": 5,
+      "text": "Question 17 of 35\nWhat is the main purpose of the Medicare Advantage rebate?\nA\nTo increase Part B premiums\nB\nFunds that plans can use to lower premiums, reduce cost-sharing, or offer supplemental benefits\nC\nA penalty for high utilization\nD\nA tax paid by enrollees\nSpeaker notes: 19",
+      "topics": [
+        "eligibility",
+        "costs",
+        "plan-types"
+      ],
+      "ordinal": 39
+    },
+    {
+      "id": "04-s20",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 20,
+      "section": "Question 18 of 35",
+      "kind": "slide",
+      "sourcePriority": 5,
+      "text": "Question 18 of 35\nCan a person who has End-Stage Renal Disease (ESRD) enroll in a Medicare Advantage plan?\nA\nNo, never\nB\nYes, under current rules (restrictions largely lifted)\nC\nOnly through a special SNP\nD\nOnly if under age 55\nSpeaker notes: 20",
+      "topics": [
+        "eligibility",
+        "plan-types"
+      ],
+      "ordinal": 40
+    },
+    {
+      "id": "04-s21",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 21,
+      "section": "Question 19 of 35",
+      "kind": "slide",
+      "sourcePriority": 5,
+      "text": "Question 19 of 35\nWhat does “zero-premium” Medicare Advantage plan usually mean?\nA\nThe plan covers the Part B premium completely and charges $0\nB\nThe enrollee pays $0 for the MA plan premium (still pays Part B premium)\nC\nNo cost-sharing for any services\nD\nFree Medigap coverage\nSpeaker notes: 21",
+      "topics": [
+        "eligibility",
+        "costs",
+        "plan-types"
+      ],
+      "ordinal": 41
+    },
+    {
+      "id": "04-s22",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 22,
+      "section": "Question 20 of 35",
+      "kind": "slide",
+      "sourcePriority": 5,
+      "text": "Question 20 of 35\nWhich statement about prior authorization in Medicare Advantage is generally true?\nA\nPrior authorization is never used\nB\nMany MA plans use prior authorization for certain services\nC\nOnly Original Medicare uses prior authorization\nD\nPrior authorization is illegal under CMS rules\nSpeaker notes: 22",
+      "topics": [
+        "compliance",
+        "plan-types"
+      ],
+      "ordinal": 42
+    },
+    {
+      "id": "04-s23",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 23,
+      "section": "Question 21 of 35",
+      "kind": "slide",
+      "sourcePriority": 5,
+      "text": "Question 21 of 35\nIf a beneficiary is enrolled in a Medicare Advantage plan and needs hospice care, who primarily covers the hospice services?\nA\nThe MA plan only\nB\nOriginal Medicare (hospice is covered by Original Medicare)\nC\nThe state Medicaid program\nD\nThe beneficiary pays 100%\nSpeaker notes: 23",
+      "topics": [
+        "plan-types"
+      ],
+      "ordinal": 43
+    },
+    {
+      "id": "04-s24",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 24,
+      "section": "Question 22 of 35",
+      "kind": "slide",
+      "sourcePriority": 5,
+      "text": "Question 22 of 35\nWhat is the typical structure of cost-sharing in many Medicare Advantage HMO plans?\nA\nAlways 20% coinsurance like Original Medicare\nB\nFixed copayments for office visits and services\nC\nNo cost-sharing at all\nD\nOnly deductibles with no copays\nSpeaker notes: 24",
+      "topics": [
+        "costs",
+        "plan-types"
+      ],
+      "ordinal": 44
+    },
+    {
+      "id": "04-s25",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 25,
+      "section": "Question 23 of 35",
+      "kind": "slide",
+      "sourcePriority": 5,
+      "text": "Question 23 of 35\nDuring which period can a newly eligible Medicare beneficiary first enroll in a Medicare Advantage plan?\nA\nOnly during AEP\nB\nDuring their Initial Coverage Election Period (ICEP)\nC\nOnly after age 70\nD\nNever in the first year\nSpeaker notes: 25",
+      "topics": [
+        "eligibility",
+        "enrollment",
+        "plan-types"
+      ],
+      "ordinal": 45
+    },
+    {
+      "id": "04-s26",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 26,
+      "section": "Question 24 of 35",
+      "kind": "slide",
+      "sourcePriority": 5,
+      "text": "Question 24 of 35\nWhich of the following is a common reason someone might prefer Original Medicare over Medicare Advantage?\nA\nDesire for a broad nationwide provider choice without network restrictions\nB\nWanting extra dental and vision benefits\nC\nPreferring a single all-in-one plan\nD\nWanting an out-of-pocket maximum\nSpeaker notes: 26",
+      "topics": [
+        "needs",
+        "costs",
+        "plan-types",
+        "benefits"
+      ],
+      "ordinal": 46
+    },
+    {
+      "id": "04-s27",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 27,
+      "section": "Question 25 of 35",
+      "kind": "slide",
+      "sourcePriority": 5,
+      "text": "Question 25 of 35\nWhat happens if a Medicare Advantage plan leaves the market or the enrollee moves out of the service area?\nA\nThe person is locked into the plan forever\nB\nA Special Enrollment Period (SEP) is typically available\nC\nCoverage ends immediately with no options\nD\nThey must wait until the next AEP only\nSpeaker notes: 27",
+      "topics": [
+        "enrollment",
+        "plan-types"
+      ],
+      "ordinal": 47
+    },
+    {
+      "id": "04-s28",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 28,
+      "section": "Question 26 of 35",
+      "kind": "slide",
+      "sourcePriority": 5,
+      "text": "Question 26 of 35\nWhich organization sets the rules and oversees Medicare Advantage plans?\nA\nThe IRS\nB\nCenters for Medicare & Medicaid Services (CMS)\nC\nState insurance departments only\nD\nThe FDA\nSpeaker notes: 28",
+      "topics": [
+        "compliance",
+        "plan-types"
+      ],
+      "ordinal": 48
+    },
+    {
+      "id": "04-s29",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 29,
+      "section": "Question 27 of 35",
+      "kind": "slide",
+      "sourcePriority": 5,
+      "text": "Question 27 of 35\nIn a Medicare Advantage PPO plan, what is generally true about out-of-network care?\nA\nIt is never covered\nB\nIt is usually covered but often at higher cost-sharing\nC\nIt requires a referral from the primary care doctor\nD\nIt is free of charge\nSpeaker notes: 29",
+      "topics": [
+        "needs",
+        "plan-types"
+      ],
+      "ordinal": 49
+    },
+    {
+      "id": "04-s30",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 30,
+      "section": "Question 28 of 35",
+      "kind": "slide",
+      "sourcePriority": 5,
+      "text": "Question 28 of 35\nWhat is a D-SNP?\nA\nA plan for people with diabetes only\nB\nA Dual Eligible Special Needs Plan for those with both Medicare and Medicaid\nC\nA plan that only covers drugs\nD\nA dental-only special needs plan\nSpeaker notes: 30",
+      "topics": [
+        "eligibility",
+        "plan-types",
+        "benefits"
+      ],
+      "ordinal": 50
+    },
+    {
+      "id": "04-s31",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 31,
+      "section": "Question 29 of 35",
+      "kind": "slide",
+      "sourcePriority": 5,
+      "text": "Question 29 of 35\nApproximately what share of individual Medicare Advantage plans with drug coverage charged $0 premium (beyond Part B) in recent years?\nA\nLess than 20%\nB\nAbout 40%\nC\nAround 75% or more of enrollees are in $0 premium plans\nD\n100% of all plans\nSpeaker notes: 31",
+      "topics": [
+        "eligibility",
+        "costs",
+        "plan-types"
+      ],
+      "ordinal": 51
+    },
+    {
+      "id": "04-s32",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 32,
+      "section": "Question 30 of 35",
+      "kind": "slide",
+      "sourcePriority": 5,
+      "text": "Question 30 of 35\nCan Medicare Advantage plans charge higher cost-sharing than Original Medicare for the same service?\nA\nYes, without any limits\nB\nNo, never\nC\nThey must follow CMS rules and cannot exceed certain limits; overall value must be actuarially equivalent or better\nD\nOnly for Part D drugs\nSpeaker notes: 32",
+      "topics": [
+        "compliance",
+        "plan-types"
+      ],
+      "ordinal": 52
+    },
+    {
+      "id": "04-s33",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 33,
+      "section": "Question 31 of 35",
+      "kind": "slide",
+      "sourcePriority": 5,
+      "text": "Question 31 of 35\nWhat is the Medicare Advantage Maximum Out-of-Pocket (MOOP) designed to do?\nA\nLimit the plan’s payments to providers\nB\nProtect enrollees by capping their annual spending on covered Part A and B services\nC\nReplace the Part B deductible\nD\nApply only to prescription drugs\nSpeaker notes: 33",
+      "topics": [
+        "eligibility",
+        "script",
+        "needs",
+        "costs",
+        "plan-types"
+      ],
+      "ordinal": 53
+    },
+    {
+      "id": "04-s34",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 34,
+      "section": "Question 32 of 35",
+      "kind": "slide",
+      "sourcePriority": 5,
+      "text": "Question 32 of 35\nIf someone joins a Medicare Advantage plan for the first time and is unhappy, what option do they have in the first 3 months of the year?\nA\nNothing until next October\nB\nUse the MA Open Enrollment Period to switch plans or return to Original Medicare\nC\nOnly appeal to CMS\nD\nAutomatically get Medigap\nSpeaker notes: 34",
+      "topics": [
+        "enrollment",
+        "compliance",
+        "plan-types"
+      ],
+      "ordinal": 54
+    },
+    {
+      "id": "04-s35",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 35,
+      "section": "Question 33 of 35",
+      "kind": "slide",
+      "sourcePriority": 5,
+      "text": "Question 33 of 35\nWhich statement best describes Star Ratings for Medicare Advantage plans?\nA\nThey are purely marketing and have no impact\nB\nCMS rates plans 1–5 stars based on quality and performance; higher stars can affect payments and enrollment\nC\nOnly Part D plans receive Star Ratings\nD\nStars are assigned by the plans themselves\nSpeaker notes: 35",
+      "topics": [
+        "compliance",
+        "plan-types"
+      ],
+      "ordinal": 55
+    },
+    {
+      "id": "04-s36",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 36,
+      "section": "Question 34 of 35",
+      "kind": "slide",
+      "sourcePriority": 5,
+      "text": "Question 34 of 35\nTrue or False: All Medicare Advantage plans must cover the same core benefits as Original Medicare (Parts A and B).\nA\nTrue\nB\nFalse – they can exclude hospital care\nC\nFalse – they only cover Part B\nD\nTrue, but only if the member pays extra\nSpeaker notes: 36",
+      "topics": [
+        "eligibility",
+        "plan-types"
+      ],
+      "ordinal": 56
+    },
+    {
+      "id": "04-s37",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 37,
+      "section": "Question 35 of 35",
+      "kind": "slide",
+      "sourcePriority": 5,
+      "text": "Question 35 of 35\nWhat should a beneficiary primarily consider when choosing between Original Medicare and a Medicare Advantage plan?\nA\nOnly the monthly premium amount\nB\nProvider network, total costs (premiums + cost-sharing), extra benefits, and personal health needs\nC\nOnly whether dental is included\nD\nThe color of the plan brochure\nSpeaker notes: 37",
+      "topics": [
+        "needs",
+        "costs",
+        "plan-types",
+        "benefits"
+      ],
+      "ordinal": 57
+    },
+    {
+      "id": "04-s38",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 38,
+      "section": "ANSWER KEY",
+      "kind": "slide",
+      "sourcePriority": 5,
+      "text": "ANSWER KEY\nReview the correct answers and short explanations\nSpeaker notes: 38",
+      "topics": [],
+      "ordinal": 58
+    },
+    {
+      "id": "04-s39",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 39,
+      "section": "Answer Key — Questions 1–7",
+      "kind": "slide",
+      "sourcePriority": 5,
+      "text": "Answer Key — Questions 1–7\nQ1: C\nMedicare Advantage is also called Medicare Part C.\nQ2: C\nEligibility requires both Medicare Part A and Part B.\nQ3: B\nPrivate insurers contract with Medicare to offer MA plans.\nQ4: B\nMost MA plans are MA-PDs and include Part D drug coverage.\nQ5: B\nMA plans are required to cap annual out-of-pocket spending for Part A and B services.\nQ6: C\nCMS set the 2025 in-network MOOP maximum at $9,350.\nQ7: B\nHMOs generally require in-network care and referrals for specialists.\nSpeaker notes: 39",
+      "topics": [
+        "eligibility",
+        "compliance",
+        "needs",
+        "costs",
+        "plan-types"
+      ],
+      "ordinal": 59
+    },
+    {
+      "id": "04-s40",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 40,
+      "section": "Answer Key — Questions 8–14",
+      "kind": "slide",
+      "sourcePriority": 5,
+      "text": "Answer Key — Questions 8–14\nQ8: C\nYou cannot have Medigap while enrolled in a Medicare Advantage plan.\nQ9: B\nAEP runs October 15 through December 7 each year.\nQ10: B\nMA OEP (Jan 1–Mar 31) allows one change: switch MA plans or return to Original Medicare.\nQ11: C\nOver half (around 54–55%) of eligible beneficiaries are enrolled in MA plans.\nQ12: A\nDental, vision, and hearing benefits are very common supplemental benefits in MA plans.\nQ13: B\nMedicare pays MA plans a fixed monthly amount (capitation) per enrollee.\nQ14: B\nSNPs serve dual-eligible individuals, those with chronic conditions, or institutionalized beneficiaries.\nSpeaker notes: 40",
+      "topics": [
+        "eligibility",
+        "enrollment",
+        "plan-types",
+        "benefits"
+      ],
+      "ordinal": 60
+    },
+    {
+      "id": "04-s41",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 41,
+      "section": "Answer Key — Questions 15–21",
+      "kind": "slide",
+      "sourcePriority": 5,
+      "text": "Answer Key — Questions 15–21\nQ15: B\nHMOs generally restrict coverage to their network (with exceptions for emergencies).\nQ16: B\nMA plans must cover emergency and urgently needed services even out of network/area.\nQ17: B\nRebates result when a plan’s bid is below the benchmark; they fund extra benefits or lower costs.\nQ18: B\nThe previous ESRD enrollment restriction was removed; people with ESRD can generally join MA plans.\nQ19: B\nZero-premium means $0 additional MA plan premium; the standard Part B premium still applies.\nQ20: B\nPrior authorization is commonly used by MA plans for certain procedures, DME, and therapies.\nQ21: B\nHospice care is covered under Original Medicare even if the person remains in an MA plan.\nSpeaker notes: 41",
+      "topics": [
+        "eligibility",
+        "needs",
+        "costs",
+        "plan-types",
+        "benefits"
+      ],
+      "ordinal": 61
+    },
+    {
+      "id": "04-s42",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 42,
+      "section": "Answer Key — Questions 22–28",
+      "kind": "slide",
+      "sourcePriority": 5,
+      "text": "Answer Key — Questions 22–28\nQ22: B\nMany MA plans use set copays (e.g., $20 primary care) rather than 20% coinsurance.\nQ23: B\nThe Initial Coverage Election Period allows first-time enrollment in an MA plan.\nQ24: A\nOriginal Medicare allows any provider that accepts Medicare, anywhere in the U.S.\nQ25: B\nLoss of plan or moving out of area triggers a Special Enrollment Period.\nQ26: B\nCMS contracts with and regulates Medicare Advantage organizations.\nQ27: B\nPPOs typically cover out-of-network services at higher cost-sharing levels.\nQ28: B\nD-SNPs are designed for dual-eligible beneficiaries (Medicare + Medicaid).\nSpeaker notes: 42",
+      "topics": [
+        "eligibility",
+        "enrollment",
+        "compliance",
+        "needs",
+        "costs",
+        "plan-types"
+      ],
+      "ordinal": 62
+    },
+    {
+      "id": "04-s43",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 43,
+      "section": "Answer Key — Questions 29–35",
+      "kind": "slide",
+      "sourcePriority": 5,
+      "text": "Answer Key — Questions 29–35\nQ29: C\nA large majority of MA-PD enrollees are in plans with $0 additional premium.\nQ30: C\nPlans must provide at least the same overall value; individual services have cost-sharing limits set by CMS.\nQ31: B\nMOOP protects beneficiaries by limiting their annual out-of-pocket costs for covered services.\nQ32: B\nThe MA OEP (January–March) allows one change for those already in MA.\nQ33: B\nCMS Star Ratings measure quality; higher-rated plans may receive bonus payments and attract more members.\nQ34: A\nMA plans must cover all medically necessary Part A and Part B services (with limited exceptions such as hospice).\nQ35: B\nThe best choice depends on doctors/hospitals used, expected care needs, travel, and total cost exposure.\nSpeaker notes: 43",
+      "topics": [
+        "eligibility",
+        "enrollment",
+        "compliance",
+        "needs",
+        "costs"
+      ],
+      "ordinal": 63
+    },
+    {
+      "id": "04-s44",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 44,
+      "section": "Great work!",
+      "kind": "slide",
+      "sourcePriority": 5,
+      "text": "Great work!\nYou’ve completed the 35-question Medicare Advantage quiz.\nReview any missed questions using the Answer Key and stay current with annual CMS updates, as plan rules and benefits can change each year.\nFor official information: Medicare.gov • CMS.gov\nSpeaker notes: 44",
+      "topics": [
+        "compliance",
+        "plan-types"
+      ],
+      "ordinal": 64
+    },
+    {
+      "id": "05-s01",
+      "source": "05_Medicare_Supplement_vs_Advantage.pptx",
+      "slide": 1,
+      "section": "Medicare Supplement vs. Medicare Advantage",
+      "kind": "slide",
+      "sourcePriority": 5,
+      "text": "Medicare Supplement vs. Medicare Advantage\nKey differences at a glance | 2026\nMedicare Supplement (Medigap)\nMedicare Advantage (Part C)\nHow it works\nWorks with Original Medicare\nFills the cost gaps\nReplaces Original Medicare\nAll-in-one private plan\nMonthly premium\n(beyond Part B)\nTypically $100–$300+\nOften $0 (avg ~$14)\nOut-of-pocket costs\nVery low & predictable\n(Plan G: mainly Part B deductible ~$283)\nCopays + coinsurance\nMax up to $9,350 in-network\nDoctor choice\nAny Medicare-accepting\nprovider nationwide\nUsually network-based\n(HMO or PPO)\nReferrals needed\nRarely\nOften (especially HMOs)\nPrescription drugs\nSeparate Part D plan required\nUsually included\nExtra benefits\nNot included\n(dental, vision, hearing)\nOften included\nBest for\nHigher care needs, travel,\nprovider freedom, predictability\nHealthy, low premiums,\nbundled extras, local network\nYou cannot have both at the same time. | Everyone pays the Part B premium (~$202.90/mo in 2026). | Source: Medicare.gov\nSpeaker notes: 1",
+      "topics": [
+        "eligibility",
+        "enrollment",
+        "script",
+        "needs",
+        "costs",
+        "plan-types",
+        "benefits"
+      ],
+      "ordinal": 65
+    },
+    {
+      "id": "06-s01",
+      "source": "06_Medicare_Script_Quiz.pptx",
+      "slide": 1,
+      "section": "Main Pitch Only",
+      "kind": "slide",
+      "sourcePriority": 4,
+      "text": "Main Pitch Only\n10 Questions · Based strictly on the script content from Greeting through Transfer\nTraining Tool for Agents\nSpeaker notes: 1",
+      "topics": [
+        "script",
+        "transfer"
+      ],
+      "ordinal": 66
+    },
+    {
+      "id": "06-s02",
+      "source": "06_Medicare_Script_Quiz.pptx",
+      "slide": 2,
+      "section": "QUESTION 1",
+      "kind": "slide",
+      "sourcePriority": 4,
+      "text": "QUESTION 1\nGreeting & Company Name\nAccording to the script, how should the agent introduce themselves?\nA\nMy name is Brian from US Healthcare, how are you doing?\nB\nMy name is Brain from US health care how are you doing?\nC\nHi, this is [Name] calling from Medicare Benefits Center.\nD\nGood morning, I am a licensed agent with US Health Care.\nSpeaker notes: 2",
+      "topics": [
+        "script",
+        "transfer"
+      ],
+      "ordinal": 67
+    },
+    {
+      "id": "06-s03",
+      "source": "06_Medicare_Script_Quiz.pptx",
+      "slide": 3,
+      "section": "QUESTION 2",
+      "kind": "slide",
+      "sourcePriority": 4,
+      "text": "QUESTION 2\nPurpose of the Call\nWhat is the stated reason for the call in the script?\nA\nTo sell a new Medicare Advantage plan and change the customer’s coverage\nB\nThis call is about your benefits and savings on Medicare so you do have Medicare Part A and B, right?\nC\nTo schedule a free in-home consultation with a licensed agent\nD\nTo verify the customer’s Social Security number and bank details\nSpeaker notes: 3",
+      "topics": [
+        "eligibility",
+        "script",
+        "plan-types",
+        "transfer"
+      ],
+      "ordinal": 68
+    },
+    {
+      "id": "06-s04",
+      "source": "06_Medicare_Script_Quiz.pptx",
+      "slide": 4,
+      "section": "QUESTION 3",
+      "kind": "slide",
+      "sourcePriority": 4,
+      "text": "QUESTION 3\nBenefits Mentioned After Confirming A & B\nIf the customer confirms they have Medicare Part A & B, which benefits does the script say they may qualify for?\nA\nOnly dental and vision coverage\nB\nIncreasing food-stamps, Flex-card, dental, vision and cashback (more money back into the Social Security check each month)\nC\nFree hospital stays and unlimited prescription drugs\nD\nA brand-new Medicare Advantage plan with $0 premium\nSpeaker notes: 4",
+      "topics": [
+        "eligibility",
+        "script",
+        "needs",
+        "costs",
+        "plan-types",
+        "benefits",
+        "conflict"
+      ],
+      "ordinal": 69
+    },
+    {
+      "id": "06-s05",
+      "source": "06_Medicare_Script_Quiz.pptx",
+      "slide": 5,
+      "section": "QUESTION 4",
+      "kind": "slide",
+      "sourcePriority": 4,
+      "text": "QUESTION 4\nQualification Questions – Age & Decision Making\nWhich two qualification questions appear consecutively in the script right after the benefits pitch?\nA\nWhat is your Social Security number? and What is your bank account number?\nB\nHow old are you? and You make your own decision. Right?\nC\nDo you have Medicare Advantage? and Are you currently on Medicaid?\nD\nWhat is your income? and Do you own your home?\nSpeaker notes: 5",
+      "topics": [
+        "script",
+        "plan-types"
+      ],
+      "ordinal": 70
+    },
+    {
+      "id": "06-s06",
+      "source": "06_Medicare_Script_Quiz.pptx",
+      "slide": 6,
+      "section": "QUESTION 5",
+      "kind": "slide",
+      "sourcePriority": 4,
+      "text": "QUESTION 5\nVA, Tricare & Retirement Plans\nWhat exact question does the script instruct the agent to ask about other coverage?\nA\nDo you have any other health insurance besides Medicare?\nB\nDo you have any VA, Tricare & Retirement Plans?\nC\nAre you currently enrolled in a Medicare Advantage plan?\nD\nDo you receive benefits from the Department of Veterans Affairs?\nSpeaker notes: 6",
+      "topics": [
+        "script",
+        "plan-types"
+      ],
+      "ordinal": 71
+    },
+    {
+      "id": "06-s07",
+      "source": "06_Medicare_Script_Quiz.pptx",
+      "slide": 7,
+      "section": "QUESTION 6",
+      "kind": "slide",
+      "sourcePriority": 4,
+      "text": "QUESTION 6\nDate of Birth & Additional Benefits\nAfter asking for date of birth, the script states the company helps senior citizens find which extra benefits?\nA\nFree gym memberships and meal delivery only\nB\nTransportation, meals after hospital stays and wellness program\nC\nLong-term care insurance and home modifications\nD\nPrescription drug discounts and hearing aids\nSpeaker notes: 7",
+      "topics": [
+        "eligibility",
+        "script",
+        "needs",
+        "benefits"
+      ],
+      "ordinal": 72
+    },
+    {
+      "id": "06-s08",
+      "source": "06_Medicare_Script_Quiz.pptx",
+      "slide": 8,
+      "section": "QUESTION 7",
+      "kind": "slide",
+      "sourcePriority": 4,
+      "text": "QUESTION 7\nZip Code Request\nWhat does the script say when asking for the customer’s zip code?\nA\nWhat is your full mailing address including city and state?\nB\nSo, let me go ahead to see those benefits available in your area what is your zip code? (5 Digits)\nC\nCan you give me your zip code so I can check plan availability?\nD\nI need your 9-digit zip code for accurate benefit matching.\nSpeaker notes: 8",
+      "topics": [
+        "script"
+      ],
+      "ordinal": 73
+    },
+    {
+      "id": "06-s09",
+      "source": "06_Medicare_Script_Quiz.pptx",
+      "slide": 9,
+      "section": "QUESTION 8",
+      "kind": "slide",
+      "sourcePriority": 4,
+      "text": "QUESTION 8\nName Confirmation\nWhat is the exact wording used when asking for the customer’s name?\nA\nCan I get your full legal name as it appears on your Medicare card?\nB\nLastly just to address you properly can you confirm your first and last name for me?\nC\nWhat is the name we should put on the application?\nD\nPlease spell your first and last name for me.\nSpeaker notes: 9",
+      "topics": [],
+      "ordinal": 74
+    },
+    {
+      "id": "06-s10",
+      "source": "06_Medicare_Script_Quiz.pptx",
+      "slide": 10,
+      "section": "QUESTION 9",
+      "kind": "slide",
+      "sourcePriority": 4,
+      "text": "QUESTION 9\nDisclaimer Content\nAccording to the script disclaimer, by submitting information the customer agrees to receive communication via:\nA\nText messages and postal mail only\nB\nLive auto dial pre-recorded calls and email from us and our partner companies\nC\nIn-person visits and phone calls from licensed agents only\nD\nSocial media messages and email newsletters\nSpeaker notes: 10",
+      "topics": [
+        "script",
+        "transfer"
+      ],
+      "ordinal": 75
+    },
+    {
+      "id": "06-s11",
+      "source": "06_Medicare_Script_Quiz.pptx",
+      "slide": 11,
+      "section": "QUESTION 10",
+      "kind": "slide",
+      "sourcePriority": 4,
+      "text": "QUESTION 10\nTransfer to Licensed Agent\nAt the end of the main script, what does the agent say they are going to do?\nA\nMail the customer a packet of information and call back in 3 days\nB\nConnect the call with the license agent based on the customer’s area so they can explain the additional benefits\nC\nProcess the enrollment immediately over the phone\nD\nSchedule a follow-up appointment for the next week\nSpeaker notes: 11",
+      "topics": [
+        "script",
+        "plan-types",
+        "transfer"
+      ],
+      "ordinal": 76
+    },
+    {
+      "id": "06-s12",
+      "source": "06_Medicare_Script_Quiz.pptx",
+      "slide": 12,
+      "section": "ANSWER KEY",
+      "kind": "slide",
+      "sourcePriority": 4,
+      "text": "ANSWER KEY\nCorrect Answers (Main Script Only)\nAll answers are taken directly from the original Med Script wording.\nB\nMy name is Brain from US health care how are you doing?\nB\nThis call is about your benefits and savings on Medicare so you do have Medicare Part A and B, right?\nB\nIncreasing food-stamps, Flex-card, dental, vision and cashback from Social Security check\nB\nHow old are you? and You make your own decision. Right?\nB\nDo you have any VA, Tricare & Retirement Plans?\nB\nTransportation, meals after hospital stays and wellness program\nB\n…what is your zip code? (5 Digits)\nB\nLastly just to address you properly can you confirm your first and last name for me?\nB\nLive auto dial pre-recorded calls and email from us and our partner companies\nB\nConnect the call with the license agent based on the area\nSpeaker notes: 12",
+      "topics": [
+        "eligibility",
+        "script",
+        "benefits",
+        "conflict"
+      ],
+      "ordinal": 77
+    },
+    {
+      "id": "07-s01",
+      "source": "07_Medicare_Basics_Overview.pptx",
+      "slide": 1,
+      "section": "A Detailed Overview of the",
+      "kind": "slide",
+      "sourcePriority": 4,
+      "text": "A Detailed Overview of the\nU.S. Federal Health Insurance Program\nEligibility · Parts A, B, C & D · Costs · Coverage Options · 2026 Updates\nEducational Overview · Current as of 2026\nSpeaker notes: 1",
+      "topics": [
+        "eligibility",
+        "costs"
+      ],
+      "ordinal": 78
+    },
+    {
+      "id": "07-s02",
+      "source": "07_Medicare_Basics_Overview.pptx",
+      "slide": 2,
+      "section": "INTRODUCTION",
+      "kind": "slide",
+      "sourcePriority": 4,
+      "text": "INTRODUCTION\nWhat is Medicare?\nFederal health insurance established in 1965 under Title XVIII of the Social Security Act.\n65+\nWho It Serves\nPeople age 65 and older\nCertain younger people with\ndisabilities\nPeople with End-Stage Renal\nDisease (ESRD) or ALS\nA–D\nHow It Works\nCovers hospital care,\ndoctor visits, preventive\nservices, and prescription\ndrugs through four parts\nCMS\nAdministration\nRun by the Centers for\nMedicare & Medicaid\nServices (CMS)\nFunded by taxes, premiums\nand federal budget\n70M\nScale\nServes more than 70 million\nAmericans (2026)\nNearly all people 65+\nhave coverage\nSpeaker notes: 2",
+      "topics": [
+        "eligibility",
+        "compliance",
+        "script",
+        "needs",
+        "costs"
+      ],
+      "ordinal": 79
+    },
+    {
+      "id": "07-s03",
+      "source": "07_Medicare_Basics_Overview.pptx",
+      "slide": 3,
+      "section": "ELIGIBILITY",
+      "kind": "slide",
+      "sourcePriority": 4,
+      "text": "ELIGIBILITY\nWho Qualifies for Medicare?\nYou must generally be a U.S. citizen or lawful permanent resident who has lived in the U.S. for at least 5 years.\nPrimary Pathways\nAge 65 or Older\nMost common path. Automatic enrollment if already receiving Social Security benefits.\nDisability\nUnder 65 and entitled to Social Security disability benefits for 24 months (waiting period may be waived).\nESRD\nAny age with permanent kidney failure requiring dialysis or a kidney transplant.\nALS (Lou Gehrig's)\nAny age diagnosed with amyotrophic lateral sclerosis — no waiting period.\nPremium-Free Part A\nMost people get Part A at no monthly cost if they (or a spouse) paid Medicare taxes for at least 10 years (40 quarters) while working.\nKey Notes\n• Part B is optional but most people enroll\n• You can buy Part A if you do not qualify for free coverage\n• Enrollment is not always automatic — check your situation\n• Spousal work history can help you qualify\nSpeaker notes: 3",
+      "topics": [
+        "eligibility",
+        "costs"
+      ],
+      "ordinal": 80
+    },
+    {
+      "id": "07-s04",
+      "source": "07_Medicare_Basics_Overview.pptx",
+      "slide": 4,
+      "section": "STRUCTURE",
+      "kind": "slide",
+      "sourcePriority": 4,
+      "text": "STRUCTURE\nThe Four Parts of Medicare\nMedicare is organized into four distinct parts that cover different types of services.\nA\nHospital Insurance\n• Inpatient hospital stays\n• Skilled nursing facility care\n• Hospice care\n• Some home health care\nB\nMedical Insurance\n• Doctor & provider services\n• Outpatient care\n• Durable medical equipment\n• Preventive services & screenings\nC\nMedicare Advantage\n• Private plan alternative\n• Bundles A + B (often D)\n• May include extra benefits\n• Network-based coverage\nD\nPrescription Drugs\n• Outpatient prescription drugs\n• Many recommended vaccines\n• Run by private plans\n• Available with Original or MA\nSpeaker notes: 4",
+      "topics": [
+        "script",
+        "needs",
+        "plan-types",
+        "benefits"
+      ],
+      "searchTerms": "Part A Part B Part C Part D hospital medical insurance Medicare Advantage prescription drugs cover covers coverage what does",
+      "retrievalBoost": 5.0,
+      "ordinal": 81
+    },
+    {
+      "id": "07-s05",
+      "source": "07_Medicare_Basics_Overview.pptx",
+      "slide": 5,
+      "section": "PART A",
+      "kind": "slide",
+      "sourcePriority": 4,
+      "text": "PART A\nHospital Insurance — What It Covers & Costs (2026)\nMost people receive premium-free Part A after paying Medicare taxes for at least 10 years.\nWhat Part A Helps Cover\nInpatient Hospital Care\nSemi-private room, meals, general nursing, drugs as part of inpatient treatment, and other hospital services.\nSkilled Nursing Facility (SNF)\nCare after a qualifying 3-day hospital stay. Days 1–20 fully covered after deductible; coinsurance applies days 21–100.\nHospice Care\nFor terminally ill patients. Includes pain relief, support services, and counseling. Minimal cost sharing.\nHome Health Care\nPart-time skilled nursing, physical/occupational therapy, and home health aide services when medically necessary.\n2026 Part A Costs\nPremium (most people)\n$0\nPremium (30–39 quarters)\n$311/mo\nPremium (<30 quarters)\n$565/mo\nHospital deductible (per benefit period)\n$1,736\nDays 61–90 coinsurance\n$434/day\nLifetime reserve days\n$868/day\nSNF days 21–100 coinsurance\n$217/day\nSpeaker notes: 5",
+      "topics": [
+        "eligibility",
+        "costs",
+        "plan-types"
+      ],
+      "searchTerms": "Part A hospital costs deductible SNF coinsurance 2026",
+      "retrievalBoost": 2.0,
+      "ordinal": 82
+    },
+    {
+      "id": "07-s06",
+      "source": "07_Medicare_Basics_Overview.pptx",
+      "slide": 6,
+      "section": "PART B",
+      "kind": "slide",
+      "sourcePriority": 4,
+      "text": "PART B\nMedical Insurance — What It Covers & Costs (2026)\nPart B is optional but strongly recommended. Most people pay a monthly premium.\nWhat Part B Helps Cover\n• Services from doctors and other health care providers\n• Outpatient hospital care and emergency room visits\n• Durable medical equipment (wheelchairs, walkers, oxygen)\n• Many preventive services (screenings, vaccines, wellness visits)\n• Clinical laboratory tests and diagnostic imaging\n• Mental health services (outpatient)\n• Ambulance services and some home health care\n• Limited prescription drugs administered by a provider\n2026 Part B Costs\nStandard Monthly Premium\n$202.90\n(Higher for higher incomes — IRMAA applies)\nAnnual Deductible\n$283\nCoinsurance\nUsually 20% of Medicare-approved amount after deductible\nNo annual out-of-pocket maximum under Original Medicare\nSpeaker notes: 6",
+      "topics": [
+        "eligibility",
+        "script",
+        "needs",
+        "costs"
+      ],
+      "searchTerms": "Part B medical costs premium deductible coinsurance 2026",
+      "retrievalBoost": 4.0,
+      "ordinal": 83
+    },
+    {
+      "id": "07-s07",
+      "source": "07_Medicare_Basics_Overview.pptx",
+      "slide": 7,
+      "section": "COVERAGE CHOICES",
+      "kind": "slide",
+      "sourcePriority": 4,
+      "text": "COVERAGE CHOICES\nOriginal Medicare vs. Medicare Advantage (Part C)\nYou choose one path when you first enroll and can switch during certain periods each year.\nOriginal Medicare\nParts Included\nPart A + Part B (add Part D separately)\nProvider Choice\nAny doctor or hospital that accepts Medicare nationwide\nReferrals\nGenerally not required for specialists\nExtra Benefits\nLimited — vision, dental, hearing usually not covered\nOut-of-Pocket\nNo annual maximum; Medigap can help fill gaps\nDrug Coverage\nOptional separate Part D plan\nMedicare Advantage (Part C)\nParts Included\nBundled A + B, usually includes Part D\nProvider Choice\nMust use plan network (HMO/PPO rules apply)\nReferrals\nOften required for specialists (especially HMOs)\nExtra Benefits\nMany plans offer dental, vision, hearing, gym, OTC\nOut-of-Pocket\nAnnual maximum (varies by plan); more predictable costs\nDrug Coverage\nUsually included; check formulary carefully\nSpeaker notes: 7",
+      "topics": [
+        "eligibility",
+        "enrollment",
+        "needs",
+        "costs",
+        "plan-types",
+        "benefits"
+      ],
+      "ordinal": 84
+    },
+    {
+      "id": "07-s08",
+      "source": "07_Medicare_Basics_Overview.pptx",
+      "slide": 8,
+      "section": "PART D",
+      "kind": "slide",
+      "sourcePriority": 4,
+      "text": "PART D\nPrescription Drug Coverage\nOptional coverage for outpatient prescription drugs. Available as a standalone plan or through most Medicare Advantage plans.\nHow It Works\nPrivate insurance companies offer plans that follow Medicare rules. You pay a monthly premium and share costs for drugs.\nFormulary\nEach plan has a list of covered drugs (formulary). Check that your medications are covered before enrolling.\n2026 OOP Cap\nThanks to the Inflation Reduction Act, out-of-pocket drug spending is capped at $2,100 in 2026.\nExtra Help (LIS)\nPeople with limited income and resources may qualify for the Low-Income Subsidy, which lowers premiums and costs.\nSpeaker notes: 8",
+      "topics": [
+        "script",
+        "needs",
+        "costs",
+        "plan-types"
+      ],
+      "searchTerms": "Part D prescription drug coverage out-of-pocket cap 2026",
+      "retrievalBoost": 3.0,
+      "ordinal": 85
+    },
+    {
+      "id": "07-s09",
+      "source": "07_Medicare_Basics_Overview.pptx",
+      "slide": 9,
+      "section": "FILLING THE GAPS",
+      "kind": "slide",
+      "sourcePriority": 4,
+      "text": "FILLING THE GAPS\nMedigap, Medicaid & Extra Help\nOriginal Medicare leaves cost-sharing gaps. Several programs can reduce what you pay.\nMedigap (Medicare Supplement)\nPrivate policies that help pay deductibles, coinsurance, and copayments under Original Medicare. Standardized plans (A–N). Best bought during the 6-month Medigap Open Enrollment Period starting when Part B begins.\nMedicaid / Dual Eligibility\nState-federal program for people with limited income and resources. Dual eligibles can get help with Medicare premiums and cost-sharing, plus extra benefits such as long-term care and transportation.\nMedicare Savings Programs\nState programs that help pay Part A and/or Part B premiums and sometimes deductibles and coinsurance for people with modest income and resources.\nExtra Help (Low-Income Subsidy)\nFederal program that helps pay Part D premiums, deductibles, and copayments. Expanded eligibility under recent legislation. Apply through Social Security.\nSpeaker notes: 9",
+      "topics": [
+        "eligibility",
+        "enrollment",
+        "costs",
+        "plan-types",
+        "benefits"
+      ],
+      "retrievalBoost": 2.0,
+      "ordinal": 86
+    },
+    {
+      "id": "07-s10",
+      "source": "07_Medicare_Basics_Overview.pptx",
+      "slide": 10,
+      "section": "GETTING STARTED",
+      "kind": "slide",
+      "sourcePriority": 4,
+      "text": "GETTING STARTED\nEnrollment Periods & Key Decisions\nTiming matters. Missing your initial enrollment window can result in lifelong late-enrollment penalties.\nInitial Enrollment Period\n• 7-month window around 65th birthday\n• 3 months before + month of + 3 after\n• Best time to avoid penalties\n• Sign up for A and/or B\nAnnual Election Period\n• Oct 15 – Dec 7 every year\n• Switch between Original & Advantage\n• Change or join Part D plans\n• Changes take effect Jan 1\nSpecial Enrollment\n• Still working past 65 with employer coverage\n• Moving, losing other coverage\n• Qualifying life events\n• Avoids late-enrollment penalties\nSpeaker notes: 10",
+      "topics": [
+        "eligibility",
+        "enrollment",
+        "plan-types"
+      ],
+      "ordinal": 87
+    },
+    {
+      "id": "07-s11",
+      "source": "07_Medicare_Basics_Overview.pptx",
+      "slide": 11,
+      "section": "SUMMARY",
+      "kind": "slide",
+      "sourcePriority": 4,
+      "text": "SUMMARY\nKey Takeaways\nRemember these essentials when navigating Medicare.\nFour Parts\nA (Hospital), B (Medical), C (Advantage), D (Drugs). Understand what each covers before choosing.\nTwo Main Paths\nOriginal Medicare + optional Medigap/Part D, or a Medicare Advantage plan that bundles coverage.\nCosts Are Shared\nPremiums, deductibles, and coinsurance apply. 2026 standard Part B premium is $202.90; Part A is free for most.\nHelp Is Available\nExtra Help, Medicare Savings Programs, Medicaid, and Medigap can significantly lower your out-of-pocket costs.\nTiming Matters\nEnroll during your Initial Enrollment Period to avoid permanent late penalties. Review coverage every year.\nOfficial Sources\nAlways verify details at Medicare.gov or 1-800-MEDICARE. Plans and costs change annually.\nSpeaker notes: 11",
+      "topics": [
+        "eligibility",
+        "enrollment",
+        "costs",
+        "plan-types"
+      ],
+      "ordinal": 88
+    },
+    {
+      "id": "04-q01",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 3,
+      "section": "Quiz Q1: What is Medicare Advantage (MA) also known as?",
+      "kind": "quiz-qa",
+      "sourcePriority": 5,
+      "text": "Question: What is Medicare Advantage (MA) also known as?\nOptions: A. Part A; B. Part B; C. Part C; D. Part D\nCorrect answer: C — Medicare Advantage is also called Medicare Part C.",
+      "topics": [
+        "eligibility",
+        "plan-types"
+      ],
+      "answerSlide": 39,
+      "answer": "C",
+      "ordinal": 89
+    },
+    {
+      "id": "04-q02",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 4,
+      "section": "Quiz Q2: To enroll in a Medicare Advantage plan, a person must have:",
+      "kind": "quiz-qa",
+      "sourcePriority": 5,
+      "text": "Question: To enroll in a Medicare Advantage plan, a person must have:\nOptions: A. Only Part A; B. Only Part B; C. Both Part A and Part B; D. Part D only\nCorrect answer: C — Eligibility requires both Medicare Part A and Part B.",
+      "topics": [
+        "eligibility",
+        "plan-types"
+      ],
+      "answerSlide": 39,
+      "answer": "C",
+      "ordinal": 90
+    },
+    {
+      "id": "04-q03",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 5,
+      "section": "Quiz Q3: Who offers Medicare Advantage plans?",
+      "kind": "quiz-qa",
+      "sourcePriority": 5,
+      "text": "Question: Who offers Medicare Advantage plans?\nOptions: A. Only the federal government; B. Private insurance companies that contract with Medicare; C. State Medicaid offices only; D. Hospitals directly\nCorrect answer: B — Private insurers contract with Medicare to offer MA plans.",
+      "topics": [
+        "eligibility",
+        "plan-types"
+      ],
+      "answerSlide": 39,
+      "answer": "B",
+      "ordinal": 91
+    },
+    {
+      "id": "04-q04",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 6,
+      "section": "Quiz Q4: Most Medicare Advantage plans include which additional coverage?",
+      "kind": "quiz-qa",
+      "sourcePriority": 5,
+      "text": "Question: Most Medicare Advantage plans include which additional coverage?\nOptions: A. Only hospital care; B. Prescription drug coverage (Part D); C. Long-term nursing home care; D. Medigap supplements\nCorrect answer: B — Most MA plans are MA-PDs and include Part D drug coverage.",
+      "topics": [
+        "script",
+        "needs",
+        "plan-types"
+      ],
+      "answerSlide": 39,
+      "answer": "B",
+      "ordinal": 92
+    },
+    {
+      "id": "04-q05",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 7,
+      "section": "Quiz Q5: What is a key difference between Original Medicare and Medicare Advantage regard",
+      "kind": "quiz-qa",
+      "sourcePriority": 5,
+      "text": "Question: What is a key difference between Original Medicare and Medicare Advantage regarding out-of-pocket costs?\nOptions: A. Original Medicare has a yearly out-of-pocket maximum; B. Medicare Advantage plans must have an annual out-of-pocket maximum; C. Neither has an out-of-pocket limit; D. Only Part D has an out-of-pocket limit\nCorrect answer: B — MA plans are required to cap annual out-of-pocket spending for Part A and B services.",
+      "topics": [
+        "eligibility",
+        "costs",
+        "plan-types"
+      ],
+      "answerSlide": 39,
+      "answer": "B",
+      "ordinal": 93
+    },
+    {
+      "id": "04-q06",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 8,
+      "section": "Quiz Q6: In 2025, the federal maximum out-of-pocket limit (MOOP) for in-network services ",
+      "kind": "quiz-qa",
+      "sourcePriority": 5,
+      "text": "Question: In 2025, the federal maximum out-of-pocket limit (MOOP) for in-network services in MA plans was set at approximately:\nOptions: A. $3,500; B. $6,000; C. $9,350; D. $15,000\nCorrect answer: C — CMS set the 2025 in-network MOOP maximum at $9,350.",
+      "topics": [
+        "compliance",
+        "needs",
+        "costs"
+      ],
+      "answerSlide": 39,
+      "answer": "C",
+      "ordinal": 94
+    },
+    {
+      "id": "04-q07",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 9,
+      "section": "Quiz Q7: Which type of Medicare Advantage plan typically requires members to use in-netwo",
+      "kind": "quiz-qa",
+      "sourcePriority": 5,
+      "text": "Question: Which type of Medicare Advantage plan typically requires members to use in-network providers and often needs referrals for specialists?\nOptions: A. PPO; B. HMO; C. PFFS; D. MSA\nCorrect answer: B — HMOs generally require in-network care and referrals for specialists.",
+      "topics": [
+        "eligibility",
+        "needs",
+        "plan-types"
+      ],
+      "answerSlide": 39,
+      "answer": "B",
+      "ordinal": 95
+    },
+    {
+      "id": "04-q08",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 10,
+      "section": "Quiz Q8: Can a person with Medicare Advantage also purchase a Medigap (Medicare Supplemen",
+      "kind": "quiz-qa",
+      "sourcePriority": 5,
+      "text": "Question: Can a person with Medicare Advantage also purchase a Medigap (Medicare Supplement) policy?\nOptions: A. Yes, always; B. Yes, during Open Enrollment only; C. No, Medigap cannot be used with Medicare Advantage; D. Only if the MA plan is an HMO\nCorrect answer: C — You cannot have Medigap while enrolled in a Medicare Advantage plan.",
+      "topics": [
+        "eligibility",
+        "plan-types"
+      ],
+      "answerSlide": 40,
+      "answer": "C",
+      "ordinal": 96
+    },
+    {
+      "id": "04-q09",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 11,
+      "section": "Quiz Q9: What is the Annual Coordinated Election Period (AEP) for Medicare Advantage?",
+      "kind": "quiz-qa",
+      "sourcePriority": 5,
+      "text": "Question: What is the Annual Coordinated Election Period (AEP) for Medicare Advantage?\nOptions: A. January 1 – March 31; B. October 15 – December 7; C. April 1 – June 30; D. July 1 – September 30\nCorrect answer: B — AEP runs October 15 through December 7 each year.",
+      "topics": [
+        "enrollment",
+        "plan-types"
+      ],
+      "answerSlide": 40,
+      "answer": "B",
+      "ordinal": 97
+    },
+    {
+      "id": "04-q10",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 12,
+      "section": "Quiz Q10: During the Medicare Advantage Open Enrollment Period (MA OEP), what can benefici",
+      "kind": "quiz-qa",
+      "sourcePriority": 5,
+      "text": "Question: During the Medicare Advantage Open Enrollment Period (MA OEP), what can beneficiaries do?\nOptions: A. Only switch from Original Medicare to MA; B. Switch MA plans or return to Original Medicare (Jan 1 – March 31); C. Enroll in any Medigap plan without underwriting; D. Change their Part B premium\nCorrect answer: B — MA OEP (Jan 1–Mar 31) allows one change: switch MA plans or return to Original Medicare.",
+      "topics": [
+        "eligibility",
+        "enrollment",
+        "costs",
+        "plan-types"
+      ],
+      "answerSlide": 40,
+      "answer": "B",
+      "ordinal": 98
+    },
+    {
+      "id": "04-q11",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 13,
+      "section": "Quiz Q11: Approximately what percentage of eligible Medicare beneficiaries were enrolled i",
+      "kind": "quiz-qa",
+      "sourcePriority": 5,
+      "text": "Question: Approximately what percentage of eligible Medicare beneficiaries were enrolled in Medicare Advantage in recent years (2025–2026)?\nOptions: A. About 25%; B. About 40%; C. More than 50%; D. About 80%\nCorrect answer: C — Over half (around 54–55%) of eligible beneficiaries are enrolled in MA plans.",
+      "topics": [
+        "eligibility",
+        "costs",
+        "plan-types"
+      ],
+      "answerSlide": 40,
+      "answer": "C",
+      "ordinal": 99
+    },
+    {
+      "id": "04-q12",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 14,
+      "section": "Quiz Q12: Many Medicare Advantage plans offer supplemental benefits not covered by Origina",
+      "kind": "quiz-qa",
+      "sourcePriority": 5,
+      "text": "Question: Many Medicare Advantage plans offer supplemental benefits not covered by Original Medicare. Which of the following is commonly offered?\nOptions: A. Routine dental, vision, and hearing; B. Unlimited long-term care; C. Cosmetic surgery; D. International travel insurance only\nCorrect answer: A — Dental, vision, and hearing benefits are very common supplemental benefits in MA plans.",
+      "topics": [
+        "plan-types",
+        "benefits"
+      ],
+      "answerSlide": 40,
+      "answer": "A",
+      "ordinal": 100
+    },
+    {
+      "id": "04-q13",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 15,
+      "section": "Quiz Q13: How are Medicare Advantage plans primarily paid by Medicare?",
+      "kind": "quiz-qa",
+      "sourcePriority": 5,
+      "text": "Question: How are Medicare Advantage plans primarily paid by Medicare?\nOptions: A. Fee-for-service for each service; B. Capitated (per-member-per-month) payments; C. Only when claims are submitted by the member; D. Through state budgets\nCorrect answer: B — Medicare pays MA plans a fixed monthly amount (capitation) per enrollee.",
+      "topics": [
+        "plan-types"
+      ],
+      "answerSlide": 40,
+      "answer": "B",
+      "ordinal": 101
+    },
+    {
+      "id": "04-q14",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 16,
+      "section": "Quiz Q14: What is a Special Needs Plan (SNP)?",
+      "kind": "quiz-qa",
+      "sourcePriority": 5,
+      "text": "Question: What is a Special Needs Plan (SNP)?\nOptions: A. A plan only for people under 65; B. An MA plan designed for people with specific conditions or dual eligibility; C. A plan that covers only Part D; D. A temporary emergency plan\nCorrect answer: B — SNPs serve dual-eligible individuals, those with chronic conditions, or institutionalized beneficiaries.",
+      "topics": [
+        "eligibility",
+        "plan-types"
+      ],
+      "answerSlide": 40,
+      "answer": "B",
+      "ordinal": 102
+    },
+    {
+      "id": "04-q15",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 17,
+      "section": "Quiz Q15: Which of the following is true about provider networks in Medicare Advantage?",
+      "kind": "quiz-qa",
+      "sourcePriority": 5,
+      "text": "Question: Which of the following is true about provider networks in Medicare Advantage?\nOptions: A. All MA plans allow any Medicare provider nationwide; B. HMO plans usually limit care to in-network providers; C. PPO plans never cover out-of-network care; D. Networks are the same as Original Medicare\nCorrect answer: B — HMOs generally restrict coverage to their network (with exceptions for emergencies).",
+      "topics": [
+        "needs",
+        "plan-types"
+      ],
+      "answerSlide": 41,
+      "answer": "B",
+      "ordinal": 103
+    },
+    {
+      "id": "04-q16",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 18,
+      "section": "Quiz Q16: If a Medicare Advantage member needs emergency care while traveling outside the ",
+      "kind": "quiz-qa",
+      "sourcePriority": 5,
+      "text": "Question: If a Medicare Advantage member needs emergency care while traveling outside the plan’s service area, what typically happens?\nOptions: A. No coverage is provided; B. Emergency and urgently needed care is covered; C. Only Part A is covered; D. The member must pay 100% and seek reimbursement later\nCorrect answer: B — MA plans must cover emergency and urgently needed services even out of network/area.",
+      "topics": [
+        "eligibility",
+        "needs",
+        "plan-types"
+      ],
+      "answerSlide": 41,
+      "answer": "B",
+      "ordinal": 104
+    },
+    {
+      "id": "04-q17",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 19,
+      "section": "Quiz Q17: What is the main purpose of the Medicare Advantage rebate?",
+      "kind": "quiz-qa",
+      "sourcePriority": 5,
+      "text": "Question: What is the main purpose of the Medicare Advantage rebate?\nOptions: A. To increase Part B premiums; B. Funds that plans can use to lower premiums, reduce cost-sharing, or offer supplemental benefits; C. A penalty for high utilization; D. A tax paid by enrollees\nCorrect answer: B — Rebates result when a plan’s bid is below the benchmark; they fund extra benefits or lower costs.",
+      "topics": [
+        "eligibility",
+        "costs",
+        "plan-types",
+        "benefits"
+      ],
+      "answerSlide": 41,
+      "answer": "B",
+      "ordinal": 105
+    },
+    {
+      "id": "04-q18",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 20,
+      "section": "Quiz Q18: Can a person who has End-Stage Renal Disease (ESRD) enroll in a Medicare Advanta",
+      "kind": "quiz-qa",
+      "sourcePriority": 5,
+      "text": "Question: Can a person who has End-Stage Renal Disease (ESRD) enroll in a Medicare Advantage plan?\nOptions: A. No, never; B. Yes, under current rules (restrictions largely lifted); C. Only through a special SNP; D. Only if under age 55\nCorrect answer: B — The previous ESRD enrollment restriction was removed; people with ESRD can generally join MA plans.",
+      "topics": [
+        "eligibility",
+        "plan-types"
+      ],
+      "answerSlide": 41,
+      "answer": "B",
+      "ordinal": 106
+    },
+    {
+      "id": "04-q19",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 21,
+      "section": "Quiz Q19: What does “zero-premium” Medicare Advantage plan usually mean?",
+      "kind": "quiz-qa",
+      "sourcePriority": 5,
+      "text": "Question: What does “zero-premium” Medicare Advantage plan usually mean?\nOptions: A. The plan covers the Part B premium completely and charges $0; B. The enrollee pays $0 for the MA plan premium (still pays Part B premium); C. No cost-sharing for any services; D. Free Medigap coverage\nCorrect answer: B — Zero-premium means $0 additional MA plan premium; the standard Part B premium still applies.",
+      "topics": [
+        "eligibility",
+        "costs",
+        "plan-types"
+      ],
+      "answerSlide": 41,
+      "answer": "B",
+      "ordinal": 107
+    },
+    {
+      "id": "04-q20",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 22,
+      "section": "Quiz Q20: Which statement about prior authorization in Medicare Advantage is generally tru",
+      "kind": "quiz-qa",
+      "sourcePriority": 5,
+      "text": "Question: Which statement about prior authorization in Medicare Advantage is generally true?\nOptions: A. Prior authorization is never used; B. Many MA plans use prior authorization for certain services; C. Only Original Medicare uses prior authorization; D. Prior authorization is illegal under CMS rules\nCorrect answer: B — Prior authorization is commonly used by MA plans for certain procedures, DME, and therapies.",
+      "topics": [
+        "compliance",
+        "plan-types"
+      ],
+      "answerSlide": 41,
+      "answer": "B",
+      "ordinal": 108
+    },
+    {
+      "id": "04-q21",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 23,
+      "section": "Quiz Q21: If a beneficiary is enrolled in a Medicare Advantage plan and needs hospice care",
+      "kind": "quiz-qa",
+      "sourcePriority": 5,
+      "text": "Question: If a beneficiary is enrolled in a Medicare Advantage plan and needs hospice care, who primarily covers the hospice services?\nOptions: A. The MA plan only; B. Original Medicare (hospice is covered by Original Medicare); C. The state Medicaid program; D. The beneficiary pays 100%\nCorrect answer: B — Hospice care is covered under Original Medicare even if the person remains in an MA plan.",
+      "topics": [
+        "plan-types"
+      ],
+      "answerSlide": 41,
+      "answer": "B",
+      "ordinal": 109
+    },
+    {
+      "id": "04-q22",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 24,
+      "section": "Quiz Q22: What is the typical structure of cost-sharing in many Medicare Advantage HMO pla",
+      "kind": "quiz-qa",
+      "sourcePriority": 5,
+      "text": "Question: What is the typical structure of cost-sharing in many Medicare Advantage HMO plans?\nOptions: A. Always 20% coinsurance like Original Medicare; B. Fixed copayments for office visits and services; C. No cost-sharing at all; D. Only deductibles with no copays\nCorrect answer: B — Many MA plans use set copays (e.g., $20 primary care) rather than 20% coinsurance.",
+      "topics": [
+        "costs",
+        "plan-types"
+      ],
+      "answerSlide": 42,
+      "answer": "B",
+      "ordinal": 110
+    },
+    {
+      "id": "04-q23",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 25,
+      "section": "Quiz Q23: During which period can a newly eligible Medicare beneficiary first enroll in a ",
+      "kind": "quiz-qa",
+      "sourcePriority": 5,
+      "text": "Question: During which period can a newly eligible Medicare beneficiary first enroll in a Medicare Advantage plan?\nOptions: A. Only during AEP; B. During their Initial Coverage Election Period (ICEP); C. Only after age 70; D. Never in the first year\nCorrect answer: B — The Initial Coverage Election Period allows first-time enrollment in an MA plan.",
+      "topics": [
+        "eligibility",
+        "enrollment",
+        "plan-types"
+      ],
+      "answerSlide": 42,
+      "answer": "B",
+      "ordinal": 111
+    },
+    {
+      "id": "04-q24",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 26,
+      "section": "Quiz Q24: Which of the following is a common reason someone might prefer Original Medicare",
+      "kind": "quiz-qa",
+      "sourcePriority": 5,
+      "text": "Question: Which of the following is a common reason someone might prefer Original Medicare over Medicare Advantage?\nOptions: A. Desire for a broad nationwide provider choice without network restrictions; B. Wanting extra dental and vision benefits; C. Preferring a single all-in-one plan; D. Wanting an out-of-pocket maximum\nCorrect answer: A — Original Medicare allows any provider that accepts Medicare, anywhere in the U.S.",
+      "topics": [
+        "needs",
+        "costs",
+        "plan-types",
+        "benefits"
+      ],
+      "answerSlide": 42,
+      "answer": "A",
+      "ordinal": 112
+    },
+    {
+      "id": "04-q25",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 27,
+      "section": "Quiz Q25: What happens if a Medicare Advantage plan leaves the market or the enrollee move",
+      "kind": "quiz-qa",
+      "sourcePriority": 5,
+      "text": "Question: What happens if a Medicare Advantage plan leaves the market or the enrollee moves out of the service area?\nOptions: A. The person is locked into the plan forever; B. A Special Enrollment Period (SEP) is typically available; C. Coverage ends immediately with no options; D. They must wait until the next AEP only\nCorrect answer: B — Loss of plan or moving out of area triggers a Special Enrollment Period.",
+      "topics": [
+        "enrollment",
+        "plan-types"
+      ],
+      "answerSlide": 42,
+      "answer": "B",
+      "ordinal": 113
+    },
+    {
+      "id": "04-q26",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 28,
+      "section": "Quiz Q26: Which organization sets the rules and oversees Medicare Advantage plans?",
+      "kind": "quiz-qa",
+      "sourcePriority": 5,
+      "text": "Question: Which organization sets the rules and oversees Medicare Advantage plans?\nOptions: A. The IRS; B. Centers for Medicare & Medicaid Services (CMS); C. State insurance departments only; D. The FDA\nCorrect answer: B — CMS contracts with and regulates Medicare Advantage organizations.",
+      "topics": [
+        "compliance",
+        "plan-types"
+      ],
+      "answerSlide": 42,
+      "answer": "B",
+      "ordinal": 114
+    },
+    {
+      "id": "04-q27",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 29,
+      "section": "Quiz Q27: In a Medicare Advantage PPO plan, what is generally true about out-of-network ca",
+      "kind": "quiz-qa",
+      "sourcePriority": 5,
+      "text": "Question: In a Medicare Advantage PPO plan, what is generally true about out-of-network care?\nOptions: A. It is never covered; B. It is usually covered but often at higher cost-sharing; C. It requires a referral from the primary care doctor; D. It is free of charge\nCorrect answer: B — PPOs typically cover out-of-network services at higher cost-sharing levels.",
+      "topics": [
+        "needs",
+        "plan-types"
+      ],
+      "answerSlide": 42,
+      "answer": "B",
+      "ordinal": 115
+    },
+    {
+      "id": "04-q28",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 30,
+      "section": "Quiz Q28: What is a D-SNP?",
+      "kind": "quiz-qa",
+      "sourcePriority": 5,
+      "text": "Question: What is a D-SNP?\nOptions: A. A plan for people with diabetes only; B. A Dual Eligible Special Needs Plan for those with both Medicare and Medicaid; C. A plan that only covers drugs; D. A dental-only special needs plan\nCorrect answer: B — D-SNPs are designed for dual-eligible beneficiaries (Medicare + Medicaid).",
+      "topics": [
+        "eligibility",
+        "plan-types",
+        "benefits"
+      ],
+      "answerSlide": 42,
+      "answer": "B",
+      "ordinal": 116
+    },
+    {
+      "id": "04-q29",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 31,
+      "section": "Quiz Q29: Approximately what share of individual Medicare Advantage plans with drug covera",
+      "kind": "quiz-qa",
+      "sourcePriority": 5,
+      "text": "Question: Approximately what share of individual Medicare Advantage plans with drug coverage charged $0 premium (beyond Part B) in recent years?\nOptions: A. Less than 20%; B. About 40%; C. Around 75% or more of enrollees are in $0 premium plans; D. 100% of all plans\nCorrect answer: C — A large majority of MA-PD enrollees are in plans with $0 additional premium.",
+      "topics": [
+        "eligibility",
+        "costs",
+        "plan-types"
+      ],
+      "answerSlide": 43,
+      "answer": "C",
+      "ordinal": 117
+    },
+    {
+      "id": "04-q30",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 32,
+      "section": "Quiz Q30: Can Medicare Advantage plans charge higher cost-sharing than Original Medicare f",
+      "kind": "quiz-qa",
+      "sourcePriority": 5,
+      "text": "Question: Can Medicare Advantage plans charge higher cost-sharing than Original Medicare for the same service?\nOptions: A. Yes, without any limits; B. No, never; C. They must follow CMS rules and cannot exceed certain limits; overall value must be actuarially equivalent or better; D. Only for Part D drugs\nCorrect answer: C — Plans must provide at least the same overall value; individual services have cost-sharing limits set by CMS.",
+      "topics": [
+        "compliance",
+        "plan-types"
+      ],
+      "answerSlide": 43,
+      "answer": "C",
+      "ordinal": 118
+    },
+    {
+      "id": "04-q31",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 33,
+      "section": "Quiz Q31: What is the Medicare Advantage Maximum Out-of-Pocket (MOOP) designed to do?",
+      "kind": "quiz-qa",
+      "sourcePriority": 5,
+      "text": "Question: What is the Medicare Advantage Maximum Out-of-Pocket (MOOP) designed to do?\nOptions: A. Limit the plan’s payments to providers; B. Protect enrollees by capping their annual spending on covered Part A and B services; C. Replace the Part B deductible; D. Apply only to prescription drugs\nCorrect answer: B — MOOP protects beneficiaries by limiting their annual out-of-pocket costs for covered services.",
+      "topics": [
+        "eligibility",
+        "script",
+        "needs",
+        "costs",
+        "plan-types"
+      ],
+      "answerSlide": 43,
+      "answer": "B",
+      "ordinal": 119
+    },
+    {
+      "id": "04-q32",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 34,
+      "section": "Quiz Q32: If someone joins a Medicare Advantage plan for the first time and is unhappy, wh",
+      "kind": "quiz-qa",
+      "sourcePriority": 5,
+      "text": "Question: If someone joins a Medicare Advantage plan for the first time and is unhappy, what option do they have in the first 3 months of the year?\nOptions: A. Nothing until next October; B. Use the MA Open Enrollment Period to switch plans or return to Original Medicare; C. Only appeal to CMS; D. Automatically get Medigap\nCorrect answer: B — The MA OEP (January–March) allows one change for those already in MA.",
+      "topics": [
+        "enrollment",
+        "compliance",
+        "plan-types"
+      ],
+      "answerSlide": 43,
+      "answer": "B",
+      "ordinal": 120
+    },
+    {
+      "id": "04-q33",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 35,
+      "section": "Quiz Q33: Which statement best describes Star Ratings for Medicare Advantage plans?",
+      "kind": "quiz-qa",
+      "sourcePriority": 5,
+      "text": "Question: Which statement best describes Star Ratings for Medicare Advantage plans?\nOptions: A. They are purely marketing and have no impact; B. CMS rates plans 1–5 stars based on quality and performance; higher stars can affect payments and enrollment; C. Only Part D plans receive Star Ratings; D. Stars are assigned by the plans themselves\nCorrect answer: B — CMS Star Ratings measure quality; higher-rated plans may receive bonus payments and attract more members.",
+      "topics": [
+        "compliance",
+        "plan-types"
+      ],
+      "answerSlide": 43,
+      "answer": "B",
+      "ordinal": 121
+    },
+    {
+      "id": "04-q34",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 36,
+      "section": "Quiz Q34: True or False: All Medicare Advantage plans must cover the same core benefits as",
+      "kind": "quiz-qa",
+      "sourcePriority": 5,
+      "text": "Question: True or False: All Medicare Advantage plans must cover the same core benefits as Original Medicare (Parts A and B).\nOptions: A. True; B. False – they can exclude hospital care; C. False – they only cover Part B; D. True, but only if the member pays extra\nCorrect answer: A — MA plans must cover all medically necessary Part A and Part B services (with limited exceptions such as hospice).",
+      "topics": [
+        "eligibility",
+        "plan-types"
+      ],
+      "answerSlide": 43,
+      "answer": "A",
+      "ordinal": 122
+    },
+    {
+      "id": "04-q35",
+      "source": "04_Medicare_Advantage_MA_Plan_Quiz_35Q.pptx",
+      "slide": 37,
+      "section": "Quiz Q35: What should a beneficiary primarily consider when choosing between Original Medi",
+      "kind": "quiz-qa",
+      "sourcePriority": 5,
+      "text": "Question: What should a beneficiary primarily consider when choosing between Original Medicare and a Medicare Advantage plan?\nOptions: A. Only the monthly premium amount; B. Provider network, total costs (premiums + cost-sharing), extra benefits, and personal health needs; C. Only whether dental is included; D. The color of the plan brochure\nCorrect answer: B — The best choice depends on doctors/hospitals used, expected care needs, travel, and total cost exposure.",
+      "topics": [
+        "eligibility",
+        "needs",
+        "costs",
+        "plan-types",
+        "benefits"
+      ],
+      "answerSlide": 43,
+      "answer": "B",
+      "ordinal": 123
+    },
+    {
+      "id": "06-q01",
+      "source": "06_Medicare_Script_Quiz.pptx",
+      "slide": 2,
+      "section": "Script Quiz Q1: According to the script, how should the agent introduce themselves?",
+      "kind": "script-quiz",
+      "sourcePriority": 4,
+      "text": "Question: According to the script, how should the agent introduce themselves?\nOptions: A. My name is Brian from US Healthcare, how are you doing?; B. My name is Brain from US health care how are you doing?; C. Hi, this is [Name] calling from Medicare Benefits Center.; D. Good morning, I am a licensed agent with US Health Care.\nCorrect answer: B — My name is Brain from US health care how are you doing?",
+      "topics": [
+        "script",
+        "transfer"
+      ],
+      "ordinal": 124
+    },
+    {
+      "id": "06-q02",
+      "source": "06_Medicare_Script_Quiz.pptx",
+      "slide": 3,
+      "section": "Script Quiz Q2: What is the stated reason for the call in the script?",
+      "kind": "script-quiz",
+      "sourcePriority": 4,
+      "text": "Question: What is the stated reason for the call in the script?\nOptions: A. To sell a new Medicare Advantage plan and change the customer’s coverage; B. This call is about your benefits and savings on Medicare so you do have Medicare Part A and B, right?; C. To schedule a free in-home consultation with a licensed agent; D. To verify the customer’s Social Security number and bank details\nCorrect answer: B — This call is about your benefits and savings on Medicare so you do have Medicare Part A and B, right?",
+      "topics": [
+        "eligibility",
+        "script",
+        "plan-types",
+        "transfer"
+      ],
+      "ordinal": 125
+    },
+    {
+      "id": "06-q03",
+      "source": "06_Medicare_Script_Quiz.pptx",
+      "slide": 4,
+      "section": "Script Quiz Q3: If the customer confirms they have Medicare Part A & B, which benefits does the ",
+      "kind": "script-quiz",
+      "sourcePriority": 4,
+      "text": "Question: If the customer confirms they have Medicare Part A & B, which benefits does the script say they may qualify for?\nOptions: A. Only dental and vision coverage; B. Increasing food-stamps, Flex-card, dental, vision and cashback (more money back into the Social Security check each month); C. Free hospital stays and unlimited prescription drugs; D. A brand-new Medicare Advantage plan with $0 premium\nCorrect answer: B — Increasing food-stamps, Flex-card, dental, vision and cashback from Social Security check",
+      "topics": [
+        "eligibility",
+        "script",
+        "needs",
+        "costs",
+        "plan-types",
+        "benefits",
+        "conflict"
+      ],
+      "ordinal": 126
+    },
+    {
+      "id": "06-q04",
+      "source": "06_Medicare_Script_Quiz.pptx",
+      "slide": 5,
+      "section": "Script Quiz Q4: Which two qualification questions appear consecutively in the script right after",
+      "kind": "script-quiz",
+      "sourcePriority": 4,
+      "text": "Question: Which two qualification questions appear consecutively in the script right after the benefits pitch?\nOptions: A. What is your Social Security number? and What is your bank account number?; B. How old are you? and You make your own decision. Right?; C. Do you have Medicare Advantage? and Are you currently on Medicaid?; D. What is your income? and Do you own your home?\nCorrect answer: B — How old are you? and You make your own decision. Right?",
+      "topics": [
+        "script",
+        "plan-types"
+      ],
+      "ordinal": 127
+    },
+    {
+      "id": "06-q05",
+      "source": "06_Medicare_Script_Quiz.pptx",
+      "slide": 6,
+      "section": "Script Quiz Q5: What exact question does the script instruct the agent to ask about other covera",
+      "kind": "script-quiz",
+      "sourcePriority": 4,
+      "text": "Question: What exact question does the script instruct the agent to ask about other coverage?\nOptions: A. Do you have any other health insurance besides Medicare?; B. Do you have any VA, Tricare & Retirement Plans?; C. Are you currently enrolled in a Medicare Advantage plan?; D. Do you receive benefits from the Department of Veterans Affairs?\nCorrect answer: B — Do you have any VA, Tricare & Retirement Plans?",
+      "topics": [
+        "script",
+        "plan-types"
+      ],
+      "ordinal": 128
+    },
+    {
+      "id": "06-q06",
+      "source": "06_Medicare_Script_Quiz.pptx",
+      "slide": 7,
+      "section": "Script Quiz Q6: After asking for date of birth, the script states the company helps senior citiz",
+      "kind": "script-quiz",
+      "sourcePriority": 4,
+      "text": "Question: After asking for date of birth, the script states the company helps senior citizens find which extra benefits?\nOptions: A. Free gym memberships and meal delivery only; B. Transportation, meals after hospital stays and wellness program; C. Long-term care insurance and home modifications; D. Prescription drug discounts and hearing aids\nCorrect answer: B — Transportation, meals after hospital stays and wellness program",
+      "topics": [
+        "eligibility",
+        "script",
+        "needs",
+        "benefits"
+      ],
+      "ordinal": 129
+    },
+    {
+      "id": "06-q07",
+      "source": "06_Medicare_Script_Quiz.pptx",
+      "slide": 8,
+      "section": "Script Quiz Q7: What does the script say when asking for the customer’s zip code?",
+      "kind": "script-quiz",
+      "sourcePriority": 4,
+      "text": "Question: What does the script say when asking for the customer’s zip code?\nOptions: A. What is your full mailing address including city and state?; B. So, let me go ahead to see those benefits available in your area what is your zip code? (5 Digits); C. Can you give me your zip code so I can check plan availability?; D. I need your 9-digit zip code for accurate benefit matching.\nCorrect answer: B — …what is your zip code? (5 Digits)",
+      "topics": [
+        "script"
+      ],
+      "ordinal": 130
+    },
+    {
+      "id": "06-q08",
+      "source": "06_Medicare_Script_Quiz.pptx",
+      "slide": 9,
+      "section": "Script Quiz Q8: What is the exact wording used when asking for the customer’s name?",
+      "kind": "script-quiz",
+      "sourcePriority": 4,
+      "text": "Question: What is the exact wording used when asking for the customer’s name?\nOptions: A. Can I get your full legal name as it appears on your Medicare card?; B. Lastly just to address you properly can you confirm your first and last name for me?; C. What is the name we should put on the application?; D. Please spell your first and last name for me.\nCorrect answer: B — Lastly just to address you properly can you confirm your first and last name for me?",
+      "topics": [],
+      "ordinal": 131
+    },
+    {
+      "id": "06-q09",
+      "source": "06_Medicare_Script_Quiz.pptx",
+      "slide": 10,
+      "section": "Script Quiz Q9: According to the script disclaimer, by submitting information the customer agree",
+      "kind": "script-quiz",
+      "sourcePriority": 4,
+      "text": "Question: According to the script disclaimer, by submitting information the customer agrees to receive communication via:\nOptions: A. Text messages and postal mail only; B. Live auto dial pre-recorded calls and email from us and our partner companies; C. In-person visits and phone calls from licensed agents only; D. Social media messages and email newsletters\nCorrect answer: B — Live auto dial pre-recorded calls and email from us and our partner companies",
+      "topics": [
+        "script",
+        "transfer"
+      ],
+      "ordinal": 132
+    },
+    {
+      "id": "06-q10",
+      "source": "06_Medicare_Script_Quiz.pptx",
+      "slide": 11,
+      "section": "Script Quiz Q10: At the end of the main script, what does the agent say they are going to do?",
+      "kind": "script-quiz",
+      "sourcePriority": 4,
+      "text": "Question: At the end of the main script, what does the agent say they are going to do?\nOptions: A. Mail the customer a packet of information and call back in 3 days; B. Connect the call with the license agent based on the customer’s area so they can explain the additional benefits; C. Process the enrollment immediately over the phone; D. Schedule a follow-up appointment for the next week\nCorrect answer: B — Connect the call with the license agent based on the area",
+      "topics": [
+        "script",
+        "plan-types"
+      ],
+      "ordinal": 133
+    },
+    {
+      "id": "03-greeting",
+      "source": "03_Medicare_Script.docx",
+      "slide": null,
+      "section": "Campaign script: Greeting",
+      "kind": "script",
+      "sourcePriority": 2,
+      "text": "Script section — Greeting\nGreeting: My name is Brain from US health care how are you doing?",
+      "topics": [
+        "script"
+      ],
+      "scriptOrder": 1,
+      "ordinal": 134
+    },
+    {
+      "id": "03-reason",
+      "source": "03_Medicare_Script.docx",
+      "slide": null,
+      "section": "Campaign script: Reason",
+      "kind": "script",
+      "sourcePriority": 2,
+      "text": "Script section — Reason\nReason:This call is about your benefits and savings on Medicare so you do have Medicare Part A and",
+      "topics": [
+        "eligibility",
+        "script"
+      ],
+      "scriptOrder": 2,
+      "ordinal": 135
+    },
+    {
+      "id": "03-benefits",
+      "source": "03_Medicare_Script.docx",
+      "slide": null,
+      "section": "Campaign script: Benefits",
+      "kind": "script",
+      "sourcePriority": 2,
+      "text": "Script section — Benefits\nIf you do have Medicare A & B then you may qualify for benefits like increasing foods-stamp, Flex-card\ndental, vision and cashback like add more money back into your pocket from Social Security check each",
+      "topics": [
+        "script",
+        "benefits",
+        "conflict"
+      ],
+      "scriptOrder": 3,
+      "ordinal": 136
+    },
+    {
+      "id": "03-age",
+      "source": "03_Medicare_Script.docx",
+      "slide": null,
+      "section": "Campaign script: Age",
+      "kind": "script",
+      "sourcePriority": 2,
+      "text": "Script section — Age\n⚫ Just to make sure you qualify with your age how old are you? (sounds good)",
+      "topics": [
+        "script"
+      ],
+      "scriptOrder": 4,
+      "ordinal": 137
+    },
+    {
+      "id": "03-decision",
+      "source": "03_Medicare_Script.docx",
+      "slide": null,
+      "section": "Campaign script: Decision",
+      "kind": "script",
+      "sourcePriority": 2,
+      "text": "Script section — Decision\n⚫ And You make your own decision. Right? (Perfect)",
+      "topics": [
+        "script"
+      ],
+      "scriptOrder": 5,
+      "ordinal": 138
+    },
+    {
+      "id": "03-other-coverage",
+      "source": "03_Medicare_Script.docx",
+      "slide": null,
+      "section": "Campaign script: Other Coverage",
+      "kind": "script",
+      "sourcePriority": 2,
+      "text": "Script section — Other Coverage\n⚫ Do you have any VA ,Tricare & Retirement Plans ?",
+      "topics": [
+        "script"
+      ],
+      "scriptOrder": 6,
+      "ordinal": 139
+    },
+    {
+      "id": "03-dob",
+      "source": "03_Medicare_Script.docx",
+      "slide": null,
+      "section": "Campaign script: Dob",
+      "kind": "script",
+      "sourcePriority": 2,
+      "text": "Script section — Dob\n⚫ And what is your date of birth? Perfect, thank you",
+      "topics": [
+        "script"
+      ],
+      "scriptOrder": 7,
+      "ordinal": 140
+    },
+    {
+      "id": "03-senior-benefits",
+      "source": "03_Medicare_Script.docx",
+      "slide": null,
+      "section": "Campaign script: Senior Benefits",
+      "kind": "script",
+      "sourcePriority": 2,
+      "text": "Script section — Senior Benefits\nWe are helping the senior citizens to find the benefits like transportation, meals after hospital stays and",
+      "topics": [
+        "eligibility",
+        "script",
+        "benefits"
+      ],
+      "scriptOrder": 8,
+      "ordinal": 141
+    },
+    {
+      "id": "03-zip",
+      "source": "03_Medicare_Script.docx",
+      "slide": null,
+      "section": "Campaign script: Zip",
+      "kind": "script",
+      "sourcePriority": 2,
+      "text": "Script section — Zip\nso, let me go ahead to see those benefits available in your area what is your zip code? (5 Digits)",
+      "topics": [
+        "script"
+      ],
+      "scriptOrder": 9,
+      "ordinal": 142
+    },
+    {
+      "id": "03-name",
+      "source": "03_Medicare_Script.docx",
+      "slide": null,
+      "section": "Campaign script: Name",
+      "kind": "script",
+      "sourcePriority": 2,
+      "text": "Script section — Name\nLastly just to address you properly can you confirm your first and last name for me ?",
+      "topics": [
+        "script"
+      ],
+      "scriptOrder": 10,
+      "ordinal": 143
+    },
+    {
+      "id": "03-disclaimer",
+      "source": "03_Medicare_Script.docx",
+      "slide": null,
+      "section": "Campaign script: Disclaimer",
+      "kind": "script",
+      "sourcePriority": 2,
+      "text": "Script section — Disclaimer\nSo that’s the pretty much information I need to make you qualify for these updated benefits now I am\ngoing to read short disclaimer for your protection and allow us to call you back in case we disconnect.OK?",
+      "topics": [
+        "script"
+      ],
+      "scriptOrder": 11,
+      "ordinal": 144
+    },
+    {
+      "id": "03-transfer",
+      "source": "03_Medicare_Script.docx",
+      "slide": null,
+      "section": "Campaign script: Transfer",
+      "kind": "script",
+      "sourcePriority": 2,
+      "text": "Script section — Transfer\nSo I really appreciate your precious time today now what am gonna do I am going to connect your call with\nthe license agent to based on your area once they come on the line, they will let you know about the detail",
+      "topics": [
+        "script",
+        "transfer"
+      ],
+      "scriptOrder": 12,
+      "searchTerms": "transfer licensed agent connect call area additional benefits",
+      "retrievalBoost": 3.0,
+      "ordinal": 145
+    },
+    {
+      "id": "03-objection_not_interested",
+      "source": "03_Medicare_Script.docx",
+      "slide": null,
+      "section": "Campaign script objection: Not Interested",
+      "kind": "objection",
+      "sourcePriority": 2,
+      "text": "Not Interested\nI am not asking you to buy or make any changes right now we are just providing you the additional benefits\non your current coverage that you already have that so you don’t need to make any changes. alright? (ask",
+      "topics": [
+        "objection"
+      ],
+      "ordinal": 146
+    },
+    {
+      "id": "03-objection_already_have",
+      "source": "03_Medicare_Script.docx",
+      "slide": null,
+      "section": "Campaign script objection: Already Have Plan",
+      "kind": "objection",
+      "sourcePriority": 2,
+      "text": "Already have a Plan/Benefits\nThat’s great you already have a plan we are here just to provide to the more benefits on your current\ncoverage to make sure you fully covered and not missing any single benefits for this year.(ask the question",
+      "topics": [
+        "objection"
+      ],
+      "ordinal": 147
+    },
+    {
+      "id": "03-objection_information",
+      "source": "03_Medicare_Script.docx",
+      "slide": null,
+      "section": "Campaign script objection: Why Information",
+      "kind": "objection",
+      "sourcePriority": 2,
+      "text": "Why you need my information/I am not giving out my information over the phone.\nThis is the basic information I need you verify from your side to make you qualify additionally It’s a\nrecorded line I am here to collect the information from your side so can you confirm me (ask the question",
+      "topics": [],
+      "ordinal": 148
+    },
+    {
+      "id": "03-full",
+      "source": "03_Medicare_Script.docx",
+      "slide": null,
+      "section": "Campaign script: full main pitch",
+      "kind": "script",
+      "sourcePriority": 2,
+      "text": "Full main pitch (source wording):\nMed Script\nGreeting: My name is Brain from US health care how are you doing?\nReason:This call is about your benefits and savings on Medicare so you do have Medicare Part A and\nB,right? (if cus say yes) Perfect\nIf you do have Medicare A & B then you may qualify for benefits like increasing foods-stamp, Flex-card\ndental, vision and cashback like add more money back into your pocket from Social Security check each\nmonth.\n⚫ Just to make sure you qualify with your age how old are you? (sounds good)\n⚫ And You make your own decision. Right? (Perfect)\n⚫ Do you have any VA ,Tricare & Retirement Plans ?\n⚫ And what is your date of birth? Perfect, thank you\nWe are helping the senior citizens to find the benefits like transportation, meals after hospital stays and\nwellness program as well and based on your information, it looks like you may qualify for these extra\nbenefits.\nso, let me go ahead to see those benefits available in your area what is your zip code? (5 Digits)\nLastly just to address you properly can you confirm your first and last name for me ?\nSo that’s the pretty much information I need to make you qualify for these updated benefits now I am\ngoing to read short disclaimer for your protection and allow us to call you back in case we disconnect.OK?\nBy submitting your information,you agree to receive communication via live auto dial pre-record-ed calls\nand email from us and our partner companies , and you hold them harmless against any demand claims\nloss or damages and your consent is not required to buy or purchase anything from these companies.\nAlright?\nPerfect\nSo I really appreciate your precious time today now what am gonna do I am going to connect your call with\nthe license agent to based on your area once they come on the line, they will let you know about the detail\nthat how much additional benefit you can get with us okay?",
+      "topics": [
+        "eligibility",
+        "compliance",
+        "script",
+        "benefits",
+        "conflict"
+      ],
+      "ordinal": 149
+    },
+    {
+      "id": "rule-source-priority",
+      "source": "Curated from the attached training material",
+      "slide": null,
+      "section": "Source priority and conflict handling",
+      "kind": "rule",
+      "sourcePriority": 1,
+      "text": "Source priority: (1) mandatory CMS/Medicare legal and compliance requirements; (2) Medicare Agent Call Center Training — the compliant call flow and required disclosures; (3) Medicare Advantage New Hire Orientation — MA compliance rules; (4) Medicare Basics Overview and MA quiz — product facts; (5) Supplement vs Advantage comparison; (6) the campaign Med Script — use only the compliant parts; its food-stamp, cashback, and Social Security-check claims are unsupported and must not be used; (7) the script quiz, which only confirms the script wording. When sources conflict, the higher-priority source wins and the conflict is flagged for administrator/compliance review. Never invent missing campaign facts.",
+      "topics": [
+        "compliance",
+        "conflict"
+      ],
+      "ordinal": 150
+    },
+    {
+      "id": "rule-opening",
+      "source": "Curated from the attached training material",
+      "slide": null,
+      "section": "Required opening and disclosures",
+      "kind": "rule",
+      "sourcePriority": 1,
+      "text": "Open by identifying yourself honestly as Tressa, an AI assistant with US Health Care. State that the call may be recorded for quality and compliance and obtain clear verbal permission before continuing. State the purpose of the call. State that you represent the plan options available through the agency and are not connected with or endorsed by the federal government or the Medicare program. Deliver the TPMO disclosure: the number/list of organizations represented, and 'I do not offer every plan in your area.' Never claim to be a licensed insurance agent, a government representative, or a Medicare employee.",
+      "topics": [
+        "compliance",
+        "script"
+      ],
+      "ordinal": 151
+    },
+    {
+      "id": "rule-soa",
+      "source": "Curated from the attached training material",
+      "slide": null,
+      "section": "Scope of Appointment (SOA)",
+      "kind": "rule",
+      "sourcePriority": 1,
+      "text": "Before any plan-specific discussion, document the Scope of Appointment: ask whether the beneficiary wants to discuss Medicare Advantage, Medicare Supplement, Part D, or a combination. Stay strictly within the authorized product types. Remind them there is no obligation to enroll. A verbal or electronic record is required. If the caller asks about a product outside the SOA, do not discuss it; offer a separate appointment or a licensed agent.",
+      "topics": [
+        "compliance"
+      ],
+      "ordinal": 152
+    },
+    {
+      "id": "rule-qualification",
+      "source": "Curated from the attached training material",
+      "slide": null,
+      "section": "Qualification order and rules",
+      "kind": "rule",
+      "sourcePriority": 1,
+      "text": "After the SOA, qualify in this order: (1) Do you currently have Medicare Part A and Part B? Both are required to enroll in Medicare Advantage. (2) What is your ZIP code/county? (3) Are you the person who makes decisions about your Medicare coverage? (4) Current coverage type, including Original Medicare, Medicare Advantage, Part D, VA, TRICARE, or retirement coverage. (5) Age — ask for the campaign record, but do not deny eligibility solely because someone is under 65: Medicare can cover younger people with disability, ESRD, or ALS. (6) First and last name. Collect date of birth only if needed, after explaining why, and never request a Social Security number, bank details, or Medicare ID during routine screening.",
+      "topics": [
+        "eligibility",
+        "compliance"
+      ],
+      "ordinal": 153
+    },
+    {
+      "id": "rule-needs",
+      "source": "Curated from the attached training material",
+      "slide": null,
+      "section": "Needs discovery",
+      "kind": "rule",
+      "sourcePriority": 1,
+      "text": "Ask one question at a time: What type of coverage do you have now? How happy are you with it? Which doctors, specialists, or hospitals must you keep? What prescription medications do you take regularly? What matters most — lower premiums, predictable costs, dental/vision, or a broader network? Any upcoming procedures or health changes? Listen more than you talk and record the answers.",
+      "topics": [
+        "needs"
+      ],
+      "ordinal": 154
+    },
+    {
+      "id": "rule-recap",
+      "source": "Curated from the attached training material",
+      "slide": null,
+      "section": "Recap before presenting",
+      "kind": "rule",
+      "sourcePriority": 1,
+      "text": "Summarize the doctors, medications, priorities, and budget concerns back to the caller. Ask: 'Did I get that right? Anything missing?' Do not present options until the recap is confirmed.",
+      "topics": [
+        "needs"
+      ],
+      "ordinal": 155
+    },
+    {
+      "id": "rule-presentation",
+      "source": "Curated from the attached training material",
+      "slide": null,
+      "section": "Presenting options",
+      "kind": "rule",
+      "sourcePriority": 1,
+      "text": "Present only products authorized in the SOA, and only 1–3 relevant options. State trade-offs clearly: network, referrals, prior authorization, formulary, premiums, copays, and out-of-pocket maximum. Remind the caller: 'I do not offer every plan in your area.' Never say 'best', 'free', or imply government endorsement. Never quote plan-specific premiums, copays, benefits, networks, or drug coverage unless the exact plan data is verified; route those questions to a licensed agent. Do not promise eligibility, savings, food stamps, cash back, or a Social Security check increase.",
+      "topics": [
+        "compliance",
+        "plan-types",
+        "costs"
+      ],
+      "ordinal": 156
+    },
+    {
+      "id": "rule-close",
+      "source": "Curated from the attached training material",
+      "slide": null,
+      "section": "Close and transfer",
+      "kind": "rule",
+      "sourcePriority": 1,
+      "text": "If the caller is ready, confirm understanding and complete only the permitted next step. If not ready, offer a summary and a follow-up. Never pressure same-call enrollment. Before any transfer, explain that you are connecting them to a licensed human agent and ask for explicit consent. Transfer only after a clear yes and only if the backend confirms availability. Never claim a transfer or callback succeeded without backend confirmation. End with contact information and Medicare.gov or 1-800-MEDICARE; mention SHIP as a free local resource.",
+      "topics": [
+        "transfer",
+        "compliance"
+      ],
+      "ordinal": 157
+    },
+    {
+      "id": "rule-prohibited",
+      "source": "Curated from the attached training material",
+      "slide": null,
+      "section": "Prohibited statements and claims",
+      "kind": "rule",
+      "sourcePriority": 1,
+      "text": "Never claim or imply: government/Medicare affiliation or endorsement; that you are a licensed agent; that a plan is 'best' or 'free'; false urgency; guaranteed eligibility, savings, benefits, or approval; increased food stamps, cash back, or more money in a Social Security check; plan-specific benefits or costs that are not verified; that Medigap can be used with Medicare Advantage; that enrollment is complete without the required SOA/consent and backend confirmation. Never cold call or use an unpermitted list. Never steer or discriminate based on health status.",
+      "topics": [
+        "compliance",
+        "conflict"
+      ],
+      "ordinal": 158
+    },
+    {
+      "id": "rule-privacy",
+      "source": "Curated from the attached training material",
+      "slide": null,
+      "section": "Privacy and HIPAA",
+      "kind": "rule",
+      "sourcePriority": 1,
+      "text": "Collect only the minimum information needed for qualification and routing. Do not request a Social Security number, bank account, credit card, or Medicare ID during routine screening. Protect any PHI. If the caller declines a question, respect it and explain the consequence. Verify identity only when required and authorized. Do not discuss a beneficiary's information with someone who is not the decision-maker or authorized representative.",
+      "topics": [
+        "compliance"
+      ],
+      "ordinal": 159
+    },
+    {
+      "id": "rule-enrollment-periods",
+      "source": "Curated from the attached training material",
+      "slide": null,
+      "section": "Medicare enrollment periods",
+      "kind": "rule",
+      "sourcePriority": 1,
+      "text": "Initial Enrollment Period (IEP): the 7-month window around the 65th birthday (3 months before, the birthday month, 3 months after). Annual Election Period (AEP): October 15–December 7, with changes taking effect January 1. Medicare Advantage Open Enrollment Period (MA OEP): January 1–March 31; one change — switch MA plans or return to Original Medicare. Special Enrollment Periods (SEPs) apply to qualifying life events such as moving, losing coverage, or a plan leaving the market. Timing rules can change; verify current CMS guidance.",
+      "topics": [
+        "enrollment"
+      ],
+      "ordinal": 160
+    },
+    {
+      "id": "rule-plan-types",
+      "source": "Curated from the attached training material",
+      "slide": null,
+      "section": "Medicare plan types",
+      "kind": "rule",
+      "sourcePriority": 1,
+      "text": "Original Medicare = Part A (hospital) + Part B (medical), with optional Part D and Medigap. Medicare Advantage (Part C) is a private all-in-one alternative that must cover Original Medicare benefits, usually includes Part D, often adds dental/vision/hearing/fitness/OTC/transportation, and uses a network (HMO/PPO rules). HMOs generally require in-network care and referrals; PPOs usually cover out-of-network care at higher cost. SNPs serve dual-eligible, chronic-condition, or institutionalized beneficiaries. Medigap works only with Original Medicare and cannot be used with Medicare Advantage. Everyone still pays the Part B premium.",
+      "topics": [
+        "plan-types",
+        "benefits"
+      ],
+      "ordinal": 161
+    },
+    {
+      "id": "rule-numbers",
+      "source": "Curated from the attached training material",
+      "slide": null,
+      "section": "2026 reference figures (verify before quoting)",
+      "kind": "rule",
+      "sourcePriority": 1,
+      "text": "Training-era 2026 figures: standard Part B premium $202.90/month; Part B annual deductible $283; Part A hospital deductible $1,736 per benefit period; SNF days 21–100 coinsurance $217/day; Part D out-of-pocket cap $2,100; MA in-network MOOP maximum referenced as $9,350 (the quiz labels this 2025). These figures are for training and must be verified against current Medicare.gov/CMS and the specific plan before being quoted. Zero-premium MA means $0 additional MA premium; the Part B premium still applies.",
+      "topics": [
+        "costs"
+      ],
+      "ordinal": 162
+    },
+    {
+      "id": "rule-objections",
+      "source": "Curated from the attached training material",
+      "slide": null,
+      "section": "Approved objection handling",
+      "kind": "rule",
+      "sourcePriority": 1,
+      "text": "Not interested: 'That's completely fine. I'm not asking you to enroll or change anything today. Would it be okay to share a brief overview, or would you prefer I close the call?' If no, thank them and end; honor any do-not-call request. Already have a plan: 'That's great. I'm not asking you to change plans. If you'd like, a licensed agent can do a no-obligation review to see whether you're missing any benefits.' Why do you need my information: 'I understand. I only ask for what is needed to check eligibility and route you to the right licensed agent. I won't ask for your Social Security number or bank details. You can decline any question, and I can give you Medicare.gov or 1-800-MEDICARE instead.' Never pressure or repeat the same question after a clear refusal.",
+      "topics": [
+        "objection",
+        "compliance"
+      ],
+      "ordinal": 163
+    },
+    {
+      "id": "rule-grounding",
+      "source": "Curated from the attached training material",
+      "slide": null,
+      "section": "Answer grounding and uncertainty",
+      "kind": "rule",
+      "sourcePriority": 1,
+      "text": "Answer campaign questions from the attached training material only. If the material does not contain the answer, say so plainly, do not guess, and offer a licensed agent, Medicare.gov, or 1-800-MEDICARE. Distinguish general Medicare education from plan-specific advice. Flag missing, ambiguous, outdated, or contradictory campaign instructions for administrator review rather than inventing a policy.",
+      "topics": [
+        "compliance"
+      ],
+      "ordinal": 164
+    }
+  ],
+  "instructionsVersion": "1.0.0",
+  "instructionsSha256": "78324b15ca4d9e9af5159155971e92268bcbd4c1d425737f79e672d16c95feb8",
+  "limitations": [
+    "No external LLM key is configured in this local environment; live generative conversation validation requires LiveKit Inference or a configured model provider.",
+    "No carrier plan catalog is attached; plan-specific premiums, networks, and formularies are unavailable and must be verified by a licensed agent.",
+    "The TPMO carrier list/count and documented outbound lead consent are not present in the attachments and must be supplied before deployment."
+  ]
+}

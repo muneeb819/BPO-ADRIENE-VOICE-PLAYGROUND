@@ -48,6 +48,9 @@ import urllib.parse
 import urllib.request
 import uuid
 import webbrowser
+
+import training as training_kb
+import tressa_engine
 from datetime import datetime, timedelta, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -1007,6 +1010,11 @@ def engine_step(agent: dict, state: dict, content: str, intent_override: str | N
         reply = "I can't help with that request. I can still assist with eligibility, pricing, or a transfer to a human specialist."
         return {"intent": "general", "reply": reply, "ended": False, "status": None,
                 "error": None, "violations": [], "transfer": False}
+
+    # Tressa has a dedicated Medicare flow. Do not let the generic plan/pricing
+    # replies ("$29/month", "you appear eligible") leak into her conversations.
+    if tressa_engine.is_tressa(agent):
+        return tressa_engine.step(agent, state, content, intent_override)
 
     if intent == "consent" and state.get("stage") == "awaiting_consent":
         state["consent"] = True
@@ -3285,6 +3293,97 @@ def api_admin_overview():
     }
 
 
+def find_tressa_agent() -> dict | None:
+    """Locate the Nexus Tressa USA Medicare profile for validation checks."""
+    with db() as conn:
+        row = conn.execute(
+            "SELECT * FROM agents WHERE lower(call_name) = 'tressa' "
+            "AND lower(campaign) = 'usa medicare' ORDER BY updated_at DESC LIMIT 1"
+        ).fetchone()
+    return agent_row(row) if row else None
+
+
+def api_training(handler, query, method):
+    if method != "GET":
+        raise ApiError("Method not allowed", 405)
+    store = training_kb.get_store()
+    return 200, store.summary()
+
+
+def api_training_search(handler, query, method):
+    if method != "GET":
+        raise ApiError("Method not allowed", 405)
+    q = (query.get("q", [""])[0] or "").strip()
+    if not q:
+        raise ApiError("q is required", 400)
+    try:
+        limit = min(20, max(1, int(query.get("limit", ["8"])[0])))
+    except ValueError:
+        limit = 8
+    store = training_kb.get_store()
+    return 200, {"query": q, "results": store.search(q, limit=limit)}
+
+
+def api_training_answer(handler, query, method):
+    if method != "GET":
+        raise ApiError("Method not allowed", 405)
+    q = (query.get("q", [""])[0] or "").strip()
+    if not q:
+        raise ApiError("q is required", 400)
+    store = training_kb.get_store()
+    return 200, store.answer(q)
+
+
+def api_training_validation(handler, query, method):
+    if method != "GET":
+        raise ApiError("Method not allowed", 405)
+    store = training_kb.get_store()
+    latest = store.validation or {}
+    if not latest:
+        return 200, {"available": False, "message": "No validation run recorded yet."}
+    return 200, latest
+
+
+def api_training_validate(handler, query, method):
+    if method != "POST":
+        raise ApiError("Method not allowed", 405)
+    payload = handler.json_body()
+    agent = None
+    requested = str(payload.get("agentId") or "").strip()
+    if requested:
+        with db() as conn:
+            row = conn.execute("SELECT * FROM agents WHERE id = ?", (requested,)).fetchone()
+        if not row:
+            raise ApiError("Agent not found", 404)
+        agent = agent_row(row)
+    else:
+        agent = find_tressa_agent()
+    store = training_kb.reload_store()
+    return 200, store.validate(agent)
+
+
+def api_training_reload(handler, query, method):
+    if method != "POST":
+        raise ApiError("Method not allowed", 405)
+    store = training_kb.reload_store()
+    return 200, {
+        "ok": True,
+        "version": store.kb.get("version"),
+        "chunks": len(store.chunks),
+        "tests": len(store.tests),
+        "summary": store.summary(),
+    }
+
+
+def api_training_document(handler, file_name, method):
+    if method != "GET":
+        raise ApiError("Method not allowed", 405)
+    try:
+        return 200, training_kb.get_store().document_text(file_name)
+    except KeyError:
+        raise ApiError("Training document not found", 404)
+
+
 def api_agents(handler, query, method):
     if method == "GET":
         status = query.get("status", [None])[0]
@@ -3560,8 +3659,9 @@ def api_sessions(handler, query, method):
                 (sid, agent_id, "active", mode, "{}", json.dumps(state), None, 0, ts),
             )
             campaign = f" for {agent_data['campaign']}" if agent_data["campaign"] else ""
-            greeting = (f"Hi there! I'm {agent_data['name']}, your {agent_data['tone']} "
-                        f"assistant{campaign}. How can I help you today?")
+            greeting = (agent_data.get("greeting") or "").strip() or (
+                f"Hi there! I'm {agent_data['name']}, your {agent_data['tone']} "
+                f"assistant{campaign}. How can I help you today?")
             conn.execute(
                 "INSERT INTO turns (id, session_id, seq, role, content, intent, latency_ms, meta, created_at) "
                 "VALUES (?,?,?,?,?,?,?,?,?)",
@@ -4348,6 +4448,7 @@ PAGE_ROUTES = {
     "/foundation": "index.html",
     "/admin": "admin.html",
     "/agents": "agents.html",
+    "/tressa": "tressa.html",
     "/playground": "playground.html",
     "/lab": "lab.html",
     "/testing": "testing.html",
@@ -4523,6 +4624,36 @@ class Handler(BaseHTTPRequestHandler):
             if path == "/api/health":
                 require("GET")
                 return self.write_api_result(api_health(self, query))
+
+            if path == "/api/training":
+                require("GET")
+                return self.write_api_result(api_training(self, query, method))
+
+            if path == "/api/training/search":
+                require("GET")
+                return self.write_api_result(api_training_search(self, query, method))
+
+            if path == "/api/training/answer":
+                require("GET")
+                return self.write_api_result(api_training_answer(self, query, method))
+
+            if path == "/api/training/validation":
+                require("GET")
+                return self.write_api_result(api_training_validation(self, query, method))
+
+            if path == "/api/training/validate":
+                require("POST")
+                return self.write_api_result(api_training_validate(self, query, method))
+
+            if path == "/api/training/reload":
+                require("POST")
+                return self.write_api_result(api_training_reload(self, query, method))
+
+            m = re.fullmatch(r"/api/training/documents/(.+)", path)
+            if m:
+                require("GET")
+                return self.write_api_result(
+                    api_training_document(self, urllib.parse.unquote(m.group(1)), method))
 
             if path == "/api/agents":
                 require("GET", "POST")
